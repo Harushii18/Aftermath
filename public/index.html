@@ -1,0 +1,54 @@
+<!-- This html file is what the browser shows when we 
+run index.js on port 5000. Therefore our display of our game-->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Aftermath</title>
+
+        <!-- Loads three.js into our game-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.js"> </script>
+       <!--
+        <script src="./threejs-loader/OBJLoader.js"></script>
+        <script src="./threejs-loader/MTLLoader.js"></script>
+       -->
+       <!--Lets us load blender models-->
+        <script src="https://cdn.rawgit.com/mrdoob/three.js/master/examples/js/loaders/GLTFLoader.js"></script>
+     
+    </head>
+
+    <body>
+        <script>
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+
+            const renderer = new THREE.WebGLRenderer();
+            renderer.setSize( window.innerWidth, window.innerHeight );
+            document.body.appendChild( renderer.domElement );
+
+            //this just creates a cube for the demo. For the real scene, we will be importing pre-made blender models
+            const geometry = new THREE.BoxGeometry();
+            const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+            const cube = new THREE.Mesh( geometry, material );
+            scene.add( cube );
+
+            //camera z distance away from object (in this case cube). If we decrease the z amount, we will go closer to the object
+            camera.position.z = 5;
+
+
+            //this function does animation, as well as renders our object to the viewport
+            function animate() {
+                requestAnimationFrame( animate );
+                //ALL ANIMATIONS GO HERE
+                cube.rotation.x += 0.01;
+                cube.rotation.y += 0.01;
+
+                //render the scene with the specified camera
+                renderer.render( scene, camera );
+            }
+
+            //call up the animating and rendering
+            animate();
+        </script>
+      
+    </body>
+</html>
