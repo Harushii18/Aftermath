@@ -13,6 +13,9 @@ import {FBXLoader} from 'https://cdn.jsdelivr.net/npm/three@0.118.1/examples/jsm
 import {GLTFLoader} from 'https://cdn.jsdelivr.net/npm/three@0.118.1/examples/jsm/loaders/GLTFLoader.js';
 import {OrbitControls} from 'https://cdn.jsdelivr.net/npm/three@0.118/examples/jsm/controls/OrbitControls.js';
 
+//==========================================================================================================
+//CHARACTER CONTROL CLASS
+
 //this moves the character around
 class BasicCharacterControls {
   constructor(params) {
@@ -139,7 +142,7 @@ class BasicCharacterControls {
   }
 }
 
-
+//==========================================================================================================
 class LoadModelDemo {
   constructor() {
     this._Initialize();
@@ -160,14 +163,19 @@ class LoadModelDemo {
       this._OnWindowResize();
     }, false);
 
+    //SETTING FIELD OF VIEW, ASPECT RATIO (which should generally be width/ height), NEAR AND FAR (anything outside near/ far is clipped)
     const fov = 60;
     const aspect = 1920 / 1080;
     const near = 1.0;
     const far = 1000.0;
+    //there are 2 types of cameras: orthographic and perspective- we will use perspective (more realistic)
     this._camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
     this._camera.position.set(75, 20, 0);
 
+    //initialise scene
     this._scene = new THREE.Scene();
+    //======================================================
+    //LIGHTING
 
     let light = new THREE.DirectionalLight(0xFFFFFF, 1.0);
     light.position.set(20, 100, 10);
@@ -188,14 +196,17 @@ class LoadModelDemo {
 
     light = new THREE.AmbientLight(0xFFFFFF, 4.0);
     this._scene.add(light);
-
+    //=======================================================
+    //CAMERA VIEW
+    //this is probably for the mouse camera view
     const controls = new OrbitControls(
       this._camera, this._threejs.domElement);
     controls.target.set(0, 20, 0);
     controls.update();
 
-
-    //SKYBOX- a cube that surrounds the playable platform, making the world look endless
+    
+    //==========================================================================================================
+    //CREATE SKYBOX- a cube that surrounds the playable platform, making the world look endless
     //load the skybox pictures
     const loader = new THREE.CubeTextureLoader();
     //it uses different textures per face of cube
@@ -208,7 +219,8 @@ class LoadModelDemo {
         '../skybox/House/negz.jpg'
     ]);
     this._scene.background = texture;
-
+    //=================================================================================
+    //This is the ground/ plane that everything is on
     const plane = new THREE.Mesh(
         new THREE.PlaneGeometry(1000, 1000, 10, 10),
         new THREE.MeshStandardMaterial({
@@ -218,7 +230,7 @@ class LoadModelDemo {
     plane.receiveShadow = true;
     plane.rotation.x = -Math.PI / 2;
     this._scene.add(plane);
-
+    //====================================================================
     this._mixers = [];
     this._previousRAF = null;
 
@@ -297,7 +309,6 @@ class LoadModelDemo {
   }
 
   _LoadModel() {
-
     //THIS WILL LOAD A GLTF/GLB MODEL TO THE SCENE
     const loader = new GLTFLoader();
     loader.setPath('../models/');
