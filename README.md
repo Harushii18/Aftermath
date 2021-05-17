@@ -15,10 +15,12 @@ ______________________________________________________
 
 **Instructions**<br /> 
 
-1. Run the server by using the command:
+1. Go to the Aftermath folder (where all the general contents are)
+2. Open the terminal at that folder and run 
+`npm install --save three` 
+3. Run the server by using the command:
 `node index.js`
-
-2. Go to
+4. Go to
 [this link](http://localhost:5000/) in your browser
 
 <br /> 
