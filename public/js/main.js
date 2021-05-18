@@ -98,6 +98,8 @@ class BasicCharacterControls {
     velocity.add(frameDecceleration);
 
     const controlObject = this._params.target;
+    //const cameraObject = this._params.camera;
+
     const _Q = new THREE.Quaternion();
     const _A = new THREE.Vector3();
     const _R = controlObject.quaternion.clone();
@@ -120,7 +122,9 @@ class BasicCharacterControls {
     }
 
     controlObject.quaternion.copy(_R);
+  //  cameraObject.quaternion.copy(_R);
 
+    //For Player Model
     const oldPosition = new THREE.Vector3();
     oldPosition.copy(controlObject.position);
 
@@ -138,7 +142,31 @@ class BasicCharacterControls {
     controlObject.position.add(forward);
     controlObject.position.add(sideways);
 
+/*
+    //For CameraObject
+    const oldPosition2 = new THREE.Vector3();
+    oldPosition2.copy(cameraObject.position);
+
+    const forward2 = new THREE.Vector3(0, 0, -1);
+    forward2.applyQuaternion(cameraObject.quaternion);
+    forward2.normalize();
+
+    const sideways2 = new THREE.Vector3(-1, 0, 0);
+    sideways2.applyQuaternion(cameraObject.quaternion);
+    sideways2.normalize();
+
+    sideways2.multiplyScalar(velocity.x * timeInSeconds);
+    forward2.multiplyScalar(velocity.z * timeInSeconds);
+
+    cameraObject.position.add(sideways2);
+    cameraObject.position.add(forward2);
+
+    oldPosition2.copy(cameraObject.position);
+*/
+
     oldPosition.copy(controlObject.position);
+
+
   }
 }
 
@@ -148,7 +176,11 @@ class LoadModelDemo {
     this._Initialize();
   }
 
+//CannonJS World
+//let world;
+
   _Initialize() {
+
     this._threejs = new THREE.WebGLRenderer({
       antialias: true,
     });
@@ -165,15 +197,24 @@ class LoadModelDemo {
 
     //SETTING FIELD OF VIEW, ASPECT RATIO (which should generally be width/ height), NEAR AND FAR (anything outside near/ far is clipped)
     const fov = 60;
-    const aspect = 1920 / 1080;
+    //const aspect = 1920 / 1080;
+    const aspect = window.innerWidth / window.innerHeight;
     const near = 1.0;
     const far = 1000.0;
     //there are 2 types of cameras: orthographic and perspective- we will use perspective (more realistic)
     this._camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-    this._camera.position.set(75, 20, 0);
+    this._camera.position.set(0, 10, 0);
 
-    //initialise scene
+    //Initialise ThreeJs Scene
     this._scene = new THREE.Scene();
+
+/*
+    //Initialise CanonJS Scene
+    world = new CANNON.World();
+    world.gravity.set(0,-10,0); //Gravity pulls things down. (x,y,z)
+    world.broadphase = new CANNON.NaiveBroadphase();
+    world.solver.iterations = 40;
+*/
     //======================================================
     //LIGHTING
 
@@ -194,6 +235,7 @@ class LoadModelDemo {
     light.shadow.camera.bottom = -100;
     this._scene.add(light);
 
+    //Add Ambient Light
     light = new THREE.AmbientLight(0xFFFFFF, 4.0);
     this._scene.add(light);
     //=======================================================
@@ -204,7 +246,9 @@ class LoadModelDemo {
     controls.target.set(0, 20, 0);
     controls.update();
 
-    
+
+
+
     //==========================================================================================================
     //CREATE SKYBOX- a cube that surrounds the playable platform, making the world look endless
     //load the skybox pictures
@@ -261,7 +305,7 @@ class LoadModelDemo {
     //load model
     loader.setPath('../models/characters/');
     loader.load('Douglas.fbx', (fbx) => {
-      fbx.scale.setScalar(0.1);
+      fbx.scale.setScalar(0.05);
       fbx.traverse(c => {
         c.castShadow = true;
       });
@@ -312,13 +356,13 @@ class LoadModelDemo {
     //THIS WILL LOAD A GLTF/GLB MODEL TO THE SCENE
     const loader = new GLTFLoader();
     loader.setPath('../models/');
-    loader.load('house-layout.glb', (gltf) => {
+    loader.load('Aftermath_Map.glb', (gltf) => {
       gltf.scene.traverse(c => {
         c.castShadow = true;
       });
       this._scene.add(gltf.scene);
     });
-    
+
   }
 
   _OnWindowResize() {
@@ -326,6 +370,7 @@ class LoadModelDemo {
     this._camera.updateProjectionMatrix();
     this._threejs.setSize(window.innerWidth, window.innerHeight);
   }
+
 
   //render animation frame
   _RAF() {
