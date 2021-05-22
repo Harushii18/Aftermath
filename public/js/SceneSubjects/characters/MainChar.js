@@ -1,11 +1,10 @@
-function MainChar(scene) {
-  //load a model and animate it
+class MainChar {
+	constructor(scene) {
+		//load a model and animate it
+		//TODO!
 
-//TODO!
-    	
-	this.update = function(time) {
 		
+		this.update = function (time) {
+		};
 	}
-
-
 }
