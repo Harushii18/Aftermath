@@ -5,7 +5,8 @@ class SceneManager {
 
 
         //we use (this) to make variables accessible in other classes
-        this.clock = new THREE.Clock();
+        this.time = new Time();
+
 
         const screenDimensions = {
             width: canvas.width,
@@ -23,8 +24,10 @@ class SceneManager {
         controls.target.set(0, 20, 0);
         controls.update();
 
+    }
+
         //this function creates our scene
-        function buildScene() {
+        buildScene() {
             //create a new scene
             const scene = new THREE.Scene();
 
@@ -47,7 +50,7 @@ class SceneManager {
         }
 
         //this creates a renderer for us
-        function buildRender({ width, height }) {
+        buildRender({ width, height }) {
 
             const renderer = new THREE.WebGLRenderer({
                 canvas: canvas,
@@ -62,7 +65,7 @@ class SceneManager {
         }
 
         //create a camera for the screen
-        function buildCamera({ width, height }) {
+        buildCamera({ width, height }) {
 
             //SETTING FIELD OF VIEW, ASPECT RATIO (which should generally be width/ height), NEAR AND FAR (anything outside near/ far is clipped)
             const aspectRatio = width / height;
@@ -80,7 +83,7 @@ class SceneManager {
         }
 
         //add subjects to the scene
-        function createSceneSubjects(scene) {
+        createSceneSubjects(scene) {
 
             const managers=[new EntityManager()];
             //can be altered so we can add multiple entities, and depending on which position
@@ -94,31 +97,31 @@ class SceneManager {
         }
 
         //this updates the subject/model every frame
-        this.update = function () {
+        update() {
             //KAMERON NEEDS TO UPDATE THIS TO CORRECT TIMES:
              //(don't use elapsed times anymore)
-            const elapsedTime = this.clock.getElapsedTime();
+            var deltaTime = this.time.getDelta();
            
 
             //won't call this loop if it's paused-> only for objects that need to be paused (managers that need to be paused)
             for (let i = 0; i < sceneSubjects.length; i++)
-                sceneSubjects[i].update(elapsedTime);
+                sceneSubjects[i].update(deltaTime);
 
 
             //update orbit controls
             controls.update();
 
             renderer.render(scene, camera);
-        };
+        }
 
         //this resizes our game when screen size changed
-        this.onWindowResize = function () {
+        onWindowResize = function () {
 
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
 
             renderer.setSize(window.innerWidth, window.innerHeight);
 
-        };
-    }
+        }
+    
 }
