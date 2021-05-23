@@ -1,21 +1,23 @@
   
-class SceneSubject {
-	constructor(scene) {
+class SceneSubject extends THREE.Object3D {
 
+
+	constructor() {
+		super();
 		const radius = 2;
-		const mesh = new THREE.Mesh(new THREE.IcosahedronBufferGeometry(radius, 2), new THREE.MeshStandardMaterial({ flatShading: true }));
+		this.object = new THREE.Mesh(new THREE.IcosahedronBufferGeometry(radius, 2), new THREE.MeshStandardMaterial({ flatShading: true }));
 
-		mesh.position.set(0, 0, -20);
+		this.object.position.set(0, 0, -20);
 		//we can add as many items as we want to this scene
-		scene.add(mesh);
+
 
 		//this animates whatever is inside here- updates it upon frame
-		this.update = function (time) {
-			const scale = Math.sin(time) + 2;
 
-			mesh.scale.set(scale, scale, scale);
-		};
+	}
 
+	update(time) {
+		const scale = Math.sin(time) + 2;
 
+		this.object.scale.set(scale, scale, scale);
 	}
 }

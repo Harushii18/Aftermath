@@ -9,6 +9,11 @@ class Time {
         return this.clock.getDelta();
     }
 
+    getElapsed()
+    {
+        return this.clock.getElapsedTime();
+    }
+
 
 
     

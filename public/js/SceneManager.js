@@ -32,7 +32,7 @@ class SceneManager {
         for (let i = 0 ; i < entities.length ; i++)
         {
             console.log("before" +i.toString());
-            this.scene.add(entities[i]);
+            this.scene.add(entities[i].object);
             console.log("after");
         }
     }
@@ -100,6 +100,7 @@ class SceneManager {
             //it is, certain ones won't be paused, and some will be
             managers[0].register(new GeneralLights());
             managers[0].register(new House());
+            managers[0].register(new SceneSubject())
 
 
             return managers;
@@ -109,13 +110,16 @@ class SceneManager {
         update() {
             //KAMERON NEEDS TO UPDATE THIS TO CORRECT TIMES:
              //(don't use elapsed times anymore)
-            const deltaTime = this.time.getDelta();
-           
-
+            const deltaTime = this.time.getElapsed();
+            this.managers[0].update(deltaTime);
             //won't call this loop if it's paused-> only for objects that need to be paused (managers that need to be paused)
-            //for (let i = 0; i < sceneSubjects.length; i++)
-              //  sceneSubjects[i].update(deltaTime);
-
+           /* var manager_entities = this.managers[0].entities;
+            var man_length = manager_entities.length;
+            for (let i = 0; i < man_length; i++)
+            {
+                manager_entities[i].update(deltaTime);
+            }*/
+       
 
             //update orbit controls
             this.controls.update();
