@@ -1,3 +1,4 @@
+
 class SceneManager {
     constructor(canvas) {
         //this entire function renders a scene where you can add as many items as you want to it (e.g. we can create the house and add as
@@ -8,24 +9,33 @@ class SceneManager {
         this.time = new Time();
 
 
-        const screenDimensions = {
+        this.screenDimensions = {
             width: canvas.width,
             height: canvas.height
         };
 
         //the essentials for rendering a scene
-        const scene = buildScene();
-        const renderer = buildRender(screenDimensions);
-        const camera = buildCamera(screenDimensions);
-        const sceneSubjects = createSceneSubjects(scene);
-
+        this.scene = this.buildScene();
+        this.renderer = this.buildRender(this.screenDimensions);
+        this.camera = this.buildCamera(this.screenDimensions);
+        this.managers = this.createManagers();
+        this.loadToScene(this.managers[0].entities);
         //allow camera to orbit target (player)
-        const controls = new THREE.OrbitControls(camera, renderer.domElement);
-        controls.target.set(0, 20, 0);
-        controls.update();
+        this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
+        this.controls.target.set(0, 20, 0);
+        this.controls.update();
 
     }
 
+    loadToScene(entities)
+    {
+        for (let i = 0 ; i < entities.length ; i++)
+        {
+            console.log("before" +i.toString());
+            this.scene.add(entities[i]);
+            console.log("after");
+        }
+    }
         //this function creates our scene
         buildScene() {
             //create a new scene
@@ -77,21 +87,20 @@ class SceneManager {
             const camera = new THREE.PerspectiveCamera(fieldOfView, aspectRatio, nearPlane, farPlane);
 
             //set where the camera is
-            camera.position.set(0, 10, 0);
+            camera.position.set(-50, 50, 70);
 
             return camera;
         }
 
         //add subjects to the scene
-        createSceneSubjects(scene) {
+        createManagers() {
 
             const managers=[new EntityManager()];
             //can be altered so we can add multiple entities, and depending on which position
             //it is, certain ones won't be paused, and some will be
-            managers[0].register(new GeneralLights(scene));
-            managers[0].register(new House(scene));
-            managers[0].register(new MainChar(scene));
-            managers[0].register(new SceneSubject(scene));
+            managers[0].register(new GeneralLights());
+            managers[0].register(new House());
+
 
             return managers;
         }
@@ -100,27 +109,27 @@ class SceneManager {
         update() {
             //KAMERON NEEDS TO UPDATE THIS TO CORRECT TIMES:
              //(don't use elapsed times anymore)
-            var deltaTime = this.time.getDelta();
+            const deltaTime = this.time.getDelta();
            
 
             //won't call this loop if it's paused-> only for objects that need to be paused (managers that need to be paused)
-            for (let i = 0; i < sceneSubjects.length; i++)
-                sceneSubjects[i].update(deltaTime);
+            //for (let i = 0; i < sceneSubjects.length; i++)
+              //  sceneSubjects[i].update(deltaTime);
 
 
             //update orbit controls
-            controls.update();
+            this.controls.update();
 
-            renderer.render(scene, camera);
+            this.renderer.render(this.scene, this.camera);
         }
 
         //this resizes our game when screen size changed
-        onWindowResize = function () {
+        onWindowResize() {
 
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
+            this.camera.aspect = window.innerWidth / window.innerHeight;
+            this.camera.updateProjectionMatrix();
 
-            renderer.setSize(window.innerWidth, window.innerHeight);
+            this.renderer.setSize(window.innerWidth, window.innerHeight);
 
         }
     

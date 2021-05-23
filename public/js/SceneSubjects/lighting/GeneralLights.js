@@ -1,6 +1,6 @@
   
-class GeneralLights {
-    constructor(scene) {
+class GeneralLights extends THREE.Object3D {
+    constructor() {
 
         const light = new THREE.DirectionalLight(0xFFFFFF, 1.0);
 
@@ -21,12 +21,13 @@ class GeneralLights {
 
         light.position.set(20, 100, 10);
 
-        scene.add(light);
+        return light
+    }
 
 
         //if you want the lights to do any change every frame. When update is called in the scene manager, each subject's
         //update will be called. This light, if rendered first, which it is, currently, will affect every other object
-        this.update = function (time) {
+        update(time) {
             /*light.intensity = (Math.sin(time)+1.5)/1.5;
             light.color.setHSL( Math.sin(time), 0.5, 0.5 );
             */
@@ -34,5 +35,5 @@ class GeneralLights {
 
 
 
-    }
+
 }
