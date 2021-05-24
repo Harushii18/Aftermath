@@ -19,7 +19,8 @@
 		});
 	
 	*/
-
+		//save keyboard bindings
+		this.keyboard = new THREEx.KeyboardState();
 		//creating a box (need to change it to a character with animations)
 		const geometry = new THREE.BoxGeometry( 1, 1, 1 );
 		const material = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
@@ -28,9 +29,10 @@
 		this.object.scale.x=5;
 		this.object.scale.y=10;
 		this.object.scale.z=5;
+			//starting position for character
 		this.object.position.set(0, 10, 50);
-		this.keyboard = new THREEx.KeyboardState();
-		//starting position for character
+		
+	
 
 		
 		this.update = function (time) {
@@ -46,17 +48,17 @@
 			this.object.translateZ( -moveDistance );
 			if (  this.keyboard.pressed("S") )
 			this.object.translateZ(  moveDistance );
-			if (  this.keyboard.pressed("Q") )
-			this.object.translateX( -moveDistance );
-			if (  this.keyboard.pressed("E") )
-			this.object.translateX(  moveDistance );	
-		
-			// rotate left/right/up/down
-			//var rotation_matrix = new THREE.Matrix4().identity();
 			if (  this.keyboard.pressed("A") )
-			this.object.rotateOnAxis( new THREE.Vector3(0,1,0), rotateAngle);
+			this.object.translateX( -moveDistance );
 			if (  this.keyboard.pressed("D") )
-			this.object.rotateOnAxis( new THREE.Vector3(0,1,0), -rotateAngle);
+			this.object.translateX( moveDistance );
+			
+		
+			// FOR CAMERA ROTATIONS
+			//this.object.rotateOnAxis( new THREE.Vector3(0,1,0), -rotateAngle);
+			//this.object.rotateOnAxis( new THREE.Vector3(0,1,0), rotateAngle);
+			//var rotation_matrix = new THREE.Matrix4().identity();
+			
 			
 			if (  this.keyboard.pressed("Z") )
 			{
