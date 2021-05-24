@@ -1,9 +1,12 @@
 class BasicCharacterController{
-    constructor(){
-        this.input=new BasicCharacterControllerInput();
-        this.stateMachine=new FiniteStateMachine(new BasicCharacterControllerProxy(this));
+    constructor(speed){
+        this.speed=speed;
 
        
+    }
+
+    setMoveDistance(speed){
+        this.speed=speed;
     }
 
 }
