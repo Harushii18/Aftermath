@@ -1,17 +1,29 @@
 class Time {
     constructor(){
-        this.total_run_time = 0;
+        this.is_pause = false;
+        this.accumalated_run_time = 0;
         this.clock = new THREE.Clock();
+        this.pause_clock = new THREE.Clock();
     }
 
 
-    getDelta(){
-        return this.clock.getDelta();
-    }
-
-    getElapsed()
+    getRunTime()
     {
-        return this.clock.getElapsedTime();
+        this.accumalated_run_time += this.clock.getDelta();
+
+        return this.accumalated_run_time
+    }
+
+    pause()
+    {
+        this.is_pause = true;
+
+    }
+
+    unpause()
+    {
+        this.is_pause = false;
+        this.clock.getDelta();
     }
 
 

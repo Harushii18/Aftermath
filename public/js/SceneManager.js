@@ -3,10 +3,16 @@ class SceneManager {
     constructor(canvas) {
         //this entire function renders a scene where you can add as many items as you want to it (e.g. we can create the house and add as
         //many items as we want to the house). It renders objects from other javascript files
-
+        //------------------------------------------------------------------------------------------------------------------------------------------
+        //These are supposed to act like constants. DO NOT CHANGE
+        this.GAME_PAUSE = "pause";
+        this.GAME_RUN = "run";
+        //------------------------------------------------------------------------------------------------------------------------------------------
 
         //we use (this) to make variables accessible in other classes
         this.time = new Time();
+
+        this.game_state = this.GAME_RUN;
 
 
         this.screenDimensions = {
@@ -108,19 +114,14 @@ class SceneManager {
 
         //this updates the subject/model every frame
         update() {
-            //KAMERON NEEDS TO UPDATE THIS TO CORRECT TIMES:
-             //(don't use elapsed times anymore)
-            const deltaTime = this.time.getElapsed();
-            this.managers[0].update(deltaTime);
+            
             //won't call this loop if it's paused-> only for objects that need to be paused (managers that need to be paused)
-           /* var manager_entities = this.managers[0].entities;
-            var man_length = manager_entities.length;
-            for (let i = 0; i < man_length; i++)
+            if (this.game_state == this.GAME_RUN)
             {
-                manager_entities[i].update(deltaTime);
-            }*/
-       
-
+                const runTime = this.time.getRunTime();
+                this.managers[0].update(runTime);
+            }
+      
             //update orbit controls
             this.controls.update();
 
@@ -134,6 +135,18 @@ class SceneManager {
             this.camera.updateProjectionMatrix();
 
             this.renderer.setSize(window.innerWidth, window.innerHeight);
+
+        }
+
+        pause(){ //when pause mode is entered. The pause menu needs to be rendered.
+            this.game_state = this.GAME_PAUSE;
+            this.time.pause();
+
+        }
+
+        unpause(){
+            this.game_state = this.GAME_RUN;
+            this.time.unpause();
 
         }
     

@@ -10,9 +10,29 @@ bindEventListeners()
 render();
 
 function bindEventListeners() {
+	document.addEventListener('keyup', (event) => onKeyUp(event), false);
+
 	window.onresize = resizeCanvas;
 	resizeCanvas();	
 }
+
+
+function onKeyUp(event) {
+
+	switch (event.keyCode) {
+
+		case 27: //escape key
+				//check if game is paused
+				if (sceneManager.game_state == sceneManager.GAME_PAUSE) {
+					sceneManager.unpause();
+				}
+				else {
+					sceneManager.pause();
+				}
+			break;
+	}
+}
+
 
 function resizeCanvas() {
 	canvas.style.width = '100%';
