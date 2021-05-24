@@ -12,6 +12,8 @@ class SceneManager {
         //we use (this) to make variables accessible in other classes
         this.time = new Time();
 
+        
+
         this.game_state = this.GAME_RUN;
 
 
@@ -106,6 +108,7 @@ class SceneManager {
             //it is, certain ones won't be paused, and some will be
             managers[0].register(new GeneralLights());
             managers[0].register(new House());
+            managers[0].register(new MainChar());
             managers[0].register(new SceneSubject())
 
 
