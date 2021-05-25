@@ -30,6 +30,16 @@ These you do every time you want to run the server and load the game:
 <br /> 
 <br /> 
 
+______________________________________________________
+
 **About the game** <br /> 
 
 Who are you? Where are you? Trapped in an unfamiliar house, you need to find a way out. But there's only one problem: you're not alone.
+
+**Controls**</br> 
+
+W    - Move forward</br>
+A    - Move left</br>
+S    - Move backward</br>
+D    - Move right</br>
+Shift- Run</br>
