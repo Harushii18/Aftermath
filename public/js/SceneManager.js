@@ -15,15 +15,19 @@ class SceneManager {
         //These are supposed to act like constants. DO NOT CHANGE
         this.GAME_PAUSE = "pause";
         this.GAME_RUN = "run";
+        this.GAME_START = "start";
         //------------------------------------------------------------------------------------------------------------------------------------------
 
         //we use (this) to make variables accessible in other classes
         this.time = new Time();
+        this.objPauseMenu;  
 
 
 
         this.game_state = this.GAME_RUN;
 
+        this.width_screen = canvas.width;
+        this.height_screen = canvas.height;
 
         this.screenDimensions = {
             width: canvas.width,
@@ -42,13 +46,16 @@ class SceneManager {
         this.loadToScene(this.managers[0].entities);
 
 
-        //Allow camera to orbit target (player) - OrbitPlayer Controls
 
-        //this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
-        //this.controls.target.set(0, 20, 0);
-        //this.controls.update();
+        //---------------------------------------------------------------------------------------------------------------------------------
+ // Ok, now we have the cube. Next we'll create the hud. For that we'll
+  // need a separate scene which we'll render on top of our 3D scene. We'll
+  // use a dynamic texture to render the HUD.
 
-
+  
+  // We will use 2D canvas element to render our HUD.  
+	
+  //---------------------------------------------------------------------------------------------------------------------------------
 
     }
 
@@ -56,9 +63,9 @@ class SceneManager {
     {
         for (let i = 0 ; i < entities.length ; i++)
         {
-            console.log("before" +i.toString());
+
             this.scene.add(entities[i].object);
-            console.log("after");
+
         }
     }
         //this function creates our scene
@@ -120,17 +127,17 @@ class SceneManager {
         //add subjects to the scene
         createManagers() {
 
-            const managers=[new EntityManager()];
+            const managers=[new EntityManager(), new EntityManager()];
             //can be altered so we can add multiple entities, and depending on which position
             //it is, certain ones won't be paused, and some will be
-
-            //Note that these variables are declared globally before the class definition
+      //Note that these variables are declared globally before the class definition
             /*This is so that we can use any of these object's methods or values later somewhere else*/
             managers[0].register(generalLights);
             managers[0].register(house);
             managers[0].register(mainChar);
             managers[0].register(sceneSubject);
             managers[0].register(testBlock);
+
 
             return managers;
         }
@@ -152,16 +159,40 @@ class SceneManager {
             {
                 const runTime = this.time.getRunTime();
                 this.managers[0].update(runTime);
+                    //update orbit controls
+                //this.controls.update();
+
+               this.renderer.render(this.scene, this.camera);
+
             }
+            else{
+                 // this.controls.update();
+
+                this.renderer.autoClear = true;
+            
+                //render scene1
+                this.renderer.render(this.scene, this.camera);
+            
+                //prevent canvas from being erased with next .render call
+                this.renderer.autoClear = false;
+            
+                //just render scene2 on top of scene1
+                this.renderer.render(this.objPauseMenu.scene, this.objPauseMenu.camera);
+              
+
+
+               // renderer.autoClear = true;
+
+            }
+
 
             //update orbit controls
             //this.controls.update();
 
 
             this.updateCameraPosition();
-
-
-            this.renderer.render(this.scene, this.camera);
+        
+         
         }
 
         //this resizes our game when screen size changed
@@ -178,11 +209,21 @@ class SceneManager {
             this.game_state = this.GAME_PAUSE;
             this.time.pause();
 
+            //this.controls.enabled = false; // stop orbit controls from responding to use input
+
+
+            this.objPauseMenu = new PauseMenu(this.width_screen,this.height_screen);
+
+
+
+
         }
 
         unpause(){
             this.game_state = this.GAME_RUN;
             this.time.unpause();
+        
+            //this.controls.enabled = true; // start orbit controls tp respond to input
 
         }
 

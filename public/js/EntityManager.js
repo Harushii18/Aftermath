@@ -13,6 +13,10 @@ class EntityManager{
             this.entities[i].update(time);
         }
     }
+    
+    clear(){
+        this.entities = [];
+    }
 
     //need to account for destroying objects: removing them completely from the list
 }

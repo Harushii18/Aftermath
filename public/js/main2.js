@@ -44,7 +44,7 @@ function resizeCanvas() {
     sceneManager.onWindowResize();
 }
 
-function render() {
+function render() { 
     requestAnimationFrame(render);
     sceneManager.update();
 }

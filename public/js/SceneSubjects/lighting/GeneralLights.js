@@ -17,11 +17,7 @@ class GeneralLights extends THREE.Object3D {
         this.object.shadow.camera.right = -100;
         this.object.shadow.camera.top = 100;
         this.object.shadow.camera.bottom = -100;
-
-
         this.object.position.set(20, 100, 10);
-
-
     }
 
 
