@@ -157,7 +157,7 @@ class SceneManager {
                 const runTime = this.time.getRunTime();
                 this.managers[0].update(runTime);
                     //update orbit controls
-                this.controls.update();
+                //this.controls.update();
 
                this.renderer.render(this.scene, this.camera);
 
@@ -206,7 +206,7 @@ class SceneManager {
             this.game_state = this.GAME_PAUSE;
             this.time.pause();
 
-            this.controls.enabled = false; // stop orbit controls from responding to use input
+            //this.controls.enabled = false; // stop orbit controls from responding to use input
 
 
             this.objPauseMenu = new PauseMenu(this.width_screen,this.height_screen);
@@ -220,7 +220,7 @@ class SceneManager {
             this.game_state = this.GAME_RUN;
             this.time.unpause();
         
-            this.controls.enabled = true; // start orbit controls tp respond to input
+            //this.controls.enabled = true; // start orbit controls tp respond to input
 
         }
 
