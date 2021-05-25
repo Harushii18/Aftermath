@@ -13,13 +13,14 @@ class MainChar extends THREE.Object3D {
 		this.object.scale.x = 8;
 		this.object.scale.y = 8;
 		this.object.scale.z = 8;
-		this.moveDistance = 0.5;
+
+		//walking and running speeds
+		this.walk=0.5;
+		this.run=1.2;
+
+		this.moveDistance = this.walk;
+
 		this.mixers = []
-
-
-
-		//save keyboard bindings
-		this.keyboard = new THREEx.KeyboardState();
 
 		const loader = new THREE.GLTFLoader();
 		loader.setPath('../../models/characters/');
@@ -59,7 +60,6 @@ class MainChar extends THREE.Object3D {
 			//this.object.rotateOnAxis( new THREE.Vector3(0,1,0), rotateAngle);
 			//var rotation_matrix = new THREE.Matrix4().identity();
 
-			this.moveDistance = 0.1;
 			var rotateAngle = Math.PI / 2 * 0.05;
 
 			const pos = this.object.position.clone();
@@ -79,17 +79,13 @@ class MainChar extends THREE.Object3D {
 				}
 			}
 
-			if (!blocked) {
-				this.move();
-				/*
-				// move forwards/backwards/left/right
-				if (this.keyboard.pressed("W"))
-					this.object.translateZ(-moveDistance);
-				if (this.keyboard.pressed("S"))
-					this.object.translateZ(moveDistance);
-					*/
-			}
-
+			/*if (!blocked) {
+				
+				
+			}*/
+			//MOVE THE CODE BELOW WHEN RAYCASTER IS FIXED
+			//move Character
+			this.move();
 
 /*
 
@@ -99,15 +95,6 @@ class MainChar extends THREE.Object3D {
 			if (this.keyboard.pressed("A"))
 			this.object.translateX(moveDistance);   
 				//this.object.rotateOnAxis(new THREE.Vector3(0, 1, 0), rotateAngle * 0.2);
-			if (this.keyboard.pressed("D"))
-			this.object.translateX(-moveDistance);   
-			//	this.object.rotateOnAxis(new THREE.Vector3(0, 1, 0), -rotateAngle * 0.2);
-
-			if (this.keyboard.pressed("Z")) {
-				this.object.position.set(0, 1, 50);
-				this.object.rotation.set(0, 0, 0);
-			}
-
 */
 
 		};
@@ -137,11 +124,13 @@ class MainChar extends THREE.Object3D {
 
 
 	move(){
-	//	console.log(characterControls.getMovements());
-	//	console.log("HONAY");
-		
+		if (characterControls.getRun()==true){
+			this.moveDistance=this.run;
+		}else{
+			this.moveDistance=this.walk;
+		}
+	//moves character around
 		if (characterControls.moveForward()){
-			console.log(characterControls.moveForward());
 			this.object.translateZ(-this.moveDistance);
 		}
 		if (characterControls.moveBackward()){
@@ -153,8 +142,5 @@ class MainChar extends THREE.Object3D {
 		if (characterControls.moveRight()){
 			this.object.translateX(this.moveDistance);
 		}
-		
 	}
-
-
 }

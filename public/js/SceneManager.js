@@ -34,7 +34,9 @@ class SceneManager {
         this.scene = this.buildScene();
         this.renderer = this.buildRender(this.screenDimensions);
         this.camera = this.buildCamera(this.screenDimensions);
-      //  controls = new PointerLockControls( this.camera, document.body );
+
+        //=========ERROR!!!
+      //  controls = new THREE.PointerLockControls( this.camera );
        // this.scene.add(controls.getObject());
         this.managers = this.createManagers();
         this.loadToScene(this.managers[0].entities);
@@ -110,7 +112,7 @@ class SceneManager {
             const camera = new THREE.PerspectiveCamera(fieldOfView, aspectRatio, nearPlane, farPlane);
             //Set camera initial position to main character
             let pos = mainChar.returnWorldPosition();
-            camera.position.set(pos.x,pos.y,pos.z);
+            camera.position.set(pos.x,pos.y+10,pos.z-10);
 
             return camera;
         }
@@ -183,5 +185,7 @@ class SceneManager {
             this.time.unpause();
 
         }
+
+        
 
 }

@@ -12,6 +12,12 @@ class House extends THREE.Object3D{
       gltf.scene.traverse(c => {
         c.castShadow = true;
       });
+
+      /*Scale to this size when using GameHouse.glb
+      this.object.scale.x=6;
+      this.object.scale.y=6;
+      this.object.scale.z=6;
+      */
       this.object.add( gltf.scene);
     });
 
