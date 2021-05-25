@@ -7,7 +7,7 @@ class House extends THREE.Object3D{
 
     const loader = new THREE.GLTFLoader();
     loader.setPath('../models/');
-    
+
     const gltf = loader.load('Aftermath_Map.glb', (gltf) => {
       gltf.scene.traverse(c => {
         c.castShadow = true;
@@ -15,9 +15,14 @@ class House extends THREE.Object3D{
       this.object.add( gltf.scene);
     });
 
-   
+
 
   }
+
+   return3DObject(){
+    return this.object;
+  }
+
     update(time) {
       //do nothing
     }
