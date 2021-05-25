@@ -1,5 +1,13 @@
 
+//Global Variables
+var generalLights = new GeneralLights();
+var house = new House();
+var sceneSubject = new SceneSubject();
+var testBlock = new TestBlock();
+var mainChar = new MainChar(testBlock);
+
 class SceneManager {
+
     constructor(canvas) {
         //this entire function renders a scene where you can add as many items as you want to it (e.g. we can create the house and add as
         //many items as we want to the house). It renders objects from other javascript files
@@ -12,7 +20,7 @@ class SceneManager {
         //we use (this) to make variables accessible in other classes
         this.time = new Time();
 
-        
+
 
         this.game_state = this.GAME_RUN;
 
@@ -28,10 +36,15 @@ class SceneManager {
         this.camera = this.buildCamera(this.screenDimensions);
         this.managers = this.createManagers();
         this.loadToScene(this.managers[0].entities);
-        //allow camera to orbit target (player)
-        this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
-        this.controls.target.set(0, 20, 0);
-        this.controls.update();
+
+
+        //Allow camera to orbit target (player) - OrbitPlayer Controls
+
+        //this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
+        //this.controls.target.set(0, 20, 0);
+        //this.controls.update();
+
+
 
     }
 
@@ -94,8 +107,9 @@ class SceneManager {
             //there are 2 types of cameras: orthographic and perspective- we will use perspective (more realistic)
             const camera = new THREE.PerspectiveCamera(fieldOfView, aspectRatio, nearPlane, farPlane);
 
-            //set where the camera is
-            camera.position.set(-50, 50, 70);
+            //Set camera initial position to main character
+            let pos = mainChar.returnWorldPosition();
+            camera.position.set(pos.x,pos.y,pos.z);
 
             return camera;
         }
@@ -106,27 +120,43 @@ class SceneManager {
             const managers=[new EntityManager()];
             //can be altered so we can add multiple entities, and depending on which position
             //it is, certain ones won't be paused, and some will be
-            managers[0].register(new GeneralLights());
-            managers[0].register(new House());
-            managers[0].register(new MainChar());
-            managers[0].register(new SceneSubject())
 
+            //Note that these variables are declared globally before the class definition
+            /*This is so that we can use any of these object's methods or values later somewhere else*/
+            managers[0].register(generalLights);
+            managers[0].register(house);
+            managers[0].register(mainChar);
+            managers[0].register(sceneSubject);
+            managers[0].register(testBlock);
 
             return managers;
         }
 
+        updateCameraPosition() {
+          //Match camera position and direction to the character's position and direction
+            let pos = mainChar.returnWorldPosition();
+            let dir = mainChar.returnObjectDirection();
+            //Set y to 10 to move camera closer to head-height
+            this.camera.position.set(pos.x,10,pos.z);
+            this.camera.rotation.set(dir.x,dir.y,dir.z);
+        }
+
         //this updates the subject/model every frame
         update() {
-            
+
             //won't call this loop if it's paused-> only for objects that need to be paused (managers that need to be paused)
             if (this.game_state == this.GAME_RUN)
             {
                 const runTime = this.time.getRunTime();
                 this.managers[0].update(runTime);
             }
-      
+
             //update orbit controls
-            this.controls.update();
+            //this.controls.update();
+
+
+            this.updateCameraPosition();
+
 
             this.renderer.render(this.scene, this.camera);
         }
@@ -152,5 +182,5 @@ class SceneManager {
             this.time.unpause();
 
         }
-    
+
 }
