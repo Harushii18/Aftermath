@@ -3,7 +3,7 @@
 <html>
     <head>
         <title>Aftermath</title>
-        
+
         <!-- SCRIPTS-->
         <!--Loads three.js into our game-->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.js"> </script>
@@ -21,9 +21,15 @@
         </style>
 
       </head>
-      
+
     <body>
         <canvas id="canvas"></canvas>
+        <!--MOVEMENT-->
+        <script src="./important/THREEx.KeyboardState.js" ></script>
+        <script src="./important/FirstPersonControls.js" ></script>
+
+        <!--========================================-->
+
 
         <!--Lighting models-->
         <script src="./js/sceneSubjects/lighting/GeneralLights.js" ></script>
@@ -39,14 +45,19 @@
         <!--Just a demo for you to see how this works-->
         <script src="./js/sceneSubjects/objects/SceneSubject.js" ></script>
 
+        <!--Block to test raycasting -->
+        <script src="./js/sceneSubjects/characters/TestBlock.js" ></script>
+
 
         <!--MANAGERS-->
         <!--Load the scene manager-->
+
         <script src="./js/Overlay/Overlay.js" ></script>  
         <script src="./js/EntityManager.js" ></script>  
         <script src="./js/SceneSubjects/Menu/PauseMenu.js" ></script>  
 
        <script src="./js/SceneManager.js" ></script>  
+
             <script src = "./js/Time.js" ></script>
         <!--Load our main.js function-->
         <script type="module" src="./js/main2.js" type="module"></script>

@@ -1,4 +1,4 @@
-  
+
 class SceneSubject extends THREE.Object3D {
 
 
@@ -20,4 +20,10 @@ class SceneSubject extends THREE.Object3D {
 
 		this.object.scale.set(scale, scale, scale);
 	}
+
+  return3DObject(){
+   return this.object;
+  }
+
+
 }
