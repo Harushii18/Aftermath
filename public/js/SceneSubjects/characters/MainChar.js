@@ -23,7 +23,8 @@
 		});
 
 	*/
-
+		//save keyboard bindings
+		this.keyboard = new THREEx.KeyboardState();
 		//creating a box (need to change it to a character with animations)
 		const geometry = new THREE.BoxGeometry( 1, 1, 1 );
 		const material = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
@@ -53,6 +54,7 @@
       this.object.getWorldDirection(dir);
       //pos.y += 60;
 
+      //Raycasting to detect collisions with house object
       let raycaster = new THREE.Raycaster(pos,dir);
       //raycaster.set(pos,dir);
       let blocked = false;
@@ -80,7 +82,7 @@
 
 
 
-			// rotate left/right/up/down
+			//Rotations
 			//var rotation_matrix = new THREE.Matrix4().identity();
 			if (  this.keyboard.pressed("A") )
 			this.object.rotateOnAxis( new THREE.Vector3(0,1,0), rotateAngle*0.2);
