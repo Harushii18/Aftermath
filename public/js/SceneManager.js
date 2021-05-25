@@ -34,6 +34,8 @@ class SceneManager {
         this.scene = this.buildScene();
         this.renderer = this.buildRender(this.screenDimensions);
         this.camera = this.buildCamera(this.screenDimensions);
+      //  controls = new PointerLockControls( this.camera, document.body );
+       // this.scene.add(controls.getObject());
         this.managers = this.createManagers();
         this.loadToScene(this.managers[0].entities);
 
@@ -106,7 +108,6 @@ class SceneManager {
 
             //there are 2 types of cameras: orthographic and perspective- we will use perspective (more realistic)
             const camera = new THREE.PerspectiveCamera(fieldOfView, aspectRatio, nearPlane, farPlane);
-
             //Set camera initial position to main character
             let pos = mainChar.returnWorldPosition();
             camera.position.set(pos.x,pos.y,pos.z);
