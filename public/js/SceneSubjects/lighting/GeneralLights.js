@@ -1,5 +1,5 @@
-  
-class GeneralLights extends THREE.Object3D {
+
+export class GeneralLights extends THREE.Object3D {
     constructor() {
         super();
         this.object = new THREE.DirectionalLight(0xFFFFFF, 1.0);
@@ -21,13 +21,13 @@ class GeneralLights extends THREE.Object3D {
     }
 
 
-        //if you want the lights to do any change every frame. When update is called in the scene manager, each subject's
-        //update will be called. This light, if rendered first, which it is, currently, will affect every other object
-        update(time) {
-            /*light.intensity = (Math.sin(time)+1.5)/1.5;
-            light.color.setHSL( Math.sin(time), 0.5, 0.5 );
-            */
-        }
+    //if you want the lights to do any change every frame. When update is called in the scene manager, each subject's
+    //update will be called. This light, if rendered first, which it is, currently, will affect every other object
+    update(time) {
+        /*light.intensity = (Math.sin(time)+1.5)/1.5;
+        light.color.setHSL( Math.sin(time), 0.5, 0.5 );
+        */
+    }
 
 
 

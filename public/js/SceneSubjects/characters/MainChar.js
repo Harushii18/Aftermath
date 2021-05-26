@@ -1,9 +1,9 @@
-class MainChar extends THREE.Object3D {
+import { characterControls } from '../../managers/CharacterControls.js';
+export class MainChar extends THREE.Object3D {
 	constructor(houseObject) {
 		super();
 		this.houseObject = houseObject.return3DObject();
-
-		
+		//main character object
 		this.object = new THREE.Object3D();
 		this.clock = new THREE.Clock();
 		//this.object.rotateOnAxis( new THREE.Vector3(0,1,0), -Math.PI);
@@ -14,11 +14,7 @@ class MainChar extends THREE.Object3D {
 		this.object.scale.y = 8;
 		this.object.scale.z = 8;
 
-		//walking and running speeds
-		this.walk=0.5;
-		this.run=1.2;
 
-		this.moveDistance = this.walk;
 
 		this.mixers = []
 
@@ -51,7 +47,7 @@ class MainChar extends THREE.Object3D {
 
 
 			//var rotateAngle = Math.PI / 2 * 0.05;   
-			
+
 
 
 
@@ -83,19 +79,19 @@ class MainChar extends THREE.Object3D {
 				
 				
 			}*/
-			//MOVE THE CODE BELOW WHEN RAYCASTER IS FIXED
+			//MOVE THE CODE BELOW TO INSIDE IF STATEMENT WHEN RAYCASTER IS FIXED
 			//move Character
 			this.move();
 
-/*
-
-
-			//Rotations
-			//var rotation_matrix = new THREE.Matrix4().identity();
-			if (this.keyboard.pressed("A"))
-			this.object.translateX(moveDistance);   
-				//this.object.rotateOnAxis(new THREE.Vector3(0, 1, 0), rotateAngle * 0.2);
-*/
+			/*
+			
+			
+						//Rotations
+						//var rotation_matrix = new THREE.Matrix4().identity();
+						if (this.keyboard.pressed("A"))
+						this.object.translateX(moveDistance);   
+							//this.object.rotateOnAxis(new THREE.Vector3(0, 1, 0), rotateAngle * 0.2);
+			*/
 
 		};
 	}
@@ -123,23 +119,19 @@ class MainChar extends THREE.Object3D {
 	}
 
 
-	move(){
-		if (characterControls.getRun()==true){
-			this.moveDistance=this.run;
-		}else{
-			this.moveDistance=this.walk;
-		}
-	//moves character around
-		if (characterControls.moveForward()){
+	move() {
+		this.moveDistance = characterControls.getSpeed();
+		//moves character around
+		if (characterControls.moveForward()) {
 			this.object.translateZ(-this.moveDistance);
 		}
-		if (characterControls.moveBackward()){
+		if (characterControls.moveBackward()) {
 			this.object.translateZ(this.moveDistance);
 		}
-		if (characterControls.moveLeft()){
+		if (characterControls.moveLeft()) {
 			this.object.translateX(-this.moveDistance);
 		}
-		if (characterControls.moveRight()){
+		if (characterControls.moveRight()) {
 			this.object.translateX(this.moveDistance);
 		}
 	}

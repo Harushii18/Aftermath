@@ -1,5 +1,5 @@
-class Time {
-    constructor(){
+export class Time {
+    constructor() {
         this.is_pause = false;
         this.accumalated_run_time = 0;
         this.clock = new THREE.Clock();
@@ -7,28 +7,24 @@ class Time {
     }
 
 
-    getRunTime()
-    {
+    getRunTime() {
         this.accumalated_run_time += this.clock.getDelta();
-
         return this.accumalated_run_time
     }
 
-    pause()
-    {
+    pause() {
         this.is_pause = true;
 
     }
 
-    unpause()
-    {
+    unpause() {
         this.is_pause = false;
         this.clock.getDelta();
     }
 
 
 
-    
+
 
 
 }
