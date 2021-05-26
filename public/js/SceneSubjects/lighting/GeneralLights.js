@@ -28,8 +28,4 @@ export class GeneralLights extends THREE.Object3D {
         light.color.setHSL( Math.sin(time), 0.5, 0.5 );
         */
     }
-
-
-
-
 }

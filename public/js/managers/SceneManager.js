@@ -1,12 +1,17 @@
 //IMPORT STATEMENTS
+
 import { EntityManager } from './EntityManager.js';
+import { Time } from '../Time.js';
+import { PauseMenu } from '../SceneSubjects/Menu/PauseMenu.js';
+
+//objects
 import { GeneralLights } from '../SceneSubjects/lighting/GeneralLights.js';
 import { House } from '../SceneSubjects/House.js';
 import { SceneSubject } from '../SceneSubjects/objects/SceneSubject.js';
 import { TestBlock } from '../SceneSubjects/characters/TestBlock.js';
 import { MainChar } from '../SceneSubjects/characters/MainChar.js';
-import { Time } from '../Time.js';
-import { PauseMenu } from '../SceneSubjects/Menu/PauseMenu.js';
+
+import { PointerLockControls } from '../../jsm/PointerLockControls.js';
 //==================================================================================================
 
 //Global Variables
@@ -49,9 +54,11 @@ export class SceneManager {
         this.renderer = this.buildRender(this.screenDimensions);
         this.camera = this.buildCamera(this.screenDimensions);
 
-        //=========ERROR!!!
-        //  controls = new THREE.PointerLockControls( this.camera );
-        // this.scene.add(controls.getObject());
+        //initialise pointerlock controls
+        this.pointerLockControls = new PointerLockControls(this.camera);
+        this.scene.add(this.pointerLockControls.getObject());
+        //====================
+
         this.managers = this.createManagers();
         this.loadToScene(this.managers[0].entities);
 
@@ -168,7 +175,6 @@ export class SceneManager {
             this.managers[0].update(runTime);
             //update orbit controls
             //this.controls.update();
-
             this.renderer.render(this.scene, this.camera);
 
         }
