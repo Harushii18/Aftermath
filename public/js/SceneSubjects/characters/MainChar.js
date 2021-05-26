@@ -1,9 +1,9 @@
-class MainChar extends THREE.Object3D {
+import { characterControls } from '../../managers/CharacterControls.js';
+export class MainChar extends THREE.Object3D {
 	constructor(houseObject) {
 		super();
 		this.houseObject = houseObject.return3DObject();
-
-		
+		//main character object
 		this.object = new THREE.Object3D();
 		this.clock = new THREE.Clock();
 		//this.object.rotateOnAxis( new THREE.Vector3(0,1,0), -Math.PI);
@@ -13,13 +13,10 @@ class MainChar extends THREE.Object3D {
 		this.object.scale.x = 8;
 		this.object.scale.y = 8;
 		this.object.scale.z = 8;
-		this.moveDistance = 0.5;
+
+
+
 		this.mixers = []
-
-
-
-		//save keyboard bindings
-		this.keyboard = new THREEx.KeyboardState();
 
 		const loader = new THREE.GLTFLoader();
 		loader.setPath('../../models/characters/');
@@ -50,7 +47,7 @@ class MainChar extends THREE.Object3D {
 
 
 			//var rotateAngle = Math.PI / 2 * 0.05;   
-			
+
 
 
 
@@ -59,7 +56,6 @@ class MainChar extends THREE.Object3D {
 			//this.object.rotateOnAxis( new THREE.Vector3(0,1,0), rotateAngle);
 			//var rotation_matrix = new THREE.Matrix4().identity();
 
-			this.moveDistance = 0.1;
 			var rotateAngle = Math.PI / 2 * 0.05;
 
 			const pos = this.object.position.clone();
@@ -79,36 +75,23 @@ class MainChar extends THREE.Object3D {
 				}
 			}
 
-			if (!blocked) {
-				this.move();
-				/*
-				// move forwards/backwards/left/right
-				if (this.keyboard.pressed("W"))
-					this.object.translateZ(-moveDistance);
-				if (this.keyboard.pressed("S"))
-					this.object.translateZ(moveDistance);
-					*/
-			}
+			/*if (!blocked) {
+				
+				
+			}*/
+			//MOVE THE CODE BELOW TO INSIDE IF STATEMENT WHEN RAYCASTER IS FIXED
+			//move Character
+			this.move();
 
-
-/*
-
-
-			//Rotations
-			//var rotation_matrix = new THREE.Matrix4().identity();
-			if (this.keyboard.pressed("A"))
-			this.object.translateX(moveDistance);   
-				//this.object.rotateOnAxis(new THREE.Vector3(0, 1, 0), rotateAngle * 0.2);
-			if (this.keyboard.pressed("D"))
-			this.object.translateX(-moveDistance);   
-			//	this.object.rotateOnAxis(new THREE.Vector3(0, 1, 0), -rotateAngle * 0.2);
-
-			if (this.keyboard.pressed("Z")) {
-				this.object.position.set(0, 1, 50);
-				this.object.rotation.set(0, 0, 0);
-			}
-
-*/
+			/*
+			
+			
+						//Rotations
+						//var rotation_matrix = new THREE.Matrix4().identity();
+						if (this.keyboard.pressed("A"))
+						this.object.translateX(moveDistance);   
+							//this.object.rotateOnAxis(new THREE.Vector3(0, 1, 0), rotateAngle * 0.2);
+			*/
 
 		};
 	}
@@ -136,25 +119,20 @@ class MainChar extends THREE.Object3D {
 	}
 
 
-	move(){
-	//	console.log(characterControls.getMovements());
-	//	console.log("HONAY");
-		
-		if (characterControls.moveForward()){
-			console.log(characterControls.moveForward());
+	move() {
+		this.moveDistance = characterControls.getSpeed();
+		//moves character around
+		if (characterControls.moveForward()) {
 			this.object.translateZ(-this.moveDistance);
 		}
-		if (characterControls.moveBackward()){
+		if (characterControls.moveBackward()) {
 			this.object.translateZ(this.moveDistance);
 		}
-		if (characterControls.moveLeft()){
+		if (characterControls.moveLeft()) {
 			this.object.translateX(-this.moveDistance);
 		}
-		if (characterControls.moveRight()){
+		if (characterControls.moveRight()) {
 			this.object.translateX(this.moveDistance);
 		}
-		
 	}
-
-
 }

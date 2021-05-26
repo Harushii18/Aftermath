@@ -1,5 +1,5 @@
 
-class SceneSubject extends THREE.Object3D {
+export class SceneSubject extends THREE.Object3D {
 
 
 	constructor() {

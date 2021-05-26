@@ -1,4 +1,4 @@
-class House extends THREE.Object3D{
+export class House extends THREE.Object3D {
   constructor() {
 
     super();
@@ -12,18 +12,24 @@ class House extends THREE.Object3D{
       gltf.scene.traverse(c => {
         c.castShadow = true;
       });
-      this.object.add( gltf.scene);
+
+      /*Scale to this size when using GameHouse.glb
+      this.object.scale.x=6;
+      this.object.scale.y=6;
+      this.object.scale.z=6;
+      */
+      this.object.add(gltf.scene);
     });
 
 
 
   }
 
-   return3DObject(){
+  return3DObject() {
     return this.object;
   }
 
-    update(time) {
-      //do nothing
-    }
+  update(time) {
+    //do nothing
+  }
 }
