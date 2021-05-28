@@ -1,12 +1,20 @@
 //IMPORT STATEMENTS
+
 import { EntityManager } from './EntityManager.js';
+import { Time } from '../Time.js';
+import { PauseMenu } from '../SceneSubjects/Menu/PauseMenu.js';
+
+//objects
 import { GeneralLights } from '../SceneSubjects/lighting/GeneralLights.js';
 import { House } from '../SceneSubjects/House.js';
 import { SceneSubject } from '../SceneSubjects/objects/SceneSubject.js';
 import { TestBlock } from '../SceneSubjects/characters/TestBlock.js';
 import { MainChar } from '../SceneSubjects/characters/MainChar.js';
-import { Time } from '../Time.js';
-import { PauseMenu } from '../SceneSubjects/Menu/PauseMenu.js';
+
+//other
+import { PointerLockControls } from '../../jsm/PointerLockControls.js';
+import { OrbitControls } from '../../jsm/OrbitControls.js';
+import * as THREE from '../../../jsm/three.module.js';
 //==================================================================================================
 
 //Global Variables
@@ -49,9 +57,11 @@ export class SceneManager {
         this.renderer = this.buildRender(this.screenDimensions);
         this.camera = this.buildCamera(this.screenDimensions);
 
-        //=========ERROR!!!
-        //  controls = new THREE.PointerLockControls( this.camera );
-        // this.scene.add(controls.getObject());
+        //initialise pointerlock controls
+        this.pointerLockControls = new PointerLockControls(this.camera);
+        this.scene.add(this.pointerLockControls.getObject());
+        //====================
+
         this.managers = this.createManagers();
         this.loadToScene(this.managers[0].entities);
 
@@ -155,8 +165,10 @@ export class SceneManager {
         let pos = mainChar.returnWorldPosition();
         let dir = mainChar.returnObjectDirection();
         //Set y to 10 to move camera closer to head-height
-        this.camera.position.set(pos.x, 10, pos.z);
-        this.camera.rotation.set(dir.x, dir.y, dir.z);
+        //   this.camera.position.set(pos.x, 10, pos.z);
+        this.camera.position.set(pos.x, 10 + 10, pos.z + 20);
+        //  this.camera.rotation.set(dir.x, dir.y, dir.z);
+        this.camera.rotation.set(dir.x - 0.5, dir.y, dir.z);
     }
 
     //this updates the subject/model every frame
@@ -168,7 +180,6 @@ export class SceneManager {
             this.managers[0].update(runTime);
             //update orbit controls
             //this.controls.update();
-
             this.renderer.render(this.scene, this.camera);
 
         }

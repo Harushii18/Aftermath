@@ -8,13 +8,14 @@ export class CharacterControls {
         //walking and running speeds 
         this.walk = 0.3;
         this.run = 0.5;
+        this.state = 'idle';
 
         //set the char to normalla walk speed initially
         this.moveDistance = this.walk;
     }
 
     checkMovement() {
-        if (keyboardManager.wasPressed('W') && keyboardManager.wasPressed('A') && keyboardManager.wasPressed('S') && keyboardManager.wasPressed('D')) {
+        if (keyboardManager.wasPressed('W') || keyboardManager.wasPressed('A') || keyboardManager.wasPressed('S') || keyboardManager.wasPressed('D')) {
             return true
         }
         return false
@@ -37,6 +38,7 @@ export class CharacterControls {
         return keyboardManager.getKeys();
     }
 
+
     moveForward() {
         return keyboardManager.wasPressed('W');
     }
@@ -49,6 +51,18 @@ export class CharacterControls {
     moveRight() {
         return keyboardManager.wasPressed('D');
     }
+
+    //ANIMATIONS=====================================================
+    checkAnimState(state) {
+        //checks if the curr animation is already playing
+        return (this.state == state);
+    }
+
+    setAnimState(state) {
+        //changes curr animation state
+        this.state = state;
+    }
+
 }
 
 //global variable exported to allow access to the movements
