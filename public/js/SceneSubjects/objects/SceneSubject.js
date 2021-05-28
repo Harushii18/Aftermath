@@ -1,4 +1,4 @@
-
+import * as THREE from '../../../jsm/three.module.js';
 export class SceneSubject extends THREE.Object3D {
 
 

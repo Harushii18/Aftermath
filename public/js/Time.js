@@ -1,3 +1,4 @@
+import * as THREE from '../../../jsm/three.module.js';
 export class Time {
     constructor() {
         this.is_pause = false;

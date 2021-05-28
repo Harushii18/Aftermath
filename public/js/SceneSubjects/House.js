@@ -1,3 +1,6 @@
+import {GLTFLoader} from '../../jsm/GLTFLoader.js';
+import * as THREE from '../../../jsm/three.module.js';
+
 export class House extends THREE.Object3D {
   constructor() {
 
@@ -5,10 +8,10 @@ export class House extends THREE.Object3D {
     this.object = new THREE.Object3D();
     //load house model form blender file
 
-    const loader = new THREE.GLTFLoader();
+    const loader = new GLTFLoader();
     loader.setPath('../models/');
 
-    const gltf = loader.load('Aftermath_Map.glb', (gltf) => {
+    const gltf = loader.load('Aftermath_Map2.glb', (gltf) => {
       gltf.scene.traverse(c => {
         c.castShadow = true;
       });

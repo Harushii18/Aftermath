@@ -6,17 +6,14 @@
   <title>Aftermath</title>
 
   <!-- SCRIPTS-->
-  <!--Loads three.js into our game-->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.js"> </script>
-  <!--Loads orbit controls around player-->
-  <script src="https://cdn.rawgit.com/mrdoob/three.js/master/examples/js/controls/OrbitControls.js"></script>
-  <!--Loads gltf files (our blender files)-->
-  <script src="https://cdn.rawgit.com/mrdoob/three.js/master/examples/js/loaders/GLTFLoader.js"></script>
-  <script src="https://rawgit.com/mrdoob/three.js/master/examples/js/loaders/FBXLoader.js"></script>
-  <
+ 
+  <!--FBX LOADER-->
+  <script src="./jsm/FBXLoader/FBXLoader.js" type='module'></script>
+  <script src="./jsm/FBXLoader/fflate.module.js" type='module'></script>
+  <script src="./jsm/FBXLoader/NURBSCurve.js" type='module'></script>
+  <script src="./jsm/FBXLoader/NURBSUtils.js" type='module'></script>
   <!--Pointer lock controls-->
-
-
+  <script src="./jsm/PointerLockControls.js" type='module'></script>
 
 
   <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
@@ -33,13 +30,16 @@
 
 <body>
   <canvas id="canvas"></canvas>
+  <!--=============================================-->
+
+  <!--=================================================-->
   <!--MOVEMENT-->
-  <script src="./important/THREEx.KeyboardState.js"></script>
-  <script src="./important/FirstPersonControls.js"></script>
-  <script src="./jsm/PointerLockControls.js" type='module'></script>
   <script src="./js/managers/KeyboardManager.js" type='module'></script>
   <script src="./js/managers/CharacterControls.js" type='module'></script>
   <!--========================================-->
+  <!--CAMERA-->
+
+  <!--=======================================-->
 
   <!--Lighting models-->
   <script src="./js/sceneSubjects/lighting/GeneralLights.js" type='module'></script>

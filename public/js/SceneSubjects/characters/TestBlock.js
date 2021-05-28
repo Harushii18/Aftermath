@@ -1,3 +1,4 @@
+import * as THREE from '../../../jsm/three.module.js';
 export class TestBlock extends THREE.Object3D {
   constructor() {
     //load a model and animate it

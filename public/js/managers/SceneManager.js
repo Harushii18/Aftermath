@@ -11,7 +11,10 @@ import { SceneSubject } from '../SceneSubjects/objects/SceneSubject.js';
 import { TestBlock } from '../SceneSubjects/characters/TestBlock.js';
 import { MainChar } from '../SceneSubjects/characters/MainChar.js';
 
+//other
 import { PointerLockControls } from '../../jsm/PointerLockControls.js';
+import { OrbitControls } from '../../jsm/OrbitControls.js';
+import * as THREE from '../../../jsm/three.module.js';
 //==================================================================================================
 
 //Global Variables
@@ -162,8 +165,10 @@ export class SceneManager {
         let pos = mainChar.returnWorldPosition();
         let dir = mainChar.returnObjectDirection();
         //Set y to 10 to move camera closer to head-height
-        this.camera.position.set(pos.x, 10, pos.z);
-        this.camera.rotation.set(dir.x, dir.y, dir.z);
+        //   this.camera.position.set(pos.x, 10, pos.z);
+        this.camera.position.set(pos.x, 10 + 10, pos.z + 20);
+        //  this.camera.rotation.set(dir.x, dir.y, dir.z);
+        this.camera.rotation.set(dir.x - 0.5, dir.y, dir.z);
     }
 
     //this updates the subject/model every frame

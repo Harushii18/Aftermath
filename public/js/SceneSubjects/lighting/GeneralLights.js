@@ -1,3 +1,4 @@
+import * as THREE from '../../../jsm/three.module.js';
 
 export class GeneralLights extends THREE.Object3D {
     constructor() {
