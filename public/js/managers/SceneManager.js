@@ -9,6 +9,7 @@ import { GeneralLights } from '../SceneSubjects/lighting/GeneralLights.js';
 import { House } from '../SceneSubjects/House.js';
 import { SceneSubject } from '../SceneSubjects/objects/SceneSubject.js';
 import { TestBlock } from '../SceneSubjects/characters/TestBlock.js';
+import { Door } from '../SceneSubjects/objects/Door.js';
 import { MainChar } from '../SceneSubjects/characters/MainChar.js';
 
 //other
@@ -22,6 +23,8 @@ var generalLights = new GeneralLights();
 var house = new House();
 var sceneSubject = new SceneSubject();
 var testBlock = new TestBlock();
+var testdoor = new Door();
+
 var mainChar = new MainChar(testBlock);
 
 export class SceneManager {
@@ -56,6 +59,9 @@ export class SceneManager {
         this.scene = this.buildScene();
         this.renderer = this.buildRender(this.screenDimensions);
         this.camera = this.buildCamera(this.screenDimensions);
+        
+        //comment this out
+        this.controls= new OrbitControls(this.camera,this.renderer.domElement);
 
         //initialise pointerlock controls
         this.pointerLockControls = new PointerLockControls(this.camera);
@@ -151,7 +157,14 @@ export class SceneManager {
         //Note that these variables are declared globally before the class definition
         /*This is so that we can use any of these object's methods or values later somewhere else*/
         managers[0].register(generalLights);
+
+      
         managers[0].register(house);
+
+        testdoor.setPosition(0,-0.5,33);
+        //testdoor.setRotation(-Math.PI/2);
+        managers[0].register(testdoor);
+
         managers[0].register(mainChar);
         managers[0].register(sceneSubject);
         managers[0].register(testBlock);
@@ -178,13 +191,18 @@ export class SceneManager {
         if (this.game_state == this.GAME_RUN) {
             const runTime = this.time.getRunTime();
             this.managers[0].update(runTime);
+            
             //update orbit controls
-            //this.controls.update();
+            //comment out this.controls.update() 
+            this.controls.update();
+
             this.renderer.render(this.scene, this.camera);
 
         }
         else {
-            // this.controls.update();
+
+            //comment out
+            this.controls.update();
 
             this.renderer.autoClear = true;
 
@@ -205,10 +223,11 @@ export class SceneManager {
 
 
         //update orbit controls
-        //this.controls.update();
+        //comment out
+        this.controls.update();
 
-
-        this.updateCameraPosition();
+        //uncomment this 
+       // this.updateCameraPosition();
 
 
     }
@@ -227,7 +246,8 @@ export class SceneManager {
         this.game_state = this.GAME_PAUSE;
         this.time.pause();
 
-        //this.controls.enabled = false; // stop orbit controls from responding to use input
+        //comment out 
+        this.controls.enabled = false; // stop orbit controls from responding to use input
 
 
         this.objPauseMenu = new PauseMenu(this.width_screen, this.height_screen);
@@ -241,7 +261,8 @@ export class SceneManager {
         this.game_state = this.GAME_RUN;
         this.time.unpause();
 
-        //this.controls.enabled = true; // start orbit controls tp respond to input
+        //comment out
+        this.controls.enabled = true; // start orbit controls tp respond to input
 
     }
 

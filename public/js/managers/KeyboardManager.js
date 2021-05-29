@@ -11,7 +11,8 @@ export class KeyboardManager {
             S: false,
             D: false,
             SHIFT: false,
-            ESC: false
+            ESC: false,
+            E: false
         };
 
         //add listeners
@@ -37,8 +38,9 @@ export class KeyboardManager {
             case 16: // shift
                 this.keys.SHIFT = true;
                 break;
-
-
+            case 69: //e
+                this.keys.E = true;
+                break;
         }
     }
 
@@ -60,6 +62,9 @@ export class KeyboardManager {
             case 16: // shift
                 this.keys.SHIFT = false;
                 break;
+            case 69: //e
+                this.keys.E = false;
+                break;
 
 
         }
@@ -78,6 +83,8 @@ export class KeyboardManager {
                 return (this.keys.D);
             case 'SHIFT': // shift
                 return (this.keys.SHIFT);
+            case 'E'://e
+                return (this.keys.E);
         }
         return;
     }
