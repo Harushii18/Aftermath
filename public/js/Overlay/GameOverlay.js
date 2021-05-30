@@ -6,24 +6,20 @@ class GameOverlay{
         //creating a box (need to change it to a character with animations)
         this.overlay = document.getElementsByClassName("gameIconBottom");
 
-
-
-
-
         this.update = function (time) {
             //Do nothing
 
         };
     }
     showOverlay() {
-        console.log('Imma show');
+        console.log('show me');
         for (let i = 0; i < this.overlay.length; i++) {
             this.overlay[i].style.display = 'inline-block';
         }
     }
 
     changeText(newText){
-        document.getElementsByClassName("gameIconBottomOverlayText").innerHTML = newText ;
+        document.getElementsByClassName("gameIconBottomOverlayText").textContent = newText ;
     }
 
 

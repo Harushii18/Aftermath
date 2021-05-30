@@ -84,12 +84,20 @@ export class Bookshelf extends THREE.Object3D {
 
         //if the character is in the vicinity of the object
         if (((pos.z < this.object.position.z + vicinityLimitZ) && (pos.z > this.object.position.z - vicinityLimitZ)) && (((pos.x < this.object.position.x + vicinityLimitX)) && ((pos.x > this.object.position.x - vicinityLimitX)))) {
-            gameOverlay.showOverlay();
-            gameOverlay.changeText('[E] Enter code');
+            if (this.complete==false){
+                gameOverlay.showOverlay();
+            }else{
+                gameOverlay.hideOverlay();
+            }
+           
+          //  gameOverlay.changeText('[E] Enter code');
             return true;
         }
 
+        
         gameOverlay.hideOverlay();
+       
+       
         //if the character is not in the vicinity, return false
         return false;
     }

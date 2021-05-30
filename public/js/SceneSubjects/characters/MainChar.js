@@ -189,12 +189,6 @@ export class MainChar extends THREE.Object3D {
 	}
 
 
-	resetChar() {
-		this.object.position.set(0, 1, 50);
-		this.object.rotation.set(0, 0, 0);
-	}
-
-
 	rotate() {
 		var rotateAngle = Math.PI / 2 * 0.05;
 
@@ -207,8 +201,6 @@ export class MainChar extends THREE.Object3D {
 	}
 
 	move() {
-
-
 		this.moveDistance = characterControls.getSpeed();
 		//moves character around
 		if (characterControls.moveForward()) {

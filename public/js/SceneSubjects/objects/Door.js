@@ -2,6 +2,7 @@ import * as THREE from '../../../jsm/three.module.js';
 import { GLTFLoader } from '../../../jsm/GLTFLoader.js';
 import { keyboardManager } from '../../managers/KeyboardManager.js';
 import { mainChar } from '../../managers/SceneManager.js';
+import {gameOverlay} from '../../Overlay/GameOverlay.js';
 
 export class Door extends THREE.Object3D {
     constructor() {
@@ -52,6 +53,9 @@ export class Door extends THREE.Object3D {
 
         //console.log(time);
 
+         //just to show the div
+         var checkVicinity=this.checkCharacterVicinity();
+
 
         if (this.open == true) { //animate
             if (this.idleMixer) {
@@ -76,7 +80,7 @@ export class Door extends THREE.Object3D {
 
         if (keyboardManager.wasPressed('E')) {
             //if character is in vicinity of door, then they can open door
-            if (this.checkCharacterVicinity()) {
+            if (checkVicinity) {
                 if (this.open == false) { // animate
 
                     //this.startTime=time;
@@ -102,15 +106,19 @@ export class Door extends THREE.Object3D {
         let pos = mainChar.returnWorldPosition();
 
         //variable that allows change in vicinity position in which E needs to be pressed:
-        var vicinityLimitZ=20;
+        var vicinityLimitZ=10;
         var vicinityLimitX=10;
 
         //if the character is in the vicinity of the door
         if (((pos.z < this.object.position.z + vicinityLimitZ) && (pos.z > this.object.position.z - vicinityLimitZ)) && (((pos.x < this.object.position.x + vicinityLimitX)) && ((pos.x > this.object.position.x - vicinityLimitX)))) {
+            console.log('hell yeah boii');
+            gameOverlay.showOverlay();
+            gameOverlay.changeText('[E] Open door');
             return true;
         }
-
+        this.overlay = document.getElementsByClassName("gameIconBottom");
         //if the character is not in the vicinity, return false
+       gameOverlay.hideOverlay();
         return false;
     }
 
