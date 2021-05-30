@@ -84,7 +84,6 @@ export class Bookshelf extends THREE.Object3D {
 
         //if the character is in the vicinity of the object
         if (((pos.z < this.object.position.z + vicinityLimitZ) && (pos.z > this.object.position.z - vicinityLimitZ)) && (((pos.x < this.object.position.x + vicinityLimitX)) && ((pos.x > this.object.position.x - vicinityLimitX)))) {
-            console.log('Fuk u');
             gameOverlay.showOverlay();
             gameOverlay.changeText('[E] Enter code');
             return true;
