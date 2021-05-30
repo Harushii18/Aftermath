@@ -64,8 +64,6 @@ export class CharacterControls {
             }else{
                 //just backward
                 return "back"
-
-
             }
 
         }

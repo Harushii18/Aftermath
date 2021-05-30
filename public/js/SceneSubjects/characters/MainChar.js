@@ -11,6 +11,7 @@ export class MainChar extends THREE.Object3D {
 		this.clock = new THREE.Clock();
 
 		this.object.position.set(0, 1, 50);
+	
 		//	this.object.rotateOnAxis( new THREE.Vector3(0,1,0), -Math.PI);
 
 		//change the below to 8 to scale him to the correct scale
@@ -22,26 +23,6 @@ export class MainChar extends THREE.Object3D {
 
 		this.loadModel();
 
-		//CODE FOR LOADING GLTF FILES
-		/*
-		const loader = new THREE.GLTFLoader();
-		loader.setPath('../../models/characters/');
-
-		var gltf = loader.load('walk.glb', (gltf) => {
-			gltf.scene.traverse(c => {
-				c.castShadow = true;
-
-			});
-			this.idleMixer = new THREE.AnimationMixer(gltf.scene);
-			this.idleMixer.timeScale = 1;
-			this.mixers.push(this.idleMixer)
-			var idle = this.idleMixer.clipAction(gltf.animations[0]);
-			idle.play();
-
-			this.object.add(gltf.scene);
-		});
-		*/
-
 		this.update = function (time) {
 
 			//animation
@@ -49,14 +30,6 @@ export class MainChar extends THREE.Object3D {
 				this.determineAnimations();
 				this.walkMixer.update(this.clock.getDelta());
 			}
-
-
-			//var rotateAngle = Math.PI / 2 * 0.05;
-
-			// FOR CAMERA ROTATIONS
-			//this.object.rotateOnAxis( new THREE.Vector3(0,1,0), -rotateAngle);
-			//this.object.rotateOnAxis( new THREE.Vector3(0,1,0), rotateAngle);
-			//var rotation_matrix = new THREE.Matrix4().identity();
 
 			var rotateAngle = Math.PI / 2 * 0.05;
 
@@ -87,14 +60,6 @@ export class MainChar extends THREE.Object3D {
 
 			//move character
 			this.move();
-
-			/*
-						//Rotations
-						//var rotation_matrix = new THREE.Matrix4().identity();
-						if (this.keyboard.pressed("A"))
-						this.object.translateX(moveDistance);
-							//this.object.rotateOnAxis(new THREE.Vector3(0, 1, 0), rotateAngle * 0.2);
-			*/
 
 		};
 	}
@@ -199,6 +164,7 @@ export class MainChar extends THREE.Object3D {
 			fbx.scale.setScalar(0.0115);
 			fbx.traverse(c => {
 				c.castShadow = true;
+				c.receiveShadow=true;
 			});
 
 

@@ -7,17 +7,17 @@ export class GeneralLights extends THREE.Object3D {
 
         this.object.target.position.set(0, 0, 0);
         this.object.castShadow = true;
-        this.object.shadow.bias = -0.001;
-        this.object.shadow.mapSize.width = 2048;
-        this.object.shadow.mapSize.height = 2048;
-        this.object.shadow.camera.near = 0.1;
-        this.object.shadow.camera.far = 500.0;
-        this.object.shadow.camera.near = 0.5;
-        this.object.shadow.camera.far = 500.0;
-        this.object.shadow.camera.left = 100;
-        this.object.shadow.camera.right = -100;
-        this.object.shadow.camera.top = 100;
-        this.object.shadow.camera.bottom = -100;
+        // this.object.shadow.bias = -0.001;
+        // this.object.shadow.mapSize.width = 2048;
+        // this.object.shadow.mapSize.height = 2048;
+        // this.object.shadow.camera.near = 0.1;
+        // this.object.shadow.camera.far = 500.0;
+        // this.object.shadow.camera.near = 0.5;
+        // this.object.shadow.camera.far = 500.0;
+        // this.object.shadow.camera.left = 100;
+        // this.object.shadow.camera.right = -100;
+        // this.object.shadow.camera.top = 100;
+        // this.object.shadow.camera.bottom = -100;
         this.object.position.set(20, 100, 10);
     }
 

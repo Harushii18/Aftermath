@@ -11,14 +11,35 @@ export class KeyboardManager {
             S: false,
             D: false,
             SHIFT: false,
-            ESC: false
+            ESC: false,
+            E: false
         };
+
+        //move camera on mouse movements
+        // this.mouseX = 0;
+        // this.mouseY = 0;
+        // this.windowHalfX = window.innerWidth / 2;
+        // this.windowHalfY = window.innerHeight / 2;
+        // document.addEventListener('mousemove', this.onDocumentMouseMove);
+
 
         //add listeners
         document.addEventListener('keyup', (event) => this.KeyUp(event), false);
         document.addEventListener('keydown', (event) => this.KeyDown(event), false);
     }
 
+    // onDocumentMouseMove(event) {
+    //     this.mouseX = (event.clientX - this.windowHalfX) / 100;
+    //     this.mouseY = (event.clientY - this.windowHalfY) / 100;
+
+    // }
+
+    getMouseX() {
+        return this.mouseX;
+    }
+    getMouseY() {
+        return this.mouseY;
+    }
     //key was pressed
     KeyDown(event) {
         switch (event.keyCode) {
@@ -37,8 +58,9 @@ export class KeyboardManager {
             case 16: // shift
                 this.keys.SHIFT = true;
                 break;
-
-
+            case 69: //e
+                this.keys.E = true;
+                break;
         }
     }
 
@@ -60,6 +82,9 @@ export class KeyboardManager {
             case 16: // shift
                 this.keys.SHIFT = false;
                 break;
+            case 69: //e
+                this.keys.E = false;
+                break;
 
 
         }
@@ -78,6 +103,8 @@ export class KeyboardManager {
                 return (this.keys.D);
             case 'SHIFT': // shift
                 return (this.keys.SHIFT);
+            case 'E'://e
+                return (this.keys.E);
         }
         return;
     }
