@@ -33,7 +33,8 @@ export class SceneManager {
         //These are supposed to act like constants. DO NOT CHANGE
         this.GAME_PAUSE = "pause";
         this.GAME_RUN = "run";
-        this.GAME_START = "start";
+        this.GAME_MENU = "menu";
+        this.GAME_INTRO = "intro";
         //------------------------------------------------------------------------------------------------------------------------------------------
 
         //we use (this) to make variables accessible in other classes
@@ -42,7 +43,7 @@ export class SceneManager {
 
 
 
-        this.game_state = this.GAME_RUN;
+        this.game_state = this.GAME_MENU;
 
         this.width_screen = canvas.width;
         this.height_screen = canvas.height;
@@ -175,15 +176,51 @@ export class SceneManager {
     update() {
 
         //won't call this loop if it's paused-> only for objects that need to be paused (managers that need to be paused)
-        if (this.game_state == this.GAME_RUN) {
+        if(this.game_state == this.GAME_MENU){ //when the game start
+
+            //id the start button
+            const btnStart = document.getElementById("start");
+
+            //start game pressed, remove start screen items
+            btnStart.addEventListener("click", () => {
+                console.log("pressed start");
+                const menu = document.getElementsByClassName("mainMenu");
+                for(let i = 0; i < menu.length; i++){
+                    menu[i].style.display = 'none';
+                }
+                //change state to game intro
+                this.game_state = this.GAME_INTRO;
+            });
+
+
+        } else if(this.game_state == this.GAME_INTRO){
+
+            //make intro screen visible
+            const intro = document.getElementsByClassName("intro");
+            for(let i = 0; i < intro.length; i++){
+                intro[i].style.display = 'flex';
+            }
+
+            //id the continue button
+            const btnContinue = document.getElementById("continue");
+
+            ////intro screen game pressed, remove intro screen items
+            btnContinue.addEventListener("click", () => {
+                for(let i = 0; i < intro.length; i++){
+                    intro[i].style.display = 'none';
+                }
+                //change state to game run
+                this.game_state = this.GAME_RUN;
+            });
+
+        } else if (this.game_state == this.GAME_RUN) {
             const runTime = this.time.getRunTime();
             this.managers[0].update(runTime);
             //update orbit controls
             //this.controls.update();
             this.renderer.render(this.scene, this.camera);
 
-        }
-        else {
+        }  else {
             // this.controls.update();
 
             this.renderer.autoClear = true;
