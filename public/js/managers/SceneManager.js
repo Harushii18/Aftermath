@@ -1,14 +1,21 @@
 //IMPORT STATEMENTS
 
 import { EntityManager } from './EntityManager.js';
+import { LightingManager } from './LightingManager.js';
 import { Time } from '../Time.js';
 import { PauseMenu } from '../SceneSubjects/Menu/PauseMenu.js';
+import { keyboardManager } from './KeyboardManager.js';
+
+//lights
+import { GeneralLights } from '../SceneSubjects/lighting/GeneralLights.js';
+import { CeilingLight } from '../SceneSubjects/lighting/CeilingLight.js';
+import { CeilingLightObj } from '../SceneSubjects/objects/CeilingLightObj.js';
 
 //objects
-import { GeneralLights } from '../SceneSubjects/lighting/GeneralLights.js';
 import { House } from '../SceneSubjects/House.js';
 import { SceneSubject } from '../SceneSubjects/objects/SceneSubject.js';
 import { TestBlock } from '../SceneSubjects/characters/TestBlock.js';
+import { Door } from '../SceneSubjects/objects/Door.js';
 import { MainChar } from '../SceneSubjects/characters/MainChar.js';
 
 //other
@@ -18,11 +25,34 @@ import * as THREE from '../../../jsm/three.module.js';
 //==================================================================================================
 
 //Global Variables
+
+//lights
 var generalLights = new GeneralLights();
+
+//ceiling lights
+var bedroomLightObj = new CeilingLightObj();
+var kitchenLightObj = new CeilingLightObj();
+var studyLightObj = new CeilingLightObj();
+var hallwayLightObj1 = new CeilingLightObj();
+var hallwayLightObj2 = new CeilingLightObj();
+var bathroomLightObj = new CeilingLightObj();
+var loungeLightObj = new CeilingLightObj();
+
+var bedroomLight = new CeilingLight();
+var kitchenLight = new CeilingLight();
+var studyLight = new CeilingLight();
+var hallwayLight1 = new CeilingLight();
+var bathroomLight = new CeilingLight();
+var hallwayLight2 = new CeilingLight();
+var loungeLight = new CeilingLight();
+
+//objects
 var house = new House();
 var sceneSubject = new SceneSubject();
 var testBlock = new TestBlock();
-var mainChar = new MainChar(testBlock);
+var testdoor = new Door();
+
+export var mainChar = new MainChar(testBlock);
 
 export class SceneManager {
 
@@ -58,13 +88,25 @@ export class SceneManager {
         this.renderer = this.buildRender(this.screenDimensions);
         this.camera = this.buildCamera(this.screenDimensions);
 
+
+        //comment this out
+          this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+
         //initialise pointerlock controls
-        this.pointerLockControls = new PointerLockControls(this.camera);
-        this.scene.add(this.pointerLockControls.getObject());
+        this.pointerLockControls = new PointerLockControls(this.camera, this.renderer.domElement);
+        this.pointerLockControls.unlock();
+
+        //this.scene.add(this.pointerLockControls.getObject());
         //====================
 
+        //adjust the ceiling light properties in the house
+        this.setCeilingLightProperties();
+
         this.managers = this.createManagers();
-        this.loadToScene(this.managers[0].entities);
+
+        //load things to scene
+        this.loadToScene(this.managers[0].lights);
+        this.loadToScene(this.managers[1].entities);
 
 
 
@@ -79,6 +121,8 @@ export class SceneManager {
         //---------------------------------------------------------------------------------------------------------------------------------
 
     }
+
+
 
     loadToScene(entities) {
         for (let i = 0; i < entities.length; i++) {
@@ -143,19 +187,75 @@ export class SceneManager {
         return camera;
     }
 
+    setCeilingLightProperties() {
+        //set their light positions
+        bedroomLightObj.setLightPosition(0, 21, 50);
+        bedroomLight.setLightPosition(0, 16, 50);
+
+
+        loungeLightObj.setLightPosition(-45, 21, -60);
+        loungeLight.setLightPosition(-45, 16, -60);
+
+        studyLightObj.setLightPosition(35, 21, -50);
+        studyLight.setLightPosition(35, 16, -50);
+
+        kitchenLight.setLightPosition(-45, 16, 5);
+        kitchenLightObj.setLightPosition(-45, 21, 5);
+
+        bathroomLight.setLightPosition(45, 16, 15);
+        bathroomLightObj.setLightPosition(45, 21, 15);
+
+        hallwayLightObj1.setLightPosition(0, 21, -60);
+        hallwayLight1.setLightPosition(0, 16, -60);
+
+        hallwayLightObj2.setLightPosition(0, 21, 0);
+        hallwayLight2.setLightPosition(0, 16, 0);
+
+
+
+    }
+
     //add subjects to the scene
     createManagers() {
 
-        const managers = [new EntityManager(), new EntityManager()];
+        const managers = [new LightingManager(), new EntityManager()];
         //can be altered so we can add multiple entities, and depending on which position
         //it is, certain ones won't be paused, and some will be
         //Note that these variables are declared globally before the class definition
         /*This is so that we can use any of these object's methods or values later somewhere else*/
-        managers[0].register(generalLights);
-        managers[0].register(house);
-        managers[0].register(mainChar);
-        managers[0].register(sceneSubject);
-        managers[0].register(testBlock);
+
+        //lights
+        //  managers[0].register(generalLights);
+        managers[0].register(bedroomLight);
+        managers[0].register(loungeLight);
+        managers[0].register(studyLight);
+        managers[0].register(hallwayLight1);
+        managers[0].register(hallwayLight2);
+        managers[0].register(kitchenLight);
+        managers[0].register(bathroomLight);
+
+
+        //entities
+        managers[1].register(loungeLightObj);
+        managers[1].register(studyLightObj);
+        managers[1].register(kitchenLightObj);
+        managers[1].register(bathroomLightObj);
+        managers[1].register(bedroomLightObj);
+        managers[1].register(hallwayLightObj1);
+        managers[1].register(hallwayLightObj2);
+
+
+
+
+        managers[1].register(house);
+
+        testdoor.setPosition(0, -0.5, 33);
+        //testdoor.setRotation(-Math.PI/2);
+        managers[1].register(testdoor);
+
+        managers[1].register(mainChar);
+        managers[1].register(sceneSubject);
+        managers[1].register(testBlock);
 
 
         return managers;
@@ -166,10 +266,15 @@ export class SceneManager {
         let pos = mainChar.returnWorldPosition();
         let dir = mainChar.returnObjectDirection();
         //Set y to 10 to move camera closer to head-height
-        //   this.camera.position.set(pos.x, 10, pos.z);
-        this.camera.position.set(pos.x, 10 + 10, pos.z + 20);
-        //  this.camera.rotation.set(dir.x, dir.y, dir.z);
-        this.camera.rotation.set(dir.x - 0.5, dir.y, dir.z);
+
+        //UNCOMMENT FOR 3RD PERSON
+       //  this.camera.position.set(pos.x, 10+10, pos.z + 10);
+        // this.camera.rotation.set(dir.x - 0.5, dir.y, dir.z);
+
+        //UNCOMMENT FOR FIRST PERSON
+      //  this.camera.position.set(pos.x, 15, pos.z - 5);
+     
+      //  this.camera.rotation.set(dir.x, dir.y, dir.z);
     }
 
     //this updates the subject/model every frame
@@ -214,13 +319,24 @@ export class SceneManager {
             });
 
         } else if (this.game_state == this.GAME_RUN) {
+              //TO EXPERIMENT WITH FOR LOOKING AROUND!
+            //  this.camera.position.x += ( keyboardManager.getMouseX() - this.camera.position.x ) ;
+            //   this.camera.position.y += ( - keyboardManager.getMouseY() - this.camera.position.y );
+            // this.camera.lookAt( this.scene.position );
             const runTime = this.time.getRunTime();
             this.managers[0].update(runTime);
+            this.managers[1].update(runTime);
             //update orbit controls
-            //this.controls.update();
+            //comment out this.controls.update() 
+            this.controls.update();
+
             this.renderer.render(this.scene, this.camera);
 
-        }  else {
+        }
+        else {
+
+            //comment out
+
             // this.controls.update();
 
             this.renderer.autoClear = true;
@@ -242,10 +358,11 @@ export class SceneManager {
 
 
         //update orbit controls
-        //this.controls.update();
+        //comment out
+          this.controls.update();
 
-
-        this.updateCameraPosition();
+        //uncomment this 
+        //this.updateCameraPosition();
 
 
     }
@@ -264,7 +381,8 @@ export class SceneManager {
         this.game_state = this.GAME_PAUSE;
         this.time.pause();
 
-        //this.controls.enabled = false; // stop orbit controls from responding to use input
+        //comment out 
+         this.controls.enabled = false; // stop orbit controls from responding to use input
 
 
         this.objPauseMenu = new PauseMenu(this.width_screen, this.height_screen);
@@ -278,10 +396,12 @@ export class SceneManager {
         this.game_state = this.GAME_RUN;
         this.time.unpause();
 
-        //this.controls.enabled = true; // start orbit controls tp respond to input
+        //comment out
+         this.controls.enabled = true; // start orbit controls to respond to input
 
     }
 
 
 
 }
+
