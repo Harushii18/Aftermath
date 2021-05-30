@@ -22,12 +22,12 @@ export class Door extends THREE.Object3D {
 
             });
 
-            //scale door 
+            //scale door
             this.object.scale.x = 0.271;
             this.object.scale.y = 0.271;
             this.object.scale.z = 0.271;
 
-            //play animation 
+            //play animation
             this.idleMixer = new THREE.AnimationMixer(gltf.scene);
             this.idleMixer.timeScale = 0.2; //speed of animation
             this.idle = this.idleMixer.clipAction(gltf.animations[0]);
@@ -114,6 +114,8 @@ export class Door extends THREE.Object3D {
         return false;
     }
 
-
+    return3DObject(){
+     return this.object;
+    }
 
 }

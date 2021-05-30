@@ -5,9 +5,9 @@ import { keyboardManager } from './KeyboardManager.js';
 export class CharacterControls {
 
     constructor() {
-        //walking and running speeds 
-        this.walk = 0.5;
-        this.run = 1;
+        //walking and running speeds
+        this.walk = 0.05; //Was 0.5 - can change back
+        this.run = 0.1; //Was 1 - can change back
         this.state = 'idle';
 
         //set the char to normal walk speed initially
@@ -49,7 +49,7 @@ export class CharacterControls {
             }else{
                 //just forward
                 return "forward"
-            } 
+            }
         }
 
         if (this.moveBackward()){
@@ -96,6 +96,12 @@ export class CharacterControls {
     moveRight() {
          //checks if the character is walking sideways to the right
         return keyboardManager.wasPressed('D');
+    }
+    rotateRight(){
+      return keyboardManager.wasPressed('X');
+    }
+    rotateLeft(){
+      return keyboardManager.wasPressed('Z');
     }
 
     //ANIMATIONS=====================================================
