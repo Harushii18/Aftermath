@@ -5,6 +5,7 @@ import { LightingManager } from './LightingManager.js';
 import { Time } from '../Time.js';
 import { PauseMenu } from '../SceneSubjects/Menu/PauseMenu.js';
 import { keyboardManager } from './KeyboardManager.js';
+import{ CollisionsManager } from './CollisionsManager.js'; //Collision Manager
 
 //lights
 import { GeneralLights } from '../SceneSubjects/lighting/GeneralLights.js';
@@ -52,7 +53,15 @@ var sceneSubject = new SceneSubject();
 var testBlock = new TestBlock();
 var testdoor = new Door();
 
-export var mainChar = new MainChar(house);
+//Collision Manager to add all objects that need to be collided with
+const collisionManager = new CollisionsManager();
+//Add collidable objects here
+collisionManager.addObject(house);
+collisionManager.addObject(testBlock);
+collisionManager.addObject(testdoor);
+
+//Pass collidable objects as a parameter to the main character (raycasting implementation)
+export var mainChar = new MainChar(collisionManager.returnObjects());
 
 export class SceneManager {
 

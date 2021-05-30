@@ -3,9 +3,9 @@ import * as THREE from '../../../jsm/three.module.js';
 import { FBXLoader } from '../../../jsm/FBXLoader/FBXLoader.js';
 
 export class MainChar extends THREE.Object3D {
-	constructor(houseObject) {
+	constructor(collidableObjects) {
 		super();
-		this.houseObject = houseObject.return3DObject();
+		this.collidableObjects = collidableObjects;
 		//main character object
 		this.object = new THREE.Object3D();
 		this.clock = new THREE.Clock();
@@ -43,7 +43,7 @@ export class MainChar extends THREE.Object3D {
 			//raycaster.set(pos,dir);
 			let blocked = false;
 
-			const intersect = raycaster.intersectObject(this.houseObject, true);
+			const intersect = raycaster.intersectObjects(this.collidableObjects, true);
 			if (intersect.length > 0) {
 				if (intersect[0].distance < 3) {
 					console.log("Collision with player model");
