@@ -15,6 +15,10 @@
   <!--Pointer lock controls-->
   <script src="./jsm/PointerLockControls.js" type='module'></script>
 
+  <!--STYLES-->
+  <link rel="stylesheet" href="./assets/styles/gameIcons.css" type="text/css">
+
+
 
   <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
   <style>
@@ -196,11 +200,27 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.0.2/anime.min.js"></script>
     <button id="continue" class="menu-button">continue</button>
   </div>
+
+
+  <!--Game icons in game -->
+
+  <div class='gameIconBottom'>
+
+    <h2 class='gameIconBottomOverlayText'>[E] Interact</h2>
+
+
+  </div>
+
   <canvas id="canvas"></canvas>
+
+  
+
+
   <!--=============================================-->
 
   <!--=================================================-->
   <!--MOVEMENT-->
+  <script src="./js/Overlay/GameOverlay.js" type='module'></script>
   <script src="./js/managers/KeyboardManager.js" type='module'></script>
   <script src="./js/managers/CharacterControls.js" type='module'></script>
   <!--========================================-->

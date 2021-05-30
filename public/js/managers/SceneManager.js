@@ -11,12 +11,15 @@ import { GeneralLights } from '../SceneSubjects/lighting/GeneralLights.js';
 import { CeilingLight } from '../SceneSubjects/lighting/CeilingLight.js';
 import { CeilingLightObj } from '../SceneSubjects/objects/CeilingLightObj.js';
 
-//objects
+//OBJECTS
 import { House } from '../SceneSubjects/House.js';
 import { SceneSubject } from '../SceneSubjects/objects/SceneSubject.js';
 import { TestBlock } from '../SceneSubjects/characters/TestBlock.js';
 import { Door } from '../SceneSubjects/objects/Door.js';
 import { MainChar } from '../SceneSubjects/characters/MainChar.js';
+
+//study
+import { Bookshelf } from '../SceneSubjects/objects/Bookshelf.js';
 
 //other
 import { PointerLockControls } from '../../jsm/PointerLockControls.js';
@@ -51,6 +54,9 @@ var house = new House();
 var sceneSubject = new SceneSubject();
 var testBlock = new TestBlock();
 var testdoor = new Door();
+
+//study
+var bookshelf=new Bookshelf();
 
 export var mainChar = new MainChar(testBlock);
 
@@ -247,6 +253,7 @@ export class SceneManager {
 
 
 
+
         managers[1].register(house);
 
         testdoor.setPosition(0, -0.5, 33);
@@ -256,6 +263,9 @@ export class SceneManager {
         managers[1].register(mainChar);
         managers[1].register(sceneSubject);
         managers[1].register(testBlock);
+
+        //study
+        managers[1].register(bookshelf);
 
 
         return managers;
@@ -384,12 +394,7 @@ export class SceneManager {
         //comment out 
          this.controls.enabled = false; // stop orbit controls from responding to use input
 
-
         this.objPauseMenu = new PauseMenu(this.width_screen, this.height_screen);
-
-
-
-
     }
 
     unpause() {
