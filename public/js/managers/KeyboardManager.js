@@ -12,7 +12,11 @@ export class KeyboardManager {
             D: false,
             SHIFT: false,
             ESC: false,
-            E: false
+            E: false,
+
+            //For rotating
+            Z: false,
+            X: false
         };
 
         //move camera on mouse movements
@@ -61,6 +65,15 @@ export class KeyboardManager {
             case 69: //e
                 this.keys.E = true;
                 break;
+
+            //For rotations
+            case 90:
+              this.keys.Z = true;
+              break;
+            case 88:
+              this.keys.X = true;
+              break;
+
         }
     }
 
@@ -86,6 +99,13 @@ export class KeyboardManager {
                 this.keys.E = false;
                 break;
 
+                //For rotations
+            case 90:
+              this.keys.Z = false;
+              break;
+            case 88:
+              this.keys.X = false;
+              break;
 
         }
     }
@@ -105,9 +125,16 @@ export class KeyboardManager {
                 return (this.keys.SHIFT);
             case 'E'://e
                 return (this.keys.E);
-        }
+
+            case 'Z'://Z
+                return (this.keys.Z);
+
+            case 'X'://X
+                return (this.keys.X);
+
         return;
     }
+  }
 
     getKeys() {
         return this.keys;

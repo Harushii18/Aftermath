@@ -52,7 +52,7 @@ var sceneSubject = new SceneSubject();
 var testBlock = new TestBlock();
 var testdoor = new Door();
 
-export var mainChar = new MainChar(testBlock);
+export var mainChar = new MainChar(house);
 
 export class SceneManager {
 
@@ -116,7 +116,7 @@ export class SceneManager {
         // use a dynamic texture to render the HUD.
 
 
-        // We will use 2D canvas element to render our HUD.  
+        // We will use 2D canvas element to render our HUD.
 
         //---------------------------------------------------------------------------------------------------------------------------------
 
@@ -226,6 +226,8 @@ export class SceneManager {
 
         //lights
         //  managers[0].register(generalLights);
+
+
         managers[0].register(bedroomLight);
         managers[0].register(loungeLight);
         managers[0].register(studyLight);
@@ -273,7 +275,7 @@ export class SceneManager {
 
         //UNCOMMENT FOR FIRST PERSON
       //  this.camera.position.set(pos.x, 15, pos.z - 5);
-     
+
       //  this.camera.rotation.set(dir.x, dir.y, dir.z);
     }
 
@@ -327,7 +329,7 @@ export class SceneManager {
             this.managers[0].update(runTime);
             this.managers[1].update(runTime);
             //update orbit controls
-            //comment out this.controls.update() 
+            //comment out this.controls.update()
             this.controls.update();
 
             this.renderer.render(this.scene, this.camera);
@@ -361,7 +363,7 @@ export class SceneManager {
         //comment out
           this.controls.update();
 
-        //uncomment this 
+        //uncomment this
         //this.updateCameraPosition();
 
 
@@ -381,7 +383,7 @@ export class SceneManager {
         this.game_state = this.GAME_PAUSE;
         this.time.pause();
 
-        //comment out 
+        //comment out
          this.controls.enabled = false; // stop orbit controls from responding to use input
 
 
@@ -404,4 +406,3 @@ export class SceneManager {
 
 
 }
-

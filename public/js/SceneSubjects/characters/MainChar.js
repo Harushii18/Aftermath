@@ -11,8 +11,8 @@ export class MainChar extends THREE.Object3D {
 		this.clock = new THREE.Clock();
 		this.object.rotateOnAxis( new THREE.Vector3(0,1,0), -Math.PI);
 		this.object.position.set(0, 1, 50);
-	
-	
+
+
 
 		//change the below to 8 to scale him to the correct scale
 		this.object.scale.x = 8;
@@ -31,7 +31,7 @@ export class MainChar extends THREE.Object3D {
 				this.walkMixer.update(this.clock.getDelta());
 			}
 
-			var rotateAngle = Math.PI / 2 * 0.05;
+
 
 			const pos = this.object.position.clone();
 			let dir = new THREE.Vector3();
@@ -43,23 +43,26 @@ export class MainChar extends THREE.Object3D {
 			//raycaster.set(pos,dir);
 			let blocked = false;
 
-			const intersect = raycaster.intersectObject(this.houseObject);
+			const intersect = raycaster.intersectObject(this.houseObject, true);
 			if (intersect.length > 0) {
-				if (intersect[0].distance < 50) {
+				if (intersect[0].distance < 3) {
+					console.log("Collision with player model");
 					blocked = true;
 				}
 			}
 
-			/*if (!blocked) {
+			this.rotate();
 
+			if (!blocked) {
+					this.move();
 
-			}*/
+			}
 			//MOVE THE CODE BELOW TO INSIDE IF STATEMENT WHEN RAYCASTER IS FIXED
 			//determine animations
 
 
 			//move character
-			this.move();
+
 
 		};
 	}
@@ -192,7 +195,20 @@ export class MainChar extends THREE.Object3D {
 	}
 
 
+	rotate() {
+		var rotateAngle = Math.PI / 2 * 0.05;
+
+		if (characterControls.rotateRight()) {
+			this.object.rotateOnAxis(new THREE.Vector3(0,1,0), -rotateAngle );
+		}
+		if (characterControls.rotateLeft()) {
+			this.object.rotateOnAxis(new THREE.Vector3(0,1,0), rotateAngle );
+		}
+	}
+
 	move() {
+
+
 		this.moveDistance = characterControls.getSpeed();
 		//moves character around
 		if (characterControls.moveForward()) {
@@ -207,5 +223,6 @@ export class MainChar extends THREE.Object3D {
 		if (characterControls.moveRight()) {
 			this.object.translateX(-this.moveDistance);
 		}
+
 	}
 }
