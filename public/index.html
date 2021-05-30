@@ -1,6 +1,6 @@
 <!-- This html file is what the browser shows when we run index.js on port 5000. Therefore our display of our game-->
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/html">
 
 <head>
   <title>Aftermath</title>
@@ -24,11 +24,178 @@
       width: 100%;
       overflow: hidden
     }
+
+    .menu{
+      position: absolute;
+      z-index: 3;
+      width: 100%;
+      height: 100%;
+      /*background: url("assets/house2.jpg") no-repeat;*/
+      /*background-size: cover;*/
+      background: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .bg{
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      z-index: 0;
+      background: url("assets/house2.jpg") no-repeat;
+      background-size: cover;
+      overflow: hidden;
+    }
+
+    .intro{
+      position: absolute;
+      z-index: 3;
+      width: 100%;
+      height: 100%;
+      /*background: url("assets/house2.jpg") no-repeat;*/
+      /*background-size: cover;*/
+      background: black;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+
+    .menu button{
+      diplay: block;
+
+    }
+
+    .menu-button{
+      height: 50px;
+      width: 100px;
+      border-radius: 10px;
+      color: white;
+      background: black;
+      margin: 20px;
+      z-index: 2;
+    }
+
+    .menu-button:hover{
+      color: black;
+      background: white;
+    }
+
+    .ml3 {
+      font-weight: 900;
+      font-size: 2em;
+      display: block;
+      color: white;
+      margin: 30px;
+    }
+
+    .title {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 2;
+      display: flex;
+      justify-content: start;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .title > h1 {
+      color: #fff;
+      font-size: 5rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .fog {
+      position: absolute;
+      height: 100vh;
+      width: 100%;
+      background: #fff;
+    }
+
+    .fog-container {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    .fog-img {
+      position: absolute;
+      height: 100vh;
+      width: 300vw;
+      z-index: 2;
+    }
+
+    .fog-img-first {
+      background: url("assets/fog1.png");
+      background-repeat: repeat-x;
+      background-size: contain;
+      background-position: center;
+      animation: marquee 60s linear infinite;
+    }
+
+    .fog-img-second {
+      background: url("assets/fog2.png");
+      background-repeat: repeat-x;
+      background-size: contain;
+      background-position: center;
+      animation: marquee 30s linear infinite;
+    }
+
+    @keyframes marquee {
+      0% {
+        transform: translate3d(0, 0, 0);
+      }
+
+      100% {
+        transform: translate3d(-200vw, 0, 0);s
+      }
+    }
   </style>
 
 </head>
 
 <body>
+<div class="mainMenu">
+  <div class="title">
+    <h1>AFTERMATH</h1>
+  </div>
+  <div class="bg"></div>
+  <div class="fog-container">
+    <div class="fog-img fog-img-first"></div>
+    <div class="fog-img fog-img-second"></div>
+  </div>
+
+  <div class="menu">
+    <button id="start" class="menu-button">start</button>
+    <button id="about" class="menu-button">About</button>
+    <audio src="assets/bg_sound.mp3" loop="true" autoplay="true" ></audio>
+    <!--    <img src="assets/cyber.jpg" class="dsd" alt="image" height="100" width="100">-->
+  </div>
+</div>
+
+  <div class="intro">
+    <h2 class="ml3">I have been unable to escape this bedroom that I found myself in three days ago. I do not know how I arrived here.</h2>
+
+     </br>
+
+    <h2 class="ml3">Every day I hear strange sounds: a child and woman crying, gurgling, knocking, scratching on the door and, this morning, there was a knocking sound coming from behind the picture frame.</h2>
+
+    </br>
+
+    <h2 class="ml3"> I am absolutely terrified. The most terrifying thing of all is that I do not feel the need to do the things that humans normally do: such as eat or sleep. Therefore I have been awake all this time: trapped in this hell and unable to break down the door to escape. All the windows are locked, and the glass cannot be shattered. The noises outside this room get louder by the day, as though something is approaching me…
+      I need to escape quickly.</h2>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.0.2/anime.min.js"></script>
+    <button id="continue" class="menu-button">continue</button>
+  </div>
   <canvas id="canvas"></canvas>
   <!--=============================================-->
 
@@ -69,6 +236,7 @@
   <script src="./js/Time.js" type='module'></script>
   <!--Load our main.js function-->
   <script type="module" src="./js/main2.js"></script>
+
 </body>
 
 </html>
