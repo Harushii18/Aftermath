@@ -99,11 +99,11 @@ export class SceneManager {
 
 
         //comment this out
-          this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+        //  this.controls = new OrbitControls(this.camera, this.renderer.domElement);
 
         //initialise pointerlock controls
         this.pointerLockControls = new PointerLockControls(this.camera, this.renderer.domElement);
-        this.pointerLockControls.unlock();
+        //this.pointerLockControls.lock();
 
         //this.scene.add(this.pointerLockControls.getObject());
         //====================
@@ -119,6 +119,16 @@ export class SceneManager {
 
 
 
+      //  canvas.requestPointerLock = canvas.requestPointerLock || canvas.mozRequestPointerLock;//request pointer lock from player
+      //  document.exitPointerLock = document.exitPointerLock || document.mozExitPointerLock;//exit pointer lock
+
+
+        //Define new listener for clicking on the canvas
+        canvas.onclick = function(){
+            canvas.requestPointerLock(); //If canvas clicked, request pointer lock
+        };
+
+
         //---------------------------------------------------------------------------------------------------------------------------------
         // Ok, now we have the cube. Next we'll create the hud. For that we'll
         // need a separate scene which we'll render on top of our 3D scene. We'll
@@ -130,6 +140,8 @@ export class SceneManager {
         //---------------------------------------------------------------------------------------------------------------------------------
 
     }
+
+
 
 
 
@@ -277,15 +289,23 @@ export class SceneManager {
         let pos = mainChar.returnWorldPosition();
         let dir = mainChar.returnObjectDirection();
         //Set y to 10 to move camera closer to head-height
+        this.pointerLockControls.getObject().position.set( pos.x,17.5,pos.z ); //Need to sort out position of camera at head height
 
         //UNCOMMENT FOR 3RD PERSON
-       //  this.camera.position.set(pos.x, 10+10, pos.z + 10);
+        // this.camera.position.set(pos.x, 10+10, pos.z + 10);
         // this.camera.rotation.set(dir.x - 0.5, dir.y, dir.z);
 
         //UNCOMMENT FOR FIRST PERSON
-      //  this.camera.position.set(pos.x, 15, pos.z - 5);
+        //this.camera.position.set(pos.x, 15, pos.z - 5);
 
-      //  this.camera.rotation.set(dir.x, dir.y, dir.z);
+        //this.camera.rotation.set(dir.x, dir.y, dir.z);
+    }
+
+    updatePlayerRotation(){
+      var mousePointer = new THREE.Vector3();
+      mousePointer.normalize();
+      this.pointerLockControls.getDirection( mousePointer );
+      mainChar.updateDirection( mousePointer );
     }
 
     //this updates the subject/model every frame
@@ -339,7 +359,7 @@ export class SceneManager {
             this.managers[1].update(runTime);
             //update orbit controls
             //comment out this.controls.update()
-            this.controls.update();
+              //this.controls.update();
 
             this.renderer.render(this.scene, this.camera);
 
@@ -370,12 +390,13 @@ export class SceneManager {
 
         //update orbit controls
         //comment out
-          this.controls.update();
+          //this.controls.update();
 
         //uncomment this
-        //this.updateCameraPosition();
 
-
+        this.updateCameraPosition();
+      //  console.log(this.pointerLockControls.getDirection());
+        this.updatePlayerRotation();//Make player face direction of mouse movement
     }
 
     //this resizes our game when screen size changed

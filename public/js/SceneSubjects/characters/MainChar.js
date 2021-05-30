@@ -11,7 +11,7 @@ export class MainChar extends THREE.Object3D {
 		this.clock = new THREE.Clock();
 		this.object.rotateOnAxis( new THREE.Vector3(0,1,0), -Math.PI);
 		this.object.position.set(0, 1, 50);
-
+		//this.object.visible = false; //Uncomment this so you don't see the player in first person view
 
 
 		//change the below to 8 to scale him to the correct scale
@@ -38,25 +38,45 @@ export class MainChar extends THREE.Object3D {
 			this.object.getWorldDirection(dir);
 			//pos.y += 60;
 
-			//Raycasting to detect collisions with house object
-			let raycaster = new THREE.Raycaster(pos, dir);
-			//raycaster.set(pos,dir);
-			let blocked = false;
 
-			const intersect = raycaster.intersectObjects(this.collidableObjects, true);
+
+			let forwardDirection = new THREE.Vector3(dir.x,dir.y,dir.z);
+			let backwardDirection = new THREE.Vector3(-dir.x,dir.y,-dir.z);
+			let rightDirection = new THREE.Vector3(-dir.x,dir.y,dir.z);
+			let leftDirection = new THREE.Vector3(dir.x,dir.y,-dir.z);
+
+			//Raycasting to detect collisions with house object
+			let forwardRaycaster = new THREE.Raycaster(pos, forwardDirection);
+
+			let blockedF = false;//Blocked forward
+			let blockedB = false;//Blocked backward
+			let blockedR = false;//Blocked right
+			let blockedL = false;//Blocked left
+
+
+			const intersect = forwardRaycaster.intersectObjects(this.collidableObjects, true);
 			if (intersect.length > 0) {
 				if (intersect[0].distance < 3) {
 					console.log("Collision with player model");
-					blocked = true;
+					blockedF = true;
 				}
 			}
 
 			this.rotate();
 
-			if (!blocked) {
+			if (!blockedF) {
 					this.move();
+			}
+			if (!blockedB) {
 
 			}
+			if (!blockedR){
+
+			}
+			if(!blockedL){
+
+			}
+
 			//MOVE THE CODE BELOW TO INSIDE IF STATEMENT WHEN RAYCASTER IS FIXED
 			//determine animations
 
@@ -70,6 +90,11 @@ export class MainChar extends THREE.Object3D {
 	//Return the direction that the character  is facing
 	returnObjectDirection() {
 		return this.object.rotation;
+	}
+
+
+	updateDirection(directionVector){
+		this.object.lookAt(directionVector.x+this.object.position.x,this.object.position.y,directionVector.z+this.object.position.z);
 	}
 
 	//Return the position of the object in the world
