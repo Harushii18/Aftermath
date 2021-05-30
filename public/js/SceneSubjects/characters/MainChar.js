@@ -9,10 +9,10 @@ export class MainChar extends THREE.Object3D {
 		//main character object
 		this.object = new THREE.Object3D();
 		this.clock = new THREE.Clock();
-
+		this.object.rotateOnAxis( new THREE.Vector3(0,1,0), -Math.PI);
 		this.object.position.set(0, 1, 50);
 	
-		//	this.object.rotateOnAxis( new THREE.Vector3(0,1,0), -Math.PI);
+	
 
 		//change the below to 8 to scale him to the correct scale
 		this.object.scale.x = 8;
@@ -196,16 +196,16 @@ export class MainChar extends THREE.Object3D {
 		this.moveDistance = characterControls.getSpeed();
 		//moves character around
 		if (characterControls.moveForward()) {
-			this.object.translateZ(-this.moveDistance);
-		}
-		if (characterControls.moveBackward()) {
 			this.object.translateZ(this.moveDistance);
 		}
+		if (characterControls.moveBackward()) {
+			this.object.translateZ(-this.moveDistance);
+		}
 		if (characterControls.moveLeft()) {
-			this.object.translateX(-this.moveDistance);
+			this.object.translateX(this.moveDistance);
 		}
 		if (characterControls.moveRight()) {
-			this.object.translateX(this.moveDistance);
+			this.object.translateX(-this.moveDistance);
 		}
 	}
 }

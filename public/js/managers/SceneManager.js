@@ -90,7 +90,7 @@ export class SceneManager {
 
 
         //comment this out
-        //  this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+          this.controls = new OrbitControls(this.camera, this.renderer.domElement);
 
         //initialise pointerlock controls
         this.pointerLockControls = new PointerLockControls(this.camera, this.renderer.domElement);
@@ -268,12 +268,13 @@ export class SceneManager {
         //Set y to 10 to move camera closer to head-height
 
         //UNCOMMENT FOR 3RD PERSON
-        // this.camera.position.set(pos.x, 10 +10, pos.z + 20);
+       //  this.camera.position.set(pos.x, 10+10, pos.z + 10);
         // this.camera.rotation.set(dir.x - 0.5, dir.y, dir.z);
 
         //UNCOMMENT FOR FIRST PERSON
-        this.camera.position.set(pos.x, 15, pos.z - 5);
-        this.camera.rotation.set(dir.x, dir.y, dir.z);
+      //  this.camera.position.set(pos.x, 15, pos.z - 5);
+     
+      //  this.camera.rotation.set(dir.x, dir.y, dir.z);
     }
 
     //this updates the subject/model every frame
@@ -327,7 +328,7 @@ export class SceneManager {
             this.managers[1].update(runTime);
             //update orbit controls
             //comment out this.controls.update() 
-            //this.controls.update();
+            this.controls.update();
 
             this.renderer.render(this.scene, this.camera);
 
@@ -358,10 +359,10 @@ export class SceneManager {
 
         //update orbit controls
         //comment out
-        //  this.controls.update();
+          this.controls.update();
 
         //uncomment this 
-        this.updateCameraPosition();
+        //this.updateCameraPosition();
 
 
     }
@@ -381,7 +382,7 @@ export class SceneManager {
         this.time.pause();
 
         //comment out 
-        // this.controls.enabled = false; // stop orbit controls from responding to use input
+         this.controls.enabled = false; // stop orbit controls from responding to use input
 
 
         this.objPauseMenu = new PauseMenu(this.width_screen, this.height_screen);
@@ -396,7 +397,7 @@ export class SceneManager {
         this.time.unpause();
 
         //comment out
-        // this.controls.enabled = true; // start orbit controls tp respond to input
+         this.controls.enabled = true; // start orbit controls to respond to input
 
     }
 
