@@ -111,9 +111,10 @@ export class Door extends THREE.Object3D {
 
         //if the character is in the vicinity of the door
         if (((pos.z < this.object.position.z + vicinityLimitZ) && (pos.z > this.object.position.z - vicinityLimitZ)) && (((pos.x < this.object.position.x + vicinityLimitX)) && ((pos.x > this.object.position.x - vicinityLimitX)))) {
-            console.log('hell yeah boii');
+           // console.log('hell yeah boii');
+           // gameOverlay.showOverlay(this.object.position.x,this.object.position.y,this.object.position.z);
             gameOverlay.showOverlay();
-            gameOverlay.changeText('[E] Open door');
+          //  gameOverlay.changeText('[E] Open door');
             return true;
         }
         this.overlay = document.getElementsByClassName("gameIconBottom");

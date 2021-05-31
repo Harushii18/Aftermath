@@ -2,7 +2,7 @@ import * as THREE from '../../../jsm/three.module.js';
 import { GLTFLoader } from '../../../jsm/GLTFLoader.js';
 import { keyboardManager } from '../../managers/KeyboardManager.js';
 import { mainChar } from '../../managers/SceneManager.js';
-import {gameOverlay} from '../../Overlay/GameOverlay.js';
+
 
 export class Bookshelf extends THREE.Object3D {
     constructor() {
@@ -85,17 +85,18 @@ export class Bookshelf extends THREE.Object3D {
         //if the character is in the vicinity of the object
         if (((pos.z < this.object.position.z + vicinityLimitZ) && (pos.z > this.object.position.z - vicinityLimitZ)) && (((pos.x < this.object.position.x + vicinityLimitX)) && ((pos.x > this.object.position.x - vicinityLimitX)))) {
             if (this.complete==false){
-                gameOverlay.showOverlay();
+             //   gameOverlay.showOverlay();
+               
             }else{
-                gameOverlay.hideOverlay();
+               // gameOverlay.hideOverlay();
             }
            
-          //  gameOverlay.changeText('[E] Enter code');
+           // gameOverlay.changeText('[E] Enter code');
             return true;
         }
 
         
-        gameOverlay.hideOverlay();
+       // gameOverlay.hideOverlay();
        
        
         //if the character is not in the vicinity, return false
