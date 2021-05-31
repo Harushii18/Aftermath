@@ -5,7 +5,7 @@ import { LightingManager } from './LightingManager.js';
 import { Time } from '../Time.js';
 import { PauseMenu } from '../SceneSubjects/Menu/PauseMenu.js';
 import { keyboardManager } from './KeyboardManager.js';
-import{ CollisionsManager } from './CollisionsManager.js'; //Collision Manager
+import { CollisionsManager } from './CollisionsManager.js'; //Collision Manager
 
 //lights
 import { GeneralLights } from '../SceneSubjects/lighting/GeneralLights.js';
@@ -17,6 +17,12 @@ import { House } from '../SceneSubjects/House.js';
 import { SceneSubject } from '../SceneSubjects/objects/SceneSubject.js';
 import { TestBlock } from '../SceneSubjects/characters/TestBlock.js';
 import { Door } from '../SceneSubjects/objects/Door.js';
+
+import { BedroomPainting } from '../SceneSubjects/objects/BedroomPainting.js';
+import { BedroomDrawer } from '../SceneSubjects/objects/BedroomDrawer.js';
+import { CupboardDoorR } from '../SceneSubjects/objects/CupboardDoorR.js';
+
+
 import { MainChar } from '../SceneSubjects/characters/MainChar.js';
 
 //other
@@ -53,6 +59,13 @@ var sceneSubject = new SceneSubject();
 var testBlock = new TestBlock();
 var testdoor = new Door();
 
+var bedroomPainting = new BedroomPainting();
+var bedroomDrawer = new BedroomDrawer();
+var cupBoardDoorR = new CupboardDoorR();
+
+
+
+
 //Collision Manager to add all objects that need to be collided with
 const collisionManager = new CollisionsManager();
 //Add collidable objects here
@@ -62,6 +75,7 @@ collisionManager.addObject(testdoor);
 
 //Pass collidable objects as a parameter to the main character (raycasting implementation)
 export var mainChar = new MainChar(collisionManager.returnObjects());
+
 
 export class SceneManager {
 
@@ -97,6 +111,9 @@ export class SceneManager {
         this.renderer = this.buildRender(this.screenDimensions);
         this.camera = this.buildCamera(this.screenDimensions);
 
+        //comment this out
+        this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+
 
         //comment this out
         //  this.controls = new OrbitControls(this.camera, this.renderer.domElement);
@@ -119,12 +136,12 @@ export class SceneManager {
 
 
 
-      //  canvas.requestPointerLock = canvas.requestPointerLock || canvas.mozRequestPointerLock;//request pointer lock from player
-      //  document.exitPointerLock = document.exitPointerLock || document.mozExitPointerLock;//exit pointer lock
+        //  canvas.requestPointerLock = canvas.requestPointerLock || canvas.mozRequestPointerLock;//request pointer lock from player
+        //  document.exitPointerLock = document.exitPointerLock || document.mozExitPointerLock;//exit pointer lock
 
 
         //Define new listener for clicking on the canvas
-        canvas.onclick = function(){
+        canvas.onclick = function () {
             canvas.requestPointerLock(); //If canvas clicked, request pointer lock
         };
 
@@ -280,6 +297,11 @@ export class SceneManager {
         managers[1].register(sceneSubject);
         managers[1].register(testBlock);
 
+        managers[1].register(bedroomPainting);
+        managers[1].register(bedroomDrawer);
+        managers[1].register(cupBoardDoorR);
+
+
 
         return managers;
     }
@@ -289,7 +311,7 @@ export class SceneManager {
         let pos = mainChar.returnWorldPosition();
         let dir = mainChar.returnObjectDirection();
         //Set y to 10 to move camera closer to head-height
-        this.pointerLockControls.getObject().position.set( pos.x,17.5,pos.z ); //Need to sort out position of camera at head height
+        this.pointerLockControls.getObject().position.set(pos.x, 17.5, pos.z); //Need to sort out position of camera at head height
 
         //UNCOMMENT FOR 3RD PERSON
         // this.camera.position.set(pos.x, 10+10, pos.z + 10);
@@ -301,18 +323,18 @@ export class SceneManager {
         //this.camera.rotation.set(dir.x, dir.y, dir.z);
     }
 
-    updatePlayerRotation(){
-      var mousePointer = new THREE.Vector3();
-      mousePointer.normalize();
-      this.pointerLockControls.getDirection( mousePointer );
-      mainChar.updateDirection( mousePointer );
+    updatePlayerRotation() {
+        var mousePointer = new THREE.Vector3();
+        mousePointer.normalize();
+        this.pointerLockControls.getDirection(mousePointer);
+        mainChar.updateDirection(mousePointer);
     }
 
     //this updates the subject/model every frame
     update() {
 
         //won't call this loop if it's paused-> only for objects that need to be paused (managers that need to be paused)
-        if(this.game_state == this.GAME_MENU){ //when the game start
+        if (this.game_state == this.GAME_MENU) { //when the game start
 
             //id the start button
             const btnStart = document.getElementById("start");
@@ -321,7 +343,7 @@ export class SceneManager {
             btnStart.addEventListener("click", () => {
                 console.log("pressed start");
                 const menu = document.getElementsByClassName("mainMenu");
-                for(let i = 0; i < menu.length; i++){
+                for (let i = 0; i < menu.length; i++) {
                     menu[i].style.display = 'none';
                 }
                 //change state to game intro
@@ -329,11 +351,11 @@ export class SceneManager {
             });
 
 
-        } else if(this.game_state == this.GAME_INTRO){
+        } else if (this.game_state == this.GAME_INTRO) {
 
             //make intro screen visible
             const intro = document.getElementsByClassName("intro");
-            for(let i = 0; i < intro.length; i++){
+            for (let i = 0; i < intro.length; i++) {
                 intro[i].style.display = 'flex';
             }
 
@@ -342,7 +364,7 @@ export class SceneManager {
 
             ////intro screen game pressed, remove intro screen items
             btnContinue.addEventListener("click", () => {
-                for(let i = 0; i < intro.length; i++){
+                for (let i = 0; i < intro.length; i++) {
                     intro[i].style.display = 'none';
                 }
                 //change state to game run
@@ -350,50 +372,53 @@ export class SceneManager {
             });
 
         } else if (this.game_state == this.GAME_RUN) {
-              //TO EXPERIMENT WITH FOR LOOKING AROUND!
+            //TO EXPERIMENT WITH FOR LOOKING AROUND!
             //  this.camera.position.x += ( keyboardManager.getMouseX() - this.camera.position.x ) ;
             //   this.camera.position.y += ( - keyboardManager.getMouseY() - this.camera.position.y );
             // this.camera.lookAt( this.scene.position );
             const runTime = this.time.getRunTime();
             this.managers[0].update(runTime);
+
             this.managers[1].update(runTime);
             //update orbit controls
             //comment out this.controls.update()
-              //this.controls.update();
+            //this.controls.update();
+
 
             this.renderer.render(this.scene, this.camera);
 
             //check pause--------------------------------
 
-            if ((keyboardManager.keyDownQueue[0] == "ESC") )
-          //if (keyboardManager.keys.ESC)
+            if ((keyboardManager.keyDownQueue[0] == "ESC"))
+            //if (keyboardManager.keys.ESC)
             {
 
-                    this.pause();
-                    keyboardManager.keyDownQueue.shift();
-                   //keyboardManager.keys.ESC = false;
+                this.pause();
+                keyboardManager.keyDownQueue.shift();
+                //keyboardManager.keys.ESC = false;
 
             }
 
             //--------------------------------------------
 
         }
-        else if (this.game_state == this.GAME_PAUSE)
-        {
-   
+
+        else if (this.game_state == this.GAME_PAUSE) {
+
             if (keyboardManager.keyDownQueue[0] == 'ESC')
-           //if (keyboardManager.keys.ESC)
+            //if (keyboardManager.keys.ESC)
             {
 
-                    this.unpause();
-                    //keyboardManager.keys.ESC = false;
-                    keyboardManager.keyDownQueue.shift();
+                this.unpause();
+                //keyboardManager.keys.ESC = false;
+                keyboardManager.keyDownQueue.shift();
 
             }
 
             //comment out
 
             // this.controls.update();
+
 
             this.renderer.autoClear = true;
 
@@ -415,13 +440,15 @@ export class SceneManager {
 
         //update orbit controls
         //comment out
-          //this.controls.update();
+
+        //this.controls.update();
 
         //uncomment this
 
         this.updateCameraPosition();
-      //  console.log(this.pointerLockControls.getDirection());
+        //  console.log(this.pointerLockControls.getDirection());
         this.updatePlayerRotation();//Make player face direction of mouse movement
+
     }
 
     //this resizes our game when screen size changed
@@ -435,16 +462,15 @@ export class SceneManager {
     }
 
     pause() { //when pause mode is entered. The pause menu needs to be rendered.
-        if (this.game_state == this.GAME_RUN)
-        {
-        this.game_state = this.GAME_PAUSE;
-        this.time.pause();
-
-        //comment out
-        this.pointerLockControls.lock(); // stop orbit controls from responding to use input
+        if (this.game_state == this.GAME_RUN) {
+            this.game_state = this.GAME_PAUSE;
+            this.time.pause();
 
 
-        this.objPauseMenu = new PauseMenu(this.width_screen, this.height_screen);
+            //comment out
+            this.pointerLockControls.lock(); // stop orbit controls from responding to use input
+
+            this.objPauseMenu = new PauseMenu(this.width_screen, this.height_screen);
         }
 
 
@@ -457,7 +483,9 @@ export class SceneManager {
         this.time.unpause();
 
         //comment out
+
          this.pointerLockControls.unlock(); // start orbit controls to respond to input
+
 
     }
 
