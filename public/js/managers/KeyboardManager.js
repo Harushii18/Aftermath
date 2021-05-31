@@ -19,6 +19,10 @@ export class KeyboardManager {
             X: false
         };
 
+        this.keyDownQueue = [];//Stores multiple key presses in sequence
+        this.event =  {
+            repeat: false}
+
         //move camera on mouse movements
         // this.mouseX = 0;
         // this.mouseY = 0;
@@ -44,8 +48,14 @@ export class KeyboardManager {
     getMouseY() {
         return this.mouseY;
     }
+
+    getEvent()
+    {
+        return this.event;
+    }
     //key was pressed
     KeyDown(event) {
+        this.event = event;
         switch (event.keyCode) {
             case 87: // w
                 this.keys.W = true;
@@ -74,11 +84,31 @@ export class KeyboardManager {
               this.keys.X = true;
               break;
 
+            
+		    case 27: //escape key
+                //check if game is paused
+             //   console.log(event.repeat);
+                if (event.repeat == false)
+                {
+                    this.keys.ESC = true;
+                    this.keyDownQueue.push("ESC");
+                   /* if (sceneManager.game_state == sceneManager.GAME_PAUSE) {
+                        sceneManager.unpause();
+                    }
+                    else if (sceneManager.game_state == sceneManager.GAME_RUN)
+                    {
+                        sceneManager.pause();
+                    }   */
+                }
+                break;
+
         }
     }
 
     //key was released
     KeyUp(event) {
+
+        this.event = event;
         switch (event.keyCode) {
             case 87: // w
                 this.keys.W = false;
@@ -106,6 +136,21 @@ export class KeyboardManager {
             case 88:
               this.keys.X = false;
               break;
+            case 27: //escape key
+              //check if game is paused
+             // console.log(event.repeat);
+              //if (event.repeat == false)
+              //{
+                  this.keys.ESC = false;
+                 /* if (sceneManager.game_state == sceneManager.GAME_PAUSE) {
+                      sceneManager.unpause();
+                  }
+                  else if (sceneManager.game_state == sceneManager.GAME_RUN)
+                  {
+                      sceneManager.pause();
+                  }   */
+              //}
+              break;
 
         }
     }
@@ -131,6 +176,9 @@ export class KeyboardManager {
 
             case 'X'://X
                 return (this.keys.X);
+            
+            case 'ESC'://X
+            return (this.keys.ESC);
 
         return;
     }
