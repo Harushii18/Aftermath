@@ -363,8 +363,33 @@ export class SceneManager {
 
             this.renderer.render(this.scene, this.camera);
 
+            //check pause--------------------------------
+
+            if ((keyboardManager.keyDownQueue[0] == "ESC") )
+          //if (keyboardManager.keys.ESC)
+            {
+
+                    this.pause();
+                    keyboardManager.keyDownQueue.shift();
+                   //keyboardManager.keys.ESC = false;
+
+            }
+
+            //--------------------------------------------
+
         }
-        else {
+        else if (this.game_state == this.GAME_PAUSE)
+        {
+   
+            if (keyboardManager.keyDownQueue[0] == 'ESC')
+           //if (keyboardManager.keys.ESC)
+            {
+
+                    this.unpause();
+                    //keyboardManager.keys.ESC = false;
+                    keyboardManager.keyDownQueue.shift();
+
+            }
 
             //comment out
 
@@ -410,6 +435,8 @@ export class SceneManager {
     }
 
     pause() { //when pause mode is entered. The pause menu needs to be rendered.
+        if (this.game_state == this.GAME_RUN)
+        {
         this.game_state = this.GAME_PAUSE;
         this.time.pause();
 
@@ -418,7 +445,7 @@ export class SceneManager {
 
 
         this.objPauseMenu = new PauseMenu(this.width_screen, this.height_screen);
-
+        }
 
 
 

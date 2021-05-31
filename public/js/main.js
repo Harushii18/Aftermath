@@ -12,7 +12,8 @@ bindEventListeners()
 render();
 
 function bindEventListeners() {
-	document.addEventListener('keyup', (event) => onKeyUp(event), false);
+///	document.addEventListener('keydown', (event) => onKeyDown(event), false);
+
 
 	window.onresize = resizeCanvas;
 	resizeCanvas();
@@ -25,21 +26,27 @@ I did my keyboard stuff in the char controls class, but you'll probably need to 
 I'm not sure how to make a keyboard manager, since char controls and pausing are different events, so that's why I didn't
 make one. Because I don't doing everything in one thing is ok... But actually.... Wait
 */
-function onKeyUp(event) {
+/*function onKeyDown(event) {
 
 	switch (event.keyCode) {
 
 		case 27: //escape key
 			//check if game is paused
+			console.log(event.repeat);
+			if (event.repeat == false)
+			{
 			if (sceneManager.game_state == sceneManager.GAME_PAUSE) {
 				sceneManager.unpause();
 			}
 			else {
 				sceneManager.pause();
 			}
+		}
 			break;
 	}
-}
+}*/
+
+
 //=========================================================================
 
 
