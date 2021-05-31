@@ -11,7 +11,7 @@ export class MainChar extends THREE.Object3D {
 		this.clock = new THREE.Clock();
 		this.object.rotateOnAxis( new THREE.Vector3(0,1,0), -Math.PI);
 		this.object.position.set(0, 1, 50);
-
+		this.object.visible = false; //Uncomment this so you don't see the player in first person view
 
 
 		//change the below to 8 to scale him to the correct scale
@@ -38,30 +38,46 @@ export class MainChar extends THREE.Object3D {
 			this.object.getWorldDirection(dir);
 			//pos.y += 60;
 
+
+			//Direction of raycasters
+			let forwardDirection = new THREE.Vector3(dir.x,dir.y,dir.z);
+			let backwardDirection = new THREE.Vector3(dir.x,dir.y,-dir.z);
+			let rightDirection = new THREE.Vector3(-dir.x,dir.y,dir.z);
+			let leftDirection = new THREE.Vector3(dir.x,dir.y,dir.z);
+
 			//Raycasting to detect collisions with house object
-			let raycaster = new THREE.Raycaster(pos, dir);
-			//raycaster.set(pos,dir);
-			let blocked = false;
-
-			const intersect = raycaster.intersectObjects(this.collidableObjects, true);
-			if (intersect.length > 0) {
-				if (intersect[0].distance < 3) {
-					console.log("Collision with player model");
-					blocked = true;
-				}
-			}
-
-			this.rotate();
-
-			if (!blocked) {
-					this.move();
-
-			}
-			//MOVE THE CODE BELOW TO INSIDE IF STATEMENT WHEN RAYCASTER IS FIXED
-			//determine animations
+			let forwardRaycaster = new THREE.Raycaster(pos, forwardDirection);
+			let backwardRaycaster = new THREE.Raycaster(pos, backwardDirection);
+			let rightRaycaster = new THREE.Raycaster(pos, rightDirection);
+			let leftRaycaster = new THREE.Raycaster(pos, leftDirection);
 
 
-			//move character
+			//Boolean variables representing collision
+			let blockedF = false;//Blocked forward
+			let blockedB = false;//Blocked backward
+			let blockedR = false;//Blocked right
+			let blockedL = false;//Blocked left
+
+			//Check forward intersections
+			blockedF = this.checkIntersections(blockedF, forwardRaycaster);
+
+			//Check backward intersections
+			blockedB = this.checkIntersections(blockedB, backwardRaycaster);
+
+			//Check right intersections
+			blockedR = this.checkIntersections(blockedR, rightRaycaster);
+
+			//Check left intersections
+			blockedL = this.checkIntersections(blockedL, leftRaycaster);
+
+			//Player movement
+			this.move(blockedF, blockedB, blockedR, blockedL);
+
+
+/*Note: Because the scene is warped due to the Perspective Camera, sometimes the ray (from the raycaster) doesn't detect the collision
+because the angle between the camera and the collidable object is not orthogonal. Eg. if the wall/object is parallel to the direction
+that the camera faces, walking right/left will result in a collision, but any other angle to the
+wall/object doesn't result in a collision. */
 
 
 		};
@@ -70,6 +86,26 @@ export class MainChar extends THREE.Object3D {
 	//Return the direction that the character  is facing
 	returnObjectDirection() {
 		return this.object.rotation;
+	}
+
+
+
+
+//Check intersections of a raycaster with collidable objects
+	checkIntersections(blocked, raycaster){
+		const intersect = raycaster.intersectObjects(this.collidableObjects, true);
+		if (intersect.length > 0) {
+			if (intersect[0].distance < 3) {
+				//console.log("Collision");
+				blocked = true;
+			}
+		}
+		return blocked;
+	}
+
+
+	updateDirection(directionVector){
+		this.object.lookAt(directionVector.x+this.object.position.x,this.object.position.y,directionVector.z+this.object.position.z);
 	}
 
 	//Return the position of the object in the world
@@ -206,23 +242,47 @@ export class MainChar extends THREE.Object3D {
 		}
 	}
 
-	move() {
 
+//Move the player
+	move(blockedF,blockedB,blockedR,blockedL) {
 
 		this.moveDistance = characterControls.getSpeed();
 		//moves character around
-		if (characterControls.moveForward()) {
-			this.object.translateZ(this.moveDistance);
-		}
-		if (characterControls.moveBackward()) {
-			this.object.translateZ(-this.moveDistance);
-		}
-		if (characterControls.moveLeft()) {
-			this.object.translateX(this.moveDistance);
-		}
-		if (characterControls.moveRight()) {
-			this.object.translateX(-this.moveDistance);
+
+//If front of character is not blocked
+		if(!blockedF){
+			//If trying to move forward
+			if (characterControls.moveForward()) {
+				this.object.translateZ(this.moveDistance);
+			}
 		}
 
+//If back of character is not blocked
+		if(!blockedB){
+			//If trying to move backward
+			if (characterControls.moveBackward()) {
+				this.object.translateZ(-this.moveDistance);
+			}
+		}
+
+//If right of character is not blocked
+		if(!blockedR){
+			//If trying to move right
+			if (characterControls.moveRight()) {
+				this.object.translateX(-this.moveDistance);
+			}
+		}
+
+//If left of character is not blocked
+		if(!blockedL){
+			//If trying to move left
+			if (characterControls.moveLeft()) {
+				this.object.translateX(this.moveDistance);
+			}
+		}
+
+
+
 	}
+
 }
