@@ -441,7 +441,7 @@ export class SceneManager {
         this.time.pause();
 
         //comment out
-         this.controls.enabled = false; // stop orbit controls from responding to use input
+        this.pointerLockControls.lock(); // stop orbit controls from responding to use input
 
 
         this.objPauseMenu = new PauseMenu(this.width_screen, this.height_screen);
@@ -453,10 +453,11 @@ export class SceneManager {
 
     unpause() {
         this.game_state = this.GAME_RUN;
+
         this.time.unpause();
 
         //comment out
-         this.controls.enabled = true; // start orbit controls to respond to input
+         this.pointerLockControls.unlock(); // start orbit controls to respond to input
 
     }
 
