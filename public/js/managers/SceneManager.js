@@ -17,6 +17,12 @@ import { House } from '../SceneSubjects/House.js';
 import { SceneSubject } from '../SceneSubjects/objects/SceneSubject.js';
 import { TestBlock } from '../SceneSubjects/characters/TestBlock.js';
 import { Door } from '../SceneSubjects/objects/Door.js';
+
+import { BedroomPainting } from '../SceneSubjects/objects/BedroomPainting.js';
+import { BedroomDrawer } from '../SceneSubjects/objects/BedroomDrawer.js';
+import { CupboardDoorR } from '../SceneSubjects/objects/CupboardDoorR.js';
+
+
 import { MainChar } from '../SceneSubjects/characters/MainChar.js';
 
 
@@ -61,6 +67,9 @@ var testdoor = new Door();
 //study
 var bookshelf = new Bookshelf();
 
+var bedroomPainting = new BedroomPainting();
+var bedroomDrawer = new BedroomDrawer();
+var cupBoardDoorR = new CupboardDoorR();
 
 //Collision Manager to add all objects that need to be collided with
 const collisionManager = new CollisionsManager();
@@ -106,6 +115,9 @@ export class SceneManager {
         this.scene = this.buildScene();
         this.renderer = this.buildRender(this.screenDimensions);
         this.camera = this.buildCamera(this.screenDimensions);
+
+        //comment this out
+        this.controls = new OrbitControls(this.camera, this.renderer.domElement);
 
 
         //comment this out
@@ -295,6 +307,11 @@ export class SceneManager {
         //study
         managers[1].register(bookshelf);
 
+        managers[1].register(bedroomPainting);
+        managers[1].register(bedroomDrawer);
+        managers[1].register(cupBoardDoorR);
+
+
 
         return managers;
     }
@@ -371,6 +388,7 @@ export class SceneManager {
             // this.camera.lookAt( this.scene.position );
             const runTime = this.time.getRunTime();
             this.managers[0].update(runTime);
+
             this.managers[1].update(runTime);
             //update orbit controls
             //comment out this.controls.update()
@@ -409,6 +427,7 @@ export class SceneManager {
 
             // this.controls.update();
 
+
             this.renderer.autoClear = true;
 
             //render scene1
@@ -436,6 +455,7 @@ export class SceneManager {
         this.updateCameraPosition();
         //  console.log(this.pointerLockControls.getDirection());
         this.updatePlayerRotation();//Make player face direction of mouse movement
+
     }
 
     //this resizes our game when screen size changed
@@ -466,7 +486,10 @@ export class SceneManager {
         this.time.unpause();
 
         //comment out
-        this.pointerLockControls.unlock(); // start orbit controls to respond to input
+
+         this.pointerLockControls.unlock(); // start orbit controls to respond to input
+
+
 
     }
 

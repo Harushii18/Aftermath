@@ -12,10 +12,12 @@ export class Door extends THREE.Object3D {
 
         this.clock = new THREE.Clock();
         const loader = new GLTFLoader();
-        loader.setPath('../../models/');
-        this.open = true; //open door animation
 
-        this.startTime = 0;
+        loader.setPath('../../models/3DObjects/');
+        this.open = false; //open door animation
+
+        this.startTime=0;
+
 
         var gltf = loader.load('testdoor.glb', (gltf) => {
             gltf.scene.traverse(c => {
@@ -23,22 +25,26 @@ export class Door extends THREE.Object3D {
 
             });
 
-            //scale door
+            //scale door 
             this.object.scale.x = 0.271;
             this.object.scale.y = 0.271;
             this.object.scale.z = 0.271;
-
-            //play animation
+           
+            //play animation 
             this.idleMixer = new THREE.AnimationMixer(gltf.scene);
-            this.idleMixer.timeScale = 0.2; //speed of animation
+            this.idleMixer.timeScale = 0.08; //speed of animation
             this.idle = this.idleMixer.clipAction(gltf.animations[0]);
-            // this.idle.play();
+            this.idle.clampWhenFinished=true;
+            
+           // this.idle.play();
+
 
 
             this.object.add(gltf.scene);
         });
 
     }
+
 
     setPosition(x, y, z) {
         this.object.position.set(x, y, z);
@@ -85,6 +91,7 @@ export class Door extends THREE.Object3D {
 
                     //this.startTime=time;
                     this.idle.play();
+                    this.idle.loop = THREE.LoopOnce;
                     // if(this.startTime==this.startTime+1){
                     //     this.idleMixer.stopAllAction();//stop animation after start time+3
                     //     this.open = false;
@@ -126,5 +133,6 @@ export class Door extends THREE.Object3D {
     return3DObject(){
      return this.object;
     }
+
 
 }
