@@ -8,7 +8,8 @@ export class Overlay {
 
         // Create the camera and set the viewport to match the screen dimensions.
         this.camera = new THREE.OrthographicCamera(-width / 2, width / 2, height / 2, -height / 2, 0, 30);
-
+  //  this.camera = new THREE.PerspectiveCamera( 45, width / height, 1, 1000 );
+      // scene.add( camera );
         // Create also a custom scene for HUD.
         this.scene = new THREE.Scene();
 
