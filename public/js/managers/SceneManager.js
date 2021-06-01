@@ -156,6 +156,7 @@ export class SceneManager {
 
         //---------------------------------------------------------------------------------------------------------------------------------
 
+
     }
 
 
@@ -332,7 +333,9 @@ export class SceneManager {
 
     //this updates the subject/model every frame
     update() {
-
+      
+            
+            
         //won't call this loop if it's paused-> only for objects that need to be paused (managers that need to be paused)
         if (this.game_state == this.GAME_MENU) { //when the game start
 
@@ -389,13 +392,11 @@ export class SceneManager {
 
             //check pause--------------------------------
 
-            if ((keyboardManager.keyDownQueue[0] == "ESC"))
-            //if (keyboardManager.keys.ESC)
+            if ((keyboardManager.keyDownQueue[0] == "P") )
             {
 
-                this.pause();
-                keyboardManager.keyDownQueue.shift();
-                //keyboardManager.keys.ESC = false;
+                    this.pause();
+                    keyboardManager.keyDownQueue.shift();
 
             }
 
@@ -403,24 +404,22 @@ export class SceneManager {
 
         }
 
-        else if (this.game_state == this.GAME_PAUSE) {
-
-            if (keyboardManager.keyDownQueue[0] == 'ESC')
-            //if (keyboardManager.keys.ESC)
+        else if (this.game_state == this.GAME_PAUSE)
+        {
+   
+            if (keyboardManager.keyDownQueue[0] == 'P')
             {
 
-                this.unpause();
-                //keyboardManager.keys.ESC = false;
-                keyboardManager.keyDownQueue.shift();
-
-            }
+                    this.unpause();
+                    keyboardManager.keyDownQueue.shift();
+      }
 
             //comment out
 
             // this.controls.update();
+            this.objPauseMenu.update(this.time.getElapsedTime());
 
-
-            this.renderer.autoClear = true;
+         this.renderer.autoClear = true;
 
             //render scene1
             this.renderer.render(this.scene, this.camera);
@@ -429,9 +428,12 @@ export class SceneManager {
             this.renderer.autoClear = false;
 
             //just render scene2 on top of scene1
+            this.renderer.getContext().disable(this.renderer.getContext().DEPTH_TEST);
+            
+            
             this.renderer.render(this.objPauseMenu.scene, this.objPauseMenu.camera);
 
-
+            this.renderer.getContext().enable(this.renderer.getContext().DEPTH_TEST);
 
             // renderer.autoClear = true;
 
