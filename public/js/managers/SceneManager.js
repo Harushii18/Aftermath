@@ -76,6 +76,10 @@ var bedroomPainting = new BedroomPainting();
 var bedroomDrawer = new BedroomDrawer();
 var cupBoardDoorR = new CupboardDoorR();
 
+
+
+
+
 //Collision Manager to add all objects that need to be collided with
 const collisionManager = new CollisionsManager();
 //Add collidable objects here
@@ -120,6 +124,10 @@ export class SceneManager {
         this.scene = this.buildScene();
         this.renderer = this.buildRender(this.screenDimensions);
         this.camera = this.buildCamera(this.screenDimensions);
+
+        //Post-processing Effects
+      //  this.composer = new EffectComposer(this.renderer);
+      //  this.composer.addPass(new RenderPass(this.scene,this.camera));
 
         //comment this out
         this.controls = new OrbitControls(this.camera, this.renderer.domElement);
@@ -340,7 +348,7 @@ export class SceneManager {
         if (isFirstPersonView==true){
             mainChar.setVisibility(false);
             this.pointerLockControls.getObject().position.set(pos.x, 17.5, pos.z); //Need to sort out position of camera at head height
-            this.updatePlayerRotation();//Make player face direction of mouse movement
+
         }
         //Third Person View
         else if(isFirstPersonView==false){
@@ -349,13 +357,23 @@ export class SceneManager {
           this.controls.target.set(pos.x, 17.5, pos.z+dir.z);//Set position at player model and face the same direction as model
           this.controls.update();//Update Orbital Controls
         }
+
+        this.updatePlayerRotation();//Make player face direction of mouse movement
     }
 
     updatePlayerRotation() {
+      if(isFirstPersonView==true){
         var mousePointer = new THREE.Vector3();
         mousePointer.normalize();
         this.pointerLockControls.getDirection(mousePointer);
         mainChar.updateDirection(mousePointer);
+      }
+      if(isFirstPersonView==false){
+        var directionOfCamera = new THREE.Vector3();
+        directionOfCamera.normalize();
+        this.camera.getWorldDirection( directionOfCamera );
+        mainChar.updateDirection(directionOfCamera);
+      }
     }
 
     //this updates the subject/model every frame
