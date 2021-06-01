@@ -10,6 +10,7 @@ import { CollisionsManager } from './CollisionsManager.js'; //Collision Manager
 //lights
 import { GeneralLights } from '../SceneSubjects/lighting/GeneralLights.js';
 import { CeilingLight } from '../SceneSubjects/lighting/CeilingLight.js';
+import { AmbientLight } from '../SceneSubjects/lighting/AmbientLight.js';
 import { CeilingLightObj } from '../SceneSubjects/objects/CeilingLightObj.js';
 
 //objects
@@ -58,10 +59,12 @@ var bathroomLight = new CeilingLight();
 var hallwayLight2 = new CeilingLight();
 var loungeLight = new CeilingLight();
 
+var ambientLight = new AmbientLight();
+
 //objects
 var house = new House();
 //var sceneSubject = new SceneSubject();
-//var testBlock = new TestBlock();
+var testBlock = new TestBlock();
 var testdoor = new Door();
 var bedroomPainting = new BedroomPainting();
 var bedroomDrawer = new BedroomDrawer();
@@ -76,7 +79,7 @@ var cupBoardDoorR = new CupboardDoorR();
 const collisionManager = new CollisionsManager();
 //Add collidable objects here
 collisionManager.addObject(house);
-//collisionManager.addObject(testBlock);
+collisionManager.addObject(testBlock);
 collisionManager.addObject(testdoor);
 
 //Pass collidable objects as a parameter to the main character (raycasting implementation)
@@ -211,8 +214,10 @@ export class SceneManager {
             canvas: canvas,
             antialias: true, alpha: true
         });
+        renderer.setClearColor(0xEEEEEE, 1.0);
         renderer.shadowMap.enabled = true;
-        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        //renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        renderer.shadowMapSoft = true;
         renderer.setPixelRatio(window.devicePixelRatio);
         renderer.setSize(window.innerWidth, window.innerHeight);
 
@@ -277,7 +282,7 @@ export class SceneManager {
         //lights
         //  managers[0].register(generalLights);
 
-
+        managers[0].register(ambientLight);
         managers[0].register(bedroomLight);
         managers[0].register(loungeLight);
         managers[0].register(studyLight);
@@ -285,6 +290,7 @@ export class SceneManager {
         managers[0].register(hallwayLight2);
         managers[0].register(kitchenLight);
         managers[0].register(bathroomLight);
+
 
 
         //entities
@@ -307,7 +313,7 @@ export class SceneManager {
 
         managers[1].register(mainChar);
         //managers[1].register(sceneSubject);
-        //managers[1].register(testBlock);
+        managers[1].register(testBlock);
 
         managers[1].register(bedroomPainting);
         managers[1].register(bedroomDrawer);
@@ -348,9 +354,9 @@ export class SceneManager {
 
     //this updates the subject/model every frame
     update() {
-      
-            
-            
+
+
+
         //won't call this loop if it's paused-> only for objects that need to be paused (managers that need to be paused)
         if (this.game_state == this.GAME_MENU) { //when the game start
 
@@ -436,20 +442,22 @@ export class SceneManager {
 
         else if (this.game_state == this.GAME_PAUSE)
         {
-   
+
             if (keyboardManager.keyDownQueue[0] == 'P')
             {
 
                     this.unpause();
                     keyboardManager.keyDownQueue.shift();
-      }
+
+
+            }
 
             //comment out
-
+            this.pointerLockControls.unlock();
             // this.controls.update();
             this.objPauseMenu.update(this.time.getElapsedTime());
 
-         this.renderer.autoClear = true;
+            this.renderer.autoClear = true;
 
             //render scene1
             this.renderer.render(this.scene, this.camera);
@@ -459,8 +467,8 @@ export class SceneManager {
 
             //just render scene2 on top of scene1
             this.renderer.getContext().disable(this.renderer.getContext().DEPTH_TEST);
-            
-            
+
+
             this.renderer.render(this.objPauseMenu.scene, this.objPauseMenu.camera);
 
             this.renderer.getContext().enable(this.renderer.getContext().DEPTH_TEST);

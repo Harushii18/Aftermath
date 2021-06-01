@@ -12,7 +12,7 @@ export class MainChar extends THREE.Object3D {
 		this.object.rotateOnAxis( new THREE.Vector3(0,1,0), -Math.PI);
 		this.object.position.set(0, 1, 50);
 		this.object.visible = false; //Uncomment this so you don't see the player in first person view
-
+		this.object.castShadow = true;
 
 		//change the below to 8 to scale him to the correct scale
 		this.object.scale.x = 8;
@@ -238,7 +238,7 @@ wall/object doesn't result in a collision. */
 
 
 	rotate() {
-		var rotateAngle = Math.PI / 2 * 0.05;
+		var rotateAngle = Math.PI / 2 * 0.02;
 
 		if (characterControls.rotateRight()) {
 			this.object.rotateOnAxis(new THREE.Vector3(0,1,0), -rotateAngle );

@@ -6,6 +6,8 @@ export class House extends THREE.Object3D {
 
     super();
     this.object = new THREE.Object3D();
+    //this.object.castShadow = false;
+    this.object.receiveShadow = true;
     //load house model form blender file
 
     const loader = new GLTFLoader();
