@@ -553,14 +553,13 @@ export class SceneManager {
         if (this.game_state == this.GAME_RUN) {
             this.game_state = this.GAME_PAUSE;
             this.time.pause();
+
+            //hide divs that display instructions/ key prompts
             this.instructions = document.getElementById('gameInstructions');
             this.instructions.display='none';
             this.instructions = document.getElementById('gameBottom');
             this.instructions.display='none';
             
-
-
-
             for (let sound in this.managers[2].entities)//["footstep"].pause())
             {
                 this.managers[2].entities[sound].pause();
