@@ -1,5 +1,6 @@
 import * as THREE from '../../../jsm/three.module.js';
 import {GLTFLoader} from '../../../jsm/GLTFLoader.js';
+import {loadingManager} from '../../managers/SceneManager.js';
 export class CeilingLightObj extends THREE.Object3D {
 
 
@@ -8,7 +9,7 @@ export class CeilingLightObj extends THREE.Object3D {
         this.object = new THREE.Object3D();
         //load house model form blender file
     
-        const loader = new GLTFLoader();
+        const loader = new GLTFLoader(loadingManager);
         loader.setPath('../../models/objects/');
     
         const gltf = loader.load('ceilingLight2.glb', (gltf) => {

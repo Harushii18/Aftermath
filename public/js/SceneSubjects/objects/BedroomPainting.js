@@ -1,7 +1,7 @@
 import * as THREE from '../../../jsm/three.module.js';
 import { GLTFLoader } from '../../../jsm/GLTFLoader.js';
 import { keyboardManager } from '../../managers/KeyboardManager.js';
-import { mainChar } from '../../managers/SceneManager.js';
+import { loadingManager, mainChar } from '../../managers/SceneManager.js';
 import { gameOverlay } from '../../Overlay/GameOverlay.js';
 export class BedroomPainting extends THREE.Object3D {
 
@@ -14,7 +14,7 @@ export class BedroomPainting extends THREE.Object3D {
         //stores a variable that only allows the interaction overlay to be shown once
         this.count = 0;
         this.clock = new THREE.Clock();
-        const loader = new GLTFLoader();
+        const loader = new GLTFLoader(loadingManager);
 
         loader.setPath('../../models/3DObjects/');
 
@@ -30,9 +30,11 @@ export class BedroomPainting extends THREE.Object3D {
             this.object.scale.x = 3.5;
             this.object.scale.y = 3.5;
             this.object.scale.z = 3.5;
+            this.object.rotateOnAxis(new THREE.Vector3(0, 1, 0), Math.PI/2);
 
+            
             //move painting
-            this.object.position.set(14, 12, 34);
+            this.object.position.set(20, 12, 45);
 
 
 
@@ -53,12 +55,12 @@ export class BedroomPainting extends THREE.Object3D {
         }
 
         if (this.move == true) {
-            if (this.object.position.x < 10) {    //stop moving 
+            if (this.object.position.z < 40) {    //stop moving 
                 this.move = false;
                 this.isMoved = true;
             }
             else {
-                this.object.position.x -= 0.1; //move to the left 
+                this.object.position.z -= 0.1; //move to the left 
             }
         }
     }
@@ -69,19 +71,21 @@ export class BedroomPainting extends THREE.Object3D {
         let pos = mainChar.returnWorldPosition();
 
         //variable that allows change in vicinity position in which E needs to be pressed:
-        var vicinityLimitZ = 20;
+        var vicinityLimitZ = 10;
         var vicinityLimitX = 5;
 
         //if the character is in the vicinity 
         if (((pos.z < this.object.position.z + vicinityLimitZ) && (pos.z > this.object.position.z)) && (((pos.x < this.object.position.x + vicinityLimitX)) && ((pos.x > this.object.position.x - vicinityLimitX)))) {
             //display interaction overlay if it isn't being shown
             if (this.count == 0) {
+                if (this.isMoved==false){
                 gameOverlay.changeText('[E] MOVE PAINTING');
 
                 //LATER WE CAN ADD A CONDITION IF HE LOOKED AT IT, HE'LL NOTICE IT CAN MOVE, AND THE 
                 //INTERACTION WILL SAY MOVE PAINTING
                 gameOverlay.showOverlay();
                 this.count += 1;
+                }
             }
             return true;
         }
