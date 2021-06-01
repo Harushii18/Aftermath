@@ -11,21 +11,18 @@ class GameInstructions extends THREE.Object3D {
         };
     }
 
-
     //INTERACTION OVERLAY============================================
     showInstructions(text) {
             this.instructions.style.display = 'inline-block';
             this.instructions.innerHTML = text;
     }
 
-
-
     hideInstructions() {
             this.instructions.style.display = 'none';
     }
 
     checkTime(){
-        if (this.count<731){
+        if (this.count<916){
             this.count+=1;
             if (this.count==180){
                 this.showInstructions('CLICK THE LEFT MOUSE BUTTON TO LOOK AROUND');            }
@@ -42,6 +39,12 @@ class GameInstructions extends THREE.Object3D {
                 this.showInstructions('PRESS P TO PAUSE THE GAME');
             }
             if (this.count==730){
+                this.hideInstructions();
+            }
+            if (this.count==735){
+                this.showInstructions('PRESS V TO CHANGE VIEWS');
+            }
+            if (this.count==915){
                 this.hideInstructions();
             }
         }
