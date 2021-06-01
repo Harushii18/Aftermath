@@ -66,7 +66,7 @@ var ambientLight = new AmbientLight();
 //objects
 var house = new House();
 //var sceneSubject = new SceneSubject();
-var testBlock = new TestBlock();
+//var testBlock = new TestBlock();
 var testdoor = new Door();
 
 //study
@@ -80,7 +80,7 @@ var cupBoardDoorR = new CupboardDoorR();
 const collisionManager = new CollisionsManager();
 //Add collidable objects here
 collisionManager.addObject(house);
-collisionManager.addObject(testBlock);
+//collisionManager.addObject(testBlock);
 collisionManager.addObject(testdoor);
 
 //Pass collidable objects as a parameter to the main character (raycasting implementation)
@@ -316,7 +316,7 @@ export class SceneManager {
 
         managers[1].register(mainChar);
         //managers[1].register(sceneSubject);
-        managers[1].register(testBlock);
+        //managers[1].register(testBlock);
 
         //study
         managers[1].register(bookshelf);
