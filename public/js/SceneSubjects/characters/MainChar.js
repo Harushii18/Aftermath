@@ -32,6 +32,7 @@ export class MainChar extends THREE.Object3D {
 
 		this.update = function (time) {
 
+			//MAKE IT SUCH THAT THE SUBTITLES ONLY SHOW WHEN THE GAME IS RENDERED/ LOADED COMPLETELY!!!!!
 			//add subtitles
 			if (!this.subtitleState.t1){
 				subtitleManager.showSubtitles();

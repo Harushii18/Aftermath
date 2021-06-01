@@ -115,7 +115,7 @@ export class Door extends THREE.Object3D {
         let pos = mainChar.returnWorldPosition();
 
         //variable that allows change in vicinity position in which E needs to be pressed:
-        var vicinityLimitZ = 5;
+        var vicinityLimitZ = 10;
         var vicinityLimitX = 5;
 
         //if the character is in the vicinity of the door
