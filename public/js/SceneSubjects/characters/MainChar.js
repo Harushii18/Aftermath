@@ -1,7 +1,8 @@
 import { characterControls } from '../../managers/CharacterControls.js';
 import * as THREE from '../../../jsm/three.module.js';
 import { FBXLoader } from '../../../jsm/FBXLoader/FBXLoader.js';
-import {subtitleManager} from '../../managers/SubtitleManager.js';
+import { subtitleManager } from '../../managers/SubtitleManager.js';
+import{gameInstructions} from '../../Overlay/GameInstructions.js';
 
 export class MainChar extends THREE.Object3D {
 	constructor(collidableObjects) {
@@ -10,16 +11,11 @@ export class MainChar extends THREE.Object3D {
 		//main character object
 		this.object = new THREE.Object3D();
 		this.clock = new THREE.Clock();
-		this.object.rotateOnAxis( new THREE.Vector3(0,1,0), -Math.PI);
+		this.object.rotateOnAxis(new THREE.Vector3(0, 1, 0), -Math.PI);
 		this.object.position.set(0, 1, 50);
 		this.object.visible = false; //Uncomment this so you don't see the player in first person view
 
-		//Checks if the subtitle had started showing
-		this.subtitleStarted={t1:false};
-		//Checks if the subtitle had been shown already
-		this.subtitleState={t1:false};
-		//Contains the text for each subtitle
-		this.subtitleText={t1:"I heard a sound by the painting"};
+		this.initialiseSubtitleContents();
 
 		//change the below to 8 to scale him to the correct scale
 		this.object.scale.x = 8;
@@ -31,35 +27,18 @@ export class MainChar extends THREE.Object3D {
 		this.loadModel();
 
 		this.update = function (time) {
+			//add game instructions on side of screen
+			gameInstructions.checkTime();
 
-			//MAKE IT SUCH THAT THE SUBTITLES ONLY SHOW WHEN THE GAME IS RENDERED/ LOADED COMPLETELY!!!!!
+			//TODO: MAKE IT SUCH THAT THE SUBTITLES ONLY SHOW WHEN THE GAME IS RENDERED/ LOADED COMPLETELY!!!!!
 			//add subtitles
-			if (!this.subtitleState.t1){
-				subtitleManager.showSubtitles();
-				if (!this.subtitleStarted.t1){
-					//start showing the subtitle
-					subtitleManager.startTime();
-					subtitleManager.setDuration(80);
-					subtitleManager.changeSubtitlesText(this.subtitleText.t1);
-					this.subtitleStarted.t1=true;
-				}
-				
-				subtitleManager.countTime();
-				if (!subtitleManager.checkTime()){
-					this.subtitleState.t1=true;
-					//meaning it was shown
-				}
-			}
-
-
+			this.addSubtitles();
 
 			//animation
 			if (this.walkMixer) {
 				this.determineAnimations();
 				this.walkMixer.update(this.clock.getDelta());
 			}
-
-
 
 			const pos = this.object.position.clone();
 			let dir = new THREE.Vector3();
@@ -68,10 +47,10 @@ export class MainChar extends THREE.Object3D {
 
 
 			//Direction of raycasters
-			let forwardDirection = new THREE.Vector3(dir.x,dir.y,dir.z);
-			let backwardDirection = new THREE.Vector3(dir.x,dir.y,-dir.z);
-			let rightDirection = new THREE.Vector3(-dir.x,dir.y,dir.z);
-			let leftDirection = new THREE.Vector3(dir.x,dir.y,dir.z);
+			let forwardDirection = new THREE.Vector3(dir.x, dir.y, dir.z);
+			let backwardDirection = new THREE.Vector3(dir.x, dir.y, -dir.z);
+			let rightDirection = new THREE.Vector3(-dir.x, dir.y, dir.z);
+			let leftDirection = new THREE.Vector3(dir.x, dir.y, dir.z);
 
 			//Raycasting to detect collisions with house object
 			let forwardRaycaster = new THREE.Raycaster(pos, forwardDirection);
@@ -102,14 +81,76 @@ export class MainChar extends THREE.Object3D {
 			this.move(blockedF, blockedB, blockedR, blockedL);
 
 
-/*Note: Because the scene is warped due to the Perspective Camera, sometimes the ray (from the raycaster) doesn't detect the collision
-because the angle between the camera and the collidable object is not orthogonal. Eg. if the wall/object is parallel to the direction
-that the camera faces, walking right/left will result in a collision, but any other angle to the
-wall/object doesn't result in a collision. */
+			/*Note: Because the scene is warped due to the Perspective Camera, sometimes the ray (from the raycaster) doesn't detect the collision
+			because the angle between the camera and the collidable object is not orthogonal. Eg. if the wall/object is parallel to the direction
+			that the camera faces, walking right/left will result in a collision, but any other angle to the
+			wall/object doesn't result in a collision. */
 
 
 		};
 	}
+
+	initialiseSubtitleContents() {
+		//Checks if the subtitle had started showing
+		this.subtitleStarted = {
+			t1: false,
+			t2: false
+		};
+		//Checks if the subtitle had been shown already
+		this.subtitleState = {
+			t1: false,
+			t2: false
+		};
+		//Contains the text for each subtitle
+		this.subtitleText = {
+			t1: "I heard a sound by the painting",
+			t2: "I think I should check it out"
+		};
+	}
+
+	addSubtitles() {
+
+		//t1
+		if (!this.subtitleState.t1) {
+			subtitleManager.showSubtitles();
+			if (!this.subtitleStarted.t1) {
+				//start showing the subtitle
+				subtitleManager.startTime();
+				subtitleManager.setDuration(130);
+				subtitleManager.changeSubtitlesText(this.subtitleText.t1);
+				this.subtitleStarted.t1 = true;
+			}
+
+			subtitleManager.countTime();
+			if (!subtitleManager.checkTime()) {
+				this.subtitleState.t1 = true;
+				//meaning it was shown
+			}
+		}
+
+		//show t2
+		if (this.subtitleState.t1) {
+			if (!this.subtitleState.t2) {
+				subtitleManager.showSubtitles();
+				if (!this.subtitleStarted.t2) {
+					//start showing the subtitle
+					subtitleManager.startTime();
+					subtitleManager.setDuration(130);
+					subtitleManager.changeSubtitlesText(this.subtitleText.t2);
+					this.subtitleStarted.t2 = true;
+				}
+
+				subtitleManager.countTime();
+				if (!subtitleManager.checkTime()) {
+					this.subtitleState.t2 = true;
+					//meaning it was shown
+				}
+			}
+
+		}
+
+	}
+
 
 	//Return the direction that the character  is facing
 	returnObjectDirection() {
@@ -119,8 +160,8 @@ wall/object doesn't result in a collision. */
 
 
 
-//Check intersections of a raycaster with collidable objects
-	checkIntersections(blocked, raycaster){
+	//Check intersections of a raycaster with collidable objects
+	checkIntersections(blocked, raycaster) {
 		const intersect = raycaster.intersectObjects(this.collidableObjects, true);
 		if (intersect.length > 0) {
 			if (intersect[0].distance < 3) {
@@ -132,8 +173,8 @@ wall/object doesn't result in a collision. */
 	}
 
 
-	updateDirection(directionVector){
-		this.object.lookAt(directionVector.x+this.object.position.x,this.object.position.y,directionVector.z+this.object.position.z);
+	updateDirection(directionVector) {
+		this.object.lookAt(directionVector.x + this.object.position.x, this.object.position.y, directionVector.z + this.object.position.z);
 	}
 
 	//Return the position of the object in the world
@@ -143,7 +184,7 @@ wall/object doesn't result in a collision. */
 		return worldPos;
 	}
 
-	setVisibility(visibility){
+	setVisibility(visibility) {
 		this.object.visible = visibility;
 	}
 
@@ -237,7 +278,7 @@ wall/object doesn't result in a collision. */
 			fbx.scale.setScalar(0.0115);
 			fbx.traverse(c => {
 				c.castShadow = true;
-				c.receiveShadow=true;
+				c.receiveShadow = true;
 			});
 
 
@@ -263,47 +304,47 @@ wall/object doesn't result in a collision. */
 		var rotateAngle = Math.PI / 2 * 0.05;
 
 		if (characterControls.rotateRight()) {
-			this.object.rotateOnAxis(new THREE.Vector3(0,1,0), -rotateAngle );
+			this.object.rotateOnAxis(new THREE.Vector3(0, 1, 0), -rotateAngle);
 		}
 		if (characterControls.rotateLeft()) {
-			this.object.rotateOnAxis(new THREE.Vector3(0,1,0), rotateAngle );
+			this.object.rotateOnAxis(new THREE.Vector3(0, 1, 0), rotateAngle);
 		}
 	}
 
 
 
-//Move the player
-	move(blockedF,blockedB,blockedR,blockedL) {
+	//Move the player
+	move(blockedF, blockedB, blockedR, blockedL) {
 
 		this.moveDistance = characterControls.getSpeed();
 		//moves character around
 
-//If front of character is not blocked
-		if(!blockedF){
+		//If front of character is not blocked
+		if (!blockedF) {
 			//If trying to move forward
 			if (characterControls.moveForward()) {
 				this.object.translateZ(this.moveDistance);
 			}
 		}
 
-//If back of character is not blocked
-		if(!blockedB){
+		//If back of character is not blocked
+		if (!blockedB) {
 			//If trying to move backward
 			if (characterControls.moveBackward()) {
 				this.object.translateZ(-this.moveDistance);
 			}
 		}
 
-//If right of character is not blocked
-		if(!blockedR){
+		//If right of character is not blocked
+		if (!blockedR) {
 			//If trying to move right
 			if (characterControls.moveRight()) {
 				this.object.translateX(-this.moveDistance);
 			}
 		}
 
-//If left of character is not blocked
-		if(!blockedL){
+		//If left of character is not blocked
+		if (!blockedL) {
 			//If trying to move left
 			if (characterControls.moveLeft()) {
 				this.object.translateX(this.moveDistance);
