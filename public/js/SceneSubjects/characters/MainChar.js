@@ -143,6 +143,10 @@ wall/object doesn't result in a collision. */
 		return worldPos;
 	}
 
+	setVisibility(visibility){
+		this.object.visible = visibility;
+	}
+
 	setName(name) {
 		this.object.name = name;
 	}
@@ -221,6 +225,8 @@ wall/object doesn't result in a collision. */
 			});
 		}
 	}
+
+
 
 	loadModel() {
 		//load the main character model with an FBX Loader
@@ -304,7 +310,7 @@ wall/object doesn't result in a collision. */
 			}
 		}
 
-
+		this.rotate();
 
 	}
 

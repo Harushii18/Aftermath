@@ -23,6 +23,11 @@ export class Time {
         this.clock.getDelta();
     }
 
+    getElapsedTime()
+    {
+        return this.clock.getElapsedTime();
+    }
+
 
 
 
