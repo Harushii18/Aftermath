@@ -12,9 +12,10 @@ import { CollisionsManager } from './CollisionsManager.js'; //Collision Manager
 //lights
 import { GeneralLights } from '../SceneSubjects/lighting/GeneralLights.js';
 import { CeilingLight } from '../SceneSubjects/lighting/CeilingLight.js';
+import { AmbientLight } from '../SceneSubjects/lighting/AmbientLight.js';
 import { CeilingLightObj } from '../SceneSubjects/objects/CeilingLightObj.js';
 
-//objects
+//OBJECTS
 import { House } from '../SceneSubjects/House.js';
 import { SceneSubject } from '../SceneSubjects/objects/SceneSubject.js';
 import { TestBlock } from '../SceneSubjects/characters/TestBlock.js';
@@ -24,8 +25,12 @@ import { BedroomPainting } from '../SceneSubjects/objects/BedroomPainting.js';
 import { BedroomDrawer } from '../SceneSubjects/objects/BedroomDrawer.js';
 import { CupboardDoorR } from '../SceneSubjects/objects/CupboardDoorR.js';
 
-
+//Characters
 import { MainChar } from '../SceneSubjects/characters/MainChar.js';
+
+//study
+import { Bookshelf } from '../SceneSubjects/objects/Bookshelf.js';
+
 
 //other
 import { PointerLockControls } from '../../jsm/PointerLockControls.js';
@@ -35,6 +40,9 @@ import { characterControls } from './CharacterControls.js';
 //==================================================================================================
 
 //Global Variables
+
+//FirstPersonTracker
+var isFirstPersonView = true;
 
 //lights
 var generalLights = new GeneralLights();
@@ -56,11 +64,16 @@ var bathroomLight = new CeilingLight();
 var hallwayLight2 = new CeilingLight();
 var loungeLight = new CeilingLight();
 
+var ambientLight = new AmbientLight();
+
 //objects
 var house = new House();
-var sceneSubject = new SceneSubject();
-var testBlock = new TestBlock();
+//var sceneSubject = new SceneSubject();
+//var testBlock = new TestBlock();
 var testdoor = new Door();
+
+//study
+var bookshelf = new Bookshelf();
 
 var bedroomPainting = new BedroomPainting();
 var bedroomDrawer = new BedroomDrawer();
@@ -69,11 +82,12 @@ var cupBoardDoorR = new CupboardDoorR();
 
 
 
+
 //Collision Manager to add all objects that need to be collided with
 const collisionManager = new CollisionsManager();
 //Add collidable objects here
 collisionManager.addObject(house);
-collisionManager.addObject(testBlock);
+//collisionManager.addObject(testBlock);
 collisionManager.addObject(testdoor);
 
 //Pass collidable objects as a parameter to the main character (raycasting implementation)
@@ -114,8 +128,15 @@ export class SceneManager {
         this.renderer = this.buildRender(this.screenDimensions);
         this.camera = this.buildCamera(this.screenDimensions);
 
+        //Post-processing Effects
+      //  this.composer = new EffectComposer(this.renderer);
+      //  this.composer.addPass(new RenderPass(this.scene,this.camera));
+
         //comment this out
         this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+        this.controls.minDistance = 7;
+        this.controls.maxDistance = 12;
+        this.controls.maxPolarAngle = Math.PI/2.5;
 
 
         //comment this out
@@ -169,9 +190,11 @@ export class SceneManager {
 
 
     loadToScene(entities) {
+
         for (let i = 0; i < entities.length; i++) {
 
             this.scene.add(entities[i].object);
+
 
         }
     }
@@ -205,8 +228,10 @@ export class SceneManager {
             canvas: canvas,
             antialias: true, alpha: true
         });
+        renderer.setClearColor(0xEEEEEE, 1.0);
         renderer.shadowMap.enabled = true;
-        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        //renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        renderer.shadowMapSoft = true;
         renderer.setPixelRatio(window.devicePixelRatio);
         renderer.setSize(window.innerWidth, window.innerHeight);
 
@@ -271,7 +296,7 @@ export class SceneManager {
         //lights
         //  managers[0].register(generalLights);
 
-
+        managers[0].register(ambientLight);
         managers[0].register(bedroomLight);
         managers[0].register(loungeLight);
         managers[0].register(studyLight);
@@ -281,7 +306,9 @@ export class SceneManager {
         managers[0].register(bathroomLight);
 
 
+
         //entities
+
         managers[1].register(loungeLightObj);
         managers[1].register(studyLightObj);
         managers[1].register(kitchenLightObj);
@@ -293,6 +320,7 @@ export class SceneManager {
 
 
 
+
         managers[1].register(house);
 
         testdoor.setPosition(0, -0.5, 33);
@@ -300,8 +328,11 @@ export class SceneManager {
         managers[1].register(testdoor);
 
         managers[1].register(mainChar);
-        managers[1].register(sceneSubject);
-        managers[1].register(testBlock);
+        //managers[1].register(sceneSubject);
+        //managers[1].register(testBlock);
+
+        //study
+        managers[1].register(bookshelf);
 
         managers[1].register(bedroomPainting);
         managers[1].register(bedroomDrawer);
@@ -319,30 +350,44 @@ export class SceneManager {
         let pos = mainChar.returnWorldPosition();
         let dir = mainChar.returnObjectDirection();
         //Set y to 10 to move camera closer to head-height
-        this.pointerLockControls.getObject().position.set(pos.x, 17.5, pos.z); //Need to sort out position of camera at head height
 
-        //UNCOMMENT FOR 3RD PERSON
-        // this.camera.position.set(pos.x, 10+10, pos.z + 10);
-        // this.camera.rotation.set(dir.x - 0.5, dir.y, dir.z);
+        //First Person View
+        if (isFirstPersonView==true){
+            mainChar.setVisibility(false);
+            this.pointerLockControls.getObject().position.set(pos.x, 17.5, pos.z); //Need to sort out position of camera at head height
 
-        //UNCOMMENT FOR FIRST PERSON
-        //this.camera.position.set(pos.x, 15, pos.z - 5);
+        }
+        //Third Person View
+        else if(isFirstPersonView==false){
+          mainChar.setVisibility(true);
+          this.pointerLockControls.unlock(); //Keep PointerLockControls unlocked
+          this.controls.target.set(pos.x, 17.5, pos.z+dir.z);//Set position at player model and face the same direction as model
+          this.controls.update();//Update Orbital Controls
+        }
 
-        //this.camera.rotation.set(dir.x, dir.y, dir.z);
+        this.updatePlayerRotation();//Make player face direction of mouse movement
     }
 
     updatePlayerRotation() {
+      if(isFirstPersonView==true){
         var mousePointer = new THREE.Vector3();
         mousePointer.normalize();
         this.pointerLockControls.getDirection(mousePointer);
         mainChar.updateDirection(mousePointer);
+      }
+      if(isFirstPersonView==false){
+        var directionOfCamera = new THREE.Vector3();
+        directionOfCamera.normalize();
+        this.camera.getWorldDirection( directionOfCamera );
+        mainChar.updateDirection(directionOfCamera);
+      }
     }
 
     //this updates the subject/model every frame
     update() {
-      
-            
-            
+
+
+
         //won't call this loop if it's paused-> only for objects that need to be paused (managers that need to be paused)
         if (this.game_state == this.GAME_MENU) { //when the game start
 
@@ -410,7 +455,6 @@ export class SceneManager {
             //comment out this.controls.update()
             //this.controls.update();
 
-
             this.renderer.render(this.scene, this.camera);
 
             //check pause--------------------------------
@@ -424,25 +468,44 @@ export class SceneManager {
             }
 
             //--------------------------------------------
+            //keyboardManager.keyDownQueue.shift();
+            if ((keyboardManager.keyDownQueue[0] == "V")&&isFirstPersonView==true){
+              console.log("Switching to Third-Person View");
+              isFirstPersonView = false;
+              keyboardManager.keyDownQueue.shift();
+            }
+
+
+            if ((keyboardManager.keyDownQueue[0] == "V")&&isFirstPersonView==false){
+              console.log("Switching to First-Person View");
+              isFirstPersonView = true;
+              keyboardManager.keyDownQueue.shift();
+            }
+
+            this.updateCameraPosition();
+            //  console.log(this.pointerLockControls.getDirection());
+
 
         }
 
         else if (this.game_state == this.GAME_PAUSE)
         {
-   
+
             if (keyboardManager.keyDownQueue[0] == 'P')
             {
 
                     this.unpause();
                     keyboardManager.keyDownQueue.shift();
-      }
+
+
+            }
 
             //comment out
-
+            this.pointerLockControls.unlock();
             // this.controls.update();
             this.objPauseMenu.update(this.time.getElapsedTime());
 
-         this.renderer.autoClear = true;
+            this.renderer.autoClear = true;
 
             //render scene1
             this.renderer.render(this.scene, this.camera);
@@ -452,8 +515,8 @@ export class SceneManager {
 
             //just render scene2 on top of scene1
             this.renderer.getContext().disable(this.renderer.getContext().DEPTH_TEST);
-            
-            
+
+
             this.renderer.render(this.objPauseMenu.scene, this.objPauseMenu.camera);
 
             this.renderer.getContext().enable(this.renderer.getContext().DEPTH_TEST);
@@ -465,14 +528,11 @@ export class SceneManager {
 
         //update orbit controls
         //comment out
-
         //this.controls.update();
 
         //uncomment this
 
-        this.updateCameraPosition();
-        //  console.log(this.pointerLockControls.getDirection());
-        this.updatePlayerRotation();//Make player face direction of mouse movement
+
 
     }
 
@@ -482,7 +542,7 @@ export class SceneManager {
         this.camera.aspect = window.innerWidth / window.innerHeight;
         this.camera.updateProjectionMatrix();
 
-        this.renderer.setSize(window.innerWidth, window.innerHeight);
+        this.renderer.setSize(window.innerWidth, window.innerHeight );
 
     }
 
@@ -490,6 +550,7 @@ export class SceneManager {
         if (this.game_state == this.GAME_RUN) {
             this.game_state = this.GAME_PAUSE;
             this.time.pause();
+
 
             for (let sound in this.managers[2].entities)//["footstep"].pause())
             {
@@ -502,9 +563,6 @@ export class SceneManager {
 
             this.objPauseMenu = new PauseMenu(this.width_screen, this.height_screen);
         }
-
-
-
     }
 
     unpause() {
@@ -515,6 +573,7 @@ export class SceneManager {
         //comment out
 
          this.pointerLockControls.unlock(); // start orbit controls to respond to input
+
 
 
     }
