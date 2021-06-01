@@ -11,7 +11,7 @@ export class KeyboardManager {
             S: false,
             D: false,
             SHIFT: false,
-            ESC: false,
+            P: false,
 
             E: false,
 
@@ -89,6 +89,7 @@ export class KeyboardManager {
               this.keys.X = true;
               break;
 
+
             //For switching camera views
               case 86:
               if (event.repeat == false)
@@ -103,10 +104,14 @@ export class KeyboardManager {
 		    case 27: //escape key
                 //check if game is paused
              //   console.log(event.repeat);
+
+
+		    case 80: //"p" key
+
                 if (event.repeat == false)
                 {
-                    this.keys.ESC = true;
-                    this.keyDownQueue.push("ESC");
+                    this.keys.P = true;
+                    this.keyDownQueue.push("P");
                    /* if (sceneManager.game_state == sceneManager.GAME_PAUSE) {
                         sceneManager.unpause();
                     }
@@ -153,6 +158,7 @@ export class KeyboardManager {
               this.keys.X = false;
               break;
 
+
               //For switching camera views
                 case 86:
                   this.keys.V = false;
@@ -161,11 +167,14 @@ export class KeyboardManager {
 
 
             case 27: //escape key
+
+            case 80: //"p" key
+
               //check if game is paused
              // console.log(event.repeat);
               //if (event.repeat == false)
               //{
-                  this.keys.ESC = false;
+                  this.keys.P = false;
                  /* if (sceneManager.game_state == sceneManager.GAME_PAUSE) {
                       sceneManager.unpause();
                   }
@@ -203,11 +212,17 @@ export class KeyboardManager {
                 return (this.keys.X);
 
 
+
             case 'V':
                 return (this.keys.V);
 
             case 'ESC'://X
             return (this.keys.ESC);
+
+
+            case 'P'://P
+            return (this.keys.P);
+
 
         return;
     }
