@@ -8,6 +8,8 @@ import {loadingManager} from '../../managers/SceneManager.js';
 export class Door extends THREE.Object3D {
     constructor() {
         super();
+        this.checkVicinity = false;
+        this.doCheckVicinity  = false;
         this.object = new THREE.Object3D();
 
         //stores a variable that only allows the interaction overlay to be shown once
@@ -63,8 +65,10 @@ export class Door extends THREE.Object3D {
         //console.log(time);
 
         //just to show the div
-        var checkVicinity = this.checkCharacterVicinity();
-
+        if (this.doCheckVicinity)
+        {
+        this.checkVicinity = this.checkCharacterVicinity();
+        }
 
         if (this.open == true) { //animate
             if (this.idleMixer) {
@@ -89,7 +93,7 @@ export class Door extends THREE.Object3D {
 
         if (keyboardManager.wasPressed('E')) {
             //if character is in vicinity of door, then they can open door
-            if (checkVicinity) {
+            if (this.checkVicinity) {
                 if (this.open == false) { // animate
 
                     //this.startTime=time;
