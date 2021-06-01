@@ -37,6 +37,7 @@ import { PointerLockControls } from '../../jsm/PointerLockControls.js';
 import { OrbitControls } from '../../jsm/OrbitControls.js';
 import * as THREE from '../../../jsm/three.module.js';
 import { characterControls } from './CharacterControls.js';
+
 //==================================================================================================
 
 //Global Variables
@@ -136,7 +137,7 @@ export class SceneManager {
         this.controls = new OrbitControls(this.camera, this.renderer.domElement);
         this.controls.minDistance = 7;
         this.controls.maxDistance = 12;
-        this.controls.maxPolarAngle = Math.PI/2.5;
+        this.controls.maxPolarAngle = Math.PI / 2.5;
 
 
         //comment this out
@@ -317,6 +318,8 @@ export class SceneManager {
         managers[1].register(hallwayLightObj1);
         managers[1].register(hallwayLightObj2);
 
+      
+
 
 
 
@@ -342,6 +345,7 @@ export class SceneManager {
 
 
 
+
         return managers;
     }
 
@@ -352,17 +356,17 @@ export class SceneManager {
         //Set y to 10 to move camera closer to head-height
 
         //First Person View
-        if (isFirstPersonView==true){
+        if (isFirstPersonView == true) {
             mainChar.setVisibility(false);
             this.pointerLockControls.getObject().position.set(pos.x, 17.5, pos.z); //Need to sort out position of camera at head height
 
         }
         //Third Person View
-        else if(isFirstPersonView==false){
-          mainChar.setVisibility(true);
-          this.pointerLockControls.unlock(); //Keep PointerLockControls unlocked
-          this.controls.target.set(pos.x, 17.5, pos.z+dir.z);//Set position at player model and face the same direction as model
-          this.controls.update();//Update Orbital Controls
+        else if (isFirstPersonView == false) {
+            mainChar.setVisibility(true);
+            this.pointerLockControls.unlock(); //Keep PointerLockControls unlocked
+            this.controls.target.set(pos.x, 17.5, pos.z + dir.z);//Set position at player model and face the same direction as model
+            this.controls.update();//Update Orbital Controls
         }
 
         this.updatePlayerRotation();//Make player face direction of mouse movement
@@ -459,27 +463,26 @@ export class SceneManager {
 
             //check pause--------------------------------
 
-            if ((keyboardManager.keyDownQueue[0] == "P") )
-            {
+            if ((keyboardManager.keyDownQueue[0] == "P")) {
 
-                    this.pause();
-                    keyboardManager.keyDownQueue.shift();
+                this.pause();
+                keyboardManager.keyDownQueue.shift();
 
             }
 
             //--------------------------------------------
             //keyboardManager.keyDownQueue.shift();
-            if ((keyboardManager.keyDownQueue[0] == "V")&&isFirstPersonView==true){
-              console.log("Switching to Third-Person View");
-              isFirstPersonView = false;
-              keyboardManager.keyDownQueue.shift();
+            if ((keyboardManager.keyDownQueue[0] == "V") && isFirstPersonView == true) {
+                console.log("Switching to Third-Person View");
+                isFirstPersonView = false;
+                keyboardManager.keyDownQueue.shift();
             }
 
 
-            if ((keyboardManager.keyDownQueue[0] == "V")&&isFirstPersonView==false){
-              console.log("Switching to First-Person View");
-              isFirstPersonView = true;
-              keyboardManager.keyDownQueue.shift();
+            if ((keyboardManager.keyDownQueue[0] == "V") && isFirstPersonView == false) {
+                console.log("Switching to First-Person View");
+                isFirstPersonView = true;
+                keyboardManager.keyDownQueue.shift();
             }
 
             this.updateCameraPosition();
@@ -487,6 +490,7 @@ export class SceneManager {
 
 
         }
+
 
         else if (this.game_state == this.GAME_PAUSE)
         {
@@ -496,7 +500,6 @@ export class SceneManager {
 
                     this.unpause();
                     keyboardManager.keyDownQueue.shift();
-
 
             }
 
@@ -542,7 +545,7 @@ export class SceneManager {
         this.camera.aspect = window.innerWidth / window.innerHeight;
         this.camera.updateProjectionMatrix();
 
-        this.renderer.setSize(window.innerWidth, window.innerHeight );
+        this.renderer.setSize(window.innerWidth, window.innerHeight);
 
     }
 
@@ -551,12 +554,16 @@ export class SceneManager {
             this.game_state = this.GAME_PAUSE;
             this.time.pause();
 
-
+            //hide divs that display instructions/ key prompts
+            this.instructions = document.getElementById('gameInstructions');
+            this.instructions.display='none';
+            this.instructions = document.getElementById('gameBottom');
+            this.instructions.display='none';
+            
             for (let sound in this.managers[2].entities)//["footstep"].pause())
             {
                 this.managers[2].entities[sound].pause();
             }
-
 
             //comment out
             this.pointerLockControls.lock(); // stop orbit controls from responding to use input
@@ -572,7 +579,7 @@ export class SceneManager {
 
         //comment out
 
-         this.pointerLockControls.unlock(); // start orbit controls to respond to input
+        this.pointerLockControls.unlock(); // start orbit controls to respond to input
 
 
 

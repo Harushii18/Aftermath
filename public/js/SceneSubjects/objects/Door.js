@@ -126,7 +126,6 @@ export class Door extends THREE.Object3D {
                 gameOverlay.showOverlay();
                 this.count += 1;
             }
-            //  gameOverlay.changeText('[E] Open door');
             return true;
         }
         //if the character is not in the vicinity, return false
