@@ -589,11 +589,11 @@ export class SceneManager {
             this.instructions = document.getElementById('gameBottom');
             this.instructions.display='none';
             
-            for (let sound in this.managers[2].entities)//["footstep"].pause())
+           /* for (let sound in this.managers[2].entities)//["footstep"].pause())
             {
                 this.managers[2].entities[sound].pause();
             }
-
+  */
             //comment out
             this.pointerLockControls.lock(); // stop orbit controls from responding to use input
 
