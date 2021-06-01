@@ -1,6 +1,8 @@
 //IMPORT STATEMENTS
 
 import { EntityManager } from './EntityManager.js';
+
+import { AudioManager } from './AudioManager.js';
 import { LightingManager } from './LightingManager.js';
 import { Time } from '../Time.js';
 import { PauseMenu } from '../SceneSubjects/Menu/PauseMenu.js';
@@ -10,6 +12,7 @@ import { CollisionsManager } from './CollisionsManager.js'; //Collision Manager
 //lights
 import { GeneralLights } from '../SceneSubjects/lighting/GeneralLights.js';
 import { CeilingLight } from '../SceneSubjects/lighting/CeilingLight.js';
+import { AmbientLight } from '../SceneSubjects/lighting/AmbientLight.js';
 import { CeilingLightObj } from '../SceneSubjects/objects/CeilingLightObj.js';
 
 //OBJECTS
@@ -33,6 +36,7 @@ import { Bookshelf } from '../SceneSubjects/objects/Bookshelf.js';
 import { PointerLockControls } from '../../jsm/PointerLockControls.js';
 import { OrbitControls } from '../../jsm/OrbitControls.js';
 import * as THREE from '../../../jsm/three.module.js';
+import { characterControls } from './CharacterControls.js';
 
 //==================================================================================================
 
@@ -61,6 +65,8 @@ var bathroomLight = new CeilingLight();
 var hallwayLight2 = new CeilingLight();
 var loungeLight = new CeilingLight();
 
+var ambientLight = new AmbientLight();
+
 //objects
 var house = new House();
 //var sceneSubject = new SceneSubject();
@@ -73,6 +79,10 @@ var bookshelf = new Bookshelf();
 var bedroomPainting = new BedroomPainting();
 var bedroomDrawer = new BedroomDrawer();
 var cupBoardDoorR = new CupboardDoorR();
+
+
+
+
 
 //Collision Manager to add all objects that need to be collided with
 const collisionManager = new CollisionsManager();
@@ -119,6 +129,10 @@ export class SceneManager {
         this.renderer = this.buildRender(this.screenDimensions);
         this.camera = this.buildCamera(this.screenDimensions);
 
+        //Post-processing Effects
+      //  this.composer = new EffectComposer(this.renderer);
+      //  this.composer.addPass(new RenderPass(this.scene,this.camera));
+
         //comment this out
         this.controls = new OrbitControls(this.camera, this.renderer.domElement);
         this.controls.minDistance = 7;
@@ -145,6 +159,8 @@ export class SceneManager {
         this.loadToScene(this.managers[0].lights);
         this.loadToScene(this.managers[1].entities);
 
+        
+
 
 
         //  canvas.requestPointerLock = canvas.requestPointerLock || canvas.mozRequestPointerLock;//request pointer lock from player
@@ -167,7 +183,7 @@ export class SceneManager {
 
         //---------------------------------------------------------------------------------------------------------------------------------
 
-
+        this.managers[2].register("footstep","assets/footstep.mpeg");
     }
 
 
@@ -213,8 +229,10 @@ export class SceneManager {
             canvas: canvas,
             antialias: true, alpha: true
         });
+        renderer.setClearColor(0xEEEEEE, 1.0);
         renderer.shadowMap.enabled = true;
-        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        //renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        renderer.shadowMapSoft = true;
         renderer.setPixelRatio(window.devicePixelRatio);
         renderer.setSize(window.innerWidth, window.innerHeight);
 
@@ -270,7 +288,7 @@ export class SceneManager {
     //add subjects to the scene
     createManagers() {
 
-        const managers = [new LightingManager(), new EntityManager()];
+        const managers = [new LightingManager(), new EntityManager(), new AudioManager()];
         //can be altered so we can add multiple entities, and depending on which position
         //it is, certain ones won't be paused, and some will be
         //Note that these variables are declared globally before the class definition
@@ -279,7 +297,7 @@ export class SceneManager {
         //lights
         //  managers[0].register(generalLights);
 
-
+        managers[0].register(ambientLight);
         managers[0].register(bedroomLight);
         managers[0].register(loungeLight);
         managers[0].register(studyLight);
@@ -287,6 +305,7 @@ export class SceneManager {
         managers[0].register(hallwayLight2);
         managers[0].register(kitchenLight);
         managers[0].register(bathroomLight);
+
 
 
         //entities
@@ -322,6 +341,8 @@ export class SceneManager {
         managers[1].register(bedroomDrawer);
         managers[1].register(cupBoardDoorR);
 
+   
+
 
 
 
@@ -338,7 +359,7 @@ export class SceneManager {
         if (isFirstPersonView == true) {
             mainChar.setVisibility(false);
             this.pointerLockControls.getObject().position.set(pos.x, 17.5, pos.z); //Need to sort out position of camera at head height
-            this.updatePlayerRotation();//Make player face direction of mouse movement
+
         }
         //Third Person View
         else if (isFirstPersonView == false) {
@@ -347,13 +368,23 @@ export class SceneManager {
             this.controls.target.set(pos.x, 17.5, pos.z + dir.z);//Set position at player model and face the same direction as model
             this.controls.update();//Update Orbital Controls
         }
+
+        this.updatePlayerRotation();//Make player face direction of mouse movement
     }
 
     updatePlayerRotation() {
+      if(isFirstPersonView==true){
         var mousePointer = new THREE.Vector3();
         mousePointer.normalize();
         this.pointerLockControls.getDirection(mousePointer);
         mainChar.updateDirection(mousePointer);
+      }
+      if(isFirstPersonView==false){
+        var directionOfCamera = new THREE.Vector3();
+        directionOfCamera.normalize();
+        this.camera.getWorldDirection( directionOfCamera );
+        mainChar.updateDirection(directionOfCamera);
+      }
     }
 
     //this updates the subject/model every frame
@@ -369,13 +400,15 @@ export class SceneManager {
 
             //start game pressed, remove start screen items
             btnStart.addEventListener("click", () => {
-                console.log("pressed start");
+   
                 const menu = document.getElementsByClassName("mainMenu");
                 for (let i = 0; i < menu.length; i++) {
                     menu[i].style.display = 'none';
                 }
                 //change state to game intro
                 this.game_state = this.GAME_INTRO;
+                this.managers[2].audioListener.context.resume();
+
             });
 
 
@@ -404,6 +437,20 @@ export class SceneManager {
             //  this.camera.position.x += ( keyboardManager.getMouseX() - this.camera.position.x ) ;
             //   this.camera.position.y += ( - keyboardManager.getMouseY() - this.camera.position.y );
             // this.camera.lookAt( this.scene.position );
+
+            if (characterControls.checkMovement())
+            {
+                if (this.managers[2].entities["footstep"].isPlaying == false)
+                {
+                    this.managers[2].entities["footstep"].play();
+                }
+             // console.log("in char movement");
+            }
+            else{
+                this.managers[2].entities["footstep"].pause();
+
+            }
+
             const runTime = this.time.getRunTime();
             this.managers[0].update(runTime);
 
@@ -444,16 +491,20 @@ export class SceneManager {
 
         }
 
-        else if (this.game_state == this.GAME_PAUSE) {
 
-            if (keyboardManager.keyDownQueue[0] == 'P') {
+        else if (this.game_state == this.GAME_PAUSE)
+        {
 
-                this.unpause();
-                keyboardManager.keyDownQueue.shift();
+            if (keyboardManager.keyDownQueue[0] == 'P')
+            {
+
+                    this.unpause();
+                    keyboardManager.keyDownQueue.shift();
+
             }
 
             //comment out
-
+            this.pointerLockControls.unlock();
             // this.controls.update();
             this.objPauseMenu.update(this.time.getElapsedTime());
 
@@ -502,11 +553,19 @@ export class SceneManager {
         if (this.game_state == this.GAME_RUN) {
             this.game_state = this.GAME_PAUSE;
             this.time.pause();
-            this.instructions = document.getElementById('gameInstructions')
+            this.instructions = document.getElementById('gameInstructions');
             this.instructions.display='none';
             this.instructions = document.getElementById('gameBottom');
             this.instructions.display='none';
             
+
+
+
+            for (let sound in this.managers[2].entities)//["footstep"].pause())
+            {
+                this.managers[2].entities[sound].pause();
+            }
+
             //comment out
             this.pointerLockControls.lock(); // stop orbit controls from responding to use input
 

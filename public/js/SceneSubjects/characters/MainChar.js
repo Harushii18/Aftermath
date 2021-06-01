@@ -14,8 +14,13 @@ export class MainChar extends THREE.Object3D {
 		this.object.rotateOnAxis(new THREE.Vector3(0, 1, 0), -Math.PI);
 		this.object.position.set(0, 1, 50);
 		this.object.visible = false; //Uncomment this so you don't see the player in first person view
-
 		this.initialiseSubtitleContents();
+
+		this.object.castShadow = true;
+
+
+
+
 
 		//change the below to 8 to scale him to the correct scale
 		this.object.scale.x = 8;
@@ -33,6 +38,7 @@ export class MainChar extends THREE.Object3D {
 			//TODO: MAKE IT SUCH THAT THE SUBTITLES ONLY SHOW WHEN THE GAME IS RENDERED/ LOADED COMPLETELY!!!!!
 			//add subtitles
 			this.addSubtitles();
+
 
 			//animation
 			if (this.walkMixer) {
@@ -301,7 +307,7 @@ export class MainChar extends THREE.Object3D {
 
 
 	rotate() {
-		var rotateAngle = Math.PI / 2 * 0.05;
+		var rotateAngle = Math.PI / 2 * 0.02;
 
 		if (characterControls.rotateRight()) {
 			this.object.rotateOnAxis(new THREE.Vector3(0, 1, 0), -rotateAngle);

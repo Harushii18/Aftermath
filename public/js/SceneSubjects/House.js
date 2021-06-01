@@ -6,7 +6,9 @@ export class House extends THREE.Object3D {
 
     super();
     this.object = new THREE.Object3D();
-    //load house model from blender file
+    //this.object.castShadow = false;
+    this.object.receiveShadow = true;
+    //load house model form blender file
 
     const loader = new GLTFLoader();
     loader.setPath('../models/');
@@ -18,7 +20,7 @@ export class House extends THREE.Object3D {
       });
 
       //Scale to this size when using GameHouse.glb
-      //Scaling house 
+      //Scaling house
       this.object.scale.x = 8;
       this.object.scale.y = 8;
       this.object.scale.z = 8;
