@@ -2,7 +2,7 @@ import * as THREE from '../../../jsm/three.module.js';
 import { GLTFLoader } from '../../../jsm/GLTFLoader.js';
 import { keyboardManager } from '../../managers/KeyboardManager.js';
 
-import { mainChar } from '../../managers/SceneManager.js';
+import { loadingManager, mainChar } from '../../managers/SceneManager.js';
 import { gameOverlay } from '../../Overlay/GameOverlay.js';
 
 export class BedroomDrawer extends THREE.Object3D {
@@ -16,7 +16,7 @@ export class BedroomDrawer extends THREE.Object3D {
         this.count = 0;
 
         this.clock = new THREE.Clock();
-        const loader = new GLTFLoader();
+        const loader = new GLTFLoader(loadingManager);
 
         loader.setPath('../../models/3DObjects/');
 
@@ -83,9 +83,12 @@ export class BedroomDrawer extends THREE.Object3D {
         if (((pos.z < this.object.position.z + vicinityLimitZ) && (pos.z > this.object.position.z)) && (((pos.x < this.object.position.x + vicinityLimitX)) && ((pos.x > this.object.position.x - vicinityLimitX)))) {
             //display interaction overlay if it isn't being shown
             if (this.count == 0) {
-                gameOverlay.changeText('[E] OPEN DRAWER');
-                gameOverlay.showOverlay();
-                this.count += 1;
+                if (this.open == false) {
+                    gameOverlay.changeText('[E] OPEN DRAWER');
+                    gameOverlay.showOverlay();
+
+                    this.count += 1;
+                }
             }
             return true;
         }
