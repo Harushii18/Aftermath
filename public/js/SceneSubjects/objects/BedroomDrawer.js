@@ -83,9 +83,12 @@ export class BedroomDrawer extends THREE.Object3D {
         if (((pos.z < this.object.position.z + vicinityLimitZ) && (pos.z > this.object.position.z)) && (((pos.x < this.object.position.x + vicinityLimitX)) && ((pos.x > this.object.position.x - vicinityLimitX)))) {
             //display interaction overlay if it isn't being shown
             if (this.count == 0) {
-                gameOverlay.changeText('[E] OPEN DRAWER');
-                gameOverlay.showOverlay();
-                this.count += 1;
+                if (this.open == false) {
+                    gameOverlay.changeText('[E] OPEN DRAWER');
+                    gameOverlay.showOverlay();
+
+                    this.count += 1;
+                }
             }
             return true;
         }
