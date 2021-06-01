@@ -7,12 +7,10 @@ class GameOverlay extends THREE.Object3D {
 
         this.update = function (time) {
 
-
             //Do nothing
 
         };
     }
-
 
     //INTERACTION OVERLAY============================================
     showOverlay() {
