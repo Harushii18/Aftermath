@@ -17,7 +17,10 @@ export class KeyboardManager {
 
             //For rotating
             Z: false,
-            X: false
+            X: false,
+
+            //For switching camera views
+            V: false
 
         };
 
@@ -86,7 +89,17 @@ export class KeyboardManager {
               this.keys.X = true;
               break;
 
-            
+            //For switching camera views
+              case 86:
+              if (event.repeat == false)
+              {
+                this.keys.V = true;
+                this.keyDownQueue.push("V");
+              }
+                break;
+
+
+
 		    case 27: //escape key
                 //check if game is paused
              //   console.log(event.repeat);
@@ -139,6 +152,14 @@ export class KeyboardManager {
             case 88:
               this.keys.X = false;
               break;
+
+              //For switching camera views
+                case 86:
+                  this.keys.V = false;
+                  break;
+
+
+
             case 27: //escape key
               //check if game is paused
              // console.log(event.repeat);
@@ -180,7 +201,11 @@ export class KeyboardManager {
 
             case 'X'://X
                 return (this.keys.X);
-            
+
+
+            case 'V':
+                return (this.keys.V);
+
             case 'ESC'://X
             return (this.keys.ESC);
 
