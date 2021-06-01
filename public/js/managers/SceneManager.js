@@ -12,7 +12,7 @@ import { GeneralLights } from '../SceneSubjects/lighting/GeneralLights.js';
 import { CeilingLight } from '../SceneSubjects/lighting/CeilingLight.js';
 import { CeilingLightObj } from '../SceneSubjects/objects/CeilingLightObj.js';
 
-//objects
+//OBJECTS
 import { House } from '../SceneSubjects/House.js';
 import { SceneSubject } from '../SceneSubjects/objects/SceneSubject.js';
 import { TestBlock } from '../SceneSubjects/characters/TestBlock.js';
@@ -25,6 +25,8 @@ import { CupboardDoorR } from '../SceneSubjects/objects/CupboardDoorR.js';
 //Characters
 import { MainChar } from '../SceneSubjects/characters/MainChar.js';
 
+//study
+import { Bookshelf } from '../SceneSubjects/objects/Bookshelf.js';
 
 
 //other
@@ -63,14 +65,13 @@ var house = new House();
 //var sceneSubject = new SceneSubject();
 //var testBlock = new TestBlock();
 var testdoor = new Door();
+
+//study
+var bookshelf = new Bookshelf();
+
 var bedroomPainting = new BedroomPainting();
 var bedroomDrawer = new BedroomDrawer();
 var cupBoardDoorR = new CupboardDoorR();
-
-
-
-
-
 
 //Collision Manager to add all objects that need to be collided with
 const collisionManager = new CollisionsManager();
@@ -288,6 +289,7 @@ export class SceneManager {
 
 
         //entities
+
         managers[1].register(loungeLightObj);
         managers[1].register(studyLightObj);
         managers[1].register(kitchenLightObj);
@@ -295,6 +297,7 @@ export class SceneManager {
         managers[1].register(bedroomLightObj);
         managers[1].register(hallwayLightObj1);
         managers[1].register(hallwayLightObj2);
+
 
 
 
@@ -308,6 +311,9 @@ export class SceneManager {
         managers[1].register(mainChar);
         //managers[1].register(sceneSubject);
         //managers[1].register(testBlock);
+
+        //study
+        managers[1].register(bookshelf);
 
         managers[1].register(bedroomPainting);
         managers[1].register(bedroomDrawer);
@@ -402,7 +408,6 @@ export class SceneManager {
             //comment out this.controls.update()
             //this.controls.update();
 
-
             this.renderer.render(this.scene, this.camera);
 
             //check pause--------------------------------
@@ -423,6 +428,7 @@ export class SceneManager {
               keyboardManager.keyDownQueue.shift();
             }
 
+
             if ((keyboardManager.keyDownQueue[0] == "V")&&isFirstPersonView==false){
               console.log("Switching to First-Person View");
               isFirstPersonView = true;
@@ -431,6 +437,7 @@ export class SceneManager {
 
             this.updateCameraPosition();
             //  console.log(this.pointerLockControls.getDirection());
+
 
         }
 
@@ -472,7 +479,6 @@ export class SceneManager {
 
         //update orbit controls
         //comment out
-
         //this.controls.update();
 
         //uncomment this
@@ -496,15 +502,11 @@ export class SceneManager {
             this.game_state = this.GAME_PAUSE;
             this.time.pause();
 
-
             //comment out
             this.pointerLockControls.lock(); // stop orbit controls from responding to use input
 
             this.objPauseMenu = new PauseMenu(this.width_screen, this.height_screen);
         }
-
-
-
     }
 
     unpause() {
@@ -515,6 +517,7 @@ export class SceneManager {
         //comment out
 
          this.pointerLockControls.unlock(); // start orbit controls to respond to input
+
 
 
     }

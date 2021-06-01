@@ -22,8 +22,10 @@ export class CeilingLight extends THREE.Object3D {
     //if you want the lights to do any change every frame. When update is called in the scene manager, each subject's
     //update will be called. This light, if rendered first, which it is, currently, will affect every other object
     update(time) {
-        this.object.intensity = (Math.sin(time) + 1.5) / 2;
-        //  this.object.color.setHSL( Math.sin(time), 0.5, 0.5 );
+
+        //PUT THIS BACK LATER
+      //  this.object.intensity = (Math.sin(time) + 1.5) / 2;
+      
 
     }
 }
