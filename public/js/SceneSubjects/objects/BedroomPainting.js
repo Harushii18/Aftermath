@@ -8,6 +8,7 @@ export class BedroomPainting extends THREE.Object3D {
 
     constructor() {
         super();
+        this.isMoved = false;
         this.object = new THREE.Object3D();
 
         //stores a variable that only allows the interaction overlay to be shown once
@@ -54,6 +55,7 @@ export class BedroomPainting extends THREE.Object3D {
         if (this.move == true) {
             if (this.object.position.x < 10) {    //stop moving 
                 this.move = false;
+                this.isMoved = true;
             }
             else {
                 this.object.position.x -= 0.1; //move to the left 
@@ -74,7 +76,7 @@ export class BedroomPainting extends THREE.Object3D {
         if (((pos.z < this.object.position.z + vicinityLimitZ) && (pos.z > this.object.position.z)) && (((pos.x < this.object.position.x + vicinityLimitX)) && ((pos.x > this.object.position.x - vicinityLimitX)))) {
             //display interaction overlay if it isn't being shown
             if (this.count == 0) {
-                gameOverlay.changeText('[E] LOOK AT PAINTING');
+                gameOverlay.changeText('[E] MOVE PAINTING');
 
                 //LATER WE CAN ADD A CONDITION IF HE LOOKED AT IT, HE'LL NOTICE IT CAN MOVE, AND THE 
                 //INTERACTION WILL SAY MOVE PAINTING

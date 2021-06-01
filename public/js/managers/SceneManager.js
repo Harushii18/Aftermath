@@ -106,7 +106,7 @@ export class SceneManager {
         this.GAME_MENU = "menu";
         this.GAME_INTRO = "intro";
         //------------------------------------------------------------------------------------------------------------------------------------------
-
+        this.audioActive = false;
         //we use (this) to make variables accessible in other classes
         this.time = new Time();
         this.objPauseMenu;
@@ -181,7 +181,6 @@ export class SceneManager {
         // We will use 2D canvas element to render our HUD.
 
         //---------------------------------------------------------------------------------------------------------------------------------
-
 
     }
 
@@ -341,6 +340,7 @@ export class SceneManager {
         managers[2].register("footstep","assets/footstep.mpeg");
         managers[2].register("door_open","assets/door_open.mpeg");
         managers[2].entities["door_open"].setLoop( false );
+        managers[2].register("background","assets/back_sound.mp3");
   
    
 
@@ -389,9 +389,6 @@ export class SceneManager {
 
     //this updates the subject/model every frame
     update() {
-
-
-
         //won't call this loop if it's paused-> only for objects that need to be paused (managers that need to be paused)
         if (this.game_state == this.GAME_MENU) { //when the game start
 
@@ -407,12 +404,20 @@ export class SceneManager {
                 }
                 //change state to game intro
                 this.game_state = this.GAME_INTRO;
-                this.managers[2].audioListener.context.resume();
+
 
             });
 
 
+
         } else if (this.game_state == this.GAME_INTRO) {
+        if( this.audioActive == false)
+        {
+            this.audioActive = true;
+            
+        this.managers[2].audioListener.context.resume();
+        this.managers[2].entities["background"].play();
+        }
 
             //make intro screen visible
             const intro = document.getElementsByClassName("intro");
@@ -433,6 +438,23 @@ export class SceneManager {
             });
 
         } else if (this.game_state == this.GAME_RUN) {
+
+            //door open sounds---------------------------------------------------------------------------
+            if (bedroomPainting.isMoved)
+            {
+                testdoor.doCheckVicinity =true;
+            if (keyboardManager.wasPressed('E') && testdoor.checkVicinity) {
+                if (this.managers[2].entities["door_open"].isPlaying == false)
+                {
+                    this.managers[2].entities["door_open"].setLoop(0);
+                    console.log("PLAYING DOOR");
+                    this.managers[2].entities["door_open"].play();
+                }
+            }
+        }
+            //door open sounds---------------------------------------------------------------------------
+
+            
             //TO EXPERIMENT WITH FOR LOOKING AROUND!
             //  this.camera.position.x += ( keyboardManager.getMouseX() - this.camera.position.x ) ;
             //   this.camera.position.y += ( - keyboardManager.getMouseY() - this.camera.position.y );
@@ -451,17 +473,6 @@ export class SceneManager {
 
             }
             //character footstep sounds---------------------------------------------------------------------------
-
-            //door open sounds---------------------------------------------------------------------------
-            if (keyboardManager.wasPressed('E') && testdoor.checkVicinity) {
-                if (this.managers[2].entities["door_open"].isPlaying == false)
-                {
-                    this.managers[2].entities["door_open"].setLoop(0);
-                    console.log("PLAYING DOOR");
-                    this.managers[2].entities["door_open"].play();
-                }
-            }
-            //door open sounds---------------------------------------------------------------------------
 
 
 

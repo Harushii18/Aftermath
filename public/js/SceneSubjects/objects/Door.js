@@ -8,6 +8,7 @@ export class Door extends THREE.Object3D {
     constructor() {
         super();
         this.checkVicinity = false;
+        this.doCheckVicinity  = false;
         this.object = new THREE.Object3D();
 
         //stores a variable that only allows the interaction overlay to be shown once
@@ -63,8 +64,10 @@ export class Door extends THREE.Object3D {
         //console.log(time);
 
         //just to show the div
+        if (this.doCheckVicinity)
+        {
         this.checkVicinity = this.checkCharacterVicinity();
-
+        }
 
         if (this.open == true) { //animate
             if (this.idleMixer) {
