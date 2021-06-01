@@ -1,7 +1,7 @@
 import * as THREE from '../../../jsm/three.module.js';
 import { GLTFLoader } from '../../../jsm/GLTFLoader.js';
 import { keyboardManager } from '../../managers/KeyboardManager.js';
-import { mainChar } from '../../managers/SceneManager.js';
+import { loadingManager, mainChar } from '../../managers/SceneManager.js';
 import { gameOverlay } from '../../Overlay/GameOverlay.js';
 export class BedroomPainting extends THREE.Object3D {
 
@@ -13,7 +13,7 @@ export class BedroomPainting extends THREE.Object3D {
         //stores a variable that only allows the interaction overlay to be shown once
         this.count = 0;
         this.clock = new THREE.Clock();
-        const loader = new GLTFLoader();
+        const loader = new GLTFLoader(loadingManager);
 
         loader.setPath('../../models/3DObjects/');
 
@@ -30,6 +30,7 @@ export class BedroomPainting extends THREE.Object3D {
             this.object.scale.y = 3.5;
             this.object.scale.z = 3.5;
 
+            
             //move painting
             this.object.position.set(14, 12, 34);
 

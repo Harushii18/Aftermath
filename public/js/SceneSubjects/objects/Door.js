@@ -3,6 +3,7 @@ import { GLTFLoader } from '../../../jsm/GLTFLoader.js';
 import { keyboardManager } from '../../managers/KeyboardManager.js';
 import { mainChar } from '../../managers/SceneManager.js';
 import { gameOverlay } from '../../Overlay/GameOverlay.js';
+import {loadingManager} from '../../managers/SceneManager.js';
 
 export class Door extends THREE.Object3D {
     constructor() {
@@ -13,7 +14,7 @@ export class Door extends THREE.Object3D {
         this.count = 0;
 
         this.clock = new THREE.Clock();
-        const loader = new GLTFLoader();
+        const loader = new GLTFLoader(loadingManager);
 
         loader.setPath('../../models/3DObjects/');
         this.open = false; //open door animation

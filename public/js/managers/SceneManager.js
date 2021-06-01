@@ -37,6 +37,8 @@ import { PointerLockControls } from '../../jsm/PointerLockControls.js';
 import { OrbitControls } from '../../jsm/OrbitControls.js';
 import * as THREE from '../../../jsm/three.module.js';
 import { characterControls } from './CharacterControls.js';
+//pre-loader
+import { ColladaLoader } from '../../jsm/Loaders/ColladaLoader.js';
 
 //==================================================================================================
 
@@ -80,8 +82,8 @@ var bedroomPainting = new BedroomPainting();
 var bedroomDrawer = new BedroomDrawer();
 var cupBoardDoorR = new CupboardDoorR();
 
-
-
+//pre-loader
+export var loadingManager; 
 
 
 //Collision Manager to add all objects that need to be collided with
@@ -128,6 +130,17 @@ export class SceneManager {
         this.scene = this.buildScene();
         this.renderer = this.buildRender(this.screenDimensions);
         this.camera = this.buildCamera(this.screenDimensions);
+
+        loadingManager= new THREE.LoadingManager( () => {
+	
+            const loadingScreen = document.getElementById( 'loading-screen' );
+            loadingScreen.classList.add( 'fade-out' );
+            
+            // optional: remove loader from DOM via event listener
+            loadingScreen.addEventListener( 'transitionend', this.onTransitionEnd );
+            
+        } );
+        
 
         //Post-processing Effects
       //  this.composer = new EffectComposer(this.renderer);
@@ -191,7 +204,7 @@ export class SceneManager {
 
 
     loadToScene(entities) {
-
+ 
         for (let i = 0; i < entities.length; i++) {
 
             this.scene.add(entities[i].object);
@@ -549,6 +562,13 @@ export class SceneManager {
 
     }
 
+    
+ onTransitionEnd( event ) {
+
+	const element = event.target;
+	element.remove();
+	
+}
     pause() { //when pause mode is entered. The pause menu needs to be rendered.
         if (this.game_state == this.GAME_RUN) {
             this.game_state = this.GAME_PAUSE;
