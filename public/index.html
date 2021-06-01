@@ -6,7 +6,7 @@
   <title>Aftermath</title>
 
   <!-- SCRIPTS-->
- 
+
   <!--FBX LOADER-->
   <script src="./jsm/FBXLoader/FBXLoader.js" type='module'></script>
   <script src="./jsm/FBXLoader/fflate.module.js" type='module'></script>
@@ -29,7 +29,7 @@
       overflow: hidden
     }
 
-    .menu{
+    .menu {
       position: absolute;
       z-index: 3;
       width: 100%;
@@ -42,7 +42,7 @@
       justify-content: center;
     }
 
-    .bg{
+    .bg {
       position: absolute;
       top: 0;
       left: 0;
@@ -54,7 +54,7 @@
       overflow: hidden;
     }
 
-    .intro{
+    .intro {
       position: absolute;
       z-index: 3;
       width: 100%;
@@ -68,12 +68,12 @@
       flex-direction: column;
     }
 
-    .menu button{
+    .menu button {
       display: block;
 
     }
 
-    .menu-button{
+    .menu-button {
       height: 50px;
       width: 100px;
       border-radius: 10px;
@@ -83,7 +83,7 @@
       z-index: 2;
     }
 
-    .menu-button:hover{
+    .menu-button:hover {
       color: black;
       background: white;
     }
@@ -109,7 +109,7 @@
       align-items: center;
     }
 
-    .title > h1 {
+    .title>h1 {
       color: #fff;
       font-size: 5rem;
       text-transform: uppercase;
@@ -168,59 +168,67 @@
 </head>
 
 <body>
-<div class="mainMenu">
-  <div class="title">
-    <h1>AFTERMATH</h1>
-  </div>
-  <div class="bg"></div>
-  <div class="fog-container">
-    <div class="fog-img fog-img-first"></div>
-    <div class="fog-img fog-img-second"></div>
+
+  <!-- MAIN MENU=========================================================== -->
+  <div class="mainMenu">
+    <div class="title">
+      <h1>AFTERMATH</h1>
+    </div>
+    <div class="bg"></div>
+    <div class="fog-container">
+      <div class="fog-img fog-img-first"></div>
+      <div class="fog-img fog-img-second"></div>
+    </div>
+
+    <div class="menu">
+      <button id="start" class="menu-button">start</button>
+      <button id="about" class="menu-button">About</button>
+      <audio src="assets/bg_sound.mp3" loop="true" autoplay="true"></audio>
+      <!--    <img src="assets/cyber.jpg" class="dsd" alt="image" height="100" width="100">-->
+    </div>
   </div>
 
-  <div class="menu">
-    <button id="start" class="menu-button">start</button>
-    <button id="about" class="menu-button">About</button>
-    <audio src="assets/bg_sound.mp3" loop="true" autoplay="true" ></audio>
-    <!--    <img src="assets/cyber.jpg" class="dsd" alt="image" height="100" width="100">-->
-  </div>
-</div>
+  <!-- INTRO SCREEN ====================================================================================================-->
 
   <div class="intro">
-    <h2 class="ml3">I have been unable to escape this bedroom that I found myself in three days ago. I do not know how I arrived here.</h2>
-
-     </br>
-
-    <h2 class="ml3">Every day I hear strange sounds: a child and woman crying, gurgling, knocking, scratching on the door and, this morning, there was a knocking sound coming from behind the picture frame.</h2>
+    <h2 class="ml3">I have been unable to escape this bedroom that I found myself in three days ago. I do not know how I
+      arrived here.</h2>
 
     </br>
 
-    <h2 class="ml3"> I am absolutely terrified. The most terrifying thing of all is that I do not feel the need to do the things that humans normally do: such as eat or sleep. Therefore I have been awake all this time: trapped in this hell and unable to break down the door to escape. All the windows are locked, and the glass cannot be shattered. The noises outside this room get louder by the day, as though something is approaching me…
+    <h2 class="ml3">Every day I hear strange sounds: a child and woman crying, gurgling, knocking, scratching on the
+      door and, this morning, there was a knocking sound coming from behind the picture frame.</h2>
+
+    </br>
+
+    <h2 class="ml3"> I am absolutely terrified. The most terrifying thing of all is that I do not feel the need to do
+      the things that humans normally do: such as eat or sleep. Therefore I have been awake all this time: trapped in
+      this hell and unable to break down the door to escape. All the windows are locked, and the glass cannot be
+      shattered. The noises outside this room get louder by the day, as though something is approaching me…
       I need to escape quickly.</h2>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.0.2/anime.min.js"></script>
     <button id="continue" class="menu-button">continue</button>
   </div>
 
+  <!-- ON-SCREEN KEY PROMPTS AND IN-GAME DISPLAYS ========================================================================-->
 
-  <!--Game icons in game -->
+  <!-- <div id='itemMenu'>
+    <span class='items'>
+      <img id='hammer' src="./assets/items/hammer.jpeg" alt="hammer" width="50" height="50">
+    </span>
 
-  <div id='gameBottom' class='gameIconBottom'>
+</div> -->
 
-    <h2 class='gameIconBottomOverlayText'>[E] Interact</h2>
-
-
-  </div>
+  <!--Game on-screen elements-->
+  <div class='subtitles' id='subtitle'>I can't see shit with this lighting</div>
+  <div id='gameBottom' class='gameIconBottom'></div>
 
   <canvas id="canvas"></canvas>
-
-  
-
 
   <!--=============================================-->
 
   <!--=================================================-->
   <!--MOVEMENT-->
-
   <script src="./js/managers/KeyboardManager.js" type='module'></script>
   <script src="./js/managers/CharacterControls.js" type='module'></script>
   <!--========================================-->
@@ -241,7 +249,7 @@
   <script src="./js/sceneSubjects/objects/BedroomPainting.js" type='module'></script>
   <script src="./js/sceneSubjects/objects/BedroomDrawer.js" type='module'></script>
   <script src="./js/sceneSubjects/objects/CupboardDoorR.js" type='module'></script>
-  
+
 
   <!--Our character model file (not complete due to loading issues with fbx)-->
   <script src="./js/sceneSubjects/characters/MainChar.js" type='module'></script>

@@ -1,13 +1,46 @@
 .gameIconBottom{
         position: absolute;
-       right:0px;
+       right:50%;
        padding:5px;
-        bottom:0px;
-        border: 3px solid;
+        top:50%;
         z-index:100;
         display:none;
         /*set display to inline-block to show it*/
         text-align: right;
         background-color: white;
         opacity: 0.2;
+        font-size: larger;
+        font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
+
+.subtitles{
+        position: absolute;
+        bottom: 0px;
+        display:none;
+        z-index:101;
+        text-align: center;
+        width: 100%;
+        background-color: transparent;
+        font-weight: bold;
+        font-size: 12;
+        color: white;
+        padding-bottom:2%;
+}
+/* #itemMenu{
+        z-index: 100;
+        position: absolute;
+        background-color: black;
+        opacity: 0.1;
+       left:0%;
+       padding:10px;
+        top:0%;
+       
+}
+
+.items{
+        background-color: white;
+        opacity: 1;
+        margin: 5px;
+
+}
+ */
