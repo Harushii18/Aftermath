@@ -12,11 +12,13 @@ export class KeyboardManager {
             D: false,
             SHIFT: false,
             P: false,
+
             E: false,
 
             //For rotating
             Z: false,
             X: false
+
         };
 
         this.keyDownQueue = [];//Stores multiple key presses in sequence
@@ -101,7 +103,6 @@ export class KeyboardManager {
                 break;
 
 
-
         }
     }
 
@@ -170,6 +171,7 @@ export class KeyboardManager {
                 return (this.keys.SHIFT);
             case 'E'://e
                 return (this.keys.E);
+
 
             case 'Z'://Z
                 return (this.keys.Z);
