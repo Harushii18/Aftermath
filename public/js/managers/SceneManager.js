@@ -86,7 +86,7 @@ var cupBoardDoorR = new CupboardDoorR();
 //Collision Manager to add all objects that need to be collided with
 const collisionManager = new CollisionsManager();
 //Add collidable objects here
-collisionManager.addObject(house);
+//collisionManager.addObject(house);
 //collisionManager.addObject(testBlock);
 collisionManager.addObject(testdoor);
 
@@ -182,7 +182,7 @@ export class SceneManager {
 
         //---------------------------------------------------------------------------------------------------------------------------------
 
-        this.managers[2].register("footstep","assets/footstep.mpeg");
+
     }
 
 
@@ -338,6 +338,10 @@ export class SceneManager {
         managers[1].register(bedroomDrawer);
         managers[1].register(cupBoardDoorR);
 
+        managers[2].register("footstep","assets/footstep.mpeg");
+        managers[2].register("door_open","assets/door_open.mpeg");
+        managers[2].entities["door_open"].setLoop( false );
+  
    
 
 
@@ -434,18 +438,32 @@ export class SceneManager {
             //   this.camera.position.y += ( - keyboardManager.getMouseY() - this.camera.position.y );
             // this.camera.lookAt( this.scene.position );
 
+            //character footstep sounds---------------------------------------------------------------------------
             if (characterControls.checkMovement())
             {
                 if (this.managers[2].entities["footstep"].isPlaying == false)
                 {
                     this.managers[2].entities["footstep"].play();
                 }
-             // console.log("in char movement");
             }
             else{
                 this.managers[2].entities["footstep"].pause();
 
             }
+            //character footstep sounds---------------------------------------------------------------------------
+
+            //door open sounds---------------------------------------------------------------------------
+            if (keyboardManager.wasPressed('E') && testdoor.checkVicinity) {
+                if (this.managers[2].entities["door_open"].isPlaying == false)
+                {
+                    this.managers[2].entities["door_open"].setLoop(0);
+                    console.log("PLAYING DOOR");
+                    this.managers[2].entities["door_open"].play();
+                }
+            }
+            //door open sounds---------------------------------------------------------------------------
+
+
 
             const runTime = this.time.getRunTime();
             this.managers[0].update(runTime);
