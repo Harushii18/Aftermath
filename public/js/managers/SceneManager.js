@@ -1,6 +1,8 @@
 //IMPORT STATEMENTS
 
 import { EntityManager } from './EntityManager.js';
+
+import { AudioManager } from './AudioManager.js';
 import { LightingManager } from './LightingManager.js';
 import { Time } from '../Time.js';
 import { PauseMenu } from '../SceneSubjects/Menu/PauseMenu.js';
@@ -34,6 +36,7 @@ import { Bookshelf } from '../SceneSubjects/objects/Bookshelf.js';
 import { PointerLockControls } from '../../jsm/PointerLockControls.js';
 import { OrbitControls } from '../../jsm/OrbitControls.js';
 import * as THREE from '../../../jsm/three.module.js';
+import { characterControls } from './CharacterControls.js';
 //==================================================================================================
 
 //Global Variables
@@ -155,6 +158,8 @@ export class SceneManager {
         this.loadToScene(this.managers[0].lights);
         this.loadToScene(this.managers[1].entities);
 
+        
+
 
 
         //  canvas.requestPointerLock = canvas.requestPointerLock || canvas.mozRequestPointerLock;//request pointer lock from player
@@ -177,7 +182,7 @@ export class SceneManager {
 
         //---------------------------------------------------------------------------------------------------------------------------------
 
-
+        this.managers[2].register("footstep","assets/footstep.mpeg");
     }
 
 
@@ -282,7 +287,7 @@ export class SceneManager {
     //add subjects to the scene
     createManagers() {
 
-        const managers = [new LightingManager(), new EntityManager()];
+        const managers = [new LightingManager(), new EntityManager(), new AudioManager()];
         //can be altered so we can add multiple entities, and depending on which position
         //it is, certain ones won't be paused, and some will be
         //Note that these variables are declared globally before the class definition
@@ -332,6 +337,8 @@ export class SceneManager {
         managers[1].register(bedroomPainting);
         managers[1].register(bedroomDrawer);
         managers[1].register(cupBoardDoorR);
+
+   
 
 
 
@@ -389,13 +396,15 @@ export class SceneManager {
 
             //start game pressed, remove start screen items
             btnStart.addEventListener("click", () => {
-                console.log("pressed start");
+   
                 const menu = document.getElementsByClassName("mainMenu");
                 for (let i = 0; i < menu.length; i++) {
                     menu[i].style.display = 'none';
                 }
                 //change state to game intro
                 this.game_state = this.GAME_INTRO;
+                this.managers[2].audioListener.context.resume();
+
             });
 
 
@@ -424,6 +433,20 @@ export class SceneManager {
             //  this.camera.position.x += ( keyboardManager.getMouseX() - this.camera.position.x ) ;
             //   this.camera.position.y += ( - keyboardManager.getMouseY() - this.camera.position.y );
             // this.camera.lookAt( this.scene.position );
+
+            if (characterControls.checkMovement())
+            {
+                if (this.managers[2].entities["footstep"].isPlaying == false)
+                {
+                    this.managers[2].entities["footstep"].play();
+                }
+             // console.log("in char movement");
+            }
+            else{
+                this.managers[2].entities["footstep"].pause();
+
+            }
+
             const runTime = this.time.getRunTime();
             this.managers[0].update(runTime);
 
@@ -527,6 +550,13 @@ export class SceneManager {
         if (this.game_state == this.GAME_RUN) {
             this.game_state = this.GAME_PAUSE;
             this.time.pause();
+
+
+            for (let sound in this.managers[2].entities)//["footstep"].pause())
+            {
+                this.managers[2].entities[sound].pause();
+            }
+
 
             //comment out
             this.pointerLockControls.lock(); // stop orbit controls from responding to use input
