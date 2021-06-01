@@ -1,6 +1,7 @@
 import { characterControls } from '../../managers/CharacterControls.js';
 import * as THREE from '../../../jsm/three.module.js';
 import { FBXLoader } from '../../../jsm/FBXLoader/FBXLoader.js';
+import {subtitleManager} from '../../managers/SubtitleManager.js';
 
 export class MainChar extends THREE.Object3D {
 	constructor(collidableObjects) {
@@ -12,7 +13,17 @@ export class MainChar extends THREE.Object3D {
 		this.object.rotateOnAxis( new THREE.Vector3(0,1,0), -Math.PI);
 		this.object.position.set(0, 1, 50);
 		this.object.visible = false; //Uncomment this so you don't see the player in first person view
+
 		this.object.castShadow = true;
+
+
+		//Checks if the subtitle had started showing
+		this.subtitleStarted={t1:false};
+		//Checks if the subtitle had been shown already
+		this.subtitleState={t1:false};
+		//Contains the text for each subtitle
+		this.subtitleText={t1:"I heard a sound by the painting"};
+
 
 		//change the below to 8 to scale him to the correct scale
 		this.object.scale.x = 8;
@@ -24,6 +35,27 @@ export class MainChar extends THREE.Object3D {
 		this.loadModel();
 
 		this.update = function (time) {
+
+			//MAKE IT SUCH THAT THE SUBTITLES ONLY SHOW WHEN THE GAME IS RENDERED/ LOADED COMPLETELY!!!!!
+			//add subtitles
+			if (!this.subtitleState.t1){
+				subtitleManager.showSubtitles();
+				if (!this.subtitleStarted.t1){
+					//start showing the subtitle
+					subtitleManager.startTime();
+					subtitleManager.setDuration(80);
+					subtitleManager.changeSubtitlesText(this.subtitleText.t1);
+					this.subtitleStarted.t1=true;
+				}
+
+				subtitleManager.countTime();
+				if (!subtitleManager.checkTime()){
+					this.subtitleState.t1=true;
+					//meaning it was shown
+				}
+			}
+
+
 
 			//animation
 			if (this.walkMixer) {
@@ -231,12 +263,6 @@ wall/object doesn't result in a collision. */
 	}
 
 
-	resetChar() {
-		this.object.position.set(0, 1, 50);
-		this.object.rotation.set(0, 0, 0);
-	}
-
-
 	rotate() {
 		var rotateAngle = Math.PI / 2 * 0.02;
 
@@ -247,6 +273,7 @@ wall/object doesn't result in a collision. */
 			this.object.rotateOnAxis(new THREE.Vector3(0,1,0), rotateAngle );
 		}
 	}
+
 
 
 //Move the player
