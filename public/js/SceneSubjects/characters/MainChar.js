@@ -3,6 +3,7 @@ import * as THREE from '../../../jsm/three.module.js';
 import { FBXLoader } from '../../../jsm/FBXLoader/FBXLoader.js';
 import { subtitleManager } from '../../managers/SubtitleManager.js';
 import{gameInstructions} from '../../Overlay/GameInstructions.js';
+import {loadingManager} from '../../managers/SceneManager.js';
 
 export class MainChar extends THREE.Object3D {
 	constructor(collidableObjects) {
@@ -253,7 +254,7 @@ export class MainChar extends THREE.Object3D {
 			//this.walkMixer.stopAllAction();
 
 			//load the animation
-			const anim = new FBXLoader();
+			const anim = new FBXLoader(loadingManager);
 			anim.setPath(path);
 			anim.load(file, (anim) => {
 				//make the walkMixer do this action
@@ -277,7 +278,7 @@ export class MainChar extends THREE.Object3D {
 
 	loadModel() {
 		//load the main character model with an FBX Loader
-		const loader = new FBXLoader();
+		const loader = new FBXLoader(loadingManager);
 		loader.setPath('../models/characters/');
 		loader.load('Douglas.fbx', (fbx) => {
 			//scale the model down
@@ -289,7 +290,7 @@ export class MainChar extends THREE.Object3D {
 
 
 			//animate character
-			const anim = new FBXLoader();
+			const anim = new FBXLoader(loadingManager);
 			anim.setPath('../models/characters/Animations/');
 			anim.load('Idle.fbx', (anim) => {
 

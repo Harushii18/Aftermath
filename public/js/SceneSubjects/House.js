@@ -1,6 +1,6 @@
 import { GLTFLoader } from '../../jsm/GLTFLoader.js';
 import * as THREE from '../../../jsm/three.module.js';
-
+import {loadingManager} from '../managers/SceneManager.js';
 export class House extends THREE.Object3D {
   constructor() {
 
@@ -10,7 +10,7 @@ export class House extends THREE.Object3D {
     this.object.receiveShadow = true;
     //load house model form blender file
 
-    const loader = new GLTFLoader();
+    const loader = new GLTFLoader(loadingManager);
     loader.setPath('../models/');
 
     const gltf = loader.load('pleaseloadbedroom.glb', (gltf) => {
