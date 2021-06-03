@@ -13,13 +13,13 @@ export class House extends THREE.Object3D {
     const loader = new GLTFLoader();
     loader.setPath('../models/');
 
-    const gltf = loader.load('bedroom.glb', (gltf) => {
+    const gltf = loader.load('pleaseloadbedroom.glb', (gltf) => {
 
       gltf.scene.traverse(c => {
         c.castShadow = true;
       });
 
-      //Scale to this size when using GameHouse.glb
+  
       //Scaling house
       this.object.scale.x = 8;
       this.object.scale.y = 8;
