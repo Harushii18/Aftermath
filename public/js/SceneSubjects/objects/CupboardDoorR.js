@@ -33,7 +33,7 @@ export class CupboardDoorR extends THREE.Object3D {
             this.object.scale.z = 0.8;
 
             //move door
-            this.object.position.set(-12.5, -4.5, 66.3);
+            this.object.position.set(-12.5, -5, 66.3);
 
 
 
