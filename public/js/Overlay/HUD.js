@@ -29,9 +29,6 @@ export class HUD extends Overlay {
 
 
     this.scene.add(this.light);
-    this.scene.add(this.light2);
-    
-
 
 
 
