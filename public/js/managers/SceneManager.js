@@ -88,7 +88,7 @@ var bookshelf = new Bookshelf();
 
 //bedroom
 var bedroomPainting = new BedroomPainting();
-var bedroomDrawer = new BedroomDrawer();
+export var bedroomDrawer = new BedroomDrawer();
 var cupBoardDoorR = new CupboardDoorR();
 var hammer = new Hammer();
 var pin = new Pin();
@@ -97,7 +97,7 @@ var key = new Key();
 
 
 //pre-loader
-export var loadingManager; 
+export var loadingManager;
 
 
 //Collision Manager to add all objects that need to be collided with
@@ -131,8 +131,8 @@ export class SceneManager {
 
 
 
-       this.game_state = this.GAME_MENU;
-      
+        this.game_state = this.GAME_MENU;
+
 
 
         this.width_screen = canvas.width;
@@ -149,37 +149,32 @@ export class SceneManager {
         this.camera = this.buildCamera(this.screenDimensions);
 
         //loading manager
-        loadingManager= new THREE.LoadingManager();
-        loadingManager.onProgress=function(item, loaded,total){
-            console.log(item,loaded,total);
-            const loadingScreen = document.getElementById( 'loading-screen' );
-            loadingScreen.classList.add( 'fade-out' );
-            
-            // optional: remove loader from DOM via event listener
-            loadingScreen.addEventListener( 'transitionend', this.onTransitionEnd );
-            
-        };  
+        loadingManager = new THREE.LoadingManager();
+        loadingManager.onProgress = function (item, loaded, total) {
+            //  console.log(item, loaded, total);
+            const loadingScreen = document.getElementById('loading-screen');
+            loadingScreen.classList.add('fade-out');
 
-        loadingManager.onLoad=function(){
+            // optional: remove loader from DOM via event listener
+            loadingScreen.addEventListener('transitionend', this.onTransitionEnd);
+
+        };
+
+        loadingManager.onLoad = function () {
             console.log('loaded all resources');
-            const loadingScreen = document.getElementById( 'loading-screen' );
-            loadingScreen.style.display="none";
-           // RESOURCES_LOADED=true;
+            const loadingScreen = document.getElementById('loading-screen');
+            loadingScreen.style.display = "none";
         }
 
         //Post-processing Effects
-      //  this.composer = new EffectComposer(this.renderer);
-      //  this.composer.addPass(new RenderPass(this.scene,this.camera));
+        //  this.composer = new EffectComposer(this.renderer);
+        //  this.composer.addPass(new RenderPass(this.scene,this.camera));
 
         //comment this out
         this.controls = new OrbitControls(this.camera, this.renderer.domElement);
         this.controls.minDistance = 7;
         this.controls.maxDistance = 12;
         this.controls.maxPolarAngle = Math.PI / 2.5;
-
-
-        //comment this out
-        //  this.controls = new OrbitControls(this.camera, this.renderer.domElement);
 
         //initialise pointerlock controls
         this.pointerLockControls = new PointerLockControls(this.camera, this.renderer.domElement);
@@ -197,7 +192,7 @@ export class SceneManager {
         this.loadToScene(this.managers[0].lights);
         this.loadToScene(this.managers[1].entities);
 
-        
+
 
 
 
@@ -229,7 +224,7 @@ export class SceneManager {
 
 
     loadToScene(entities) {
- 
+
         for (let i = 0; i < entities.length; i++) {
 
             this.scene.add(entities[i].object);
@@ -357,7 +352,6 @@ export class SceneManager {
         managers[1].register(house);
 
         testdoor.setPosition(0, -0.5, 33);
-        //testdoor.setRotation(-Math.PI/2);
         managers[1].register(testdoor);
 
         managers[1].register(mainChar);
@@ -377,10 +371,10 @@ export class SceneManager {
         managers[1].register(key);
 
 
-        managers[2].register("footstep","assets/footstep.mpeg");
-        managers[2].register("door_open","assets/door_open.mpeg");
-        managers[2].entities["door_open"].setLoop( false );
-        managers[2].register("background","assets/back_sound.mp3");
+        managers[2].register("footstep", "assets/footstep.mpeg");
+        managers[2].register("door_open", "assets/door_open.mpeg");
+        managers[2].entities["door_open"].setLoop(false);
+        managers[2].register("background", "assets/back_sound.mp3");
 
         return managers;
     }
@@ -409,24 +403,24 @@ export class SceneManager {
     }
 
     updatePlayerRotation() {
-      if(isFirstPersonView==true){
-        var mousePointer = new THREE.Vector3();
-        mousePointer.normalize();
-        this.pointerLockControls.getDirection(mousePointer);
-        mainChar.updateDirection(mousePointer);
-      }
-      if(isFirstPersonView==false){
-        var directionOfCamera = new THREE.Vector3();
-        directionOfCamera.normalize();
-        this.camera.getWorldDirection( directionOfCamera );
-        mainChar.updateDirection(directionOfCamera);
-      }
+        if (isFirstPersonView == true) {
+            var mousePointer = new THREE.Vector3();
+            mousePointer.normalize();
+            this.pointerLockControls.getDirection(mousePointer);
+            mainChar.updateDirection(mousePointer);
+        }
+        if (isFirstPersonView == false) {
+            var directionOfCamera = new THREE.Vector3();
+            directionOfCamera.normalize();
+            this.camera.getWorldDirection(directionOfCamera);
+            mainChar.updateDirection(directionOfCamera);
+        }
     }
 
     //this updates the subject/model every frame
     update() {
         //won't call this loop if it's paused-> only for objects that need to be paused (managers that need to be paused)
-        
+
         if (this.game_state == this.GAME_MENU) { //when the game start
 
             //id the start button
@@ -434,7 +428,7 @@ export class SceneManager {
 
             //start game pressed, remove start screen items
             btnStart.addEventListener("click", () => {
-   
+
                 const menu = document.getElementsByClassName("mainMenu");
                 for (let i = 0; i < menu.length; i++) {
                     menu[i].style.display = 'none';
@@ -448,13 +442,12 @@ export class SceneManager {
 
 
         } else if (this.game_state == this.GAME_INTRO) {
-        if( this.audioActive == false)
-        {
-            this.audioActive = true;
-            
-        this.managers[2].audioListener.context.resume();
-       // this.managers[2].entities["background"].play();
-        }
+            if (this.audioActive == false) {
+                this.audioActive = true;
+
+                this.managers[2].audioListener.context.resume();
+                // this.managers[2].entities["background"].play();
+            }
 
             //make intro screen visible
             const intro = document.getElementsByClassName("intro");
@@ -478,36 +471,32 @@ export class SceneManager {
         } else if (this.game_state == this.GAME_RUN) {
 
             //door open sounds---------------------------------------------------------------------------
-            if (bedroomPainting.isMoved)
-            {
-                testdoor.doCheckVicinity =true;
-            if (keyboardManager.wasPressed('E') && testdoor.checkVicinity) {
-                if (this.managers[2].entities["door_open"].isPlaying == false)
-                {
-                    this.managers[2].entities["door_open"].setLoop(0);
-                    console.log("PLAYING DOOR");
-                    this.managers[2].entities["door_open"].play();
+            if (key.checkKeyTaken()) {
+                testdoor.doCheckVicinity = true;
+                if (keyboardManager.wasPressed('E') && testdoor.checkVicinity) {
+                    if (this.managers[2].entities["door_open"].isPlaying == false) {
+                        this.managers[2].entities["door_open"].setLoop(0);
+                        console.log("PLAYING DOOR");
+                        this.managers[2].entities["door_open"].play();
+                    }
                 }
             }
-        }
             //door open sounds---------------------------------------------------------------------------
 
-            
+
             //TO EXPERIMENT WITH FOR LOOKING AROUND!
             //  this.camera.position.x += ( keyboardManager.getMouseX() - this.camera.position.x ) ;
             //   this.camera.position.y += ( - keyboardManager.getMouseY() - this.camera.position.y );
             // this.camera.lookAt( this.scene.position );
 
             //character footstep sounds---------------------------------------------------------------------------
-            if (characterControls.checkMovement())
-            {
-                if (this.managers[2].entities["footstep"].isPlaying == false)
-                {
+            if (characterControls.checkMovement()) {
+                if (this.managers[2].entities["footstep"].isPlaying == false) {
                     this.managers[2].entities["footstep"].play();
                 }
-                
+
             }
-            else{
+            else {
                 this.managers[2].entities["footstep"].pause();
 
             }
@@ -517,8 +506,6 @@ export class SceneManager {
             this.managers[0].update(runTime);
 
             this.managers[1].update(runTime);
-            //update orbit controls
-
 
             //check pause--------------------------------
             if ((keyboardManager.keyDownQueue[0] == "P")) {
@@ -553,14 +540,12 @@ export class SceneManager {
 
 
         }
-        else if (this.game_state == this.GAME_PAUSE)
-        {
+        else if (this.game_state == this.GAME_PAUSE) {
 
-            if (keyboardManager.keyDownQueue[0] == 'P')
-            {
+            if (keyboardManager.keyDownQueue[0] == 'P') {
 
-                    this.unpause();
-                    keyboardManager.keyDownQueue.shift();
+                this.unpause();
+                keyboardManager.keyDownQueue.shift();
 
             }
 
@@ -568,47 +553,35 @@ export class SceneManager {
             this.renderPauseMenu();
 
         }
+    }
 
+    renderPauseMenu() {
 
-        //update orbit controls
         //comment out
-        //this.controls.update();
+        this.pointerLockControls.unlock();
+        // this.controls.update();
+        this.objPauseMenu.update(this.time.getElapsedTime());
 
-        //uncomment this
+        this.renderer.autoClear = true;
 
+        //render scene1
+        this.renderer.render(this.scene, this.camera);
 
+        //prevent canvas from being erased with next .render call
+        this.renderer.autoClear = false;
 
-    }
-
-    renderPauseMenu()
-    {
-        
-            //comment out
-            this.pointerLockControls.unlock();
-            // this.controls.update();
-            this.objPauseMenu.update(this.time.getElapsedTime());
-
-            this.renderer.autoClear = true;
-
-            //render scene1
-            this.renderer.render(this.scene, this.camera);
-
-            //prevent canvas from being erased with next .render call
-            this.renderer.autoClear = false;
-
-            //just render scene2 on top of scene1
-            this.renderer.getContext().disable(this.renderer.getContext().DEPTH_TEST);
+        //just render scene2 on top of scene1
+        this.renderer.getContext().disable(this.renderer.getContext().DEPTH_TEST);
 
 
-            this.renderer.render(this.objPauseMenu.scene, this.objPauseMenu.camera);
+        this.renderer.render(this.objPauseMenu.scene, this.objPauseMenu.camera);
 
-            this.renderer.getContext().enable(this.renderer.getContext().DEPTH_TEST);
+        this.renderer.getContext().enable(this.renderer.getContext().DEPTH_TEST);
 
 
     }
 
-    renderMainScene()
-    {
+    renderMainScene() {
         this.renderer.render(this.scene, this.camera);
 
         this.renderer.autoClear = false;//prevent canvas from being erased with next .render call
@@ -631,13 +604,13 @@ export class SceneManager {
         this.renderer.setSize(window.innerWidth, window.innerHeight);
     }
 
-    
- onTransitionEnd( event ) {
 
-	const element = event.target;
-	element.remove();
-	
-}
+    onTransitionEnd(event) {
+
+        const element = event.target;
+        element.remove();
+
+    }
     pause() { //when pause mode is entered. The pause menu needs to be rendered.
         if (this.game_state == this.GAME_RUN) {
             this.game_state = this.GAME_PAUSE;
@@ -645,15 +618,15 @@ export class SceneManager {
 
             //hide divs that display instructions/ key prompts
             this.instructions = document.getElementById('gameInstructions');
-            this.instructions.display='none';
+            this.instructions.display = 'none';
             this.instructions = document.getElementById('gameBottom');
-            this.instructions.display='none';
-            
-           /* for (let sound in this.managers[2].entities)//["footstep"].pause())
-            {
-                this.managers[2].entities[sound].pause();
-            }
-  */
+            this.instructions.display = 'none';
+
+            /* for (let sound in this.managers[2].entities)//["footstep"].pause())
+             {
+                 this.managers[2].entities[sound].pause();
+             }
+   */
             //comment out
 
             this.managers[2].entities["footstep"].pause();
@@ -667,8 +640,6 @@ export class SceneManager {
         this.game_state = this.GAME_RUN;
 
         this.time.unpause();
-
-        //comment out
 
         this.pointerLockControls.unlock(); // start orbit controls to respond to input
     }

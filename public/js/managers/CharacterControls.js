@@ -31,6 +31,7 @@ export class CharacterControls {
         }
         return this.moveDistance;
     }
+    
     getRun() {
         //checks if the character is running
         return keyboardManager.wasPressed('SHIFT');
