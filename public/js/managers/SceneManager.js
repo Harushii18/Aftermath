@@ -39,6 +39,7 @@ import * as THREE from '../../../jsm/three.module.js';
 import { characterControls } from './CharacterControls.js';
 //pre-loader
 import { ColladaLoader } from '../../jsm/Loaders/ColladaLoader.js';
+import { HUD } from '../Overlay/HUD.js';
 
 //==================================================================================================
 
@@ -113,6 +114,7 @@ export class SceneManager {
         //we use (this) to make variables accessible in other classes
         this.time = new Time();
         this.objPauseMenu;
+        //this.hud;
 
 
 
@@ -195,6 +197,7 @@ export class SceneManager {
         // We will use 2D canvas element to render our HUD.
 
         //---------------------------------------------------------------------------------------------------------------------------------
+        this.hud = new HUD(this.width_screen, this.height_screen);
 
     }
 
@@ -452,6 +455,7 @@ export class SceneManager {
                 }
                 //change state to game run
                 this.game_state = this.GAME_RUN;
+                this.managers[2].entities["background"].pause();
             });
 
         } else if (this.game_state == this.GAME_RUN) {
@@ -491,29 +495,23 @@ export class SceneManager {
             }
             //character footstep sounds---------------------------------------------------------------------------
 
-
-
             const runTime = this.time.getRunTime();
             this.managers[0].update(runTime);
 
             this.managers[1].update(runTime);
             //update orbit controls
-            //comment out this.controls.update()
-            //this.controls.update();
 
-            this.renderer.render(this.scene, this.camera);
 
             //check pause--------------------------------
-
             if ((keyboardManager.keyDownQueue[0] == "P")) {
 
                 this.pause();
                 keyboardManager.keyDownQueue.shift();
 
             }
-
             //--------------------------------------------
-            //keyboardManager.keyDownQueue.shift();
+
+            //Check if view must be changed--------------------------------------------------------------------------------------------
             if ((keyboardManager.keyDownQueue[0] == "V") && isFirstPersonView == true) {
                 console.log("Switching to Third-Person View");
                 isFirstPersonView = false;
@@ -527,13 +525,16 @@ export class SceneManager {
                 keyboardManager.keyDownQueue.shift();
             }
 
+            //Check if view must be changed--------------------------------------------------------------------------------------------
+
             this.updateCameraPosition();
             //  console.log(this.pointerLockControls.getDirection());
 
+            this.renderMainScene();
+
+
 
         }
-
-
         else if (this.game_state == this.GAME_PAUSE)
         {
 
@@ -545,6 +546,25 @@ export class SceneManager {
 
             }
 
+
+            this.renderPauseMenu();
+
+        }
+
+
+        //update orbit controls
+        //comment out
+        //this.controls.update();
+
+        //uncomment this
+
+
+
+    }
+
+    renderPauseMenu()
+    {
+        
             //comment out
             this.pointerLockControls.unlock();
             // this.controls.update();
@@ -566,19 +586,21 @@ export class SceneManager {
 
             this.renderer.getContext().enable(this.renderer.getContext().DEPTH_TEST);
 
-            // renderer.autoClear = true;
 
-        }
+    }
 
+    renderMainScene()
+    {
+        this.renderer.render(this.scene, this.camera);
 
-        //update orbit controls
-        //comment out
-        //this.controls.update();
-
-        //uncomment this
-
+        this.renderer.autoClear = false;//prevent canvas from being erased with next .render call
+        this.renderer.getContext().disable(this.renderer.getContext().DEPTH_TEST);
 
 
+        this.renderer.render(this.hud.scene, this.hud.camera);
+
+        this.renderer.getContext().enable(this.renderer.getContext().DEPTH_TEST);
+        this.renderer.autoClear = true;
     }
 
     //this resizes our game when screen size changed
@@ -615,6 +637,8 @@ export class SceneManager {
             }
   */
             //comment out
+
+            this.managers[2].entities["footstep"].pause();
             this.pointerLockControls.lock(); // stop orbit controls from responding to use input
 
             this.objPauseMenu = new PauseMenu(this.width_screen, this.height_screen);
