@@ -40,8 +40,6 @@ import { PointerLockControls } from '../../jsm/PointerLockControls.js';
 import { OrbitControls } from '../../jsm/OrbitControls.js';
 import * as THREE from '../../../jsm/three.module.js';
 import { characterControls } from './CharacterControls.js';
-//pre-loader
-import { ColladaLoader } from '../../jsm/Loaders/ColladaLoader.js';
 
 //==================================================================================================
 
@@ -136,6 +134,7 @@ export class SceneManager {
         this.renderer = this.buildRender(this.screenDimensions);
         this.camera = this.buildCamera(this.screenDimensions);
 
+        //loading manager
         loadingManager= new THREE.LoadingManager();
         loadingManager.onProgress=function(item, loaded,total){
             console.log(item,loaded,total);
@@ -305,8 +304,6 @@ export class SceneManager {
         hallwayLightObj2.setLightPosition(0, 21, 0);
         hallwayLight2.setLightPosition(0, 16, 0);
 
-
-
     }
 
     //add subjects to the scene
@@ -342,12 +339,6 @@ export class SceneManager {
         managers[1].register(hallwayLightObj1);
         managers[1].register(hallwayLightObj2);
 
-      
-
-
-
-
-
         managers[1].register(house);
 
         testdoor.setPosition(0, -0.5, 33);
@@ -369,11 +360,6 @@ export class SceneManager {
         managers[2].register("door_open","assets/door_open.mpeg");
         managers[2].entities["door_open"].setLoop( false );
         managers[2].register("background","assets/back_sound.mp3");
-  
-   
-
-
-
 
         return managers;
     }
@@ -446,7 +432,7 @@ export class SceneManager {
             this.audioActive = true;
             
         this.managers[2].audioListener.context.resume();
-        this.managers[2].entities["background"].play();
+       // this.managers[2].entities["background"].play();
         }
 
             //make intro screen visible
@@ -591,8 +577,6 @@ export class SceneManager {
 
         //uncomment this
 
-
-
     }
 
     //this resizes our game when screen size changed
@@ -602,7 +586,6 @@ export class SceneManager {
         this.camera.updateProjectionMatrix();
 
         this.renderer.setSize(window.innerWidth, window.innerHeight);
-
     }
 
     
@@ -643,11 +626,5 @@ export class SceneManager {
         //comment out
 
         this.pointerLockControls.unlock(); // start orbit controls to respond to input
-
-
-
     }
-
-
-
 }

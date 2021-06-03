@@ -76,8 +76,8 @@ export class BedroomDrawer extends THREE.Object3D {
         let pos = mainChar.returnWorldPosition();
 
         //variable that allows change in vicinity position in which E needs to be pressed:
-        var vicinityLimitZ = 20;
-        var vicinityLimitX = 5;
+        var vicinityLimitZ = 15;
+        var vicinityLimitX = 8;
 
         //if the character is in the vicinity of the drawer
         if (((pos.z < this.object.position.z + vicinityLimitZ) && (pos.z > this.object.position.z)) && (((pos.x < this.object.position.x + vicinityLimitX)) && ((pos.x > this.object.position.x - vicinityLimitX)))) {
