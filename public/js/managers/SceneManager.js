@@ -1,5 +1,8 @@
 //IMPORT STATEMENTS
 
+//style
+import anime from '../../jsm/animejs/lib/anime.es.js';
+
 import { EntityManager } from './EntityManager.js';
 
 import { AudioManager } from './AudioManager.js';
@@ -116,7 +119,9 @@ export class SceneManager {
 
 
 
-        this.game_state = this.GAME_MENU;
+       this.game_state = this.GAME_MENU;
+      
+
 
         this.width_screen = canvas.width;
         this.height_screen = canvas.height;
@@ -131,16 +136,23 @@ export class SceneManager {
         this.renderer = this.buildRender(this.screenDimensions);
         this.camera = this.buildCamera(this.screenDimensions);
 
-        loadingManager= new THREE.LoadingManager( () => {
-	
+        loadingManager= new THREE.LoadingManager();
+        loadingManager.onProgress=function(item, loaded,total){
+            console.log(item,loaded,total);
             const loadingScreen = document.getElementById( 'loading-screen' );
             loadingScreen.classList.add( 'fade-out' );
             
             // optional: remove loader from DOM via event listener
             loadingScreen.addEventListener( 'transitionend', this.onTransitionEnd );
             
-        } );
-        
+        };  
+
+        loadingManager.onLoad=function(){
+            console.log('loaded all resources');
+            const loadingScreen = document.getElementById( 'loading-screen' );
+            loadingScreen.style.display="none";
+           // RESOURCES_LOADED=true;
+        }
 
         //Post-processing Effects
       //  this.composer = new EffectComposer(this.renderer);
@@ -407,6 +419,7 @@ export class SceneManager {
     //this updates the subject/model every frame
     update() {
         //won't call this loop if it's paused-> only for objects that need to be paused (managers that need to be paused)
+        
         if (this.game_state == this.GAME_MENU) { //when the game start
 
             //id the start button
@@ -484,6 +497,7 @@ export class SceneManager {
                 {
                     this.managers[2].entities["footstep"].play();
                 }
+                
             }
             else{
                 this.managers[2].entities["footstep"].pause();
