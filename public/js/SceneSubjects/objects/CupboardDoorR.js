@@ -1,7 +1,8 @@
 import * as THREE from '../../../jsm/three.module.js';
 import { GLTFLoader } from '../../../jsm/GLTFLoader.js';
 import { keyboardManager } from '../../managers/KeyboardManager.js';
-import { loadingManager } from '../../managers/SceneManager.js';
+import { loadingManager, mainChar } from '../../managers/SceneManager.js';
+import { gameOverlay } from '../../Overlay/GameOverlay.js';
 export class CupboardDoorR extends THREE.Object3D {
 
     constructor() {
@@ -14,6 +15,7 @@ export class CupboardDoorR extends THREE.Object3D {
         loader.setPath('../../models/');
         loader.setPath('../../models/3DObjects/');
         this.open = false; //open door animation
+        this.count = 0;
         var axis = new THREE.Vector3(0, 0, 1);
         var rad=0;
 
@@ -50,32 +52,79 @@ export class CupboardDoorR extends THREE.Object3D {
 
 
     update(time) {
+      
 
+      var rotationVector = new THREE.Vector3(0,1,0);
+      //rotationVector.x = rotationVector.x + this.object.position.x;
+      //rotationVector.y = rotationVector.y + this.object.position.y;
 
-        //on button E press, move painting to  the left 
+      rotationVector.normalize();
+      this.object.rotateOnAxis(rotationVector,0.01*(Math.sin(time) + 1.5) / 2);
+        //just to show the div
+        var checkVicinity = this.checkCharacterVicinity();
+
+        //on button E press, move painting to  the left
         if (keyboardManager.wasPressed('E')) {
-
-            //  this.object.rotation.y-=0.1;
-            ///
-            // this.object.rotateOnAxis(new THREE.Vector3(0, 0, 1), this.object.rotation.y - 0.1);
-            // this.object.rotation.y -= 0.1;
-
-            //declared once at the top of your code
-           //tilted a bit on x and y - feel free to plug your different axis here
-            //in your update/draw function
-            // this.rad += 0.1;
-            // this.object.rotateOnAxis(this.axis, this.rad);
-
-          //  this.object.rotateY(-Math.PI/2);
-
-            this.object.rotateOnAxis(new THREE.Vector3(0,1,0),this.object.rotation.y-0.1);
-
-            this.open = true;
-
+            if (checkVicinity) {
+              this.object.rotateOnAxis(new THREE.Vector3(0,1,0), this.object.rotation.y+0.1);
+              this.open = true;
+            }
         }
 
-
-
-
     }
+
+
+
+    inVicinity(vicinityLimitZ, vicinityLimitX){
+        let pos = mainChar.returnWorldPosition();
+
+
+        if(pos.x <this.object.position.x +vicinityLimitX && pos.x > this.object.position.x-vicinityLimitX){
+          if(pos.z < this.object.position.z+vicinityLimitZ && pos.z > this.object.position.z-vicinityLimitZ){
+            return true;
+          }
+        }
+        else{
+          return false;
+        }
+    }
+
+    //checks if Character is in vicinity
+    checkCharacterVicinity() {
+    //  console.log("Vinicinity Hammer function running");
+        //get the position of the main character
+
+
+        //variable that allows change in vicinity position in which E needs to be pressed:
+        var vicinityLimitZ = 10;
+        var vicinityLimitX = 5;
+
+        //if the character is in the vicinity
+        if (this.inVicinity(vicinityLimitZ, vicinityLimitX)) {
+
+        //  console.log("Player is near the Cupboard");
+            //display interaction overlay if it isn't being shown
+            if (this.count == 0) {
+                if (this.open==false){
+                gameOverlay.changeText('[E] OPEN CUPBOARD');
+                //LATER WE CAN ADD A CONDITION IF HE LOOKED AT IT, HE'LL NOTICE IT CAN MOVE, AND THE
+                //INTERACTION WILL SAY MOVE PAINTING
+                gameOverlay.showOverlay();
+                this.count += 1;
+                }
+            }
+            return true;
+        }
+        //if the character is not in the vicinity, return false
+        //hide interaction overlay
+        if (this.count == 1) {
+            gameOverlay.hideOverlay();
+            this.count = 0;
+        }
+
+        return false;
+    }
+
+
+
 }

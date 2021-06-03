@@ -98,13 +98,13 @@ var key = new Key();
 
 
 //pre-loader
-export var loadingManager; 
+export var loadingManager;
 
 
 //Collision Manager to add all objects that need to be collided with
 const collisionManager = new CollisionsManager();
 //Add collidable objects here
-//collisionManager.addObject(house);
+collisionManager.addObject(house);
 //collisionManager.addObject(testBlock);
 collisionManager.addObject(testdoor);
 
@@ -133,7 +133,7 @@ export class SceneManager {
 
 
        this.game_state = this.GAME_MENU;
-      
+
 
 
         this.width_screen = canvas.width;
@@ -151,20 +151,24 @@ export class SceneManager {
 
         loadingManager= new THREE.LoadingManager();
         loadingManager.onProgress=function(item, loaded,total){
-            console.log(item,loaded,total);
+            //console.log(item,loaded,total);
             const loadingScreen = document.getElementById( 'loading-screen' );
             loadingScreen.classList.add( 'fade-out' );
-            
+
             // optional: remove loader from DOM via event listener
             loadingScreen.addEventListener( 'transitionend', this.onTransitionEnd );
-            
-        };  
+
+        };
 
         loadingManager.onLoad=function(){
-            console.log('loaded all resources');
+            //console.log('loaded all resources');
             const loadingScreen = document.getElementById( 'loading-screen' );
             loadingScreen.style.display="none";
            // RESOURCES_LOADED=true;
+        }
+
+        loadingManager.onError = function(){
+          console.log("Encountered Loading Error");
         }
 
         //Post-processing Effects
@@ -197,7 +201,7 @@ export class SceneManager {
         this.loadToScene(this.managers[0].lights);
         this.loadToScene(this.managers[1].entities);
 
-        
+
 
 
 
@@ -229,7 +233,7 @@ export class SceneManager {
 
 
     loadToScene(entities) {
- 
+
         for (let i = 0; i < entities.length; i++) {
 
             this.scene.add(entities[i].object);
@@ -356,7 +360,7 @@ export class SceneManager {
         managers[1].register(hallwayLightObj1);
         managers[1].register(hallwayLightObj2);
 
-      
+
 
 
 
@@ -389,8 +393,8 @@ export class SceneManager {
         managers[2].register("door_open","assets/door_open.mpeg");
         managers[2].entities["door_open"].setLoop( false );
         managers[2].register("background","assets/back_sound.mp3");
-  
-   
+
+
 
 
 
@@ -439,7 +443,7 @@ export class SceneManager {
     //this updates the subject/model every frame
     update() {
         //won't call this loop if it's paused-> only for objects that need to be paused (managers that need to be paused)
-        
+
         if (this.game_state == this.GAME_MENU) { //when the game start
 
             //id the start button
@@ -447,7 +451,7 @@ export class SceneManager {
 
             //start game pressed, remove start screen items
             btnStart.addEventListener("click", () => {
-   
+
                 const menu = document.getElementsByClassName("mainMenu");
                 for (let i = 0; i < menu.length; i++) {
                     menu[i].style.display = 'none';
@@ -464,7 +468,7 @@ export class SceneManager {
         if( this.audioActive == false)
         {
             this.audioActive = true;
-            
+
         this.managers[2].audioListener.context.resume();
         this.managers[2].entities["background"].play();
         }
@@ -505,7 +509,7 @@ export class SceneManager {
         }
             //door open sounds---------------------------------------------------------------------------
 
-            
+
             //TO EXPERIMENT WITH FOR LOOKING AROUND!
             //  this.camera.position.x += ( keyboardManager.getMouseX() - this.camera.position.x ) ;
             //   this.camera.position.y += ( - keyboardManager.getMouseY() - this.camera.position.y );
@@ -518,7 +522,7 @@ export class SceneManager {
                 {
                     this.managers[2].entities["footstep"].play();
                 }
-                
+
             }
             else{
                 this.managers[2].entities["footstep"].pause();
@@ -595,7 +599,7 @@ export class SceneManager {
 
     renderPauseMenu()
     {
-        
+
             //comment out
             this.pointerLockControls.unlock();
             // this.controls.update();
@@ -644,12 +648,12 @@ export class SceneManager {
 
     }
 
-    
+
  onTransitionEnd( event ) {
 
 	const element = event.target;
 	element.remove();
-	
+
 }
     pause() { //when pause mode is entered. The pause menu needs to be rendered.
         if (this.game_state == this.GAME_RUN) {
@@ -661,7 +665,7 @@ export class SceneManager {
             this.instructions.display='none';
             this.instructions = document.getElementById('gameBottom');
             this.instructions.display='none';
-            
+
            /* for (let sound in this.managers[2].entities)//["footstep"].pause())
             {
                 this.managers[2].entities[sound].pause();
