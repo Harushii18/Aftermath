@@ -16,6 +16,7 @@
   <script src="./jsm/PointerLockControls.js" type='module'></script>
 
   <!--STYLES-->
+  <link rel="stylesheet" href="./assets/styles/styleSheet.css" type="text/css">
   <link rel="stylesheet" href="./assets/styles/gameIcons.css" type="text/css">
   <link rel="stylesheet" href="./assets/styles/loadingScreen.css" type="text/css">
   <!-- FONTS -->
@@ -24,165 +25,19 @@
 
 
   <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-  <style>
-    body {
-      margin: 0;
-      height: 100%;
-      width: 100%;
-      overflow: hidden
-    }
 
-    .menu {
-      position: absolute;
-      z-index: 3;
-      width: 100%;
-      height: 100%;
-      /*background: url("assets/house2.jpg") no-repeat;*/
-      /*background-size: cover;*/
-      background: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .bg {
-      position: absolute;
-      top: 0;
-      left: 0;
-      height: 100%;
-      width: 100%;
-      z-index: 0;
-      background: url("assets/house2.jpg") no-repeat;
-      background-size: cover;
-      overflow: hidden;
-    }
-
-    .intro {
-      position: absolute;
-      z-index: 3;
-      width: 100%;
-      height: 100%;
-      /*background: url("assets/house2.jpg") no-repeat;*/
-      /*background-size: cover;*/
-      background: black;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-    }
-
-    .menu button {
-      display: block;
-      opacity: 0.8;
-
-    }
-
-    .menu-button {
-      height: 50px;
-      width: 20%;
-      border-radius: 10px;
-      border-width: 0.1px;
-      font-family: 'Special Elite', cursive;
-      font-weight: bolder;
-      
-      color: white;
-      font-size: 15px;
-      background:black;
-      margin: 20px;
-      z-index: 2;
-    }
-
-    .menu-button:hover {
-      text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
-      color: white;
-      border-style: ridge 2px;
-      background: black;
-      opacity: 0.5;
-    }
-
-    .ml3 {
-      font-weight: 900;
-      font-size: 2em;
-      display: block;
-      color: white;
-      margin: 30px;
-    }
-
-    .title {
-      position: absolute;
-      top: 0;
-      left: 0;
-
-      font-family: 'Special Elite', cursive;
-      width: 100%;
-      height: 100%;
-      z-index: 2;
-      display: flex;
-      justify-content: start;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .title>h1 {
-      text-shadow: 2px 2px 4px #503C38;
-      color: black;
-      font-size: 5rem;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    .fog {
-      position: absolute;
-      height: 100vh;
-      width: 100%;
-      background: #fff;
-    }
-
-    .fog-container {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      z-index: 1;
-    }
-
-    .fog-img {
-      position: absolute;
-      height: 100vh;
-      width: 300vw;
-      z-index: 2;
-    }
-
-    .fog-img-first {
-      background: url("assets/fog1.png");
-      background-repeat: repeat-x;
-      background-size: contain;
-      background-position: center;
-      animation: marquee 60s linear infinite;
-    }
-
-    .fog-img-second {
-      background: url("assets/fog2.png");
-      background-repeat: repeat-x;
-      background-size: contain;
-      background-position: center;
-      animation: marquee 30s linear infinite;
-    }
-
-    @keyframes marquee {
-      0% {
-        transform: translate3d(0, 0, 0);
-      }
-
-      100% {
-        transform: translate3d(-200vw, 0, 0);
-      }
-    }
-  </style>
+  
 
 </head>
 
 <body>
+
+  <!-- <div class="loader"></div> -->
+
+  <!-- intro logo div -->
+  <div class="logo">
+    <img src="assets/cyber.jpg" class="logo">
+  </div>
 
   <!-- MAIN MENU=========================================================== -->
   <div class="mainMenu">
@@ -208,17 +63,19 @@
 
   <!-- INTRO SCREEN ====================================================================================================-->
 
-  <div class="intro">
-    <h2 class="ml3">I have been unable to escape this bedroom that I found myself in three days ago. I do not know how I
+  <div class="intro" id="para1">
+    <h2 class="ml3" >I have been unable to escape this bedroom that I found myself in three days ago. I do not know how I
       arrived here.</h2>
+      <!-- <button id="next1" class="menu-button">Next</button> -->
+  </div>
 
-    </br>
-
+  <div class="intro" id="para2">
     <h2 class="ml3">Every day I hear strange sounds: a child and woman crying, gurgling, knocking, scratching on the
       door and, this morning, there was a knocking sound coming from behind the picture frame.</h2>
+      <!-- <button id="next2" class="menu-button">Next</button> -->
+  </div>
 
-    </br>
-
+  <div class="intro" id="para3">
     <h2 class="ml3"> I am absolutely terrified. The most terrifying thing of all is that I do not feel the need to do
       the things that humans normally do: such as eat or sleep. Therefore I have been awake all this time: trapped in
       this hell and unable to break down the door to escape. All the windows are locked, and the glass cannot be
@@ -226,6 +83,12 @@
       I need to escape quickly.</h2>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.0.2/anime.min.js"></script>
     <button id="continue" class="menu-button">CONTINUE</button>
+  </div>
+
+  <!-- Pause Menu -->
+  <div class="pauseMenu">
+      <button id="unpause" class="menu-button">UNPAUSE</button>
+      <button id="mainMenu" class="menu-button">MAIN MENU</button>
   </div>
 
   <!-- PRE-LOADER -->

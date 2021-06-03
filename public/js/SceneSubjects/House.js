@@ -13,7 +13,7 @@ export class House extends THREE.Object3D {
     const loader = new GLTFLoader(loadingManager);
     loader.setPath('../models/');
 
-    const gltf = loader.load('pleaseloadbedroom.glb', (gltf) => {
+    const gltf = loader.load('bedroom.glb', (gltf) => {
 
       gltf.scene.traverse(c => {
         c.castShadow = true;
