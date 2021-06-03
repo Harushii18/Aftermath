@@ -3,6 +3,7 @@ import { GLTFLoader } from '../../../jsm/GLTFLoader.js';
 import { keyboardManager } from '../../managers/KeyboardManager.js';
 import { loadingManager, mainChar } from '../../managers/SceneManager.js';
 import { gameOverlay } from '../../Overlay/GameOverlay.js';
+
 export class BedroomPainting extends THREE.Object3D {
 
 
@@ -79,12 +80,12 @@ export class BedroomPainting extends THREE.Object3D {
             //display interaction overlay if it isn't being shown
             if (this.count == 0) {
                 if (this.isMoved==false){
-                gameOverlay.changeText('[E] MOVE PAINTING');
+                    gameOverlay.changeText('[E] MOVE PAINTING');
 
-                //LATER WE CAN ADD A CONDITION IF HE LOOKED AT IT, HE'LL NOTICE IT CAN MOVE, AND THE 
-                //INTERACTION WILL SAY MOVE PAINTING
-                gameOverlay.showOverlay();
-                this.count += 1;
+                    //LATER WE CAN ADD A CONDITION IF HE LOOKED AT IT, HE'LL NOTICE IT CAN MOVE, AND THE 
+                    //INTERACTION WILL SAY MOVE PAINTING
+                    gameOverlay.showOverlay();
+                    this.count += 1;
                 }
             }
             return true;
