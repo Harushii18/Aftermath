@@ -1,5 +1,8 @@
 //IMPORT STATEMENTS
 
+//style
+import anime from '../../jsm/animejs/lib/anime.es.js';
+
 import { EntityManager } from './EntityManager.js';
 
 import { AudioManager } from './AudioManager.js';
@@ -42,6 +45,8 @@ import { PointerLockControls } from '../../jsm/PointerLockControls.js';
 import { OrbitControls } from '../../jsm/OrbitControls.js';
 import * as THREE from '../../../jsm/three.module.js';
 import { characterControls } from './CharacterControls.js';
+//pre-loader
+import { ColladaLoader } from '../../jsm/Loaders/ColladaLoader.js';
 
 //==================================================================================================
 
@@ -91,14 +96,14 @@ var letterI = new LetterI();
 var key = new Key();
 
 
-
-
+//pre-loader
+export var loadingManager; 
 
 
 //Collision Manager to add all objects that need to be collided with
 const collisionManager = new CollisionsManager();
 //Add collidable objects here
-collisionManager.addObject(house);
+//collisionManager.addObject(house);
 //collisionManager.addObject(testBlock);
 collisionManager.addObject(testdoor);
 
@@ -118,14 +123,16 @@ export class SceneManager {
         this.GAME_MENU = "menu";
         this.GAME_INTRO = "intro";
         //------------------------------------------------------------------------------------------------------------------------------------------
-
+        this.audioActive = false;
         //we use (this) to make variables accessible in other classes
         this.time = new Time();
         this.objPauseMenu;
 
 
 
-        this.game_state = this.GAME_MENU;
+       this.game_state = this.GAME_MENU;
+      
+
 
         this.width_screen = canvas.width;
         this.height_screen = canvas.height;
@@ -139,6 +146,24 @@ export class SceneManager {
         this.scene = this.buildScene();
         this.renderer = this.buildRender(this.screenDimensions);
         this.camera = this.buildCamera(this.screenDimensions);
+
+        loadingManager= new THREE.LoadingManager();
+        loadingManager.onProgress=function(item, loaded,total){
+            console.log(item,loaded,total);
+            const loadingScreen = document.getElementById( 'loading-screen' );
+            loadingScreen.classList.add( 'fade-out' );
+            
+            // optional: remove loader from DOM via event listener
+            loadingScreen.addEventListener( 'transitionend', this.onTransitionEnd );
+            
+        };  
+
+        loadingManager.onLoad=function(){
+            console.log('loaded all resources');
+            const loadingScreen = document.getElementById( 'loading-screen' );
+            loadingScreen.style.display="none";
+           // RESOURCES_LOADED=true;
+        }
 
         //Post-processing Effects
       //  this.composer = new EffectComposer(this.renderer);
@@ -194,7 +219,6 @@ export class SceneManager {
 
         //---------------------------------------------------------------------------------------------------------------------------------
 
-        this.managers[2].register("footstep","assets/footstep.mpeg");
     }
 
 
@@ -202,7 +226,7 @@ export class SceneManager {
 
 
     loadToScene(entities) {
-
+ 
         for (let i = 0; i < entities.length; i++) {
 
             this.scene.add(entities[i].object);
@@ -358,6 +382,11 @@ export class SceneManager {
         managers[1].register(key);
 
 
+        managers[2].register("footstep","assets/footstep.mpeg");
+        managers[2].register("door_open","assets/door_open.mpeg");
+        managers[2].entities["door_open"].setLoop( false );
+        managers[2].register("background","assets/back_sound.mp3");
+  
    
 
 
@@ -406,10 +435,8 @@ export class SceneManager {
 
     //this updates the subject/model every frame
     update() {
-
-
-
         //won't call this loop if it's paused-> only for objects that need to be paused (managers that need to be paused)
+        
         if (this.game_state == this.GAME_MENU) { //when the game start
 
             //id the start button
@@ -424,12 +451,20 @@ export class SceneManager {
                 }
                 //change state to game intro
                 this.game_state = this.GAME_INTRO;
-                this.managers[2].audioListener.context.resume();
+
 
             });
 
 
+
         } else if (this.game_state == this.GAME_INTRO) {
+        if( this.audioActive == false)
+        {
+            this.audioActive = true;
+            
+        this.managers[2].audioListener.context.resume();
+        this.managers[2].entities["background"].play();
+        }
 
             //make intro screen visible
             const intro = document.getElementsByClassName("intro");
@@ -450,23 +485,44 @@ export class SceneManager {
             });
 
         } else if (this.game_state == this.GAME_RUN) {
+
+            //door open sounds---------------------------------------------------------------------------
+            if (bedroomPainting.isMoved)
+            {
+                testdoor.doCheckVicinity =true;
+            if (keyboardManager.wasPressed('E') && testdoor.checkVicinity) {
+                if (this.managers[2].entities["door_open"].isPlaying == false)
+                {
+                    this.managers[2].entities["door_open"].setLoop(0);
+                    console.log("PLAYING DOOR");
+                    this.managers[2].entities["door_open"].play();
+                }
+            }
+        }
+            //door open sounds---------------------------------------------------------------------------
+
+            
             //TO EXPERIMENT WITH FOR LOOKING AROUND!
             //  this.camera.position.x += ( keyboardManager.getMouseX() - this.camera.position.x ) ;
             //   this.camera.position.y += ( - keyboardManager.getMouseY() - this.camera.position.y );
             // this.camera.lookAt( this.scene.position );
 
+            //character footstep sounds---------------------------------------------------------------------------
             if (characterControls.checkMovement())
             {
                 if (this.managers[2].entities["footstep"].isPlaying == false)
                 {
                     this.managers[2].entities["footstep"].play();
                 }
-             // console.log("in char movement");
+                
             }
             else{
                 this.managers[2].entities["footstep"].pause();
 
             }
+            //character footstep sounds---------------------------------------------------------------------------
+
+
 
             const runTime = this.time.getRunTime();
             this.managers[0].update(runTime);
@@ -566,6 +622,13 @@ export class SceneManager {
 
     }
 
+    
+ onTransitionEnd( event ) {
+
+	const element = event.target;
+	element.remove();
+	
+}
     pause() { //when pause mode is entered. The pause menu needs to be rendered.
         if (this.game_state == this.GAME_RUN) {
             this.game_state = this.GAME_PAUSE;
@@ -577,11 +640,11 @@ export class SceneManager {
             this.instructions = document.getElementById('gameBottom');
             this.instructions.display='none';
             
-            for (let sound in this.managers[2].entities)//["footstep"].pause())
+           /* for (let sound in this.managers[2].entities)//["footstep"].pause())
             {
                 this.managers[2].entities[sound].pause();
             }
-
+  */
             //comment out
             this.pointerLockControls.lock(); // stop orbit controls from responding to use input
 

@@ -3,17 +3,24 @@ import { GLTFLoader } from '../../../jsm/GLTFLoader.js';
 import { keyboardManager } from '../../managers/KeyboardManager.js';
 import { mainChar } from '../../managers/SceneManager.js';
 import { gameOverlay } from '../../Overlay/GameOverlay.js';
+import { loadingManager } from '../../managers/SceneManager.js';
+import { subtitleManager } from '../../managers/SubtitleManager.js';
 
 export class Door extends THREE.Object3D {
     constructor() {
         super();
+        this.checkVicinity = false;
+        this.doCheckVicinity = false;
         this.object = new THREE.Object3D();
+
+        //subtitles
+        this.initialiseSubtitleContents();
 
         //stores a variable that only allows the interaction overlay to be shown once
         this.count = 0;
 
         this.clock = new THREE.Clock();
-        const loader = new GLTFLoader();
+        const loader = new GLTFLoader(loadingManager);
 
         loader.setPath('../../models/3DObjects/');
         this.open = false; //open door animation
@@ -47,6 +54,66 @@ export class Door extends THREE.Object3D {
 
     }
 
+    initialiseSubtitleContents() {
+        //Checks if the subtitle had started showing
+        this.subtitleStarted = {
+            t1: false,
+            t2: false
+        };
+        //Checks if the subtitle had been shown already
+        this.subtitleState = {
+            t1: false,
+            t2: false
+        };
+        //Contains the text for each subtitle
+        this.subtitleText = {
+            t1: "The door's unlocked!! ",
+            t2: "The door's unlocked!!"
+        };
+    }
+
+    addSubtitles() {
+
+        //t1
+        if (!this.subtitleState.t1) {
+            subtitleManager.showSubtitles();
+            if (!this.subtitleStarted.t1) {
+                //start showing the subtitle
+                subtitleManager.startTime();
+                subtitleManager.setDuration(130);
+                subtitleManager.changeSubtitlesText(this.subtitleText.t1);
+                this.subtitleStarted.t1 = true;
+            }
+
+            subtitleManager.countTime();
+            if (!subtitleManager.checkTime()) {
+                this.subtitleState.t1 = true;
+                //meaning it was shown
+            }
+        }
+
+        //show t2
+        if (this.subtitleState.t1) {
+            if (!this.subtitleState.t2) {
+                subtitleManager.showSubtitles();
+                if (!this.subtitleStarted.t2) {
+                    //start showing the subtitle
+                    subtitleManager.startTime();
+                    subtitleManager.setDuration(130);
+                    subtitleManager.changeSubtitlesText(this.subtitleText.t2);
+                    this.subtitleStarted.t2 = true;
+                }
+
+                subtitleManager.countTime();
+                if (!subtitleManager.checkTime()) {
+                    this.subtitleState.t2 = true;
+                    //meaning it was shown
+                }
+            }
+
+        }
+
+    }
 
     setPosition(x, y, z) {
         this.object.position.set(x, y, z);
@@ -62,10 +129,12 @@ export class Door extends THREE.Object3D {
         //console.log(time);
 
         //just to show the div
-        var checkVicinity = this.checkCharacterVicinity();
-
+        if (this.doCheckVicinity) {
+            this.checkVicinity = this.checkCharacterVicinity();
+        }
 
         if (this.open == true) { //animate
+
             if (this.idleMixer) {
                 this.idleMixer.update(this.clock.getDelta());
             }
@@ -88,9 +157,24 @@ export class Door extends THREE.Object3D {
 
         if (keyboardManager.wasPressed('E')) {
             //if character is in vicinity of door, then they can open door
-            if (checkVicinity) {
+            if (this.checkVicinity) {
                 if (this.open == false) { // animate
+                    if (!this.subtitleState.t1) {
+                        subtitleManager.showSubtitles();
+                        if (!this.subtitleStarted.t1) {
+                            //start showing the subtitle
+                            subtitleManager.startTime();
+                            subtitleManager.setDuration(80);
+                            subtitleManager.changeSubtitlesText(this.subtitleText.t1);
+                            this.subtitleStarted.t1 = true;
+                        }
 
+                        subtitleManager.countTime();
+                        if (!subtitleManager.checkTime()) {
+                            this.subtitleState.t1 = true;
+                            //meaning it was shown
+                        }
+                    }
                     //this.startTime=time;
                     this.idle.play();
                     this.idle.loop = THREE.LoopOnce;
@@ -122,9 +206,11 @@ export class Door extends THREE.Object3D {
         if (((pos.z < this.object.position.z + vicinityLimitZ) && (pos.z > this.object.position.z - vicinityLimitZ)) && (((pos.x < this.object.position.x + vicinityLimitX)) && ((pos.x > this.object.position.x - vicinityLimitX)))) {
             //display interaction overlay if it isn't being shown
             if (this.count == 0) {
-                gameOverlay.changeText('[E] OPEN DOOR');
-                gameOverlay.showOverlay();
-                this.count += 1;
+                if (this.open == false) {
+                    gameOverlay.changeText('[E] OPEN DOOR');
+                    gameOverlay.showOverlay();
+                    this.count += 1;
+                }
             }
             return true;
         }

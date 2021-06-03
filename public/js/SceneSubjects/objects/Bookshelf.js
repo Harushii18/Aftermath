@@ -4,6 +4,7 @@ import { keyboardManager } from '../../managers/KeyboardManager.js';
 import { mainChar } from '../../managers/SceneManager.js';
 
 
+
 export class Bookshelf extends THREE.Object3D {
     constructor() {
         super();

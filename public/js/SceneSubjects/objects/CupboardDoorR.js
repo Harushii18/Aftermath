@@ -1,6 +1,7 @@
 import * as THREE from '../../../jsm/three.module.js';
 import { GLTFLoader } from '../../../jsm/GLTFLoader.js';
 import { keyboardManager } from '../../managers/KeyboardManager.js';
+import { loadingManager } from '../../managers/SceneManager.js';
 export class CupboardDoorR extends THREE.Object3D {
 
     constructor() {
@@ -9,7 +10,7 @@ export class CupboardDoorR extends THREE.Object3D {
 
 
         this.clock = new THREE.Clock();
-        const loader = new GLTFLoader();
+        const loader = new GLTFLoader(loadingManager);
         loader.setPath('../../models/');
         loader.setPath('../../models/3DObjects/');
         this.open = false; //open door animation

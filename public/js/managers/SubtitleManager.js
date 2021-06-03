@@ -7,7 +7,6 @@ class SubtitleManager extends THREE.Object3D {
 
         this.update = function (time) {
 
-
             //Do nothing
 
         };
