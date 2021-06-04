@@ -134,15 +134,9 @@ export class SceneManager {
 
 
 
-<<<<<<< HEAD
        this.game_state = this.GAME_LOGO;
        //intro paragraph state
        this.intro_para = 1;
-=======
-       
-        this.game_state = this.GAME_MENU;
-
->>>>>>> 8af00f3a126a7df68978165139a04261fbc2f952
 
 
         this.width_screen = canvas.width;
@@ -496,6 +490,8 @@ export class SceneManager {
              const intro1 = document.getElementById("para1");
              const intro2 = document.getElementById("para2");
              const intro3 = document.getElementById("para3");
+             const intro4 = document.getElementById("para4");
+
  
              //id the buttons
             //  const btnNext1 = document.getElementById("next1");
@@ -505,18 +501,29 @@ export class SceneManager {
              intro1.style.display = 'flex';
              intro2.style.display = 'none';
              intro3.style.display = 'none';
+             intro4.style.display = 'none';
+
 
              setTimeout(() => {
                 intro1.style.display = 'none';
                 intro2.style.display = 'flex';
                 intro3.style.display = 'none';
-             }, 8000);
+                intro4.style.display = 'none';
+             }, 6000);
 
              setTimeout(() => {
                 intro1.style.display = 'none';
                 intro2.style.display = 'none';
                 intro3.style.display = 'flex';
-             }, 18000);
+                intro4.style.display = 'none';
+             }, 16000);
+
+             setTimeout(() => {
+                intro1.style.display = 'none';
+                intro2.style.display = 'none';
+                intro3.style.display = 'none';
+                intro4.style.display = 'flex';
+             }, 30000);
 
              btnContinue.addEventListener("click", () => {
 
@@ -524,6 +531,7 @@ export class SceneManager {
                 intro1.style.display = 'none';
                 intro2.style.display = 'none';
                 intro3.style.display = 'none';
+                intro4.style.display = 'none';
 
                 const menu = document.getElementsByClassName("mainMenu");
                 for (let i = 0; i < menu.length; i++) {
@@ -659,7 +667,6 @@ export class SceneManager {
         }
         else if (this.game_state == this.GAME_PAUSE) {
 
-<<<<<<< HEAD
             mainMenu.addEventListener('click', () => {
                 //make menu not visible
                 for (let i = 0; i < menu.length; i++) {
@@ -678,12 +685,6 @@ export class SceneManager {
                 for (let i = 0; i < menu.length; i++) {
                     menu[i].style.display = 'none';
                 }
-=======
-            if (keyboardManager.keyDownQueue[0] == 'P') {
-
-                this.unpause();
-                keyboardManager.keyDownQueue.shift();
->>>>>>> 8af00f3a126a7df68978165139a04261fbc2f952
 
             }
 
