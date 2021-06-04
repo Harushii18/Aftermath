@@ -2,7 +2,7 @@ import * as THREE from '../../../jsm/three.module.js';
 import { GLTFLoader } from '../../../jsm/GLTFLoader.js';
 import { keyboardManager } from '../../managers/KeyboardManager.js';
 
-import { loadingManager, mainChar } from '../../managers/SceneManager.js';
+import { loadingManager, mainChar, testdoor } from '../../managers/SceneManager.js';
 import { gameOverlay } from '../../Overlay/GameOverlay.js';
 import { bedroomDrawer } from '../../managers/SceneManager.js';
 
@@ -31,7 +31,8 @@ export class Key extends THREE.Object3D {
 
             });
 
-   
+
+         //   this.object.position.set(20.15, 7.6, 37 );//Perfect
 
             this.object.add(gltf.scene);
         });
@@ -40,16 +41,7 @@ export class Key extends THREE.Object3D {
 
     update(time) {
 
-      /*  if (bedroomDrawer.isKeyFound()) {
-            if (!this.open) {
-                if (this.object.position.z > 29) {    //stop moving 
-                    this.open = true;
-                }
-                else {
-                    this.object.position.z += 0.1; //move to the front 
-                }
-            }
-        }*/
+
 
         if (this.open) {
             //since drawer was opened, can interact with key now
@@ -66,6 +58,7 @@ export class Key extends THREE.Object3D {
                         //TODO-> DESTROY KEY OBJECT!
                         //just hiding key for now
                         this.object.position.set(0, 100, 0);
+                        testdoor.setAllowInteraction(true);
 
                         //DISPLAY KEY IN OVERLAY!!!
                         //KAMERON!

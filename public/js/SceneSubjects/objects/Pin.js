@@ -35,7 +35,7 @@ export class Pin extends THREE.Object3D {
             this.object.scale.z = 0.5;
 
             //move pin
-            this.object.position.set(-12, 9, 64);
+            this.object.position.set(-12, 6, 84);
 
             //rotate pin
           //  this.object.rotateOnAxis(new THREE.Vector3(0,1,0),Math.PI/2*0.5);
@@ -60,7 +60,7 @@ export class Pin extends THREE.Object3D {
         };
         //Contains the text for each subtitle
         this.subtitleText = {
-            t1: "Any locks around??",
+            t1: "What could I open with this...?",
 
         };
     }
