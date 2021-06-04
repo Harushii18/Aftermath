@@ -113,7 +113,7 @@ export class Key extends THREE.Object3D {
                 gameOverlay.changeText('[E] TAKE KEY');
                 gameOverlay.showOverlay();
 
-                this.count += 1;
+                this.count += 0.1;
 
             }
             return true;

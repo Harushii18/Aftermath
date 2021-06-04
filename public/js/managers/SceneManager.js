@@ -519,21 +519,21 @@ export class SceneManager {
                 intro2.style.display = 'flex';
                 intro3.style.display = 'none';
                 intro4.style.display = 'none';
-             }, 6000);
+             }, 7200);
 
              setTimeout(() => {
                 intro1.style.display = 'none';
                 intro2.style.display = 'none';
                 intro3.style.display = 'flex';
                 intro4.style.display = 'none';
-             }, 16000);
+             }, 20000);
 
              setTimeout(() => {
                 intro1.style.display = 'none';
                 intro2.style.display = 'none';
                 intro3.style.display = 'none';
                 intro4.style.display = 'flex';
-             }, 30000);
+             }, 40000);
 
              btnContinue.addEventListener("click", () => {
 
