@@ -20,14 +20,15 @@ export class BedroomDrawer extends THREE.Object3D {
         this.count = 0;
 
         //variable to start subtitles
-        this.startSubtitles=false;
+        this.startSubtitles = false;
+        this.showNoKeySubtitles=false;
 
         //checks if key was found
         this.keyFound = false;
 
         this.doCheckVicinity = true;
         //we change this to true when the other events have been allowed
-        this.allowInteraction = true;
+        this.allowInteraction = false;
 
         this.clock = new THREE.Clock();
         const loader = new GLTFLoader(loadingManager);
@@ -75,7 +76,12 @@ export class BedroomDrawer extends THREE.Object3D {
         };
     }
 
+    setAllowInteraction(value){
+        this.allowInteraction=value;
+    }
+
     showSubtitlesWithoutKey(duration) {
+        //subtitles that show if he doesn't have the key
         //t1
         if (!this.subtitleState.t1) {
             subtitleManager.showSubtitles();
@@ -90,11 +96,13 @@ export class BedroomDrawer extends THREE.Object3D {
             subtitleManager.countTime();
             if (!subtitleManager.checkTime()) {
                 this.subtitleState.t1 = true;
+                this.showNoKeySubtitles=false;
                 //meaning it was shown
             }
         }
     }
     showSubtitlesWithKey(duration) {
+        //subtitles that need to be shown if he has the key
         if (!this.subtitleState.t2) {
             subtitleManager.showSubtitles();
             if (!this.subtitleStarted.t2) {
@@ -108,7 +116,7 @@ export class BedroomDrawer extends THREE.Object3D {
             subtitleManager.countTime();
             if (!subtitleManager.checkTime()) {
                 this.subtitleState.t2 = true;
-                this.subtitleStarted=false;
+                this.subtitleStarted = false;
                 //meaning it was shown
             }
         }
@@ -116,15 +124,18 @@ export class BedroomDrawer extends THREE.Object3D {
     }
     update(time) {
 
+        if (this.startSubtitles) {
+            this.showSubtitlesWithKey(80);
+        }
+        if (this.showNoKeySubtitles){
+            this.showSubtitlesWithoutKey(80);
 
-        if (this.startSubtitles==true){
-           this.showSubtitlesWithKey(80);
         }
 
         if (this.open == false) {
             //just to show the div
             var checkVicinity = this.checkCharacterVicinity();
-        } 
+        }
 
         //on button E press, move drawer
         if (keyboardManager.wasPressed('E')) {
@@ -133,18 +144,19 @@ export class BedroomDrawer extends THREE.Object3D {
                     //only allow the drawer to open when hammer was found
                     if (this.allowInteraction) {
                         this.open = true;
-                        this.startSubtitles=true;
+                        this.startSubtitles = true;
 
                         //add that he found the key
                         this.keyFound = true;
                         //make sure vicinity can no longer be checked: do not show overlay anymore
                         this.doCheckVicinity = false;
                         gameOverlay.hideOverlay();
+                    }else{
+                        this.showNoKeySubtitles=true;
+                        this.subtitleState.t1 = false;
+                        this.subtitleStarted.t1=false;
                     }
-                } else {
-                    // this.subtitleState.t2 = false;
-                    //show subtitles where he states it is locked
-                }
+                } 
             }
         }
 

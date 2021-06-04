@@ -94,7 +94,7 @@ export class Key extends THREE.Object3D {
         let pos = mainChar.returnWorldPosition();
 
         //variable that allows change in vicinity position in which E needs to be pressed:
-        var vicinityLimitZ = 10;
+        var vicinityLimitZ = 5;
         var vicinityLimitX = 5;
 
         //if the character is in the vicinity of the drawer
