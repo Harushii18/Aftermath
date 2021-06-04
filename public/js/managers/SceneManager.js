@@ -645,6 +645,10 @@ export class SceneManager {
 
             this.renderMainScene();
 
+            if(isFirstPersonView){
+              this.renderCrosshair();
+            }
+
         } else if (this.game_state == this.GAME_PAUSE)
         {
 
@@ -723,15 +727,19 @@ export class SceneManager {
     renderMainScene() {
         this.renderer.render(this.scene, this.camera);
 
-        this.renderer.autoClear = false;//prevent canvas from being erased with next .render call
-        this.renderer.getContext().disable(this.renderer.getContext().DEPTH_TEST);
 
 
-        this.renderer.render(this.hud.scene, this.hud.camera);
+    }
 
-        this.renderer.getContext().enable(this.renderer.getContext().DEPTH_TEST);
-        this.renderer.autoClear = true;
+    renderCrosshair(){
+      this.renderer.autoClear = false;//prevent canvas from being erased with next .render call
+      this.renderer.getContext().disable(this.renderer.getContext().DEPTH_TEST);
 
+
+      this.renderer.render(this.hud.scene, this.hud.camera);
+
+      this.renderer.getContext().enable(this.renderer.getContext().DEPTH_TEST);
+      this.renderer.autoClear = true;
     }
 
     //this resizes our game when screen size changed
