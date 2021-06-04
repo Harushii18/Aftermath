@@ -17,6 +17,7 @@ export class LetterI extends THREE.Object3D {
 
 
         var gltf = loader.load('letterI.glb', (gltf) => {
+          //console.log("loaded letter I");
             gltf.scene.traverse(c => {
                 c.castShadow = true;
 

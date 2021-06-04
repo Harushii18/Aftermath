@@ -56,6 +56,9 @@ import { HUD } from '../Overlay/HUD.js';
 //FirstPersonTracker
 var isFirstPersonView = true;
 
+//objects
+var house = new House();
+
 //lights
 var generalLights = new GeneralLights();
 
@@ -78,8 +81,7 @@ var loungeLight = new CeilingLight();
 
 var ambientLight = new AmbientLight();
 
-//objects
-var house = new House();
+
 //var sceneSubject = new SceneSubject();
 //var testBlock = new TestBlock();
 export var testdoor = new Door();
@@ -89,7 +91,12 @@ var bookshelf = new Bookshelf();
 
 //bedroom
 var bedroomPainting = new BedroomPainting();
-var lock = new Lock();
+export var lockCupboard = new Lock();
+//var lockDrawer = new Lock();
+
+//lockDrawer.setScale(new THREE.Vector3(10,10,10));
+//lockDrawer.setPosition(new THREE.Vector3(20.15, 7.6, 50));
+
 export var bedroomDrawer = new BedroomDrawer();
 export var cupBoardDoorR = new CupboardDoorR();
 export var hammer = new Hammer();
@@ -106,6 +113,7 @@ export var loadingManager;
 const collisionManager = new CollisionsManager();
 //Add collidable objects here
 collisionManager.addObject(house);
+//collisionManager.addObject(cupBoardDoorR);
 //collisionManager.addObject(testBlock);
 collisionManager.addObject(testdoor);
 
@@ -375,7 +383,8 @@ export class SceneManager {
         managers[1].register(cupBoardDoorR);
         managers[1].register(hammer);
         managers[1].register(pin);
-        managers[1].register(lock);
+        managers[1].register(lockCupboard);
+        //managers[1].register(lockDrawer);
         managers[1].register(letterI);
         managers[1].register(key);
 
@@ -502,6 +511,7 @@ export class SceneManager {
              intro2.style.display = 'none';
              intro3.style.display = 'none';
              intro4.style.display = 'none';
+
 
 
              setTimeout(() => {

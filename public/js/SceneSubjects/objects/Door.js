@@ -36,6 +36,7 @@ export class Door extends THREE.Object3D {
 
         loader.setPath('../../models/3DObjects/');
         var gltf = loader.load('testdoor.glb', (gltf) => {
+          //console.log("loaded door");
             gltf.scene.traverse(c => {
                 c.castShadow = true;
 
