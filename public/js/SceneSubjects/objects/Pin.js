@@ -3,6 +3,8 @@ import { GLTFLoader } from '../../../jsm/GLTFLoader.js';
 import { keyboardManager } from '../../managers/KeyboardManager.js';
 import { mainChar, cupBoardDoorR, bedroomDrawer } from '../../managers/SceneManager.js';
 import { gameOverlay } from '../../Overlay/GameOverlay.js';
+import { subtitleManager } from '../../managers/SubtitleManager.js';
+
 export class Pin extends THREE.Object3D {
 
 
@@ -12,6 +14,9 @@ export class Pin extends THREE.Object3D {
         this.count = 0;
         this.pickedUp = false;
         this.allowInteraction = false;
+
+        //initialise subtitle contents
+        this.initialiseSubtitleContents();
 
         this.clock = new THREE.Clock();
         const loader = new GLTFLoader();
@@ -42,16 +47,62 @@ export class Pin extends THREE.Object3D {
 
     }
 
+    initialiseSubtitleContents() {
+        //Checks if the subtitle had started showing
+        this.subtitleStarted = {
+            t1: false,
+
+        };
+        //Checks if the subtitle had been shown already
+        this.subtitleState = {
+            t1: false,
+
+        };
+        //Contains the text for each subtitle
+        this.subtitleText = {
+            t1: "Any locks around??",
+
+        };
+    }
+
+    showSubtitlesAfterPickUp(duration) {
+        //subtitles that shows when he picks up the hammer
+        //t1
+        if (!this.subtitleState.t1) {
+            subtitleManager.showSubtitles();
+            if (!this.subtitleStarted.t1) {
+                //start showing the subtitle
+                subtitleManager.startTime();
+                subtitleManager.setDuration(duration);
+                subtitleManager.changeSubtitlesText(this.subtitleText.t1);
+                this.subtitleStarted.t1 = true;
+            }
+
+            subtitleManager.countTime();
+            if (!subtitleManager.checkTime()) {
+                this.subtitleState.t1 = true;
+                //meaning it was shown
+            }
+        }
+    }
+
     update(time) {
 
             //just to show the div
             var checkVicinity = this.checkCharacterVicinity();
 
+            if (this.startSubtitles) {
+                this.showSubtitlesAfterPickUp(80);
+            }
+
             //on button E press, move painting to  the left
             if (keyboardManager.wasPressed('E')) {
                 if (checkVicinity) {
                   if(this.allowInteraction == true){
+                    //Subtitles when lockpick is picked up
+                    this.startSubtitles = true;
 
+                    gameOverlay.hideOverlay();
                     //Hiding Lockpick, will need to destroy it later
                     this.object.position.set(0, 100, 0);
                     this.pickedUp = true;
@@ -61,7 +112,7 @@ export class Pin extends THREE.Object3D {
                     bedroomDrawer.setAllowInteraction(true);
                   }
                   else{
-                    
+
                   }
                 }
 
@@ -103,6 +154,9 @@ export class Pin extends THREE.Object3D {
                 //display interaction overlay if it isn't being shown
                 if (this.count == 0) {
                     if (this.pickedUp==false){
+                      if(this.allowInteraction){
+
+
                     gameOverlay.changeText('[E] PICK UP LOCKPICK');
 
                     //LATER WE CAN ADD A CONDITION IF HE LOOKED AT IT, HE'LL NOTICE IT CAN MOVE, AND THE
@@ -111,7 +165,7 @@ export class Pin extends THREE.Object3D {
                     this.count += 1;
 
                     //HIDE LOCKPICK IMAGE IN OVERLAY
-
+                      }
                     }
                 }
                 return true;

@@ -52,6 +52,7 @@ export class BedroomPainting extends THREE.Object3D {
         if (keyboardManager.wasPressed('E')) {
             if (checkVicinity) {
                 this.move = true;
+                gameOverlay.hideOverlay();
             }
         }
 

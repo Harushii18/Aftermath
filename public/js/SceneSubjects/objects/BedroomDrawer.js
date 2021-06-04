@@ -35,7 +35,7 @@ export class BedroomDrawer extends THREE.Object3D {
 
         loader.setPath('../../models/3DObjects/');
 
-        this.open = false; //keeps track if the drawer is openend 
+        this.open = false; //keeps track if the drawer is openend
 
         var gltf = loader.load('bedroomDrawer.glb', (gltf) => {
             gltf.scene.traverse(c => {
@@ -129,7 +129,6 @@ export class BedroomDrawer extends THREE.Object3D {
         }
         if (this.showNoKeySubtitles){
             this.showSubtitlesWithoutKey(80);
-
         }
 
         if (this.open == false) {
@@ -156,16 +155,16 @@ export class BedroomDrawer extends THREE.Object3D {
                         this.subtitleState.t1 = false;
                         this.subtitleStarted.t1=false;
                     }
-                } 
+                }
             }
         }
 
         if (this.open == true) {
-            if (this.object.position.z > 28) {    //stop moving 
+            if (this.object.position.z > 28) {    //stop moving
                 this.open = false;
             }
             else {
-                this.object.position.z += 0.1; //move to the left 
+                this.object.position.z += 0.1; //move to the left
             }
         }
     }
