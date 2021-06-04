@@ -584,7 +584,13 @@ export class SceneManager {
 
         } else if (this.game_state == this.GAME_RUN) {
             //hud elements
-            if (this.hud.hasItem('key') ==false && bedroomDrawer.keyFound && testdoor.open == false)
+            if (this.hud.hasItem('key') )
+            {
+                console.log()
+            }
+
+
+            if (this.hud.hasItem('key') == false && bedroomDrawer.keyFound && testdoor.open == false)
             {
                 console.log("key adde");
                 var selectedObject = bedroomDrawer.object.getObjectByName('key');
@@ -598,6 +604,7 @@ export class SceneManager {
             }
             else if (this.hud.hasItem('key') && testdoor.open)
             {
+                console.log("key removed");
                 this.hud.remove('key');
 
 

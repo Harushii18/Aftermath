@@ -39,18 +39,17 @@ export class BedroomDrawer extends THREE.Object3D {
         this.open = false; //keeps track if the drawer is openend
 
         //add key to object
-        //set key transforms------------------------------------------------------
+        //set key transforms--------------------------------------------------------------------------
         this.key = new Key();
         this.key.object.scale.x = 0.5;
         this.key.object.scale.y = 0.5;
         this.key.object.scale.z = 0.5;
        // key.object.position.set(20.15, 1.8, 27.5 );
         this.key.object.name = "key";
-      //  managers[1].register(key);
 
         this.object.add(this.key.object);        
 
-        //
+        //----------------------------------------------------------------------------------------
 
 
 

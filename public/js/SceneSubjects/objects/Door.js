@@ -133,11 +133,11 @@ export class Door extends THREE.Object3D {
     update(time) {
         //just to show the div
 
-/*
+
         if (this.doCheckVicinity) {
-            //this.checkVicinity = this.checkCharacterVicinity();
+            this.checkVicinity = this.checkCharacterVicinity();
         }
-*/
+        
 
         if (this.showLockedSubtitles) {
             this.showSubtitlesLocked(80);
@@ -161,11 +161,9 @@ export class Door extends THREE.Object3D {
             }
         }
 
-
-        var checkVicinity =  this.checkCharacterVicinity();
         if (keyboardManager.wasPressed('E')) {
 
-            if (checkVicinity) {
+            if (this.checkVicinity) {
                 //if character is in vicinity of door, then they can open door
                 if (this.allowInteraction) {
                         this.playDoorSound = true;
@@ -233,6 +231,7 @@ export class Door extends THREE.Object3D {
         }
         return false;
     }
+
 
     return3DObject() {
         return this.object;
