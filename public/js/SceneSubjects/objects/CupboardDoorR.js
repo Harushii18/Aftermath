@@ -19,163 +19,185 @@ export class CupboardDoorR extends THREE.Object3D {
         this.showLockedSubtitles = false;
         this.showOpenedSubtitles=false;
 
-        this.clock = new THREE.Clock();
-        const loader = new GLTFLoader(loadingManager);
-        loader.setPath('../../models/');
-        loader.setPath('../../models/3DObjects/');
-        this.open = false; //open door animation
-        this.count = 0;
-        var axis = new THREE.Vector3(0, 0, 1);
-        var rad=0;
-
-        this.startTime = 0;
-
-        var gltf = loader.load('cupboardDoorR.glb', (gltf) => {
-            gltf.scene.traverse(c => {
-                c.castShadow = true;
-
-            });
+    this.clock = new THREE.Clock();
+    const loader = new GLTFLoader(loadingManager);
+    loader.setPath('../../models/');
+    loader.setPath('../../models/3DObjects/');
+    this.open = false; //open door animation
+    this.count = 0;
+    this.animationCounter = 0;
+    var axis = new THREE.Vector3(0, 0, 1);
+    var rad = 0;
 
 
+    this.startTime = 0;
 
-            // //scale door
-            this.object.scale.x = 0.8;
-            this.object.scale.y = 0.8;
-            this.object.scale.z = 0.8;
+    var gltf = loader.load('cupboard.glb', (gltf) => {
+      gltf.scene.traverse(c => {
+        c.castShadow = true;
 
-            //move door
-            this.object.position.set(-12.5, -5, 66.3);
+      });
 
+      // //scale door
+      this.object.scale.x = 3;
+      this.object.scale.y = 3;
+      this.object.scale.z = 3;
 
-
-
-
-            this.object.add(gltf.scene);
-        });
-
-    }
-
+      //move door
+      this.object.position.set(-20, -4, 83);
+      //this.object.rotateOnAxis(new THREE.Vector3(1,0,0), Math.PI);
 
 
-    initialiseSubtitleContents() {
-        //Checks if the subtitle had started showing
-        this.subtitleStarted = {
-            t1: false,
-            t2: false
-        };
-        //Checks if the subtitle had been shown already
-        this.subtitleState = {
-            t1: false,
-            t2: false
-        };
-        //Contains the text for each subtitle
-        this.subtitleText = {
-            t1: "It's locked! I don't remember locking this?!",
-            t2: "Finally, it's opened!"
-        };
-    }
+      //get animation for cupboard
+      this.cupboardMixer = new THREE.AnimationMixer(gltf.scene);
+      this.cupboardMixer.timeScale = 0.2; //speed of animation
+      this.cupboardAnim = this.cupboardMixer.clipAction(gltf.animations[0]);
+
+      this.object.add(gltf.scene);
+    });
+  }
 
 
-    showSubtitlesLocked(duration) {
-        //subtitles that show if he doesn't have the key
-        //t1
-        if (!this.subtitleState.t1) {
-            subtitleManager.showSubtitles();
-            if (!this.subtitleStarted.t1) {
-                //start showing the subtitle
-                subtitleManager.startTime();
-                subtitleManager.setDuration(duration);
-                subtitleManager.changeSubtitlesText(this.subtitleText.t1);
-                this.subtitleStarted.t1 = true;
-            }
+  initialiseSubtitleContents() {
+      //Checks if the subtitle had started showing
+      this.subtitleStarted = {
+          t1: false,
+          t2: false
+      };
+      //Checks if the subtitle had been shown already
+      this.subtitleState = {
+          t1: false,
+          t2: false
+      };
+      //Contains the text for each subtitle
+      this.subtitleText = {
+          t1: "It's locked! I don't remember locking this?!",
+          t2: "Finally, it's opened!"
+      };
+  }
 
-            subtitleManager.countTime();
-            if (!subtitleManager.checkTime()) {
-                this.subtitleState.t1 = true;
-                this.showLockedSubtitles=false;
-                //meaning it was shown
-            }
-        }
-    }
-    showSubtitlesUnlocked(duration) {
-        //subtitles that need to be shown if he has the key
-        if (!this.showOpenedSubtitles.t2) {
-            subtitleManager.showSubtitles();
-            if (!this.subtitleStarted.t2) {
-                //start showing the subtitle
-                subtitleManager.startTime();
-                subtitleManager.setDuration(duration);
-                subtitleManager.changeSubtitlesText(this.subtitleText.t2);
-                this.subtitleStarted.t2 = true;
-            }
 
-            subtitleManager.countTime();
-            if (!subtitleManager.checkTime()) {
-                this.subtitleState.t2 = true;
-                this.showOpenedSubtitles = false;
-                //meaning it was shown
-            }
-        }
+  showSubtitlesLocked(duration) {
+      //subtitles that show if he doesn't have the key
+      //t1
+      if (!this.subtitleState.t1) {
+          subtitleManager.showSubtitles();
+          if (!this.subtitleStarted.t1) {
+              //start showing the subtitle
+              subtitleManager.startTime();
+              subtitleManager.setDuration(duration);
+              subtitleManager.changeSubtitlesText(this.subtitleText.t1);
+              this.subtitleStarted.t1 = true;
+          }
 
-    }
-
-    update(time) {
-
-      if (this.showLockedSubtitles) {
-          this.showSubtitlesLocked(80);
+          subtitleManager.countTime();
+          if (!subtitleManager.checkTime()) {
+              this.subtitleState.t1 = true;
+              this.showLockedSubtitles=false;
+              //meaning it was shown
+          }
       }
-      if (this.showOpenedSubtitles){
-          this.showSubtitlesUnlocked(80);
+  }
+  showSubtitlesUnlocked(duration) {
+      //subtitles that need to be shown if he has the key
+      if (!this.showOpenedSubtitles.t2) {
+          subtitleManager.showSubtitles();
+          if (!this.subtitleStarted.t2) {
+              //start showing the subtitle
+              subtitleManager.startTime();
+              subtitleManager.setDuration(duration);
+              subtitleManager.changeSubtitlesText(this.subtitleText.t2);
+              this.subtitleStarted.t2 = true;
+          }
+
+          subtitleManager.countTime();
+          if (!subtitleManager.checkTime()) {
+              this.subtitleState.t2 = true;
+              this.showOpenedSubtitles = false;
+              //meaning it was shown
+          }
       }
 
-          /*var rotationVector = new THREE.Vector3(0,1,0);
-          rotationVector.normalize();
-          this.object.rotateOnAxis(rotationVector,0.01*(Math.sin(time) + 1.5) / 2);
-          */
-            //just to show the div
-            var checkVicinity = this.checkCharacterVicinity();
+  }
 
-            //on button E press, move painting to  the left
-            if (keyboardManager.wasPressed('E')) {
-                if (checkVicinity) {
-                  if(this.allowInteraction){
-                    //Animation goes here
-                    //***********
-                    this.object.rotateOnAxis(new THREE.Vector3(0,1,0), this.object.rotation.y+0.1); // This happens for now
-                    this.open = true;
-                    gameOverlay.hideOverlay();
-                    pin.setAllowInteraction(true);
-                    this.showOpenedSubtitles = true;
-                  }
-                  else{
-                    this.showLockedSubtitles = true;
-                    this.subtitleState.t1 = false;
-                    this.subtitleStarted.t1=false;
-                  }
+
+
+  update(time) {
+
+    if (this.showLockedSubtitles) {
+        this.showSubtitlesLocked(80);
+    }
+    if (this.showOpenedSubtitles){
+        this.showSubtitlesUnlocked(80);
+    }
+
+    //pause the cupboard animation at the right moment
+    if (this.cupboardMixer) {
+      if (this.animationCounter < 20) {
+        this.cupboardMixer.update(this.clock.getDelta());
+        this.animationCounter += 1;
+      } else if (this.animationCounter == 20) {
+        //pause the animation mixer-> stop the cupboard from continuing its animation
+        this.cupboardMixer.paused = true;
+      }
+    }
+
+    var checkVicinity = this.checkCharacterVicinity();
+          //on button E press, move painting to  the left
+          if (keyboardManager.wasPressed('E')) {
+              if (checkVicinity) {
+                if(this.allowInteraction){
+                  //Animation goes here
+                  //***********
+                  this.object.rotateOnAxis(new THREE.Vector3(0,1,0), this.object.rotation.y+0.1); // This happens for now
+                  this.open = true;
+                  gameOverlay.hideOverlay();
+                  pin.setAllowInteraction(true);
+                  this.showOpenedSubtitles = true;
+                  //play the cupboard animation
+                  this.cupboardAnim.play();
+                  this.cupboardAnim.loop = THREE.LoopRepeat;
+                  //this variable is to ensure that we can stop the animation at a specific time
+                  this.animationCounter = 0;
 
                 }
+                else{
+                  this.showLockedSubtitles = true;
+                  this.subtitleState.t1 = false;
+                  this.subtitleStarted.t1=false;
+                }
 
-            }
+              }
 
+          }
+
+  }
+
+
+
+
+
+  inVicinity(vicinityLimitZ, vicinityLimitX) {
+    let pos = mainChar.returnWorldPosition();
+
+
+    if (pos.x < this.object.position.x + vicinityLimitX && pos.x > this.object.position.x - vicinityLimitX) {
+      if (pos.z < this.object.position.z + vicinityLimitZ && pos.z > this.object.position.z - vicinityLimitZ) {
+        return true;
+      }
     }
+    else {
+      return false;
+    }
+  }
+
+
 
     setAllowInteraction(value){
         this.allowInteraction=value;
     }
 
-    inVicinity(vicinityLimitZ, vicinityLimitX){
-        let pos = mainChar.returnWorldPosition();
 
-
-        if(pos.x <this.object.position.x +vicinityLimitX && pos.x > this.object.position.x-vicinityLimitX){
-          if(pos.z < this.object.position.z+vicinityLimitZ && pos.z > this.object.position.z-vicinityLimitZ){
-            return true;
-          }
-        }
-        else{
-          return false;
-        }
-    }
 
     //checks if Character is in vicinity
     checkCharacterVicinity() {
@@ -218,5 +240,9 @@ export class CupboardDoorR extends THREE.Object3D {
     }
 
 
+
+  isOpen() {
+    return this.open;
+  }
 
 }

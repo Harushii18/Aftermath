@@ -8,12 +8,12 @@ export class House extends THREE.Object3D {
     this.object = new THREE.Object3D();
     //this.object.castShadow = false;
     this.object.receiveShadow = true;
-    //load house model form blender file
+    //load house model from blender file
 
     const loader = new GLTFLoader(loadingManager);
     loader.setPath('../models/');
 
-    const gltf = loader.load('pleaseloadbedroom.glb', (gltf) => {
+    const gltf = loader.load('newhouse.glb', (gltf) => {
 
       gltf.scene.traverse(c => {
         c.castShadow = true;

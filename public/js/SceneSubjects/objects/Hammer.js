@@ -42,7 +42,7 @@ export class Hammer extends THREE.Object3D {
             this.object.scale.z = 0.5;
 
             //move hammer
-            this.object.position.set(0, 3, 60);
+            this.object.position.set(7, 3, 80);
 
             //rotate hammer
             this.object.rotateOnAxis(new THREE.Vector3(0,1,0),Math.PI/2*0.5);
@@ -140,8 +140,8 @@ export class Hammer extends THREE.Object3D {
 
 
             //variable that allows change in vicinity position in which E needs to be pressed:
-            var vicinityLimitZ = 5;
-            var vicinityLimitX = 5;
+            var vicinityLimitZ = 10;
+            var vicinityLimitX = 10;
 
             //if the character is in the vicinity
             if (this.inVicinity(vicinityLimitZ, vicinityLimitX)) {

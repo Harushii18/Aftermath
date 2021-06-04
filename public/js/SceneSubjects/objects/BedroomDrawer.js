@@ -44,12 +44,12 @@ export class BedroomDrawer extends THREE.Object3D {
             });
 
             // //scale drawer
-            this.object.scale.x = 7;
-            this.object.scale.y = 7;
-            this.object.scale.z = 7;
+            this.object.scale.x = 8;
+            this.object.scale.y = 8;
+            this.object.scale.z = 8;
 
             //move drawer
-            this.object.position.set(13.6, 1.7, 26.1);
+            this.object.position.set(20.15, 1.6, 27);
 
 
 
@@ -160,7 +160,7 @@ export class BedroomDrawer extends THREE.Object3D {
         }
 
         if (this.open == true) {
-            if (this.object.position.z > 28) {    //stop moving
+            if (this.object.position.z > 29.5) {    //stop moving
                 this.open = false;
             }
             else {
@@ -181,7 +181,7 @@ export class BedroomDrawer extends THREE.Object3D {
             let pos = mainChar.returnWorldPosition();
 
             //variable that allows change in vicinity position in which E needs to be pressed:
-            var vicinityLimitZ = 15;
+            var vicinityLimitZ = 20;
             var vicinityLimitX = 5;
 
             //if the character is in the vicinity of the drawer
