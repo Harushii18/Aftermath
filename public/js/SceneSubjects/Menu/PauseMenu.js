@@ -7,11 +7,11 @@ export class PauseMenu extends Overlay {
 
     super(width, height);
     //this.overlay = new Overlay(width,height);
-    var bitmap = this.canvas.getContext('2d');//this.canvas.getCanvasContext();
+ /*   var bitmap = this.canvas.getContext('2d');//this.canvas.getCanvasContext();
     bitmap.font = "Normal 40px Arial";
     bitmap.textAlign = 'center';
     bitmap.fillStyle = "rgba(100,100,100,0.5)";
-    bitmap.fillText('Game is Paused', width / 2, height / 2);
+    bitmap.fillText('Game is Paused', width / 2, height / 2);*/
 
     //lights
     //this.light = new THREE.PointLight(0xFFFFFF, 1.0);
@@ -28,27 +28,11 @@ export class PauseMenu extends Overlay {
     this.light2.castShadow = true;
     this.light2.position.set(20, 50, 10);
 
-    //
-
-
-
-    //----------------------------------------------------------------------------------
-       //SETTING FIELD OF VIEW, ASPECT RATIO (which should generally be width/ height), NEAR AND FAR (anything outside near/ far is clipped)
-       const aspectRatio = width / height;
-       const fieldOfView = 60;
-       const nearPlane = 1;
-       const farPlane = 1000;
-
-       //there are 2 types of cameras: orthographic and perspective- we will use perspective (more realistic)
-      this.camera = new THREE.PerspectiveCamera(fieldOfView, aspectRatio, nearPlane, farPlane);
-       //Set camera initial position to main character
-      // this.camera = new THREE.OrthographicCamera(-width / 2, width / 2, height / 2, -height / 2, 0, 30);
-       this.camera.position.set(0,  0, 0);
-
+  
 
 
     var menu_height = height/13;
-    var geometry = new THREE.BoxGeometry(menu_height * aspectRatio,menu_height,2.5);
+    var geometry = new THREE.BoxGeometry(menu_height * this.aspectRatio,menu_height,2.5);
 
     var texture = THREE.ImageUtils.loadTexture("../assets/Help.jpg");
    //var texture = new THREE.TextureLoader("../assets/Help.jpg");

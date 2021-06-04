@@ -27,6 +27,11 @@ import { Door } from '../SceneSubjects/objects/Door.js';
 import { BedroomPainting } from '../SceneSubjects/objects/BedroomPainting.js';
 import { BedroomDrawer } from '../SceneSubjects/objects/BedroomDrawer.js';
 import { CupboardDoorR } from '../SceneSubjects/objects/CupboardDoorR.js';
+import { Hammer } from '../SceneSubjects/objects/Hammer.js';
+import { Pin } from '../SceneSubjects/objects/Pin.js';
+import { LetterI } from '../SceneSubjects/objects/LetterI.js';
+import { Key } from '../SceneSubjects/objects/Key.js';
+
 
 //Characters
 import { MainChar } from '../SceneSubjects/characters/MainChar.js';
@@ -42,6 +47,7 @@ import * as THREE from '../../../jsm/three.module.js';
 import { characterControls } from './CharacterControls.js';
 //pre-loader
 import { ColladaLoader } from '../../jsm/Loaders/ColladaLoader.js';
+import { HUD } from '../Overlay/HUD.js';
 
 //==================================================================================================
 
@@ -81,9 +87,15 @@ var testdoor = new Door();
 //study
 var bookshelf = new Bookshelf();
 
+//bedroom
 var bedroomPainting = new BedroomPainting();
 var bedroomDrawer = new BedroomDrawer();
 var cupBoardDoorR = new CupboardDoorR();
+var hammer = new Hammer();
+var pin = new Pin();
+var letterI = new LetterI();
+var key = new Key();
+
 
 //pre-loader
 export var loadingManager; 
@@ -117,6 +129,7 @@ export class SceneManager {
         //we use (this) to make variables accessible in other classes
         this.time = new Time();
         this.objPauseMenu;
+        //this.hud;
 
 
 
@@ -209,6 +222,7 @@ export class SceneManager {
         // We will use 2D canvas element to render our HUD.
 
         //---------------------------------------------------------------------------------------------------------------------------------
+        this.hud = new HUD(this.width_screen, this.height_screen);
 
     }
 
@@ -363,9 +377,15 @@ export class SceneManager {
         //study
         managers[1].register(bookshelf);
 
+        //bedroom
         managers[1].register(bedroomPainting);
         managers[1].register(bedroomDrawer);
         managers[1].register(cupBoardDoorR);
+        managers[1].register(hammer);
+        managers[1].register(pin);
+        managers[1].register(letterI);
+        managers[1].register(key);
+
 
         managers[2].register("footstep","assets/footstep.mpeg");
         managers[2].register("door_open","assets/door_open.mpeg");
@@ -593,29 +613,23 @@ export class SceneManager {
             }
             //character footstep sounds---------------------------------------------------------------------------
 
-
-
             const runTime = this.time.getRunTime();
             this.managers[0].update(runTime);
 
             this.managers[1].update(runTime);
             //update orbit controls
-            //comment out this.controls.update()
-            //this.controls.update();
 
-            this.renderer.render(this.scene, this.camera);
 
             //check pause--------------------------------
-
             if ((keyboardManager.keyDownQueue[0] == "P")) {
 
                 this.pause();
                 keyboardManager.keyDownQueue.shift();
 
             }
-
             //--------------------------------------------
-            //keyboardManager.keyDownQueue.shift();
+
+            //Check if view must be changed--------------------------------------------------------------------------------------------
             if ((keyboardManager.keyDownQueue[0] == "V") && isFirstPersonView == true) {
                 console.log("Switching to Third-Person View");
                 isFirstPersonView = false;
@@ -629,9 +643,12 @@ export class SceneManager {
                 keyboardManager.keyDownQueue.shift();
             }
 
+            //Check if view must be changed--------------------------------------------------------------------------------------------
+
             this.updateCameraPosition();
             //  console.log(this.pointerLockControls.getDirection());
 
+            this.renderMainScene();
 
         } else if (this.game_state == this.GAME_PAUSE)
         {
@@ -652,6 +669,9 @@ export class SceneManager {
                 }
                 this.unpause();
             });
+        }
+        else if (this.game_state == this.GAME_PAUSE)
+        {
 
             mainMenu.addEventListener('click', () => {
                 //make menu not visible
@@ -674,6 +694,25 @@ export class SceneManager {
 
             }
 
+
+            this.renderPauseMenu();
+
+        }
+
+
+        //update orbit controls
+        //comment out
+        //this.controls.update();
+
+        //uncomment this
+
+
+
+    }
+
+    renderPauseMenu()
+    {
+        
             //comment out
             this.pointerLockControls.unlock();
             // this.controls.update();
@@ -695,19 +734,21 @@ export class SceneManager {
 
             this.renderer.getContext().enable(this.renderer.getContext().DEPTH_TEST);
 
-            // renderer.autoClear = true;
 
-        }
+    }
 
+    renderMainScene()
+    {
+        this.renderer.render(this.scene, this.camera);
 
-        //update orbit controls
-        //comment out
-        //this.controls.update();
-
-        //uncomment this
-
+        this.renderer.autoClear = false;//prevent canvas from being erased with next .render call
+        this.renderer.getContext().disable(this.renderer.getContext().DEPTH_TEST);
 
 
+        this.renderer.render(this.hud.scene, this.hud.camera);
+
+        this.renderer.getContext().enable(this.renderer.getContext().DEPTH_TEST);
+        this.renderer.autoClear = true;
     }
 
     //this resizes our game when screen size changed
@@ -744,6 +785,8 @@ export class SceneManager {
             }
   */
             //comment out
+
+            this.managers[2].entities["footstep"].pause();
             this.pointerLockControls.lock(); // stop orbit controls from responding to use input
 
             this.objPauseMenu = new PauseMenu(this.width_screen, this.height_screen);

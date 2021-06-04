@@ -48,7 +48,7 @@ export class BedroomDrawer extends THREE.Object3D {
         var checkVicinity = this.checkCharacterVicinity();
 
 
-        //on button E press, move painting to  the left 
+        //on button E press, move drawer
         if (keyboardManager.wasPressed('E')) {
             if (checkVicinity) {
                 this.open = true;

@@ -19,7 +19,7 @@ export class House extends THREE.Object3D {
         c.castShadow = true;
       });
 
-      //Scale to this size when using GameHouse.glb
+  
       //Scaling house
       this.object.scale.x = 8;
       this.object.scale.y = 8;
