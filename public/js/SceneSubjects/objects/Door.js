@@ -22,13 +22,12 @@ export class Door extends THREE.Object3D {
 
         this.clock = new THREE.Clock();
         const loader = new GLTFLoader(loadingManager);
-
-        loader.setPath('../../models/3DObjects/');
+        
         this.open = false; //open door animation
 
         this.startTime = 0;
 
-
+        loader.setPath('../../models/3DObjects/');
         var gltf = loader.load('testdoor.glb', (gltf) => {
             gltf.scene.traverse(c => {
                 c.castShadow = true;

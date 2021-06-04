@@ -20,6 +20,7 @@ import { CeilingLightObj } from '../SceneSubjects/objects/CeilingLightObj.js';
 
 //OBJECTS
 import { House } from '../SceneSubjects/House.js';
+import {Lock} from '../SceneSubjects/objects/Lock.js'
 import { SceneSubject } from '../SceneSubjects/objects/SceneSubject.js';
 import { TestBlock } from '../SceneSubjects/characters/TestBlock.js';
 import { Door } from '../SceneSubjects/objects/Door.js';
@@ -88,6 +89,7 @@ var bookshelf = new Bookshelf();
 
 //bedroom
 var bedroomPainting = new BedroomPainting();
+var lock = new Lock();
 export var bedroomDrawer = new BedroomDrawer();
 export var cupBoardDoorR = new CupboardDoorR();
 export var hammer = new Hammer();
@@ -131,6 +133,7 @@ export class SceneManager {
 
 
 
+       
         this.game_state = this.GAME_MENU;
 
 
@@ -371,6 +374,7 @@ export class SceneManager {
         managers[1].register(cupBoardDoorR);
         managers[1].register(hammer);
         managers[1].register(pin);
+        managers[1].register(lock);
         managers[1].register(letterI);
         managers[1].register(key);
 
