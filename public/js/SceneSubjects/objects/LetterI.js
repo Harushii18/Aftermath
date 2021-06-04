@@ -14,7 +14,7 @@ export class LetterI extends THREE.Object3D {
 
         loader.setPath('../../models/3DObjects/');
 
-     
+
 
         var gltf = loader.load('letterI.glb', (gltf) => {
             gltf.scene.traverse(c => {
@@ -27,8 +27,11 @@ export class LetterI extends THREE.Object3D {
             this.object.scale.y = 4;
             this.object.scale.z = 4;
 
+            //rotate letter
+            this.object.rotateOnAxis(new THREE.Vector3(0, 1, 0), Math.PI/2);
+
             //move letter
-            this.object.position.set(15, 17, 32.8);
+            this.object.position.set(34, 17, 45.5);
 
             this.object.add(gltf.scene);
         });
@@ -37,7 +40,7 @@ export class LetterI extends THREE.Object3D {
 
     update(time) {
 
-     //do nothing 
+     //do nothing
     }
 
 

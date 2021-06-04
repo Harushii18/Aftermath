@@ -78,7 +78,10 @@ export class KeyboardManager {
                 this.keys.SHIFT = true;
                 break;
             case 69: //e
+            if (event.repeat == false)
+            {
                 this.keys.E = true;
+            }
                 break;
 
             //For rotations

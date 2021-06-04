@@ -13,6 +13,7 @@ export class Door extends THREE.Object3D {
         this.doCheckVicinity = false;
         this.object = new THREE.Object3D();
 
+
         //subtitles
         this.initialiseSubtitleContents();
 
@@ -21,13 +22,12 @@ export class Door extends THREE.Object3D {
 
         this.clock = new THREE.Clock();
         const loader = new GLTFLoader(loadingManager);
-
-        loader.setPath('../../models/3DObjects/');
+        
         this.open = false; //open door animation
 
         this.startTime = 0;
 
-
+        loader.setPath('../../models/3DObjects/');
         var gltf = loader.load('testdoor.glb', (gltf) => {
             gltf.scene.traverse(c => {
                 c.castShadow = true;
@@ -45,10 +45,6 @@ export class Door extends THREE.Object3D {
             this.idle = this.idleMixer.clipAction(gltf.animations[0]);
             this.idle.clampWhenFinished = true;
 
-            // this.idle.play();
-
-
-
             this.object.add(gltf.scene);
         });
 
@@ -57,30 +53,26 @@ export class Door extends THREE.Object3D {
     initialiseSubtitleContents() {
         //Checks if the subtitle had started showing
         this.subtitleStarted = {
-            t1: false,
-            t2: false
+            t1: false
         };
         //Checks if the subtitle had been shown already
         this.subtitleState = {
-            t1: false,
-            t2: false
+            t1: false
         };
         //Contains the text for each subtitle
         this.subtitleText = {
-            t1: "The door's unlocked!! ",
-            t2: "The door's unlocked!!"
+            t1: "The door's unlocked!!"
         };
     }
 
     addSubtitles() {
-
         //t1
         if (!this.subtitleState.t1) {
             subtitleManager.showSubtitles();
             if (!this.subtitleStarted.t1) {
                 //start showing the subtitle
                 subtitleManager.startTime();
-                subtitleManager.setDuration(130);
+                subtitleManager.setDuration(60);
                 subtitleManager.changeSubtitlesText(this.subtitleText.t1);
                 this.subtitleStarted.t1 = true;
             }
@@ -91,28 +83,6 @@ export class Door extends THREE.Object3D {
                 //meaning it was shown
             }
         }
-
-        //show t2
-        if (this.subtitleState.t1) {
-            if (!this.subtitleState.t2) {
-                subtitleManager.showSubtitles();
-                if (!this.subtitleStarted.t2) {
-                    //start showing the subtitle
-                    subtitleManager.startTime();
-                    subtitleManager.setDuration(130);
-                    subtitleManager.changeSubtitlesText(this.subtitleText.t2);
-                    this.subtitleStarted.t2 = true;
-                }
-
-                subtitleManager.countTime();
-                if (!subtitleManager.checkTime()) {
-                    this.subtitleState.t2 = true;
-                    //meaning it was shown
-                }
-            }
-
-        }
-
     }
 
     setPosition(x, y, z) {
@@ -125,71 +95,55 @@ export class Door extends THREE.Object3D {
 
 
     update(time) {
-
-        //console.log(time);
-
         //just to show the div
+
+
         if (this.doCheckVicinity) {
             this.checkVicinity = this.checkCharacterVicinity();
         }
 
-        if (this.open == true) { //animate
-
+        if (this.open == true) {
+            //animate
             if (this.idleMixer) {
-                this.idleMixer.update(this.clock.getDelta());
+                if (this.animationCounter < 80) {
+                    //show that the door is unlocked subtitles
+                    this.addSubtitles();
+                    this.idleMixer.update(this.clock.getDelta());
+                    this.animationCounter += 1;
+                } else if (this.animationCounter == 80) {
+                    //pause the animation mixer-> stop the door from continuing its animation
+                    this.idleMixer.paused = true;
+                    //display stage complete div
+                    const stageComplete = document.getElementById('stageComplete');
+                    stageComplete.style.display = 'block';
+                }
             }
         }
-
-        // if (keyboardManager.wasPressed('E')){
-        //     this.open=true;
-        //     this.startTime=time;
-        //     console.log(this.startTime);
-        //     // console.log("waspressed E");
-        //     this.idle.play();
-
-        // }
-        // // console.log("timer");
-        // console.log(time);
-        // if(time==this.startTime+5){
-        //     this.idleMixer.stopAllAction();
-        //     this.open=false;
-        // }
 
         if (keyboardManager.wasPressed('E')) {
-            //if character is in vicinity of door, then they can open door
-            if (this.checkVicinity) {
-                if (this.open == false) { // animate
-                    if (!this.subtitleState.t1) {
-                        subtitleManager.showSubtitles();
-                        if (!this.subtitleStarted.t1) {
-                            //start showing the subtitle
-                            subtitleManager.startTime();
-                            subtitleManager.setDuration(80);
-                            subtitleManager.changeSubtitlesText(this.subtitleText.t1);
-                            this.subtitleStarted.t1 = true;
-                        }
+            if (this.doCheckVicinity) {
+                //if character is in vicinity of door, then they can open door
+                if (this.checkVicinity) {
+                    if (this.open == false) { // animate
+                        this.doCheckVicinity = false;
 
-                        subtitleManager.countTime();
-                        if (!subtitleManager.checkTime()) {
-                            this.subtitleState.t1 = true;
-                            //meaning it was shown
-                        }
+                        //make sure the key prompt doesn't show anymore now that it is open
+                        gameOverlay.hideOverlay();
+                        //play the door animation
+                        this.idle.play();
+                        this.idle.loop = THREE.LoopOnce;
+                        this.open = true;
+                        //checks how long the animation was playing for
+                        this.animationCounter = 0;
+
+                        //HIDE KEY IMAGE IN OVERLAY!!! KAMERON!!!
+
+
                     }
-                    //this.startTime=time;
-                    this.idle.play();
-                    this.idle.loop = THREE.LoopOnce;
-                    // if(this.startTime==this.startTime+1){
-                    //     this.idleMixer.stopAllAction();//stop animation after start time+3
-                    //     this.open = false;
-                    // }
-                    this.open = true;
-                }
-                else {
-                    this.idleMixer.stopAllAction(); //stop animation
-                    this.open = false;
                 }
             }
         }
+
     }
 
 

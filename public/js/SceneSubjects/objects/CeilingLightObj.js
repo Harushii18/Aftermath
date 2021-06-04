@@ -30,9 +30,9 @@ export class CeilingLightObj extends THREE.Object3D {
         });
     
 	}
-    setLightPosition(x,y,z){
+    setLightPosition(x,z){
         //0,21,30
-        this.object.position.set(x, y, z);
+        this.object.position.set(x, 18, z);
     }
 	update(time) {
 

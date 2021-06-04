@@ -14,8 +14,8 @@ export class CeilingLight extends THREE.Object3D {
         this.object.shadow.camera.fov = 30;
     }
 
-    setLightPosition(x, y, z) {
-        this.object.position.set(x, y, z);
+    setLightPosition(x, z) {
+        this.object.position.set(x, 14, z);
 
     }
 
