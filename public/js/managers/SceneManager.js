@@ -596,9 +596,10 @@ export class SceneManager {
                 var selectedObject = bedroomDrawer.object.getObjectByName('key');
                 console.log(selectedObject);
                 bedroomDrawer.object.remove( selectedObject);
+
                 
                 this.hud.add("key",new Key());
- 
+                testdoor.setAllowInteraction(true);
 
                 
             }
