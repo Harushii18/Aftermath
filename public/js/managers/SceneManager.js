@@ -509,7 +509,7 @@ export class SceneManager {
                 intro2.style.display = 'flex';
                 intro3.style.display = 'none';
                 intro4.style.display = 'none';
-             }, 6000);
+             }, 4000);
 
              setTimeout(() => {
                 intro1.style.display = 'none';
