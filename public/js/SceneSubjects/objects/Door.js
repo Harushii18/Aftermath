@@ -9,20 +9,26 @@ import { subtitleManager } from '../../managers/SubtitleManager.js';
 export class Door extends THREE.Object3D {
     constructor() {
         super();
-        this.checkVicinity = false;
+        this.playDoorSound = false;
         this.doCheckVicinity = false;
         this.object = new THREE.Object3D();
+        this.allowInteraction = false;
+
+
 
 
         //subtitles
         this.initialiseSubtitleContents();
+        //variable to start subtitles
+        this.showLockedSubtitles = false;
+
 
         //stores a variable that only allows the interaction overlay to be shown once
         this.count = 0;
 
         this.clock = new THREE.Clock();
         const loader = new GLTFLoader(loadingManager);
-        
+
         this.open = false; //open door animation
 
         this.startTime = 0;
@@ -34,12 +40,12 @@ export class Door extends THREE.Object3D {
 
             });
 
-            //scale door 
+            //scale door
             this.object.scale.x = 0.271;
             this.object.scale.y = 0.271;
             this.object.scale.z = 0.271;
 
-            //play animation 
+            //play animation
             this.idleMixer = new THREE.AnimationMixer(gltf.scene);
             this.idleMixer.timeScale = 0.08; //speed of animation
             this.idle = this.idleMixer.clipAction(gltf.animations[0]);
@@ -53,15 +59,18 @@ export class Door extends THREE.Object3D {
     initialiseSubtitleContents() {
         //Checks if the subtitle had started showing
         this.subtitleStarted = {
-            t1: false
+            t1: false,
+            t2: false
         };
         //Checks if the subtitle had been shown already
         this.subtitleState = {
-            t1: false
+            t1: false,
+            t2: false
         };
         //Contains the text for each subtitle
         this.subtitleText = {
-            t1: "The door's unlocked!!"
+            t1: "The door's unlocked!!",
+            t2: "It's locked..."
         };
     }
 
@@ -85,6 +94,29 @@ export class Door extends THREE.Object3D {
         }
     }
 
+    showSubtitlesLocked(duration) {
+        //subtitles that need to be shown if he has the key
+        if (!this.showLockedSubtitles.t2) {
+            subtitleManager.showSubtitles();
+            if (!this.subtitleStarted.t2) {
+                //start showing the subtitle
+                subtitleManager.startTime();
+                subtitleManager.setDuration(duration);
+                subtitleManager.changeSubtitlesText(this.subtitleText.t2);
+                this.subtitleStarted.t2 = true;
+            }
+
+            subtitleManager.countTime();
+            if (!subtitleManager.checkTime()) {
+                this.subtitleState.t2 = true;
+                this.showLockedSubtitles = false;
+                //meaning it was shown
+            }
+        }
+
+    }
+
+
     setPosition(x, y, z) {
         this.object.position.set(x, y, z);
     }
@@ -94,12 +126,21 @@ export class Door extends THREE.Object3D {
     }
 
 
+    setAllowInteraction(value){
+      this.allowInteraction = value;
+    }
+
     update(time) {
         //just to show the div
 
-
+/*
         if (this.doCheckVicinity) {
-            this.checkVicinity = this.checkCharacterVicinity();
+            //this.checkVicinity = this.checkCharacterVicinity();
+        }
+*/
+
+        if (this.showLockedSubtitles) {
+            this.showSubtitlesLocked(80);
         }
 
         if (this.open == true) {
@@ -120,13 +161,14 @@ export class Door extends THREE.Object3D {
             }
         }
 
-        if (keyboardManager.wasPressed('E')) {
-            if (this.doCheckVicinity) {
-                //if character is in vicinity of door, then they can open door
-                if (this.checkVicinity) {
-                    if (this.open == false) { // animate
-                        this.doCheckVicinity = false;
 
+        var checkVicinity =  this.checkCharacterVicinity();
+        if (keyboardManager.wasPressed('E')) {
+
+            if (checkVicinity) {
+                //if character is in vicinity of door, then they can open door
+                if (this.allowInteraction) {
+                        this.playDoorSound = true;
                         //make sure the key prompt doesn't show anymore now that it is open
                         gameOverlay.hideOverlay();
                         //play the door animation
@@ -135,16 +177,23 @@ export class Door extends THREE.Object3D {
                         this.open = true;
                         //checks how long the animation was playing for
                         this.animationCounter = 0;
-
+                        this.allowInteraction = false;
                         //HIDE KEY IMAGE IN OVERLAY!!! KAMERON!!!
 
+                    }
+                    else{
+                        this.playDoorSound = false;
+
+                        this.showLockedSubtitles = true;
+                        this.subtitleState.t1 = false;
+                        this.subtitleStarted.t1=false;
 
                     }
                 }
             }
         }
 
-    }
+
 
 
     //checks if Character is in vicinity of door to open/ close it

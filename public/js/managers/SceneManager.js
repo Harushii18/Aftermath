@@ -82,7 +82,7 @@ var ambientLight = new AmbientLight();
 var house = new House();
 //var sceneSubject = new SceneSubject();
 //var testBlock = new TestBlock();
-var testdoor = new Door();
+export var testdoor = new Door();
 
 //study
 var bookshelf = new Bookshelf();
@@ -133,7 +133,7 @@ export class SceneManager {
 
 
 
-       
+
         this.game_state = this.GAME_MENU;
 
 
@@ -481,7 +481,7 @@ export class SceneManager {
             //door open sounds---------------------------------------------------------------------------
             if (key.checkKeyTaken()) {
                 testdoor.doCheckVicinity = true;
-                if (keyboardManager.wasPressed('E') && testdoor.checkVicinity) {
+                if (keyboardManager.wasPressed('E') && testdoor.playDoorSound) {
                     if (this.managers[2].entities["door_open"].isPlaying == false) {
                         this.managers[2].entities["door_open"].setLoop(0);
                         console.log("PLAYING DOOR");
