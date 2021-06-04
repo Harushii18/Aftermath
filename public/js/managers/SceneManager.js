@@ -299,27 +299,27 @@ export class SceneManager {
 
     setCeilingLightProperties() {
         //set their light positions
-        bedroomLightObj.setLightPosition(0, 21, 50);
-        bedroomLight.setLightPosition(0, 16, 50);
+        bedroomLightObj.setLightPosition(0, 50);
+        bedroomLight.setLightPosition(0,  50);
 
 
-        loungeLightObj.setLightPosition(-45, 21, -60);
-        loungeLight.setLightPosition(-45, 16, -60);
+        loungeLightObj.setLightPosition(-45, -60);
+        loungeLight.setLightPosition(-45,  -60);
 
-        studyLightObj.setLightPosition(35, 21, -50);
-        studyLight.setLightPosition(35, 16, -50);
+        studyLightObj.setLightPosition(35, -50);
+        studyLight.setLightPosition(35,  -50);
 
-        kitchenLight.setLightPosition(-45, 16, 5);
-        kitchenLightObj.setLightPosition(-45, 21, 5);
+        kitchenLight.setLightPosition(-45,  5);
+        kitchenLightObj.setLightPosition(-45,  5);
 
-        bathroomLight.setLightPosition(45, 16, 15);
-        bathroomLightObj.setLightPosition(45, 21, 15);
+        bathroomLight.setLightPosition(45, 15);
+        bathroomLightObj.setLightPosition(45, 15);
 
-        hallwayLightObj1.setLightPosition(0, 21, -60);
+        hallwayLightObj1.setLightPosition(0, -60);
         hallwayLight1.setLightPosition(0, 16, -60);
 
-        hallwayLightObj2.setLightPosition(0, 21, 0);
-        hallwayLight2.setLightPosition(0, 16, 0);
+        hallwayLightObj2.setLightPosition(0, 0);
+        hallwayLight2.setLightPosition(0, 0);
 
     }
 

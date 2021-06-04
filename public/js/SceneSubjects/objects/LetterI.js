@@ -31,7 +31,7 @@ export class LetterI extends THREE.Object3D {
             this.object.rotateOnAxis(new THREE.Vector3(0, 1, 0), Math.PI/2);
 
             //move letter
-            this.object.position.set(20, 17, 45.5);
+            this.object.position.set(34, 17, 45.5);
 
             this.object.add(gltf.scene);
         });
