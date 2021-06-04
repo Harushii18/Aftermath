@@ -5,6 +5,7 @@ import { keyboardManager } from '../../managers/KeyboardManager.js';
 import { loadingManager, mainChar } from '../../managers/SceneManager.js';
 import { gameOverlay } from '../../Overlay/GameOverlay.js';
 import { subtitleManager } from '../../managers/SubtitleManager.js';
+import { Key } from './Key.js';
 
 export class BedroomDrawer extends THREE.Object3D {
 
@@ -37,6 +38,23 @@ export class BedroomDrawer extends THREE.Object3D {
 
         this.open = false; //keeps track if the drawer is openend
 
+        //add key to object
+        //set key transforms------------------------------------------------------
+        this.key = new Key();
+        this.key.object.scale.x = 0.5;
+        this.key.object.scale.y = 0.5;
+        this.key.object.scale.z = 0.5;
+       // key.object.position.set(20.15, 1.8, 27.5 );
+        this.key.object.name = "key";
+      //  managers[1].register(key);
+
+        this.object.add(this.key.object);        
+
+        //
+
+
+
+
         var gltf = loader.load('bedroomDrawer.glb', (gltf) => {
             gltf.scene.traverse(c => {
                 c.castShadow = true;
@@ -44,16 +62,19 @@ export class BedroomDrawer extends THREE.Object3D {
             });
 
             // //scale drawer
-            this.object.scale.x = 8;
-            this.object.scale.y = 8;
-            this.object.scale.z = 8;
+         
+            var obj_gltf = new THREE.Object3D();
+
+            obj_gltf.scale.x = 8;
+            obj_gltf.scale.y = 8;
+            obj_gltf.scale.z = 8;
 
             //move drawer
-            this.object.position.set(20.15, 1.6, 27);
+            obj_gltf.position.set(0, 0,0);
 
 
-
-            this.object.add(gltf.scene);
+            obj_gltf.add(gltf.scene);
+            this.object.add(obj_gltf);
         });
 
     }
@@ -146,7 +167,9 @@ export class BedroomDrawer extends THREE.Object3D {
                         this.startSubtitles = true;
 
                         //add that he found the key
-                        this.keyFound = true;
+                      
+
+                     //   hud.add("bedroomDrawer",key.object);
                         //make sure vicinity can no longer be checked: do not show overlay anymore
                         this.doCheckVicinity = false;
                         gameOverlay.hideOverlay();
@@ -162,6 +185,7 @@ export class BedroomDrawer extends THREE.Object3D {
         if (this.open == true) {
             if (this.object.position.z > 29.5) {    //stop moving
                 this.open = false;
+                this.keyFound = true;
             }
             else {
                 this.object.position.z += 0.1; //move to the left

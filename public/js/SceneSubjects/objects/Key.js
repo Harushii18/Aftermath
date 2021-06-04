@@ -31,12 +31,7 @@ export class Key extends THREE.Object3D {
 
             });
 
-            this.object.scale.x = 0.4;
-            this.object.scale.y = 0.4;
-            this.object.scale.z = 0.4;
-
-            //set object's position
-            this.object.position.set(20.15, 1.8, 27.5 );
+   
 
             this.object.add(gltf.scene);
         });
@@ -45,7 +40,7 @@ export class Key extends THREE.Object3D {
 
     update(time) {
 
-        if (bedroomDrawer.isKeyFound()) {
+      /*  if (bedroomDrawer.isKeyFound()) {
             if (!this.open) {
                 if (this.object.position.z > 29) {    //stop moving 
                     this.open = true;
@@ -54,7 +49,7 @@ export class Key extends THREE.Object3D {
                     this.object.position.z += 0.1; //move to the front 
                 }
             }
-        }
+        }*/
 
         if (this.open) {
             //since drawer was opened, can interact with key now

@@ -135,8 +135,19 @@ export class Door extends THREE.Object3D {
                         this.open = true;
                         //checks how long the animation was playing for
                         this.animationCounter = 0;
+                        /*                        WhatsApp
+                                                                                 
+                        //Suraksha: HIDE KEY IMAGE IN OVERLAY!!! KAMERON!!!         (double blue tick)
+                        //Kameron: THATSSSS MA NAME!!!                              (single tick)
 
-                        //HIDE KEY IMAGE IN OVERLAY!!! KAMERON!!!
+                        */
+
+                        
+
+
+
+                        
+
 
 
                     }
