@@ -38,6 +38,7 @@ export class BedroomDrawer extends THREE.Object3D {
         this.open = false; //keeps track if the drawer is openend
 
         var gltf = loader.load('bedroomDrawer.glb', (gltf) => {
+          //console.log("loaded drawer");
             gltf.scene.traverse(c => {
                 c.castShadow = true;
 

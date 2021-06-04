@@ -1,7 +1,7 @@
 import * as THREE from '../../../jsm/three.module.js';
 import { GLTFLoader } from '../../../jsm/GLTFLoader.js';
 import { keyboardManager } from '../../managers/KeyboardManager.js';
-import { loadingManager, mainChar, hammer, pin } from '../../managers/SceneManager.js';
+import { loadingManager, mainChar, hammer, pin, lockCupboard } from '../../managers/SceneManager.js';
 import { gameOverlay } from '../../Overlay/GameOverlay.js';
 import { subtitleManager } from '../../managers/SubtitleManager.js';
 
@@ -33,6 +33,7 @@ export class CupboardDoorR extends THREE.Object3D {
     this.startTime = 0;
 
     var gltf = loader.load('cupboard.glb', (gltf) => {
+      //console.log("loaded cupboard door");
       gltf.scene.traverse(c => {
         c.castShadow = true;
 
@@ -159,7 +160,7 @@ export class CupboardDoorR extends THREE.Object3D {
                   this.cupboardAnim.loop = THREE.LoopRepeat;
                   //this variable is to ensure that we can stop the animation at a specific time
                   this.animationCounter = 0;
-
+                  lockCupboard.setPosition(new THREE.Vector3(0,100,0));
                 }
                 else{
                   this.showLockedSubtitles = true;
@@ -243,6 +244,10 @@ export class CupboardDoorR extends THREE.Object3D {
 
   isOpen() {
     return this.open;
+  }
+
+  return3DObject() {
+      return this.object;
   }
 
 }
