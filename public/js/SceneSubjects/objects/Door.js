@@ -36,7 +36,6 @@ export class Door extends THREE.Object3D {
 
         loader.setPath('../../models/3DObjects/');
         var gltf = loader.load('testdoor.glb', (gltf) => {
-          //console.log("loaded door");
             gltf.scene.traverse(c => {
                 c.castShadow = true;
 
@@ -174,7 +173,8 @@ export class Door extends THREE.Object3D {
                         this.playDoorSound = true;
                          //show that the door is unlocked subtitles
                    this.showUnlockedSubs=true;
-                        
+                        //make sure the key prompt doesn't show anymore now that it is open
+                        gameOverlay.hideOverlay();
                         //play the door animation
                         this.idle.play();
                         this.idle.loop = THREE.LoopOnce;
