@@ -62,7 +62,7 @@ export class Door extends THREE.Object3D {
         };
         //Contains the text for each subtitle
         this.subtitleText = {
-            t1: "The door's unlocked!! "
+            t1: "The door's unlocked!!"
         };
     }
 
