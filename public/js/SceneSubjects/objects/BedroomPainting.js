@@ -35,7 +35,7 @@ export class BedroomPainting extends THREE.Object3D {
 
 
             //move painting
-            this.object.position.set(20, 12, 45);
+            this.object.position.set(34.5, 12, 45);
 
 
 

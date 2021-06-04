@@ -30,18 +30,18 @@ export class CupboardDoorR extends THREE.Object3D {
       });
 
       // //scale door
-      this.object.scale.x = 2.2;
-      this.object.scale.y = 2.2;
-      this.object.scale.z = 2.2;
+      this.object.scale.x = 3;
+      this.object.scale.y = 3;
+      this.object.scale.z = 3;
 
       //move door
-      this.object.position.set(-12.5, -2, 60);
+      this.object.position.set(-20, -4, 83);
       //this.object.rotateOnAxis(new THREE.Vector3(1,0,0), Math.PI);
 
 
       //get animation for cupboard 
       this.cupboardMixer = new THREE.AnimationMixer(gltf.scene);
-      this.cupboardMixer.timeScale = 0.5; //speed of animation
+      this.cupboardMixer.timeScale = 0.2; //speed of animation
       this.cupboardAnim = this.cupboardMixer.clipAction(gltf.animations[0]);
 
       this.object.add(gltf.scene);
@@ -57,10 +57,10 @@ export class CupboardDoorR extends THREE.Object3D {
  
     //pause the cupboard animation at the right moment
     if (this.cupboardMixer) {
-      if (this.animationCounter < 10) {
+      if (this.animationCounter < 20) {
         this.cupboardMixer.update(this.clock.getDelta());
         this.animationCounter += 1;
-      } else if (this.animationCounter == 10) {
+      } else if (this.animationCounter == 20) {
         //pause the animation mixer-> stop the cupboard from continuing its animation
         this.cupboardMixer.paused = true;
       }
