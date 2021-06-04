@@ -36,7 +36,9 @@ export class Key extends THREE.Object3D {
             this.object.scale.z = 0.4;
 
             //set object's position
-            this.object.position.set(20.15, 1.8, 27.5 );
+            //this.object.position.set(-12, 9, 64);;
+            this.object.position.set(20.15, 7.6, 37 );//Perfect
+
 
             this.object.add(gltf.scene);
         });
@@ -46,15 +48,19 @@ export class Key extends THREE.Object3D {
     update(time) {
 
         if (bedroomDrawer.isKeyFound()) {
-            if (!this.open) {
-                if (this.object.position.z > 29) {    //stop moving 
-                    this.open = true;
-                }
-                else {
-                    this.object.position.z += 0.1; //move to the front 
-                }
-            }
+        //  console.log("Bedroom Drawer is Opened");
+          if (this.open == false) {
+          //  console.log("Key anim not played");
+              if (this.object.position.z > 39) {    //stop moving
+                  this.open = true;
+              }
+              else {
+              //  console.log("Key anim playing");
+                  this.object.position.z += 0.5; //move to the left
+              }
+          }
         }
+
 
         if (this.open) {
             //since drawer was opened, can interact with key now
