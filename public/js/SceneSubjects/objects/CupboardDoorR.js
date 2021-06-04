@@ -149,7 +149,7 @@ export class CupboardDoorR extends THREE.Object3D {
                 if(this.allowInteraction){
                   //Animation goes here
                   //***********
-                  this.object.rotateOnAxis(new THREE.Vector3(0,1,0), this.object.rotation.y+0.1); // This happens for now
+                //  this.object.rotateOnAxis(new THREE.Vector3(0,1,0), this.object.rotation.y+0.1); // This happens for now
                   this.open = true;
                   gameOverlay.hideOverlay();
                   pin.setAllowInteraction(true);
