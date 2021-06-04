@@ -89,9 +89,9 @@ var bookshelf = new Bookshelf();
 //bedroom
 var bedroomPainting = new BedroomPainting();
 export var bedroomDrawer = new BedroomDrawer();
-var cupBoardDoorR = new CupboardDoorR();
-var hammer = new Hammer();
-var pin = new Pin();
+export var cupBoardDoorR = new CupboardDoorR();
+export var hammer = new Hammer();
+export var pin = new Pin();
 var letterI = new LetterI();
 var key = new Key();
 

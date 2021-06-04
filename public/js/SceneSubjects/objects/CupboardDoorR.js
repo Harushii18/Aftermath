@@ -1,7 +1,7 @@
 import * as THREE from '../../../jsm/three.module.js';
 import { GLTFLoader } from '../../../jsm/GLTFLoader.js';
 import { keyboardManager } from '../../managers/KeyboardManager.js';
-import { loadingManager, mainChar } from '../../managers/SceneManager.js';
+import { loadingManager, mainChar, hammer, pin } from '../../managers/SceneManager.js';
 import { gameOverlay } from '../../Overlay/GameOverlay.js';
 export class CupboardDoorR extends THREE.Object3D {
 
@@ -52,25 +52,29 @@ export class CupboardDoorR extends THREE.Object3D {
 
 
     update(time) {
-      
 
-      var rotationVector = new THREE.Vector3(0,1,0);
-      //rotationVector.x = rotationVector.x + this.object.position.x;
-      //rotationVector.y = rotationVector.y + this.object.position.y;
+      if(hammer.isPickedUp()){
 
-      rotationVector.normalize();
-      this.object.rotateOnAxis(rotationVector,0.01*(Math.sin(time) + 1.5) / 2);
-        //just to show the div
-        var checkVicinity = this.checkCharacterVicinity();
+          /*var rotationVector = new THREE.Vector3(0,1,0);
+          rotationVector.normalize();
+          this.object.rotateOnAxis(rotationVector,0.01*(Math.sin(time) + 1.5) / 2);
+          */
+            //just to show the div
+            var checkVicinity = this.checkCharacterVicinity();
 
-        //on button E press, move painting to  the left
-        if (keyboardManager.wasPressed('E')) {
-            if (checkVicinity) {
-              this.object.rotateOnAxis(new THREE.Vector3(0,1,0), this.object.rotation.y+0.1);
-              this.open = true;
+            //on button E press, move painting to  the left
+            if (keyboardManager.wasPressed('E')) {
+                if (checkVicinity) {
+                  //Animation goes here
+                  //***********
+                  this.object.rotateOnAxis(new THREE.Vector3(0,1,0), this.object.rotation.y+0.1); // This happens for now
+                  this.open = true;
+
+                  pin.setAllowInteraction(true);
+
+                }
             }
-        }
-
+      }
     }
 
 
@@ -123,6 +127,10 @@ export class CupboardDoorR extends THREE.Object3D {
         }
 
         return false;
+    }
+
+    isOpen(){
+      return this.open;
     }
 
 

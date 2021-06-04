@@ -10,7 +10,7 @@ export class Hammer extends THREE.Object3D {
         super();
         this.object = new THREE.Object3D();
         this.count = 0;
-        this.isMoved = false;
+        this.pickedUp = false;
 
         this.clock = new THREE.Clock();
         const loader = new GLTFLoader();
@@ -51,8 +51,9 @@ export class Hammer extends THREE.Object3D {
         //on button E press, move painting to  the left
         if (keyboardManager.wasPressed('E')) {
             if (checkVicinity) {
-                //this.move = true;
-
+                //Hiding Hammer, will need to destroy it later
+                this.object.position.set(0, 100, 0);
+                this.pickedUp = true;
                 //SHOW HAMMER IMAGE IN OVERLAY
             }
         }
@@ -88,7 +89,7 @@ export class Hammer extends THREE.Object3D {
               //console.log("Player is near the hammer");
                 //display interaction overlay if it isn't being shown
                 if (this.count == 0) {
-                    if (this.isMoved==false){
+                    if (this.pickedUp==false){
                     gameOverlay.changeText('[E] PICK UP HAMMER');
 
                     //LATER WE CAN ADD A CONDITION IF HE LOOKED AT IT, HE'LL NOTICE IT CAN MOVE, AND THE
@@ -96,7 +97,7 @@ export class Hammer extends THREE.Object3D {
                     gameOverlay.showOverlay();
                     this.count += 1;
 
-                      //HIDE HAMMER IMAGE IN OVERLAY
+                    //HIDE HAMMER IMAGE IN OVERLAY
 
                     }
                 }
@@ -112,7 +113,9 @@ export class Hammer extends THREE.Object3D {
             return false;
         }
 
-
+        isPickedUp(){
+          return this.pickedUp;
+        }
 
 
 
