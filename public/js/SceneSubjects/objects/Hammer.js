@@ -42,7 +42,7 @@ export class Hammer extends THREE.Object3D {
             this.object.scale.z = 0.5;
 
             //move hammer
-            this.object.position.set(7, 3, 80);
+            this.object.position.set(7, 2.4, 80);
 
             //rotate hammer
             this.object.rotateOnAxis(new THREE.Vector3(0,1,0),Math.PI/2*0.5);

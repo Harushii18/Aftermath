@@ -124,6 +124,7 @@ export class SceneManager {
         this.GAME_RUN = "run";
         this.GAME_MENU = "menu";
         this.GAME_INTRO = "intro";
+        this.GAME_LOGO = "logo";
         //------------------------------------------------------------------------------------------------------------------------------------------
         this.audioActive = false;
         //we use (this) to make variables accessible in other classes
@@ -133,9 +134,9 @@ export class SceneManager {
 
 
 
-
-        this.game_state = this.GAME_MENU;
-
+       this.game_state = this.GAME_LOGO;
+       //intro paragraph state
+       this.intro_para = 1;
 
 
         this.width_screen = canvas.width;
@@ -431,6 +432,11 @@ export class SceneManager {
 
         if (this.game_state == this.GAME_MENU) { //when the game start
 
+            const menu = document.getElementsByClassName("mainMenu");
+            for (let i = 0; i < menu.length; i++) {
+                menu[i].style.display = 'flex';
+            }
+
             //id the start button
             const btnStart = document.getElementById("start");
 
@@ -449,6 +455,29 @@ export class SceneManager {
 
 
 
+        } else if(this.game_state == this.GAME_LOGO){
+            //id the divs
+            const menu = document.getElementsByClassName("mainMenu");
+            const logo = document.getElementsByClassName("logo");
+
+            //make menu not visible
+            for (let i = 0; i < menu.length; i++) {
+                menu[i].style.display = 'none';
+            }
+
+            //make logo visible
+            for (let i = 0; i < logo.length; i++) {
+                logo[i].style.display = 'flex';
+            }
+
+            setTimeout(() => {
+                //make logo not visible
+                for (let i = 0; i < logo.length; i++) {
+                    logo[i].style.display = 'none';
+                }
+                this.game_state = this.GAME_MENU;
+            }, 12000);
+
         } else if (this.game_state == this.GAME_INTRO) {
             if (this.audioActive == false) {
                 this.audioActive = true;
@@ -457,24 +486,95 @@ export class SceneManager {
                 // this.managers[2].entities["background"].play();
             }
 
-            //make intro screen visible
-            const intro = document.getElementsByClassName("intro");
-            for (let i = 0; i < intro.length; i++) {
-                intro[i].style.display = 'flex';
-            }
+             //make intro screen visible
+             const intro1 = document.getElementById("para1");
+             const intro2 = document.getElementById("para2");
+             const intro3 = document.getElementById("para3");
+             const intro4 = document.getElementById("para4");
 
-            //id the continue button
-            const btnContinue = document.getElementById("continue");
 
-            ////intro screen game pressed, remove intro screen items
-            btnContinue.addEventListener("click", () => {
-                for (let i = 0; i < intro.length; i++) {
-                    intro[i].style.display = 'none';
+             //id the buttons
+            //  const btnNext1 = document.getElementById("next1");
+            //  const btnNext2 = document.getElementById("next2");
+             const btnContinue = document.getElementById("continue");
+
+             intro1.style.display = 'flex';
+             intro2.style.display = 'none';
+             intro3.style.display = 'none';
+             intro4.style.display = 'none';
+
+
+             setTimeout(() => {
+                intro1.style.display = 'none';
+                intro2.style.display = 'flex';
+                intro3.style.display = 'none';
+                intro4.style.display = 'none';
+             }, 6000);
+
+             setTimeout(() => {
+                intro1.style.display = 'none';
+                intro2.style.display = 'none';
+                intro3.style.display = 'flex';
+                intro4.style.display = 'none';
+             }, 16000);
+
+             setTimeout(() => {
+                intro1.style.display = 'none';
+                intro2.style.display = 'none';
+                intro3.style.display = 'none';
+                intro4.style.display = 'flex';
+             }, 30000);
+
+             btnContinue.addEventListener("click", () => {
+
+                this.intro_para = 4;
+                intro1.style.display = 'none';
+                intro2.style.display = 'none';
+                intro3.style.display = 'none';
+                intro4.style.display = 'none';
+
+                const menu = document.getElementsByClassName("mainMenu");
+                for (let i = 0; i < menu.length; i++) {
+                    menu[i].style.display = 'none';
                 }
                 //change state to game run
                 this.game_state = this.GAME_RUN;
+
                 this.managers[2].entities["background"].pause();
             });
+
+            //  if(this.intro_para == 1){
+            //  intro1.style.display = 'flex';
+            //  intro2.style.display = 'none';
+            //  intro3.style.display = 'none';
+
+            //  btnNext1.addEventListener("click", () => {
+            //     this.intro_para = 2;
+            //  });
+            //  }
+
+            //  else if(this.intro_para == 2){
+            //      intro1.style.display = 'none';
+            //      intro2.style.display = 'flex';
+            //      intro3.style.display = 'none';
+            //      btnNext2.addEventListener("click", () => {
+            //          this.intro_para = 3;
+            //      });
+            //  }
+
+            //  else if(this.intro_para == 3){
+            //      intro1.style.display = 'none';
+            //      intro2.style.display = 'none';
+            //      intro3.style.display = 'flex';
+            //      btnContinue.addEventListener("click", () => {
+            //          this.intro_para = 4;
+            //          intro1.style.display = 'none';
+            //          intro2.style.display = 'none';
+            //          intro3.style.display = 'none';
+            //          //change state to game run
+            //          this.game_state = this.GAME_RUN;
+            //      });
+            //  }
 
         } else if (this.game_state == this.GAME_RUN) {
 
@@ -520,7 +620,7 @@ export class SceneManager {
 
                 this.pause();
                 keyboardManager.keyDownQueue.shift();
-
+                this.pointerLockControls.unlock();
             }
             //--------------------------------------------
 
@@ -545,15 +645,46 @@ export class SceneManager {
 
             this.renderMainScene();
 
+        } else if (this.game_state == this.GAME_PAUSE)
+        {
 
+            const menu = document.getElementsByClassName('pauseMenu');
+            const unpause = document.getElementById('unpause');
+            const mainMenu = document.getElementById('mainMenu');
 
+            //make menu visible
+            for (let i = 0; i < menu.length; i++) {
+                menu[i].style.display = 'flex';
+            }
+
+            unpause.addEventListener('click', () => {
+                //make menu not visible
+                for (let i = 0; i < menu.length; i++) {
+                    menu[i].style.display = 'none';
+                }
+                this.unpause();
+            });
         }
         else if (this.game_state == this.GAME_PAUSE) {
 
-            if (keyboardManager.keyDownQueue[0] == 'P') {
+            mainMenu.addEventListener('click', () => {
+                //make menu not visible
+                for (let i = 0; i < menu.length; i++) {
+                    menu[i].style.display = 'none';
+                }
+                this.game_state = this.GAME_MENU;
+            });
+
+            if (keyboardManager.keyDownQueue[0] == 'P')
+            {
 
                 this.unpause();
                 keyboardManager.keyDownQueue.shift();
+
+                //make menu not visible
+                for (let i = 0; i < menu.length; i++) {
+                    menu[i].style.display = 'none';
+                }
 
             }
 

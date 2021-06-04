@@ -1,0 +1,231 @@
+body {
+  margin: 0;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+@font-face {
+  font-family: dayslater;
+  src: url(../fonts/28\ Days\ Later.ttf);
+}
+
+@font-face {
+  font-family: woodCutter;
+  src: url(../fonts/WOODCUTTER\ STORM.ttf);
+}
+
+@font-face {
+  font-family: nightmare;
+  src: url(../fonts/CFNightmarePERSONAL-Regular.ttf);
+}
+
+@font-face {
+  font-family: soul;
+  src: url(../fonts/SoulMission.ttf);
+}
+
+.logo {
+  position: absolute;
+  z-index: 3;
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+  background-size: cover;
+  overflow: hidden;
+  animation: logo 5s linear infinite;
+  align-items: center;
+  justify-content: center;
+}
+
+@keyframes logo {
+  50% {
+    opacity: 0;
+  }
+}
+
+.loader {
+  position: absolute;
+  z-index: 5;
+  border: 16px solid #f3f3f3; /* Light grey */
+  border-top: 16px solid #3498db; /* Blue */
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  animation: spin 2s linear infinite;
+  display: none;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.menu {
+  position: absolute;
+  z-index: 3;
+  width: 100%;
+  height: 100%;
+  /*background: url("../../assets/house2.jpg") no-repeat;*/
+  /*background-size: cover;*/
+  background: none;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.pauseMenu {
+  position: absolute;
+  z-index: 3;
+  width: 100%;
+  height: 100%;
+  background: none;
+  display: none;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 0;
+  background: url("../../assets/house2.jpg") no-repeat;
+  background-size: cover;
+  overflow: hidden;
+}
+
+.intro {
+  position: absolute;
+  z-index: 3;
+  width: 100%;
+  height: 100%;
+  /*background: url("../../assets/house2.jpg") no-repeat;*/
+  /*background-size: cover;*/
+  background: black;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.menu button {
+  display: block;
+  opacity: 0.8;
+}
+
+.menu-button {
+  height: 50px;
+  width: 20%;
+  border-radius: 10px;
+  border-width: 0.1px;
+  font-family: soul;
+  font-weight: bolder;
+
+  color: white;
+  font-size: 15px;
+  background: black;
+  margin: 20px;
+  z-index: 2;
+}
+
+.menu-button:hover {
+  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+  color: white;
+  border-style: ridge 2px;
+  background: black;
+  opacity: 0.5;
+}
+
+.ml3 {
+  font-family: woodCutter;
+  font-weight: 900;
+  font-size: 2rem;
+  display: block;
+  color: white;
+  margin: 30px;
+}
+
+.title {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  display: flex;
+  justify-content: start;
+  flex-direction: column;
+  align-items: center;
+  animation: blinker 3s linear infinite;
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
+}
+
+.title > h1 {
+  font-family: nightmare;
+  text-shadow: 2px 2px 4px #000000;
+  color: #000000;
+  font-size: 8rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.fog {
+  position: absolute;
+  height: 100vh;
+  width: 100%;
+  background: #fff;
+}
+
+.fog-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.fog-img {
+  position: absolute;
+  height: 100vh;
+  width: 300vw;
+  z-index: 2;
+}
+
+.fog-img-first {
+  background: url("../../assets/fog1.png");
+  background-repeat: repeat-x;
+  background-size: contain;
+  background-position: center;
+  animation: marquee 60s linear infinite;
+}
+
+.fog-img-second {
+  background: url("../../assets/fog2.png");
+  background-repeat: repeat-x;
+  background-size: contain;
+  background-position: center;
+  animation: marquee 30s linear infinite;
+}
+
+@keyframes marquee {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  100% {
+    transform: translate3d(-200vw, 0, 0);
+  }
+}
