@@ -8,18 +8,22 @@ export class House extends THREE.Object3D {
     this.object = new THREE.Object3D();
     //this.object.castShadow = false;
     this.object.receiveShadow = true;
-    //load house model form blender file
+    //load house model from blender file
+    this.loadCount = 0;
 
     const loader = new GLTFLoader(loadingManager);
     loader.setPath('../models/');
 
-    const gltf = loader.load('newhouse.glb', (gltf) => {
 
-      gltf.scene.traverse(c => {
-        c.castShadow = true;
-      });
+    //while(this.loadCount==0){
+  //    console.log("in house loop");
+        const gltf = loader.load('newhouse.glb', (gltf) => {
+          this.loadCount = 1;
+          console.log("load house");
+          gltf.scene.traverse(c => {
+            c.castShadow = true;
+          });
 
-  
       //Scaling house
       this.object.scale.x = 8;
       this.object.scale.y = 8;
@@ -28,7 +32,7 @@ export class House extends THREE.Object3D {
 
       this.object.add(gltf.scene);
     });
-
+//}
 
 
   }

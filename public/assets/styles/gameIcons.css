@@ -1,8 +1,8 @@
 .gameIconBottom{
         position: absolute;
-       right:50%;
+       right:45%;
        padding:5px;
-        top:50%;
+        top:60%;
         z-index:100;
         display:none;
         /*set display to inline-block to show it*/
@@ -31,7 +31,7 @@
         bottom:50%;
         left:0%;
         background-color: white;
-        opacity: 0.2;
+        opacity: 0.5;
         display: none;
         padding: 20px;
         font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
@@ -42,21 +42,27 @@
 
 }
 
-/* #itemMenu{
-        z-index: 100;
+
+/* Animation for when the stage is complete */
+
+#stageComplete{
         position: absolute;
-        background-color: black;
-        opacity: 0.1;
-       left:0%;
-       padding:10px;
-        top:0%;
-       
+        bottom:0%;
+        right:0%;
+        background-color: transparent; 
+        text-shadow: 2px 2px 5px white;
+        display: none;
+        padding:20px;
+        font-family: 'Do Hyeon', sans-serif;
+        z-index: 100;
+        font-size: 60px;
+        font-weight: bolder;
+        color :black;
+        animation-name: stage;
+        animation-duration: 2s;
+        animation-iteration-count: 2;
 }
-
-.items{
-        background-color: white;
-        opacity: 1;
-        margin: 5px;
-
-}
- */
+@keyframes stage {
+        from {opacity: 1;}
+        to {opacity: 0;}
+      }
