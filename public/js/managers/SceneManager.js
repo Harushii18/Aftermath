@@ -26,7 +26,7 @@ import { Door } from '../SceneSubjects/objects/Door.js';
 
 import { BedroomPainting } from '../SceneSubjects/objects/BedroomPainting.js';
 import { BedroomDrawer } from '../SceneSubjects/objects/BedroomDrawer.js';
-import { CupboardDoorR } from '../SceneSubjects/objects/CupboardDoorR.js';
+
 import { Hammer } from '../SceneSubjects/objects/Hammer.js';
 import { Pin } from '../SceneSubjects/objects/Pin.js';
 import { LetterI } from '../SceneSubjects/objects/LetterI.js';
@@ -89,7 +89,7 @@ var bookshelf = new Bookshelf();
 //bedroom
 var bedroomPainting = new BedroomPainting();
 var bedroomDrawer = new BedroomDrawer();
-var cupBoardDoorR = new CupboardDoorR();
+
 var hammer = new Hammer();
 var pin = new Pin();
 var letterI = new LetterI();
@@ -375,7 +375,7 @@ export class SceneManager {
         //bedroom
         managers[1].register(bedroomPainting);
         managers[1].register(bedroomDrawer);
-        managers[1].register(cupBoardDoorR);
+      
         managers[1].register(hammer);
         managers[1].register(pin);
         managers[1].register(letterI);
