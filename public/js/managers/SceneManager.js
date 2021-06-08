@@ -29,6 +29,8 @@ import { BedroomPainting } from '../SceneSubjects/objects/BedroomPainting.js';
 import { BedroomDrawer } from '../SceneSubjects/objects/BedroomDrawer.js';
 
 import { Hammer } from '../SceneSubjects/objects/Hammer.js';
+import { Flashlight } from '../SceneSubjects/objects/Flashlight.js';
+import { cupboardDoorR } from '../SceneSubjects/objects/cupboardDoorR.js';
 import { Pin } from '../SceneSubjects/objects/Pin.js';
 import { LetterI } from '../SceneSubjects/objects/LetterI.js';
 import { Key } from '../SceneSubjects/objects/Key.js';
@@ -99,9 +101,11 @@ export var lockCupboard = new Lock();
 //lockDrawer.setPosition(new THREE.Vector3(20.15, 7.6, 50));
 
 export var bedroomDrawer = new BedroomDrawer();
-export var cupBoardDoorR = new CupboardDoorR();
+export var cupBoardDoorR = new cupboardDoorR();
 export var hammer = new Hammer();
 export var pin = new Pin();
+
+export var flashlight = new Flashlight();
 
 var letterI = new LetterI();
 var key = new Key();
@@ -386,9 +390,10 @@ export class SceneManager {
         managers[1].register(hammer);
         managers[1].register(pin);
         managers[1].register(lockCupboard);
-        //managers[1].register(lockDrawer);
+        managers[1].register(cupBoardDoorR);
         managers[1].register(letterI);
         managers[1].register(key);
+        managers[1].register(flashlight);
 
 
         managers[2].register("footstep", "assets/footstep.mpeg");
