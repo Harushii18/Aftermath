@@ -14,6 +14,7 @@ export class House extends THREE.Object3D {
     const loader = new GLTFLoader(loadingManager);
     loader.setPath('../models/');
 
+
     //while(this.loadCount==0){
   //    console.log("in house loop");
         const gltf = loader.load('newhouse.glb', (gltf) => {
@@ -22,6 +23,7 @@ export class House extends THREE.Object3D {
           gltf.scene.traverse(c => {
             c.castShadow = true;
           });
+
       //Scaling house
       this.object.scale.x = 8;
       this.object.scale.y = 8;

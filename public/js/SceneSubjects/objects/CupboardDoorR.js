@@ -5,7 +5,7 @@ import { loadingManager, mainChar, hammer, pin, lockCupboard } from '../../manag
 import { gameOverlay } from '../../Overlay/GameOverlay.js';
 import { subtitleManager } from '../../managers/SubtitleManager.js';
 
-export class CupboardDoorR extends THREE.Object3D {
+export class cupboardDoorR extends THREE.Object3D {
 
     constructor() {
         super();
