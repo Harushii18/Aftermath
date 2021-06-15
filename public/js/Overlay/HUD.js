@@ -67,6 +67,8 @@ export class HUD extends Overlay {
     this.numItems += 1;
     this.items.add(name);
 
+    console.log("in add: hud has " +this.numItems.toString())
+
   }
 
   remove(name)
@@ -75,8 +77,11 @@ export class HUD extends Overlay {
     console.log("removing from hud");
     console.log(selectedObject);
     this.scene.remove( selectedObject);
+
+    this.numItems -= 1;
     this.items.delete(name);
-    
+    console.log("in remove: hud has " +this.numItems.toString())
+
   }
 
   hasItem(name)

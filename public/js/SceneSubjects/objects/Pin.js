@@ -1,7 +1,7 @@
 import * as THREE from '../../../jsm/three.module.js';
 import { GLTFLoader } from '../../../jsm/GLTFLoader.js';
 import { keyboardManager } from '../../managers/KeyboardManager.js';
-import { mainChar, cupBoardDoorR, bedroomDrawer } from '../../managers/SceneManager.js';
+import { mainChar, cupBoardDoorR, bedroomDrawer, hudOverlayAddQueue, sceneRemoveQueue } from '../../managers/SceneManager.js';
 import { gameOverlay } from '../../Overlay/GameOverlay.js';
 import { subtitleManager } from '../../managers/SubtitleManager.js';
 
@@ -30,13 +30,6 @@ export class Pin extends THREE.Object3D {
 
             });
 
-            //scale pin
-            this.object.scale.x = 0.5;
-            this.object.scale.y = 0.5;
-            this.object.scale.z = 0.5;
-
-            //move pin
-            this.object.position.set(-12, 6, 84);
 
             //rotate pin
           //  this.object.rotateOnAxis(new THREE.Vector3(0,1,0),Math.PI/2*0.5);
@@ -107,7 +100,10 @@ export class Pin extends THREE.Object3D {
                     //Hiding Lockpick, will need to destroy it later
                     this.object.position.set(0, 100, 0);
                     this.pickedUp = true;
+                    
                     //SHOW LOCKPICK IMAGE IN OVERLAY
+                    hudOverlayAddQueue.push("pin");
+                    //sceneRemoveQueue.push("pin");
 
                     //Allo bedroomDrawer to be interacted with
                     bedroomDrawer.setAllowInteraction(true);
@@ -152,7 +148,7 @@ export class Pin extends THREE.Object3D {
             //if the character is in the vicinity
             if (this.inVicinity(vicinityLimitZ, vicinityLimitX)) {
               //console.log("Player is near the lockpick");
-                //display interaction overlay if it isn't being shown
+              //display interaction overlay if it isn't being shown
                 if (this.count == 0) {
                     if (this.pickedUp==false){
                       if(this.allowInteraction){
@@ -160,8 +156,6 @@ export class Pin extends THREE.Object3D {
 
                     gameOverlay.changeText('[E] PICK UP LOCKPICK');
 
-                    //LATER WE CAN ADD A CONDITION IF HE LOOKED AT IT, HE'LL NOTICE IT CAN MOVE, AND THE
-                    //INTERACTION WILL SAY MOVE PAINTING
                     gameOverlay.showOverlay();
                     this.count += 1;
 
@@ -179,6 +173,18 @@ export class Pin extends THREE.Object3D {
             }
 
             return false;
+        }
+
+        setForScene()
+        {
+                      //scale pin
+                      this.object.scale.x = 0.5;
+                      this.object.scale.y = 0.5;
+                      this.object.scale.z = 0.5;
+          
+                      //move pin
+                      this.object.position.set(-12, 6, 84);
+          
         }
 
 

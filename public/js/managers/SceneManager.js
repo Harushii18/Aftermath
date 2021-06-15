@@ -54,6 +54,9 @@ import { HUD } from '../Overlay/HUD.js';
 //==================================================================================================
 
 //Global Variables
+export var hudOverlayAddQueue = [];
+export var hudOverlayRemoveQueue = [];
+export var sceneRemoveQueue = [];
 
 //FirstPersonTracker
 var isFirstPersonView = true;
@@ -389,8 +392,13 @@ export class SceneManager {
         //bedroom
         managers[1].register(bedroomPainting);
 
+        hammer.setForScene();
         managers[1].register(hammer);
+
+        pin.setForScene();
         managers[1].register(pin);
+
+        lockCupboard.object.name = "lockCupboard";
         managers[1].register(lockCupboard);
         managers[1].register(cupBoardDoorR);
         managers[1].register(letterI);
@@ -603,10 +611,11 @@ export class SceneManager {
 
         } else if (this.game_state == this.GAME_RUN) {
             //hud elements
-            if (this.hud.hasItem('key') )
-            {
-                console.log()
-            }
+            this.removeHUDItems();
+            this.addToHUD();
+            this.removeFromScene()
+   
+
 
 
             if (this.hud.hasItem('key') == false && bedroomDrawer.keyFound && testdoor.open == false)
@@ -839,6 +848,62 @@ export class SceneManager {
 
             this.objPauseMenu = new PauseMenu(this.width_screen, this.height_screen);
         }
+    }
+
+
+    addToHUD()
+    {
+        if (hudOverlayAddQueue.includes("hammer"))
+        {
+           
+           this.hud.add("hammer",new Hammer());
+           console.log("hammer added to hud");
+           hudOverlayAddQueue.shift();
+
+        }
+
+        if (hudOverlayAddQueue.includes("pin"))
+        {
+           
+           this.hud.add("pin",new Pin());
+           console.log("Pin added to hud");
+           hudOverlayAddQueue.shift();
+
+        }
+    }
+
+    removeHUDItems()
+    {
+
+        while (hudOverlayRemoveQueue.length > 0)
+        {          
+            var name = hudOverlayRemoveQueue[0];
+            hudOverlayRemoveQueue.shift();
+
+
+            console.log(hudOverlayRemoveQueue.length);
+            this.hud.remove(name);
+           console.log(name + " removed from hud");
+ 
+         }
+
+        
+    }
+
+
+    removeFromScene()
+    {
+
+        while (sceneRemoveQueue.length > 0)
+        {          
+            var name = sceneRemoveQueue[0];
+            sceneRemoveQueue.shift();
+
+            var selectedObject = this.scene.getObjectByName(name);
+            this.scene.remove(selectedObject);
+
+         }
+
     }
 
     unpause() {
