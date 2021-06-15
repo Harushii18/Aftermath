@@ -323,7 +323,10 @@ export class MainChar extends THREE.Object3D {
 	//Move the player
 	move(blockedF, blockedB, blockedR, blockedL) {
 
-		this.moveDistance = characterControls.getSpeed();
+		//ensure that he does not move by frame rate
+		var delta=this.clock.getDelta();
+
+		this.moveDistance = characterControls.getSpeed()*delta;
 		//moves character around
 
 		//If front of character is not blocked

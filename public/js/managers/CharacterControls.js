@@ -6,8 +6,8 @@ export class CharacterControls {
 
     constructor() {
         //walking and running speeds
-        this.walk = 0.5; //Was 0.5 - can change back
-        this.run = 0.7; //Was 1 - can change back
+        this.walk = 20; //Was 0.5 - can change back
+        this.run = 25; //Was 1 - can change back
         this.state = 'idle';
 
         //set the char to normal walk speed initially
