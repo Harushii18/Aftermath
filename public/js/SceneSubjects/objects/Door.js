@@ -135,11 +135,11 @@ export class Door extends THREE.Object3D {
     update(time) {
         //just to show the div
 
-
+/*
         if (this.doCheckVicinity) {
-            this.checkVicinity = this.checkCharacterVicinity();
+            //this.checkVicinity = this.checkCharacterVicinity();
         }
-        
+*/
 
         if (this.showLockedSubtitles) {
             this.showSubtitlesLocked(80);
@@ -163,10 +163,11 @@ export class Door extends THREE.Object3D {
             }
         }
 
+
+        var checkVicinity =  this.checkCharacterVicinity();
         if (keyboardManager.wasPressed('E')) {
-                console.log("e pressed by door");
-            if (this.checkVicinity) {
-                console.log("vicinity by door");
+
+            if (checkVicinity) {
                 //if character is in vicinity of door, then they can open door
                 if (this.allowInteraction) {
                         this.playDoorSound = true;
@@ -180,18 +181,8 @@ export class Door extends THREE.Object3D {
                         this.open = true;
                         //checks how long the animation was playing for
                         this.animationCounter = 0;
-
-                        console.log("door allow interaction true. now set to false");
-
-                        /*                        WhatsApp
-                                                                                 
-                        //Suraksha: HIDE KEY IMAGE IN OVERLAY!!! KAMERON!!!         (double blue tick)
-                        //Kameron: THATSSSS MA NAME!!!                              (single tick)
-
-                        */
-
-
                         this.allowInteraction = false;
+                        //HIDE KEY IMAGE IN OVERLAY!!! KAMERON!!!
 
                     }
                     else{
@@ -238,7 +229,6 @@ export class Door extends THREE.Object3D {
         }
         return false;
     }
-
 
     return3DObject() {
         return this.object;
