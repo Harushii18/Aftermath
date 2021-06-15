@@ -134,9 +134,9 @@ export class SceneManager {
 
 
 
-       this.game_state = this.GAME_LOGO;
+       this.game_state = this.GAME_RUN;//default Game_LOGO
        //intro paragraph state
-       this.intro_para = 1;
+       this.intro_para = 4;//1
 
 
         this.width_screen = canvas.width;
@@ -587,6 +587,7 @@ export class SceneManager {
             //  }
 
         } else if (this.game_state == this.GAME_RUN) {
+            this.managers[2].entities["background"].pause();
 
             //door open sounds---------------------------------------------------------------------------
             if (key.checkKeyTaken()) {
@@ -678,8 +679,6 @@ export class SceneManager {
                 }
                 this.unpause();
             });
-        }
-        else if (this.game_state == this.GAME_PAUSE) {
 
             mainMenu.addEventListener('click', () => {
                 //make menu not visible
