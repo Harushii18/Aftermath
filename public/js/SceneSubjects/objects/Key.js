@@ -32,14 +32,8 @@ export class Key extends THREE.Object3D {
 
             });
 
-            this.object.scale.x = 0.4;
-            this.object.scale.y = 0.4;
-            this.object.scale.z = 0.4;
 
-            //set object's position
-            //this.object.position.set(-12, 9, 64);;
-            this.object.position.set(20.15, 7.6, 37 );//Perfect
-
+         //   this.object.position.set(20.15, 7.6, 37 );//Perfect
 
             this.object.add(gltf.scene);
         });
@@ -48,19 +42,6 @@ export class Key extends THREE.Object3D {
 
     update(time) {
 
-        if (bedroomDrawer.isKeyFound()) {
-        //  console.log("Bedroom Drawer is Opened");
-          if (this.open == false) {
-          //  console.log("Key anim not played");
-              if (this.object.position.z > 39) {    //stop moving
-                  this.open = true;
-              }
-              else {
-              //  console.log("Key anim playing");
-                  this.object.position.z += 0.5; //move to the left
-              }
-          }
-        }
 
 
         if (this.open) {
