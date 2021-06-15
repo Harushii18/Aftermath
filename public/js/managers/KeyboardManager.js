@@ -10,6 +10,13 @@ export class KeyboardManager {
             A: false,
             S: false,
             D: false,
+
+            
+            I: false,
+            K: false,
+            J: false,
+            L: false,
+            
             SHIFT: false,
             P: false,
 
@@ -74,6 +81,23 @@ export class KeyboardManager {
             case 68: // d
                 this.keys.D = true;
                 break;
+
+            case 73: 
+                this.keys.I = true;
+                break;
+
+            case 74: 
+                this.keys.J = true;
+                break;
+
+            case 75: 
+                this.keys.K = true;
+                break;
+
+            case 76: 
+                this.keys.L = true;
+                break;
+            
             case 16: // shift
                 this.keys.SHIFT = true;
                 break;
@@ -125,6 +149,8 @@ export class KeyboardManager {
                 }
                 break;
 
+            
+
 
         }
     }
@@ -146,6 +172,24 @@ export class KeyboardManager {
             case 68: // d
                 this.keys.D = false;
                 break;
+
+
+                case 73: 
+                this.keys.I = false;
+                break;
+
+            case 74: 
+                this.keys.J = false;
+                break;
+
+            case 75: 
+                this.keys.K = false;
+                break;
+
+            case 76: 
+                this.keys.L = false;
+                break;
+
             case 16: // shift
                 this.keys.SHIFT = false;
                 break;
@@ -202,6 +246,16 @@ export class KeyboardManager {
                 return (this.keys.S);
             case 'D': // d
                 return (this.keys.D);
+
+            case 'I': // w
+                return (this.keys.I);
+            case 'J': // a
+                return (this.keys.J);
+            case 'K': // s
+                return (this.keys.K);
+            case 'L': // d
+                return (this.keys.L);
+
             case 'SHIFT': // shift
                 return (this.keys.SHIFT);
             case 'E'://e
