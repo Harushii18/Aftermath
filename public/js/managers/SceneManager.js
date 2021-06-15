@@ -489,7 +489,7 @@ export class SceneManager {
                 this.audioActive = true;
 
                 this.managers[2].audioListener.context.resume();
-                // this.managers[2].entities["background"].play();
+                 this.managers[2].entities["background"].play();
             }
 
              //make intro screen visible
@@ -703,9 +703,8 @@ export class SceneManager {
                 }
                 this.unpause();
             });
-        }
-        else if (this.game_state == this.GAME_PAUSE) {
 
+            
             mainMenu.addEventListener('click', () => {
                 //make menu not visible
                 for (let i = 0; i < menu.length; i++) {
@@ -713,6 +712,13 @@ export class SceneManager {
                 }
                 this.game_state = this.GAME_MENU;
             });
+
+            
+
+            this.renderPauseMenu();
+        }
+        else if (this.game_state == this.GAME_PAUSE) {
+
 
             if (keyboardManager.keyDownQueue[0] == 'P')
             {
@@ -727,8 +733,6 @@ export class SceneManager {
 
             }
 
-
-            this.renderPauseMenu();
 
         }
     }
