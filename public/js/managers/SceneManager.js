@@ -409,8 +409,8 @@ export class SceneManager {
         managers[1].register(flashlight);
 
 
-
-        bedroomDrawer.object.position.set(drawX,drawY,drawZ);
+        
+        bedroomDrawer.object.position.set(20.2,7.4,36.7);
         managers[1].register(bedroomDrawer);
         //------------------------------------------------------------------------
 
