@@ -2,8 +2,8 @@ import { characterControls } from '../../managers/CharacterControls.js';
 import * as THREE from '../../../jsm/three.module.js';
 import { FBXLoader } from '../../../jsm/FBXLoader/FBXLoader.js';
 import { subtitleManager } from '../../managers/SubtitleManager.js';
-import{gameInstructions} from '../../Overlay/GameInstructions.js';
-import {loadingManager} from '../../managers/SceneManager.js';
+import { gameInstructions } from '../../Overlay/GameInstructions.js';
+import { loadingManager } from '../../managers/SceneManager.js';
 
 export class MainChar extends THREE.Object3D {
 	constructor(collidableObjects) {
@@ -39,6 +39,9 @@ export class MainChar extends THREE.Object3D {
 			//TODO: MAKE IT SUCH THAT THE SUBTITLES ONLY SHOW WHEN THE GAME IS RENDERED/ LOADED COMPLETELY!!!!!
 			//add subtitles
 			this.addSubtitles();
+
+			//ensure that all movement is not by frame rate
+			this.delta = this.clock.getDelta();
 
 
 			//animation
@@ -308,7 +311,7 @@ export class MainChar extends THREE.Object3D {
 
 
 	rotate() {
-		var rotateAngle = Math.PI / 2 * 0.02;
+		var rotateAngle = Math.PI / 2 * this.delta;
 
 		if (characterControls.rotateRight()) {
 			this.object.rotateOnAxis(new THREE.Vector3(0, 1, 0), -rotateAngle);
@@ -322,12 +325,8 @@ export class MainChar extends THREE.Object3D {
 
 	//Move the player
 	move(blockedF, blockedB, blockedR, blockedL) {
-
-		//ensure that he does not move by frame rate
-		var delta=this.clock.getDelta();
-
-		this.moveDistance = characterControls.getSpeed()*delta;
 		//moves character around
+		this.moveDistance = characterControls.getSpeed() * this.delta;
 
 		//If front of character is not blocked
 		if (!blockedF) {

@@ -28,9 +28,4 @@ export class Time {
         return this.clock.getElapsedTime();
     }
 
-
-
-
-
-
 }
