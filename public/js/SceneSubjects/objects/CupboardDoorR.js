@@ -1,7 +1,7 @@
 import * as THREE from '../../../jsm/three.module.js';
 import { GLTFLoader } from '../../../jsm/GLTFLoader.js';
 import { keyboardManager } from '../../managers/KeyboardManager.js';
-import { loadingManager, mainChar, hammer, pin, lockCupboard } from '../../managers/SceneManager.js';
+import { loadingManager, mainChar, hammer, pin, lockCupboard, hudOverlayRemoveQueue,sceneRemoveQueue } from '../../managers/SceneManager.js';
 import { gameOverlay } from '../../Overlay/GameOverlay.js';
 import { subtitleManager } from '../../managers/SubtitleManager.js';
 
@@ -9,6 +9,8 @@ export class cupboardDoorR extends THREE.Object3D {
 
     constructor() {
         super();
+
+        this.objectInteractionCounter = 0;
         this.object = new THREE.Object3D();
         this.allowInteraction = false;
 
@@ -140,14 +142,16 @@ export class cupboardDoorR extends THREE.Object3D {
       } else if (this.animationCounter == 20) {
         //pause the animation mixer-> stop the cupboard from continuing its animation
         this.cupboardMixer.paused = true;
+  
       }
     }
 
     var checkVicinity = this.checkCharacterVicinity();
-          //on button E press, move painting to  the left
+
           if (keyboardManager.wasPressed('E')) {
               if (checkVicinity) {
                 if(this.allowInteraction){
+                  
                   //Animation goes here
                   //***********
                 //  this.object.rotateOnAxis(new THREE.Vector3(0,1,0), this.object.rotation.y+0.1); // This happens for now
@@ -160,7 +164,14 @@ export class cupboardDoorR extends THREE.Object3D {
                   this.cupboardAnim.loop = THREE.LoopRepeat;
                   //this variable is to ensure that we can stop the animation at a specific time
                   this.animationCounter = 0;
-                  lockCupboard.setPosition(new THREE.Vector3(0,100,0));
+
+                  if (this.objectInteractionCounter != 1)
+                  {
+                  hudOverlayRemoveQueue.push("hammer");
+                  sceneRemoveQueue.push("lockCupboard");
+                  this.objectInteractionCounter += 1;
+                  }
+                  //lockCupboard.setPosition(new THREE.Vector3(0,100,0));
                 }
                 else{
                   this.showLockedSubtitles = true;

@@ -1,7 +1,7 @@
 import * as THREE from '../../../jsm/three.module.js';
 import { GLTFLoader } from '../../../jsm/GLTFLoader.js';
 import { keyboardManager } from '../../managers/KeyboardManager.js';
-import { mainChar, cupBoardDoorR } from '../../managers/SceneManager.js';
+import { mainChar, cupBoardDoorR, hudOverlayAddQueue } from '../../managers/SceneManager.js';
 import { gameOverlay } from '../../Overlay/GameOverlay.js';
 import { subtitleManager } from '../../managers/SubtitleManager.js';
 
@@ -37,16 +37,6 @@ export class Hammer extends THREE.Object3D {
 
             });
 
-            //scale hammer
-            this.object.scale.x = 0.5;
-            this.object.scale.y = 0.5;
-            this.object.scale.z = 0.5;
-
-            //move hammer
-            this.object.position.set(7, 2.4, 80);
-
-            //rotate hammer
-            this.object.rotateOnAxis(new THREE.Vector3(0,1,0),Math.PI/2*0.5);
 
 
 
@@ -103,7 +93,7 @@ export class Hammer extends THREE.Object3D {
             this.showSubtitlesAfterPickUp(80);
         }
 
-        //on button E press, move painting to  the left
+
         if (keyboardManager.wasPressed('E')) {
             if (checkVicinity) {
               //Subtitles when hammer is picked up
@@ -115,6 +105,8 @@ export class Hammer extends THREE.Object3D {
                 this.pickedUp = true;
 
                 //SHOW HAMMER IMAGE IN OVERLAY
+                hudOverlayAddQueue.push("hammer");
+
             }
         }
 }
@@ -177,6 +169,20 @@ export class Hammer extends THREE.Object3D {
           return this.pickedUp;
         }
 
+
+        setForScene()
+        {
+            //scale hammer
+            this.object.scale.x = 0.5;
+            this.object.scale.y = 0.5;
+            this.object.scale.z = 0.5;
+            
+            //move hammer
+            this.object.position.set(7, 2.4, 80);
+            
+            //rotate hammer
+            this.object.rotateOnAxis(new THREE.Vector3(0,1,0),Math.PI/2*0.5);
+        }
 
 
     }

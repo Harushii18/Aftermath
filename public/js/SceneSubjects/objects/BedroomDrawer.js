@@ -2,7 +2,7 @@ import * as THREE from '../../../jsm/three.module.js';
 import { GLTFLoader } from '../../../jsm/GLTFLoader.js';
 import { keyboardManager } from '../../managers/KeyboardManager.js';
 
-import { loadingManager, mainChar } from '../../managers/SceneManager.js';
+import { loadingManager, mainChar, hudOverlayRemoveQueue } from '../../managers/SceneManager.js';
 import { gameOverlay } from '../../Overlay/GameOverlay.js';
 import { subtitleManager } from '../../managers/SubtitleManager.js';
 import { Key } from './Key.js';
@@ -12,6 +12,7 @@ export class BedroomDrawer extends THREE.Object3D {
 
     constructor() {
         super();
+        this.objectInteractionCounter = 0;
         this.object = new THREE.Object3D();
 
         //initialise subtitle contents
@@ -161,13 +162,18 @@ export class BedroomDrawer extends THREE.Object3D {
         if (keyboardManager.wasPressed('E')) {
             if (this.doCheckVicinity) {
                 if (checkVicinity) {
-                    //only allow the drawer to open when hammer was found
+        
                     if (this.allowInteraction) {
                         this.open = true;
                         this.startSubtitles = true;
 
                         //add that he found the key
-                      
+                        if (this.objectInteractionCounter != 1)
+                        {
+                        hudOverlayRemoveQueue.push("pin");
+                        //sceneRemoveQueue.push("key");
+                        this.objectInteractionCounter += 1;
+                        }
 
                      //   hud.add("bedroomDrawer",key.object);
                         //make sure vicinity can no longer be checked: do not show overlay anymore
