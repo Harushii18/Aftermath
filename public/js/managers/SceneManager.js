@@ -502,11 +502,11 @@ export class SceneManager {
                 // this.managers[2].entities["background"].play();
             }
 
-             //make intro screen visible
-             const intro1 = document.getElementById("para1");
-             const intro2 = document.getElementById("para2");
-             const intro3 = document.getElementById("para3");
-             const intro4 = document.getElementById("para4");
+      //make intro screen visible
+              const intro1 = document.getElementById("para1");
+              const intro2 = document.getElementById("para2");
+              const intro3 = document.getElementById("para3");
+              const intro4 = document.getElementById("para4");
 
 
              //id the buttons
@@ -514,34 +514,36 @@ export class SceneManager {
             //  const btnNext2 = document.getElementById("next2");
              const btnContinue = document.getElementById("continue");
 
-             intro1.style.display = 'flex';
+             intro1.style.display = 'none'; //CHANGE TO FLEX
              intro2.style.display = 'none';
              intro3.style.display = 'none';
              intro4.style.display = 'none';
 
 
+//UNCOMMENT=======================
+            //  setTimeout(() => {
+            //     intro1.style.display = 'none';
+            //     intro2.style.display = 'flex';
+            //     intro3.style.display = 'none';
+            //     intro4.style.display = 'none';
+            //  }, 100);
 
-             setTimeout(() => {
-                intro1.style.display = 'none';
-                intro2.style.display = 'flex';
-                intro3.style.display = 'none';
-                intro4.style.display = 'none';
-             }, 7200);
+            //  setTimeout(() => {
+            //     intro1.style.display = 'none';
+            //     intro2.style.display = 'none';
+            //     intro3.style.display = 'flex';
+            //     intro4.style.display = 'none';
+            //  }, 100);
 
-             setTimeout(() => {
-                intro1.style.display = 'none';
-                intro2.style.display = 'none';
-                intro3.style.display = 'flex';
-                intro4.style.display = 'none';
-             }, 20000);
-
-             setTimeout(() => {
-                intro1.style.display = 'none';
-                intro2.style.display = 'none';
-                intro3.style.display = 'none';
-                intro4.style.display = 'flex';
-             }, 40000);
-
+            //  setTimeout(() => {
+            //     intro1.style.display = 'none';
+            //     intro2.style.display = 'none';
+            //     intro3.style.display = 'none';
+            //     intro4.style.display = 'flex';
+            //  }, 100);
+//===========================
+           
+            intro4.style.display = 'flex'; //COMMENT OUT
              btnContinue.addEventListener("click", () => {
 
                 this.intro_para = 4;
