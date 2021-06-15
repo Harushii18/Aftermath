@@ -4,6 +4,14 @@ body {
   width: 100%;
   overflow: hidden;
 }
+@keyframes shine {
+  0% {
+    background-position-x: 500%;
+  }
+  100% {
+    background-position-x: -500%;
+  }
+}
 
 @font-face {
   font-family: dayslater;
@@ -178,11 +186,20 @@ body {
 
 .title > h1 {
   font-family: nightmare;
-  text-shadow: 2px 2px 4px #000000;
   color: #000000;
   font-size: 8rem;
+  font-weight: 700;
+  text-align: center;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  background: linear-gradient(110deg, #000, rgba(65, 62, 62, 0.808), #000);
+  letter-spacing: 5px;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-repeat: no-repeat;
+  background-size: 80%;
+  animation: shine 5s linear infinite;
+  position: relative;
 }
 
 .fog {

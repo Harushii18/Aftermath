@@ -16,23 +16,34 @@ export class Lock extends THREE.Object3D {
     loader.setPath('../../models/3DObjects/');
 
     const gltf = loader.load('lock.glb', (gltf) => {
-
+      //console.log("loaded lock");
       gltf.scene.traverse(c => {
         c.castShadow = true;
       });
 
   //===============================================
       //CHANGE SCALE + POSITION IT TO RIGHT PLACE!!
-      this.object.scale.x = 8;
-      this.object.scale.y = 8;
-      this.object.scale.z = 8;
-      this.object.position.set(110, -0.5, 0);
+      this.object.scale.x = 1;
+      this.object.scale.y = 1;
+      this.object.scale.z = 1;
+      //this.object.position.set(110, -0.5, 0);
+      this.object.position.set(-14.5, 9.3, 81.3);
 //===================================================
       this.object.add(gltf.scene);
     });
 
 
 
+  }
+
+setScale(scale){
+  this.object.scale.x = scale.x;
+  this.object.scale.y = scale.y;
+  this.object.scale.z = scale.z;
+}
+
+  setPosition(position){
+    this.object.position.set(position.x,position.y,position.z);
   }
 
   return3DObject() {

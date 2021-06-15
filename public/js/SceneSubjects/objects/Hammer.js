@@ -31,6 +31,7 @@ export class Hammer extends THREE.Object3D {
                     //if hammer should move up or down
 
         var gltf = loader.load('hammer.glb', (gltf) => {
+          //console.log("loaded hammer");
             gltf.scene.traverse(c => {
                 c.castShadow = true;
 

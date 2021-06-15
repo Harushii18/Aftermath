@@ -28,6 +28,7 @@ export class Door extends THREE.Object3D {
 
         this.clock = new THREE.Clock();
         const loader = new GLTFLoader(loadingManager);
+        this.showUnlockedSubs=false;
 
         this.open = false; //open door animation
 
@@ -89,6 +90,7 @@ export class Door extends THREE.Object3D {
             subtitleManager.countTime();
             if (!subtitleManager.checkTime()) {
                 this.subtitleState.t1 = true;
+                this.showUnlockedSubs=false;
                 //meaning it was shown
             }
         }
@@ -133,22 +135,22 @@ export class Door extends THREE.Object3D {
     update(time) {
         //just to show the div
 
-/*
+
         if (this.doCheckVicinity) {
-            //this.checkVicinity = this.checkCharacterVicinity();
+            this.checkVicinity = this.checkCharacterVicinity();
         }
-*/
+        
 
         if (this.showLockedSubtitles) {
             this.showSubtitlesLocked(80);
+        }else if (this.showUnlockedSubs){
+            this.addSubtitles();
         }
 
         if (this.open == true) {
             //animate
             if (this.idleMixer) {
                 if (this.animationCounter < 80) {
-                    //show that the door is unlocked subtitles
-                    this.addSubtitles();
                     this.idleMixer.update(this.clock.getDelta());
                     this.animationCounter += 1;
                 } else if (this.animationCounter == 80) {
@@ -161,14 +163,15 @@ export class Door extends THREE.Object3D {
             }
         }
 
-
-        var checkVicinity =  this.checkCharacterVicinity();
         if (keyboardManager.wasPressed('E')) {
-
-            if (checkVicinity) {
+                console.log("e pressed by door");
+            if (this.checkVicinity) {
+                console.log("vicinity by door");
                 //if character is in vicinity of door, then they can open door
                 if (this.allowInteraction) {
                         this.playDoorSound = true;
+                         //show that the door is unlocked subtitles
+                   this.showUnlockedSubs=true;
                         //make sure the key prompt doesn't show anymore now that it is open
                         gameOverlay.hideOverlay();
                         //play the door animation
@@ -177,16 +180,26 @@ export class Door extends THREE.Object3D {
                         this.open = true;
                         //checks how long the animation was playing for
                         this.animationCounter = 0;
+
+                        console.log("door allow interaction true. now set to false");
+
+                        /*                        WhatsApp
+                                                                                 
+                        //Suraksha: HIDE KEY IMAGE IN OVERLAY!!! KAMERON!!!         (double blue tick)
+                        //Kameron: THATSSSS MA NAME!!!                              (single tick)
+
+                        */
+
+
                         this.allowInteraction = false;
-                        //HIDE KEY IMAGE IN OVERLAY!!! KAMERON!!!
 
                     }
                     else{
                         this.playDoorSound = false;
 
                         this.showLockedSubtitles = true;
-                        this.subtitleState.t1 = false;
-                        this.subtitleStarted.t1=false;
+                        this.subtitleState.t2 = false;
+                        this.subtitleStarted.t2=false;
 
                     }
                 }
@@ -225,6 +238,7 @@ export class Door extends THREE.Object3D {
         }
         return false;
     }
+
 
     return3DObject() {
         return this.object;
