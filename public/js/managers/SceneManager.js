@@ -27,8 +27,10 @@ import { Door } from '../SceneSubjects/objects/Door.js';
 
 import { BedroomPainting } from '../SceneSubjects/objects/BedroomPainting.js';
 import { BedroomDrawer } from '../SceneSubjects/objects/BedroomDrawer.js';
-import { CupboardDoorR } from '../SceneSubjects/objects/CupboardDoorR.js';
+
 import { Hammer } from '../SceneSubjects/objects/Hammer.js';
+import { Flashlight } from '../SceneSubjects/objects/Flashlight.js';
+import { cupboardDoorR } from '../SceneSubjects/objects/cupboardDoorR.js';
 import { Pin } from '../SceneSubjects/objects/Pin.js';
 import { LetterI } from '../SceneSubjects/objects/LetterI.js';
 import { Key } from '../SceneSubjects/objects/Key.js';
@@ -56,6 +58,9 @@ import { HUD } from '../Overlay/HUD.js';
 //FirstPersonTracker
 var isFirstPersonView = true;
 
+//objects
+var house = new House();
+
 //lights
 var generalLights = new GeneralLights();
 
@@ -78,8 +83,7 @@ var loungeLight = new CeilingLight();
 
 var ambientLight = new AmbientLight();
 
-//objects
-var house = new House();
+
 //var sceneSubject = new SceneSubject();
 //var testBlock = new TestBlock();
 export var testdoor = new Door();
@@ -89,11 +93,20 @@ var bookshelf = new Bookshelf();
 
 //bedroom
 var bedroomPainting = new BedroomPainting();
-var lock = new Lock();
+
+export var lockCupboard = new Lock();
+//var lockDrawer = new Lock();
+
+//lockDrawer.setScale(new THREE.Vector3(10,10,10));
+//lockDrawer.setPosition(new THREE.Vector3(20.15, 7.6, 50));
+
 export var bedroomDrawer = new BedroomDrawer();
-export var cupBoardDoorR = new CupboardDoorR();
+export var cupBoardDoorR = new cupboardDoorR();
 export var hammer = new Hammer();
 export var pin = new Pin();
+
+export var flashlight = new Flashlight();
+
 var letterI = new LetterI();
 var key = new Key();
 
@@ -109,6 +122,7 @@ export var loadingManager;
 const collisionManager = new CollisionsManager();
 //Add collidable objects here
 collisionManager.addObject(house);
+//collisionManager.addObject(cupBoardDoorR);
 //collisionManager.addObject(testBlock);
 collisionManager.addObject(testdoor);
 
@@ -374,12 +388,14 @@ export class SceneManager {
 
         //bedroom
         managers[1].register(bedroomPainting);
-  
-        managers[1].register(cupBoardDoorR);
+
         managers[1].register(hammer);
         managers[1].register(pin);
-        managers[1].register(lock);
+        managers[1].register(lockCupboard);
+        managers[1].register(cupBoardDoorR);
         managers[1].register(letterI);
+
+        managers[1].register(flashlight);
 
 
         bedroomDrawer.object.position.set(20.15, 1.8, 27.5 );
@@ -492,11 +508,11 @@ export class SceneManager {
                  this.managers[2].entities["background"].play();
             }
 
-             //make intro screen visible
-             const intro1 = document.getElementById("para1");
-             const intro2 = document.getElementById("para2");
-             const intro3 = document.getElementById("para3");
-             const intro4 = document.getElementById("para4");
+      //make intro screen visible
+              const intro1 = document.getElementById("para1");
+              const intro2 = document.getElementById("para2");
+              const intro3 = document.getElementById("para3");
+              const intro4 = document.getElementById("para4");
 
 
              //id the buttons
@@ -504,33 +520,36 @@ export class SceneManager {
             //  const btnNext2 = document.getElementById("next2");
              const btnContinue = document.getElementById("continue");
 
-             intro1.style.display = 'flex';
+             intro1.style.display = 'none'; //CHANGE TO FLEX
              intro2.style.display = 'none';
              intro3.style.display = 'none';
              intro4.style.display = 'none';
 
 
-             setTimeout(() => {
-                intro1.style.display = 'none';
-                intro2.style.display = 'flex';
-                intro3.style.display = 'none';
-                intro4.style.display = 'none';
-             }, 6000);
+//UNCOMMENT=======================
+            //  setTimeout(() => {
+            //     intro1.style.display = 'none';
+            //     intro2.style.display = 'flex';
+            //     intro3.style.display = 'none';
+            //     intro4.style.display = 'none';
+            //  }, 100);
 
-             setTimeout(() => {
-                intro1.style.display = 'none';
-                intro2.style.display = 'none';
-                intro3.style.display = 'flex';
-                intro4.style.display = 'none';
-             }, 16000);
+            //  setTimeout(() => {
+            //     intro1.style.display = 'none';
+            //     intro2.style.display = 'none';
+            //     intro3.style.display = 'flex';
+            //     intro4.style.display = 'none';
+            //  }, 100);
 
-             setTimeout(() => {
-                intro1.style.display = 'none';
-                intro2.style.display = 'none';
-                intro3.style.display = 'none';
-                intro4.style.display = 'flex';
-             }, 30000);
-
+            //  setTimeout(() => {
+            //     intro1.style.display = 'none';
+            //     intro2.style.display = 'none';
+            //     intro3.style.display = 'none';
+            //     intro4.style.display = 'flex';
+            //  }, 100);
+//===========================
+           
+            intro4.style.display = 'flex'; //COMMENT OUT
              btnContinue.addEventListener("click", () => {
 
                 this.intro_para = 4;

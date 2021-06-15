@@ -26,6 +26,7 @@ export class Key extends THREE.Object3D {
         this.startInteractions = false;
 
         var gltf = loader.load('key.glb', (gltf) => {
+          //console.log("loaded key");
             gltf.scene.traverse(c => {
                 c.castShadow = true;
 
@@ -93,7 +94,7 @@ export class Key extends THREE.Object3D {
                 gameOverlay.changeText('[E] TAKE KEY');
                 gameOverlay.showOverlay();
 
-                this.count += 1;
+                this.count += 0.1;
 
             }
             return true;

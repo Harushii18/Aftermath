@@ -22,6 +22,7 @@ export class BedroomPainting extends THREE.Object3D {
         this.move = false; //keeps track if the painting has moved
 
         var gltf = loader.load('bedroompainting.glb', (gltf) => {
+          //console.log("loaded painting");
             gltf.scene.traverse(c => {
                 c.castShadow = true;
 

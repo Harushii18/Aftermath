@@ -55,6 +55,7 @@ export class BedroomDrawer extends THREE.Object3D {
 
 
         var gltf = loader.load('bedroomDrawer.glb', (gltf) => {
+          //console.log("loaded drawer");
             gltf.scene.traverse(c => {
                 c.castShadow = true;
 

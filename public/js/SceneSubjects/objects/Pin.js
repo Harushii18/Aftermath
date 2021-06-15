@@ -24,6 +24,7 @@ export class Pin extends THREE.Object3D {
         loader.setPath('../../models/3DObjects/');
 
         var gltf = loader.load('pin.glb', (gltf) => {
+          //console.log("loaded pin");
             gltf.scene.traverse(c => {
                 c.castShadow = true;
 
