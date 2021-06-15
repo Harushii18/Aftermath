@@ -6,16 +6,15 @@ export class HUD extends Overlay {
   constructor(width, height) {
 
     super(width, height);
-    this.numItems = 0;
 
-    this.items = new Set()
+
     this.light  = new THREE.PointLight( 0xff0000, 1, 100 );
     this.light.position.set( 10, 10, 50 );
-    this.light2 = new THREE.DirectionalLight(0xFFFFFF, 3.0);
+   // this.light = new THREE.DirectionalLight(0xFFFFFF, 1.0);
 
-    this.light2.target.position.set(15, 6, -20);
-    //this.light2.castShadow = true;
-    this.light2.position.set(-20, 50, 10);
+  //  this.light.target.position.set(0, 0, -20);
+   // this.light.castShadow = true;
+    //this.light.position.set(-20, 50, 10);
 
     //create crosshair torus----------------------------------------------------
     const geometry = new THREE.TorusGeometry(0.5,0.1,9,15,Math.PI*2);
@@ -30,7 +29,6 @@ export class HUD extends Overlay {
 
 
     this.scene.add(this.light);
-    this.scene.add(this.light2);
 
 
 
@@ -54,35 +52,12 @@ export class HUD extends Overlay {
 
 
 
-  add(name,object)
+  addObject(object)
   {
-    object.object.name = name;
- 
-    object.object.rotateX(Math.PI/4);
-    object.object.rotateY(Math.PI/4);
-    object.object.rotateZ(Math.PI/4);
-    object.object.position.set(20, 9 -(3*this.numItems), -20);
-    this.scene.add(object.object);
-
-    this.numItems += 1;
-    this.items.add(name);
+      this.scene.add(object);
 
   }
 
-  remove(name)
-  {
-    var selectedObject = this.scene.getObjectByName(name);
-    console.log("removing from hud");
-    console.log(selectedObject);
-    this.scene.remove( selectedObject);
-    this.items.delete(name);
-    
-  }
-
-  hasItem(name)
-  {
-    return this.items.has(name);
-  }
 
 
 
