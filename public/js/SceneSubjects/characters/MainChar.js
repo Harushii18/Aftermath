@@ -47,7 +47,7 @@ export class MainChar extends THREE.Object3D {
 			//animation
 			if (this.walkMixer) {
 				this.determineAnimations();
-				this.walkMixer.update(this.clock.getDelta());
+				this.walkMixer.update(this.delta);
 			}
 
 			const pos = this.object.position.clone();
@@ -274,6 +274,9 @@ export class MainChar extends THREE.Object3D {
 				//play the loaded animation
 				this.moveAnim.play();
 			});
+		}
+		if (this.moveAnim){
+			console.log(this.moveAnim);
 		}
 	}
 

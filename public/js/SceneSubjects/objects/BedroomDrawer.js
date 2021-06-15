@@ -147,10 +147,10 @@ export class BedroomDrawer extends THREE.Object3D {
     update(time) {
 
         if (this.startSubtitles) {
-            this.showSubtitlesWithKey(80);
+            this.showSubtitlesWithKey(5);
         }
         if (this.showNoKeySubtitles){
-            this.showSubtitlesWithoutKey(80);
+            this.showSubtitlesWithoutKey(5);
         }
 
         if (this.open == false) {
