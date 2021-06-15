@@ -126,7 +126,7 @@ export class MainChar extends THREE.Object3D {
 			if (!this.subtitleStarted.t1) {
 				//start showing the subtitle
 				subtitleManager.startTime();
-				subtitleManager.setDuration(130);
+				subtitleManager.setDuration(30);
 				subtitleManager.changeSubtitlesText(this.subtitleText.t1);
 				this.subtitleStarted.t1 = true;
 			}
@@ -145,7 +145,7 @@ export class MainChar extends THREE.Object3D {
 				if (!this.subtitleStarted.t2) {
 					//start showing the subtitle
 					subtitleManager.startTime();
-					subtitleManager.setDuration(130);
+					subtitleManager.setDuration(5);
 					subtitleManager.changeSubtitlesText(this.subtitleText.t2);
 					this.subtitleStarted.t2 = true;
 				}
