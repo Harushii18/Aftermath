@@ -4,6 +4,7 @@ class SubtitleManager extends THREE.Object3D {
     constructor() {
         super();
         this.subtitles = document.getElementById('subtitle');
+        this.clock=new THREE.Clock();
 
         this.update = function (time) {
 
@@ -12,24 +13,29 @@ class SubtitleManager extends THREE.Object3D {
         };
 
         this.time;
+        this.show;
         this.subtitleDuration;
     }
 
     startTime(){
         //start the time for the subtitle duration
         this.time=0;
+        this.show=true;
 
     }
 
     countTime(){
-         //increase the time for the subtitle duration
-        this.time=this.time+1;
+        var delta=this.clock.getDelta();
+
+         //increase the time for the subtitle duration-> makes sure it runs on seconds and not frame rates
+        this.time+=(1*delta);
     }
 
     checkTime(){
-        if (this.time==this.subtitleDuration){
+        if (this.time>this.subtitleDuration && this.show==true){
             //hide the subtitles after it has displayed for a certain amount of time
             this.hideSubtitles();
+            this.show=false;
             return false;
         }
         return true;

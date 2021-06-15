@@ -128,10 +128,10 @@ export class cupboardDoorR extends THREE.Object3D {
   update(time) {
 
     if (this.showLockedSubtitles) {
-        this.showSubtitlesLocked(80);
+        this.showSubtitlesLocked(5);
     }
     if (this.showOpenedSubtitles){
-        this.showSubtitlesUnlocked(80);
+        this.showSubtitlesUnlocked(5);
     }
 
     //pause the cupboard animation at the right moment

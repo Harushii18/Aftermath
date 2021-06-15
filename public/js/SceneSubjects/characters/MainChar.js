@@ -2,8 +2,8 @@ import { characterControls } from '../../managers/CharacterControls.js';
 import * as THREE from '../../../jsm/three.module.js';
 import { FBXLoader } from '../../../jsm/FBXLoader/FBXLoader.js';
 import { subtitleManager } from '../../managers/SubtitleManager.js';
-import{gameInstructions} from '../../Overlay/GameInstructions.js';
-import {loadingManager} from '../../managers/SceneManager.js';
+import { gameInstructions } from '../../Overlay/GameInstructions.js';
+import { loadingManager } from '../../managers/SceneManager.js';
 
 export class MainChar extends THREE.Object3D {
 	constructor(collidableObjects) {
@@ -32,6 +32,10 @@ export class MainChar extends THREE.Object3D {
 
 		this.loadModel();
 
+		//make sure animations are pre-loaded
+		this.anim = {};
+		this.loadAllAnimations();
+
 		this.update = function (time) {
 			//add game instructions on side of screen
 			gameInstructions.checkTime();
@@ -40,11 +44,14 @@ export class MainChar extends THREE.Object3D {
 			//add subtitles
 			this.addSubtitles();
 
+			//ensure that all movement is not by frame rate
+			this.delta = this.clock.getDelta();
+
 
 			//animation
 			if (this.walkMixer) {
 				this.determineAnimations();
-				this.walkMixer.update(this.clock.getDelta());
+				this.walkMixer.update(this.delta);
 			}
 
 			const pos = this.object.position.clone();
@@ -97,6 +104,7 @@ export class MainChar extends THREE.Object3D {
 		};
 	}
 
+	//====================SUBTITLES========================================
 	initialiseSubtitleContents() {
 		//Checks if the subtitle had started showing
 		this.subtitleStarted = {
@@ -123,7 +131,7 @@ export class MainChar extends THREE.Object3D {
 			if (!this.subtitleStarted.t1) {
 				//start showing the subtitle
 				subtitleManager.startTime();
-				subtitleManager.setDuration(130);
+				subtitleManager.setDuration(30);
 				subtitleManager.changeSubtitlesText(this.subtitleText.t1);
 				this.subtitleStarted.t1 = true;
 			}
@@ -142,7 +150,7 @@ export class MainChar extends THREE.Object3D {
 				if (!this.subtitleStarted.t2) {
 					//start showing the subtitle
 					subtitleManager.startTime();
-					subtitleManager.setDuration(130);
+					subtitleManager.setDuration(5);
 					subtitleManager.changeSubtitlesText(this.subtitleText.t2);
 					this.subtitleStarted.t2 = true;
 				}
@@ -159,12 +167,7 @@ export class MainChar extends THREE.Object3D {
 	}
 
 
-	//Return the direction that the character  is facing
-	returnObjectDirection() {
-		return this.object.rotation;
-	}
-
-
+	//=============RAYCASTER AND CAMERA==============================================================
 
 
 	//Check intersections of a raycaster with collidable objects
@@ -191,6 +194,13 @@ export class MainChar extends THREE.Object3D {
 		return worldPos;
 	}
 
+	//Return the direction that the character  is facing
+	returnObjectDirection() {
+		return this.object.rotation;
+	}
+
+
+
 	setVisibility(visibility) {
 		this.object.visible = visibility;
 	}
@@ -199,79 +209,127 @@ export class MainChar extends THREE.Object3D {
 		this.object.name = name;
 	}
 
+	//==========================MOVEMENT ANIMATIONS=================================================
+
+	loadAllAnimations() {
+		var runPath = '../models/characters/Animations/Run/';
+		var walkPath = '../models/characters/Animations/Walk/';
+		//idle 
+		this.loadAnim('idle', '../models/characters/Animations/', 'Idle.fbx');
+		//RunBack
+		this.loadAnim('runBack', runPath, 'RunBack.fbx');
+		//RunBackLeft
+		this.loadAnim('runBackLeft', runPath, 'RunBackLeft.fbx');
+		//RunBackRight
+		this.loadAnim('runBackRight', runPath, 'RunBackRight.fbx');
+		//RunForward
+		this.loadAnim('runForward', runPath, 'RunForward.fbx');
+		//RunForwardLeft
+		this.loadAnim('runForwardLeft', runPath, 'RunForwardLeft.fbx');
+		//RunForwardRight
+		this.loadAnim('runForwardRight', runPath, 'RunForwardRight.fbx');
+		//RunLeft
+		this.loadAnim('runLeft', runPath, 'RunLeft.fbx');
+		//RunRight
+		this.loadAnim('runRight', runPath, 'RunRight.fbx');
+		//BackWalk
+		this.loadAnim('walkBack', walkPath, 'BackWalk.fbx');
+		//backWalkL
+		this.loadAnim('walkBackLeft', walkPath, 'backWalkL.fbx');
+		//backWalkR
+		this.loadAnim('walkBackRight', walkPath, 'backWalkR.fbx');
+		//ForwardWalk
+		this.loadAnim('walkForward', walkPath, 'ForwardWalk.fbx');
+		//WalkForwardLeft
+		this.loadAnim('walkForwardLeft', walkPath, 'WalkForwardLeft.fbx');
+		//WalkForwardRight
+		this.loadAnim('walkForwardRight', walkPath, 'WalkForwardRight.fbx');
+		//LeftWalk
+		this.loadAnim('walkLeft', walkPath, 'LeftWalk.fbx');
+		//RightWalk
+		this.loadAnim('walkRight', walkPath, 'RightWalk.fbx');
+	}
+
 	determineAnimations() {
 		if (characterControls.checkMovement() == false) {
 			//if he is not moving, load the idle animation
-			this.loadAnim('idle', '../models/characters/Animations/', 'Idle.fbx');
+			this.playAnim(this.anim['idle'], 'idle');
 		} else if (characterControls.getRun()) {
 			//if he is running, load the running animations
 			//each if statement depends on what direction he's moving in- he can move in 8 possible directions
 			if (characterControls.getMovingState() == 'back') {
-				this.loadAnim('runBack', '../models/characters/Animations/Run/', 'RunBack.fbx');
+				this.playAnim(this.anim['runBack'], 'runBack');
 			} else if (characterControls.getMovingState() == 'backLeft') {
-				this.loadAnim('runBackLeft', '../models/characters/Animations/Run/', 'RunBackLeft.fbx');
+				this.playAnim(this.anim['runBackLeft'], 'runBackLeft');
 			} else if (characterControls.getMovingState() == 'backRight') {
-				this.loadAnim('runBackRight', '../models/characters/Animations/Run/', 'RunBackRight.fbx');
+				this.playAnim(this.anim['runBackRight'], 'runBackRight');
 			} else if (characterControls.getMovingState() == 'forward') {
-				this.loadAnim('runForward', '../models/characters/Animations/Run/', 'RunForward.fbx');
+				this.playAnim(this.anim['runForward'], 'runForward');
 			} else if (characterControls.getMovingState() == 'forwardLeft') {
-				this.loadAnim('runForwardLeft', '../models/characters/Animations/Run/', 'RunForwardLeft.fbx');
+				this.playAnim(this.anim['runForwardLeft'], 'runForwardLeft');
 			} else if (characterControls.getMovingState() == 'forwardRight') {
-				this.loadAnim('runForwardRight', '../models/characters/Animations/Run/', 'RunForwardRight.fbx');
+				this.playAnim(this.anim['runForwardRight'], 'runForwardRight');
 			} else if (characterControls.getMovingState() == 'left') {
-				this.loadAnim('runLeft', '../models/characters/Animations/Run/', 'RunLeft.fbx');
+				this.playAnim(this.anim['runLeft'], 'runLeft');
 			} else if (characterControls.getMovingState() == 'right') {
-				this.loadAnim('runRight', '../models/characters/Animations/Run/', 'RunRight.fbx');
+				this.playAnim(this.anim['runRight'], 'runRight');
 			}
 		} else {
 			//if he is walking, load the walking animations
 			//each if statement depends on what direction he's moving in- he can move in 8 possible directions
 			if (characterControls.getMovingState() == 'back') {
-				this.loadAnim('walkBack', '../models/characters/Animations/Walk/', 'BackWalk.fbx');
+				this.playAnim(this.anim['walkBack'], 'walkBack');
 			} else if (characterControls.getMovingState() == 'backLeft') {
-				this.loadAnim('walkBackLeft', '../models/characters/Animations/Walk/', 'backWalkL.fbx');
+				this.playAnim(this.anim['walkBackLeft'], 'walkBackLeft');
 			} else if (characterControls.getMovingState() == 'backRight') {
-				this.loadAnim('walkBackRight', '../models/characters/Animations/Walk/', 'backWalkR.fbx');
+				this.playAnim(this.anim['walkBackRight'], 'walkBackRight');
 			} else if (characterControls.getMovingState() == 'forward') {
-				this.loadAnim('walkForward', '../models/characters/Animations/Walk/', 'ForwardWalk.fbx');
+				this.playAnim(this.anim['walkForward'], 'walkForward');
 			} else if (characterControls.getMovingState() == 'forwardLeft') {
-				this.loadAnim('walkForwardLeft', '../models/characters/Animations/Walk/', 'WalkForwardLeft.fbx');
+				this.playAnim(this.anim['walkForwardLeft'], 'walkForwardLeft');
 			} else if (characterControls.getMovingState() == 'forwardRight') {
-				this.loadAnim('walkForwardRight', '../models/characters/Animations/Walk/', 'WalkForwardRight.fbx');
+				this.playAnim(this.anim['walkForwardRight'], 'walkForwardRight');
 			} else if (characterControls.getMovingState() == 'left') {
-				this.loadAnim('walkLeft', '../models/characters/Animations/Walk/', 'LeftWalk.fbx');
+				this.playAnim(this.anim['walkLeft'], 'walkLeft');
 			} else if (characterControls.getMovingState() == 'right') {
-				this.loadAnim('walkRight', '../models/characters/Animations/Walk/', 'RightWalk.fbx');
+				this.playAnim(this.anim['walkRight'], 'walkRight');
 			}
 		}
 
 	}
 
-	loadAnim(state, path, file) {
+	playAnim(animation, state) {
 		if (!characterControls.checkAnimState(state)) {
 			//if he is not currently doing this animation, set the animation state to this new animation
 			characterControls.setAnimState(state);
-			//this.walkMixer.stopAllAction();
 
-			//load the animation
-			const anim = new FBXLoader(loadingManager);
-			anim.setPath(path);
-			anim.load(file, (anim) => {
-				//make the walkMixer do this action
-				this.moveAnim = this.walkMixer.clipAction(anim.animations[0]);
-				this.moveAnim.reset();
+			//make the walkMixer do this action
+			animation = this.walkMixer.clipAction(animation.animations[0]);
+			animation.reset();
 
-				//this.idle.setLoop(THREE.LoopOnce, 1);
-				this.moveAnim.clampWhenFinished = true;
+			animation.clampWhenFinished = true;
 
-				//cross fade from the previous animation
-				this.moveAnim.crossFadeFrom(this.currAction, 0.2, true);
-				this.currAction = this.moveAnim;
+			//cross fade from the previous animation
+			animation.crossFadeFrom(this.currAction, 0.2, true);
+			this.currAction = animation;
 
-				//play the loaded animation
-				this.moveAnim.play();
-			});
+			//play the loaded animation
+			animation.play();
 		}
+
+	}
+	loadAnim(state, path, file) {
+		//load the animation
+		const anime = new FBXLoader(loadingManager);
+		anime.setPath(path);
+		anime.load(file, (anime) => {
+
+			this.anim[state] = anime;
+			console.log(this.anim[state]);
+
+		});
+
+
 	}
 
 
@@ -293,9 +351,7 @@ export class MainChar extends THREE.Object3D {
 			const anim = new FBXLoader(loadingManager);
 			anim.setPath('../models/characters/Animations/');
 			anim.load('Idle.fbx', (anim) => {
-
 				this.walkMixer = new THREE.AnimationMixer(fbx);
-
 				//set the initial animation for our main character to be idle (as he is not moving)
 				this.idle = this.walkMixer.clipAction(anim.animations[0]);
 				this.currAction = this.idle;
@@ -307,8 +363,10 @@ export class MainChar extends THREE.Object3D {
 	}
 
 
+	//===================PLAYER MOVEMENTS===============================================
+
 	rotate() {
-		var rotateAngle = Math.PI / 2 * 0.02;
+		var rotateAngle = Math.PI / 2 * this.delta;
 
 		if (characterControls.rotateRight()) {
 			this.object.rotateOnAxis(new THREE.Vector3(0, 1, 0), -rotateAngle);
@@ -322,9 +380,8 @@ export class MainChar extends THREE.Object3D {
 
 	//Move the player
 	move(blockedF, blockedB, blockedR, blockedL) {
-
-		this.moveDistance = characterControls.getSpeed();
 		//moves character around
+		this.moveDistance = characterControls.getSpeed() * this.delta;
 
 		//If front of character is not blocked
 		if (!blockedF) {
@@ -361,5 +418,5 @@ export class MainChar extends THREE.Object3D {
 		this.rotate();
 
 	}
-
+	//============================================================================
 }

@@ -268,18 +268,31 @@ export class SceneManager {
         //create a new scene
         const scene = new THREE.Scene();
 
-        //set the scene's background-> in this case it is our skybox
-        const loader = new THREE.CubeTextureLoader();
-        //it uses different textures per face of cube
-        const texture = loader.load([
-            '../skybox/House/posx.jpg',
-            '../skybox/House/negx.jpg',
-            '../skybox/House/posy.jpg',
-            '../skybox/House/negy.jpg',
-            '../skybox/House/posz.jpg',
-            '../skybox/House/negz.jpg'
-        ]);
-        scene.background = texture;
+        // //set the scene's background-> in this case it is our skybox
+        // const loader = new THREE.CubeTextureLoader();
+        // //it uses different textures per face of cube
+        // const texture = loader.load([
+        //     '../skybox/House/posx.jpg',
+        //     '../skybox/House/negx.jpg',
+        //     '../skybox/House/posy.jpg',
+        //     '../skybox/House/negy.jpg',
+        //     '../skybox/House/posz.jpg',
+        //     '../skybox/House/negz.jpg'
+        // ]);
+        // scene.background = texture;
+
+        //Experimenting with skybox
+        const textureLoader = new THREE.TextureLoader(loadingManager);
+
+			textureLoader.load( './skybox/moonless_golf.jpg', function ( texture ) {
+
+				texture.encoding = THREE.sRGBEncoding;
+				texture.mapping = THREE.EquirectangularReflectionMapping;
+
+				scene.background = texture;
+
+
+			} );
 
         //if we wanted it to be a colour, it would have been this commented code:
         //scene.background = new THREE.Color("#000");
@@ -545,36 +558,36 @@ export class SceneManager {
             //  const btnNext2 = document.getElementById("next2");
              const btnContinue = document.getElementById("continue");
 
-             intro1.style.display = 'none'; //CHANGE TO FLEX
+             intro1.style.display = 'flex'; //CHANGE TO FLEX
              intro2.style.display = 'none';
              intro3.style.display = 'none';
              intro4.style.display = 'none';
 
 
 //UNCOMMENT=======================
-            //  setTimeout(() => {
-            //     intro1.style.display = 'none';
-            //     intro2.style.display = 'flex';
-            //     intro3.style.display = 'none';
-            //     intro4.style.display = 'none';
-            //  }, 100);
+             setTimeout(() => {
+                intro1.style.display = 'none';
+                intro2.style.display = 'flex';
+                intro3.style.display = 'none';
+                intro4.style.display = 'none';
+             }, 100);
 
-            //  setTimeout(() => {
-            //     intro1.style.display = 'none';
-            //     intro2.style.display = 'none';
-            //     intro3.style.display = 'flex';
-            //     intro4.style.display = 'none';
-            //  }, 100);
+             setTimeout(() => {
+                intro1.style.display = 'none';
+                intro2.style.display = 'none';
+                intro3.style.display = 'flex';
+                intro4.style.display = 'none';
+             }, 100);
 
-            //  setTimeout(() => {
-            //     intro1.style.display = 'none';
-            //     intro2.style.display = 'none';
-            //     intro3.style.display = 'none';
-            //     intro4.style.display = 'flex';
-            //  }, 100);
+             setTimeout(() => {
+                intro1.style.display = 'none';
+                intro2.style.display = 'none';
+                intro3.style.display = 'none';
+                intro4.style.display = 'flex';
+             }, 100);
 //===========================
            
-            intro4.style.display = 'flex'; //COMMENT OUT
+          //  intro4.style.display = 'flex'; //COMMENT OUT
              btnContinue.addEventListener("click", () => {
 
                 this.intro_para = 4;

@@ -86,7 +86,7 @@ export class Pin extends THREE.Object3D {
             var checkVicinity = this.checkCharacterVicinity();
 
             if (this.startSubtitles) {
-                this.showSubtitlesAfterPickUp(80);
+                this.showSubtitlesAfterPickUp(5);
             }
 
             //on button E press, move painting to  the left

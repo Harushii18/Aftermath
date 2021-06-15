@@ -83,7 +83,7 @@ export class Door extends THREE.Object3D {
             if (!this.subtitleStarted.t1) {
                 //start showing the subtitle
                 subtitleManager.startTime();
-                subtitleManager.setDuration(60);
+                subtitleManager.setDuration(5);
                 subtitleManager.changeSubtitlesText(this.subtitleText.t1);
                 this.subtitleStarted.t1 = true;
             }
@@ -143,12 +143,13 @@ export class Door extends THREE.Object3D {
         
 
         if (this.showLockedSubtitles) {
-            this.showSubtitlesLocked(80);
+            this.showSubtitlesLocked(5);
         }else if (this.showUnlockedSubs){
             this.addSubtitles();
         }
 
         if (this.open == true) {
+            this.showLockedSubtitles=false;
             //animate
             if (this.idleMixer) {
                 if (this.animationCounter < 80) {
@@ -188,7 +189,8 @@ export class Door extends THREE.Object3D {
                         /*                        WhatsApp
                                                                                  
                         //Suraksha: HIDE KEY IMAGE IN OVERLAY!!! KAMERON!!!         (double blue tick)
-                        //Kameron: THATSSSS MA NAME!!!                              (single tick)
+                        //Kameron: THATSSSS MA NAME!!!                              (double blue tick)
+                        //Suraksha: THANK YOU!!!!!!                                 (single tick)
 
                         */
 
