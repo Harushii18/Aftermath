@@ -58,6 +58,9 @@ export var hudOverlayAddQueue = [];
 export var hudOverlayRemoveQueue = [];
 export var sceneRemoveQueue = [];
 
+
+
+
 //FirstPersonTracker
 var isFirstPersonView = true;
 
@@ -419,7 +422,8 @@ export class SceneManager {
         managers[1].register(flashlight);
 
 
-        bedroomDrawer.object.position.set(20.15, 1.8, 27.5 );
+        
+        bedroomDrawer.object.position.set(20.2,7.4,36.7);
         managers[1].register(bedroomDrawer);
         //------------------------------------------------------------------------
 
@@ -472,6 +476,8 @@ export class SceneManager {
     //this updates the subject/model every frame
     update() {
         //won't call this loop if it's paused-> only for objects that need to be paused (managers that need to be paused)
+
+
 
         if (this.game_state == this.GAME_MENU) { //when the game start
 
@@ -634,6 +640,7 @@ export class SceneManager {
             //  }
 
         } else if (this.game_state == this.GAME_RUN) {
+
             this.managers[2].entities["background"].pause();
 
             //hud elements

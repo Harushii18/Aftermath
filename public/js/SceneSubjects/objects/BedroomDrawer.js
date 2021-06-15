@@ -188,8 +188,9 @@ export class BedroomDrawer extends THREE.Object3D {
             }
         }
 
-        if (this.open == true) {
-            if (this.object.position.z > 29.5) {    //stop moving
+        if (this.open == true) 
+        {
+            if (this.object.position.z > 38.4) {    //stop moving
                 this.open = false;
                 this.keyFound = true;
             }
@@ -219,7 +220,7 @@ export class BedroomDrawer extends THREE.Object3D {
                 //display interaction overlay if it isn't being shown
                 if (this.count == 0) {
                     if (this.open == false) {
-                        gameOverlay.changeText('[E] OPEN DRAWER');
+                        gameOverlay.changeText('[E] UNLOCK DRAWER');
                         gameOverlay.showOverlay();
 
                         this.count += 1;
