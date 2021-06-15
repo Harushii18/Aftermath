@@ -157,9 +157,9 @@ export class SceneManager {
 
 
 
-       this.game_state = this.GAME_LOGO;
+       this.game_state = this.GAME_RUN;//default Game_LOGO
        //intro paragraph state
-       this.intro_para = 1;
+       this.intro_para = 4;//1
 
 
         this.width_screen = canvas.width;
@@ -475,6 +475,8 @@ export class SceneManager {
 
             //id the start button
             const btnStart = document.getElementById("start");
+            const btnSkipIntro = document.getElementById("skipIntro");
+
 
             //start game pressed, remove start screen items
             btnStart.addEventListener("click", () => {
@@ -489,6 +491,14 @@ export class SceneManager {
 
             });
 
+            btnSkipIntro.addEventListener("click", () => {
+                const menu = document.getElementsByClassName("mainMenu");
+                for (let i = 0; i < menu.length; i++) {
+                    menu[i].style.display = 'none';
+                }
+                //change state to game intro
+                this.game_state = this.GAME_RUN;
+            });
 
 
         } else if(this.game_state == this.GAME_LOGO){
@@ -512,14 +522,15 @@ export class SceneManager {
                     logo[i].style.display = 'none';
                 }
                 this.game_state = this.GAME_MENU;
-            }, 12000);
+            }, 3000);//deafault 12000
 
         } else if (this.game_state == this.GAME_INTRO) {
             if (this.audioActive == false) {
                 this.audioActive = true;
 
                 this.managers[2].audioListener.context.resume();
-                 this.managers[2].entities["background"].play();
+                this.managers[2].entities["background"].play();
+
             }
 
       //make intro screen visible
@@ -617,8 +628,7 @@ export class SceneManager {
 
         } else if (this.game_state == this.GAME_RUN) {
 
- 
-
+            this.managers[2].entities["background"].pause();
 
             //hud elements
             this.removeHUDItems();
