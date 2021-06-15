@@ -44,6 +44,7 @@ body {
   animation: logo 5s linear infinite;
   align-items: center;
   justify-content: center;
+  display: none; /* skip intro - remove line*/
 }
 
 @keyframes logo {
@@ -81,7 +82,7 @@ body {
   /*background: url("../../assets/house2.jpg") no-repeat;*/
   /*background-size: cover;*/
   background: none;
-  display: flex;
+  display: none; /* skip intro - remove line*/
   align-items: flex-end;
   justify-content: center;
 }
@@ -107,6 +108,7 @@ body {
   background: url("../../assets/house2.jpg") no-repeat;
   background-size: cover;
   overflow: hidden;
+  display: none; /* skip intro - remove */
 }
 
 .intro {
@@ -173,6 +175,7 @@ body {
   flex-direction: column;
   align-items: center;
   animation: blinker 3s linear infinite;
+  display: none; /* skip intro - remove line */
 }
 
 @keyframes blinker {
@@ -212,6 +215,7 @@ body {
   height: 100%;
   overflow: hidden;
   z-index: 1;
+  display: none; /* skip intro - remove line */
 }
 
 .fog-img {
