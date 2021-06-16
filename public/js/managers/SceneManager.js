@@ -20,7 +20,7 @@ import { CeilingLightObj } from '../SceneSubjects/objects/CeilingLightObj.js';
 
 //OBJECTS
 import { House } from '../SceneSubjects/House.js';
-import {Lock} from '../SceneSubjects/objects/Lock.js'
+import { Lock } from '../SceneSubjects/objects/Lock.js'
 import { SceneSubject } from '../SceneSubjects/objects/SceneSubject.js';
 import { TestBlock } from '../SceneSubjects/characters/TestBlock.js';
 import { Door } from '../SceneSubjects/objects/Door.js';
@@ -54,6 +54,7 @@ import * as THREE from '../../../jsm/three.module.js';
 import { characterControls } from './CharacterControls.js';
 //pre-loader
 import { HUD } from '../Overlay/HUD.js';
+import { Woman } from '../SceneSubjects/characters/woman.js';
 
 //==================================================================================================
 
@@ -84,12 +85,12 @@ var bathroomLightObj = new CeilingLightObj();
 var loungeLightObj = new CeilingLightObj();
 
 var bedroomLight = new CeilingLight();
-var kitchenLight = new CeilingLight();
-var studyLight = new CeilingLight();
-var hallwayLight1 = new CeilingLight();
-var bathroomLight = new CeilingLight();
-var hallwayLight2 = new CeilingLight();
-var loungeLight = new CeilingLight();
+// var kitchenLight = new CeilingLight();
+// var studyLight = new CeilingLight();
+// var hallwayLight1 = new CeilingLight();
+// var bathroomLight = new CeilingLight();
+// var hallwayLight2 = new CeilingLight();
+// var loungeLight = new CeilingLight();
 
 var ambientLight = new AmbientLight();
 
@@ -143,6 +144,8 @@ collisionManager.addObject(testdoor);
 //Pass collidable objects as a parameter to the main character (raycasting implementation)
 export var mainChar = new MainChar(collisionManager.returnObjects());
 
+//woman
+var woman=new Woman();
 
 export class SceneManager {
 
@@ -165,9 +168,9 @@ export class SceneManager {
 
 
 
-       this.game_state = this.GAME_RUN;//default Game_LOGO
-       //intro paragraph state
-       this.intro_para = 4;//1
+        this.game_state = this.GAME_RUN;//default Game_LOGO
+        //intro paragraph state
+        this.intro_para = 4;//1
 
 
         this.width_screen = canvas.width;
@@ -201,8 +204,8 @@ export class SceneManager {
             loadingScreen.style.display = "none";
         }
 
-        loadingManager.onError = function(){
-          console.log("Encountered Loading Error");
+        loadingManager.onError = function () {
+            console.log("Encountered Loading Error");
         }
 
         //Post-processing Effects
@@ -292,15 +295,15 @@ export class SceneManager {
         //Experimenting with skybox
         const textureLoader = new THREE.TextureLoader(loadingManager);
 
-			textureLoader.load( './skybox/moonless_golf.jpg', function ( texture ) {
+        textureLoader.load('./skybox/moonless_golf.jpg', function (texture) {
 
-				texture.encoding = THREE.sRGBEncoding;
-				texture.mapping = THREE.EquirectangularReflectionMapping;
+            texture.encoding = THREE.sRGBEncoding;
+            texture.mapping = THREE.EquirectangularReflectionMapping;
 
-				scene.background = texture;
+            scene.background = texture;
 
 
-			} );
+        });
 
         //if we wanted it to be a colour, it would have been this commented code:
         //scene.background = new THREE.Color("#000");
@@ -344,27 +347,22 @@ export class SceneManager {
 
     setCeilingLightProperties() {
         //set their light positions
+        //I COMMENTED THE LIGHTS OUT TO SEE IF IT IMPROVES PERFORMANCE
         bedroomLightObj.setLightPosition(0, 50);
-        bedroomLight.setLightPosition(0,  50);
-
-
         loungeLightObj.setLightPosition(-45, -60);
-        loungeLight.setLightPosition(-45,  -60);
-
         studyLightObj.setLightPosition(35, -50);
-        studyLight.setLightPosition(35,  -50);
-
-        kitchenLight.setLightPosition(-45,  5);
-        kitchenLightObj.setLightPosition(-45,  5);
-
-        bathroomLight.setLightPosition(45, 15);
+        kitchenLightObj.setLightPosition(-45, 5);
         bathroomLightObj.setLightPosition(45, 15);
-
         hallwayLightObj1.setLightPosition(0, -60);
-        hallwayLight1.setLightPosition(0, 16, -60);
-
         hallwayLightObj2.setLightPosition(0, 0);
-        hallwayLight2.setLightPosition(0, 0);
+
+        bedroomLight.setLightPosition(0, 50);
+        // loungeLight.setLightPosition(-45,  -60);
+        //  studyLight.setLightPosition(35,  -50);
+        //   kitchenLight.setLightPosition(-45,  5);
+        //bathroomLight.setLightPosition(45, 15);
+        // hallwayLight1.setLightPosition(0, 16, -60);
+        //  hallwayLight2.setLightPosition(0, 0);
 
     }
 
@@ -382,14 +380,14 @@ export class SceneManager {
 
         managers[0].register(ambientLight);
         managers[0].register(bedroomLight);
-        managers[0].register(loungeLight);
-        managers[0].register(studyLight);
-        managers[0].register(hallwayLight1);
-        managers[0].register(hallwayLight2);
-        managers[0].register(kitchenLight);
-        managers[0].register(bathroomLight);
+        // managers[0].register(loungeLight);
+        // managers[0].register(studyLight);
+        // managers[0].register(hallwayLight1);
+        // managers[0].register(hallwayLight2);
+        // managers[0].register(kitchenLight);
+        // managers[0].register(bathroomLight);
 
-
+        //------------------------------------------------------------
 
         //entities
 
@@ -407,9 +405,8 @@ export class SceneManager {
         managers[1].register(testdoor);
 
         managers[1].register(mainChar);
-        //managers[1].register(sceneSubject);
-        //managers[1].register(testBlock);
-
+        managers[1].register(woman)
+    
         //study
         managers[1].register(bookshelf);
 
@@ -434,8 +431,8 @@ export class SceneManager {
         managers[1].register(plank);
 
 
-        
-        bedroomDrawer.object.position.set(20.2,7.4,36.7);
+
+        bedroomDrawer.object.position.set(20.2, 7.4, 36.7);
         managers[1].register(bedroomDrawer);
         //------------------------------------------------------------------------
 
@@ -526,7 +523,7 @@ export class SceneManager {
             });
 
 
-        } else if(this.game_state == this.GAME_LOGO){
+        } else if (this.game_state == this.GAME_LOGO) {
             //id the divs
             const menu = document.getElementsByClassName("mainMenu");
             const logo = document.getElementsByClassName("logo");
@@ -558,49 +555,49 @@ export class SceneManager {
 
             }
 
-      //make intro screen visible
-              const intro1 = document.getElementById("para1");
-              const intro2 = document.getElementById("para2");
-              const intro3 = document.getElementById("para3");
-              const intro4 = document.getElementById("para4");
+            //make intro screen visible
+            const intro1 = document.getElementById("para1");
+            const intro2 = document.getElementById("para2");
+            const intro3 = document.getElementById("para3");
+            const intro4 = document.getElementById("para4");
 
 
-             //id the buttons
+            //id the buttons
             //  const btnNext1 = document.getElementById("next1");
             //  const btnNext2 = document.getElementById("next2");
-             const btnContinue = document.getElementById("continue");
+            const btnContinue = document.getElementById("continue");
 
-             intro1.style.display = 'flex'; //CHANGE TO FLEX
-             intro2.style.display = 'none';
-             intro3.style.display = 'none';
-             intro4.style.display = 'none';
+            intro1.style.display = 'flex'; //CHANGE TO FLEX
+            intro2.style.display = 'none';
+            intro3.style.display = 'none';
+            intro4.style.display = 'none';
 
 
-//UNCOMMENT=======================
-             setTimeout(() => {
+            //UNCOMMENT=======================
+            setTimeout(() => {
                 intro1.style.display = 'none';
                 intro2.style.display = 'flex';
                 intro3.style.display = 'none';
                 intro4.style.display = 'none';
-             }, 100);
+            }, 100);
 
-             setTimeout(() => {
+            setTimeout(() => {
                 intro1.style.display = 'none';
                 intro2.style.display = 'none';
                 intro3.style.display = 'flex';
                 intro4.style.display = 'none';
-             }, 100);
+            }, 100);
 
-             setTimeout(() => {
+            setTimeout(() => {
                 intro1.style.display = 'none';
                 intro2.style.display = 'none';
                 intro3.style.display = 'none';
                 intro4.style.display = 'flex';
-             }, 100);
-//===========================
-           
-          //  intro4.style.display = 'flex'; //COMMENT OUT
-             btnContinue.addEventListener("click", () => {
+            }, 100);
+            //===========================
+
+            //  intro4.style.display = 'flex'; //COMMENT OUT
+            btnContinue.addEventListener("click", () => {
 
                 this.intro_para = 4;
                 intro1.style.display = 'none';
@@ -659,25 +656,23 @@ export class SceneManager {
             this.removeHUDItems();
             this.addToHUD();
             this.removeFromScene()
-   
 
 
 
-            if (this.hud.hasItem('key') == false && bedroomDrawer.keyFound && testdoor.open == false)
-            {
+
+            if (this.hud.hasItem('key') == false && bedroomDrawer.keyFound && testdoor.open == false) {
                 console.log("key adde");
                 var selectedObject = bedroomDrawer.object.getObjectByName('key');
                 console.log(selectedObject);
-                bedroomDrawer.object.remove( selectedObject);
+                bedroomDrawer.object.remove(selectedObject);
 
-                
-                this.hud.add("key",new Key());
+
+                this.hud.add("key", new Key());
                 testdoor.setAllowInteraction(true);
 
-                
+
             }
-            else if (this.hud.hasItem('key') && testdoor.open)
-            {
+            else if (this.hud.hasItem('key') && testdoor.open) {
                 console.log("key removed");
                 this.hud.remove('key');
 
@@ -753,12 +748,11 @@ export class SceneManager {
 
             this.renderMainScene();
 
-            if(isFirstPersonView){
-              this.renderCrosshair();
+            if (isFirstPersonView) {
+                this.renderCrosshair();
             }
 
-        } else if (this.game_state == this.GAME_PAUSE)
-        {
+        } else if (this.game_state == this.GAME_PAUSE) {
 
             const menu = document.getElementsByClassName('pauseMenu');
             const unpause = document.getElementById('unpause');
@@ -777,7 +771,7 @@ export class SceneManager {
                 this.unpause();
             });
 
-            
+
             mainMenu.addEventListener('click', () => {
                 //make menu not visible
                 for (let i = 0; i < menu.length; i++) {
@@ -786,15 +780,14 @@ export class SceneManager {
                 this.game_state = this.GAME_MENU;
             });
 
-            
+
 
             this.renderPauseMenu();
         }
         else if (this.game_state == this.GAME_PAUSE) {
 
 
-            if (keyboardManager.keyDownQueue[0] == 'P')
-            {
+            if (keyboardManager.keyDownQueue[0] == 'P') {
 
                 this.unpause();
                 keyboardManager.keyDownQueue.shift();
@@ -843,15 +836,15 @@ export class SceneManager {
 
     }
 
-    renderCrosshair(){
-      this.renderer.autoClear = false;//prevent canvas from being erased with next .render call
-      this.renderer.getContext().disable(this.renderer.getContext().DEPTH_TEST);
+    renderCrosshair() {
+        this.renderer.autoClear = false;//prevent canvas from being erased with next .render call
+        this.renderer.getContext().disable(this.renderer.getContext().DEPTH_TEST);
 
 
-      this.renderer.render(this.hud.scene, this.hud.camera);
+        this.renderer.render(this.hud.scene, this.hud.camera);
 
-      this.renderer.getContext().enable(this.renderer.getContext().DEPTH_TEST);
-      this.renderer.autoClear = true;
+        this.renderer.getContext().enable(this.renderer.getContext().DEPTH_TEST);
+        this.renderer.autoClear = true;
     }
 
     //this resizes our game when screen size changed
@@ -896,58 +889,51 @@ export class SceneManager {
     }
 
 
-    addToHUD()
-    {
-        if (hudOverlayAddQueue.includes("hammer"))
-        {
-           
-           this.hud.add("hammer",new Hammer());
-           console.log("hammer added to hud");
-           hudOverlayAddQueue.shift();
+    addToHUD() {
+        if (hudOverlayAddQueue.includes("hammer")) {
+
+            this.hud.add("hammer", new Hammer());
+            console.log("hammer added to hud");
+            hudOverlayAddQueue.shift();
 
         }
 
-        if (hudOverlayAddQueue.includes("pin"))
-        {
-           
-           this.hud.add("pin",new Pin());
-           console.log("Pin added to hud");
-           hudOverlayAddQueue.shift();
+        if (hudOverlayAddQueue.includes("pin")) {
+
+            this.hud.add("pin", new Pin());
+            console.log("Pin added to hud");
+            hudOverlayAddQueue.shift();
 
         }
     }
 
-    removeHUDItems()
-    {
+    removeHUDItems() {
 
-        while (hudOverlayRemoveQueue.length > 0)
-        {          
+        while (hudOverlayRemoveQueue.length > 0) {
             var name = hudOverlayRemoveQueue[0];
             hudOverlayRemoveQueue.shift();
 
 
             console.log(hudOverlayRemoveQueue.length);
             this.hud.remove(name);
-           console.log(name + " removed from hud");
- 
-         }
+            console.log(name + " removed from hud");
 
-        
+        }
+
+
     }
 
 
-    removeFromScene()
-    {
+    removeFromScene() {
 
-        while (sceneRemoveQueue.length > 0)
-        {          
+        while (sceneRemoveQueue.length > 0) {
             var name = sceneRemoveQueue[0];
             sceneRemoveQueue.shift();
 
             var selectedObject = this.scene.getObjectByName(name);
             this.scene.remove(selectedObject);
 
-         }
+        }
 
     }
 
