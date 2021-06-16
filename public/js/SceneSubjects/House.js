@@ -17,7 +17,7 @@ export class House extends THREE.Object3D {
 
     //while(this.loadCount==0){
   //    console.log("in house loop");
-        const gltf = loader.load('newhouse.glb', (gltf) => {
+        const gltf = loader.load('NEWHOUSE.glb', (gltf) => {
           this.loadCount = 1;
           console.log("load house");
           gltf.scene.traverse(c => {

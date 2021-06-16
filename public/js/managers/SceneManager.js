@@ -34,6 +34,10 @@ import { cupboardDoorR } from '../SceneSubjects/objects/cupboardDoorR.js';
 import { Pin } from '../SceneSubjects/objects/Pin.js';
 import { LetterI } from '../SceneSubjects/objects/LetterI.js';
 import { Key } from '../SceneSubjects/objects/Key.js';
+import { Crowbar } from '../SceneSubjects/objects/Crowbar.js';
+import { LightSwitch } from '../SceneSubjects/objects/Switch.js';
+import { Plank } from '../SceneSubjects/objects/Plank.js';
+
 
 
 //Characters
@@ -112,6 +116,10 @@ export var hammer = new Hammer();
 export var pin = new Pin();
 
 export var flashlight = new Flashlight();
+
+export var crowbar= new Crowbar();
+export var lightswitch =  new LightSwitch();
+export var plank = new Plank();
 
 var letterI = new LetterI();
 var key = new Key();
@@ -420,6 +428,10 @@ export class SceneManager {
         managers[1].register(letterI);
 
         managers[1].register(flashlight);
+
+        managers[1].register(crowbar);
+        managers[1].register(lightswitch);
+        managers[1].register(plank);
 
 
         
