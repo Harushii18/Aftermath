@@ -4,6 +4,7 @@ export class CeilingLight extends THREE.Object3D {
     constructor() {
         super();
         this.object = new THREE.PointLight(0x7E0B0A, 1, 100);
+        this.object.distance=500;
         this.object.castShadow = true;
 
         this.object.shadow.mapSize.width = 1024;
