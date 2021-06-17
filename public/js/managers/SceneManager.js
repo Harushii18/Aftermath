@@ -464,6 +464,7 @@ export class SceneManager {
         managers[1].register(woman)
 
         //study
+        bookshelf.setForScene();
         managers[1].register(bookshelf);
 
         //bedroom
@@ -483,10 +484,19 @@ export class SceneManager {
 
         managers[1].register(flashlight);
 
+        crowbar.setForScene();
         managers[1].register(crowbar);
+
+        lightswitch.setForScene();
         managers[1].register(lightswitch);
+
+        tv.setForScene();
         managers[1].register(tv);
+
+        shower.setForScene();
         managers[1].register(shower);
+
+        microwave.setForScene();
         managers[1].register(microwave);
 
         boards2.object.position.set(-4.5, 15, -77.5);

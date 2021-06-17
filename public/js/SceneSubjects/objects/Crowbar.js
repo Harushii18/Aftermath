@@ -51,12 +51,9 @@ export class Crowbar extends THREE.Object3D {
 
             var obj_gltf = new THREE.Object3D();
 
-            // obj_gltf.scale.x = 8;
-            // obj_gltf.scale.y = 8;
-            // obj_gltf.scale.z = 8;
+           
 
-
-            obj_gltf.position.set(20,4, -2);
+            
 
 
             obj_gltf.add(gltf.scene);
@@ -92,5 +89,10 @@ export class Crowbar extends THREE.Object3D {
     update(time) {
 
 
+    }
+
+    setForScene()
+    {
+        this.object.position.set(20,4, -2);
     }
 }
