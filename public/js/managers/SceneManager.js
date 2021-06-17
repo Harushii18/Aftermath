@@ -310,7 +310,7 @@ export class SceneManager {
         }
 
         //create the cube and add the textures to each face
-        var skyGeometry = new THREE.BoxGeometry(200, 200, 200);
+        var skyGeometry = new THREE.BoxGeometry(300, 300, 300);
         var skybox = new THREE.Mesh(skyGeometry, materialArray);
         this.scene.add(skybox);
 
@@ -323,7 +323,7 @@ export class SceneManager {
          var delta=this.clock.getDelta();
          //skybox rotation speed
          var speed=0.02;
-         this.skybox.rotation.x += (speed*delta);
+         this.skybox.rotation.y += (speed*delta);
          this.skybox.rotation.z += (speed*delta);
     }
     //========================================================
