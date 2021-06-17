@@ -53,6 +53,7 @@ export class House extends THREE.Object3D {
       if (loaded && loadedHouse) {
         //hide loading screen because all objects have loaded
         const loadingScreen = document.getElementById('loading-screen');
+        loadingScreen.classList.add('fade-out');
         loadingScreen.style.display = "none";
         this.hideOnce = true;
       }

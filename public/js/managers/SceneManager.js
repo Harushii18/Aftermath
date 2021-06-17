@@ -80,7 +80,7 @@ var house = new House();
 
 //lights
 var generalLights = new GeneralLights();
-var sun  = new THREE.PointLight( 0xffffff, 3 );
+var sun = new THREE.PointLight(0xffffff, 3);
 
 
 //ceiling lights
@@ -211,24 +211,13 @@ export class SceneManager {
         //initial display of starting subtitles-> only want it to load when everything has loaded
         loaded = false;
 
-
         //loading manager
         loadingManager = new THREE.LoadingManager();
         loadingManager.onProgress = function (item, loaded, total) {
-            //  console.log(item, loaded, total);
-            const loadingScreen = document.getElementById('loading-screen');
-            loadingScreen.classList.add('fade-out');
-
-            // optional: remove loader from DOM via event listener
-            loadingScreen.addEventListener('transitionend', this.onTransitionEnd);
-            if (!this.initialDisplay) {
-                this.initialDisplay = true;
-            }
-
+             //do nothing
         };
 
         loadingManager.onLoad = function () {
-            //console.log('loaded all resources');
             if (!loaded) {
                 console.log('All objects loaded')
                 loaded = true;
@@ -447,14 +436,14 @@ export class SceneManager {
         managers[1].register(bedroomLightObj);
         managers[1].register(hallwayLightObj1);
         managers[1].register(hallwayLightObj2);
-       
+
 
         managers[1].register(house);
 
         testdoor.setPosition(0, -0.5, 33);
         managers[1].register(testdoor);
 
-        studydoor.object.rotateY(Math.PI /2);
+        studydoor.object.rotateY(Math.PI / 2);
         studydoor.setPosition(7.9, -0.5, -35.3);
         managers[1].register(studydoor);
 
@@ -484,31 +473,31 @@ export class SceneManager {
         managers[1].register(crowbar);
         managers[1].register(lightswitch);
 
-        boards2.object.position.set(-4.5,15,-77.5);
+        boards2.object.position.set(-4.5, 15, -77.5);
         managers[1].register(boards2);
 
-        boards.object.position.set(-4.5,15,-77.5);
+        boards.object.position.set(-4.5, 15, -77.5);
         managers[1].register(boards);
 
 
 
-        
-       /* managers[1].register(plank);
-        plank.setPosition(-4.5, 15, -77.5);
-        plank.setRotation(Math.PI / 2)
 
-        managers[1].register(plank1);
-        plank1.setPosition(-4.5, 20, -77.5);
-        plank1.setRotation(Math.PI / 2);
-
-        managers[1].register(plank2);
-        plank2.setPosition(-4.5, 10, -77.5);
-        plank2.setRotation(Math.PI / 2);*/
+        /* managers[1].register(plank);
+         plank.setPosition(-4.5, 15, -77.5);
+         plank.setRotation(Math.PI / 2)
+ 
+         managers[1].register(plank1);
+         plank1.setPosition(-4.5, 20, -77.5);
+         plank1.setRotation(Math.PI / 2);
+ 
+         managers[1].register(plank2);
+         plank2.setPosition(-4.5, 10, -77.5);
+         plank2.setRotation(Math.PI / 2);*/
 
 
 
         bedroomDrawer.object.position.set(20.2, 7.4, 36.7);
-        
+
         managers[1].register(bedroomDrawer);
         //------------------------------------------------------------------------
 
@@ -747,47 +736,40 @@ export class SceneManager {
             var y = studydoor.object.position.y;
             var z = studydoor.object.position.z
             var changedPos = false;
-            if (keyboardManager.wasPressed("I"))
-            {
+            if (keyboardManager.wasPressed("I")) {
                 y += 0.05;
                 changedPos = true;
 
             }
-            if (keyboardManager.wasPressed("J"))
-            {
+            if (keyboardManager.wasPressed("J")) {
                 x -= 0.05;
                 changedPos = true;
 
             }
-            if (keyboardManager.wasPressed("K"))
-            {
+            if (keyboardManager.wasPressed("K")) {
                 y -= 0.05;
                 changedPos = true;
 
             }
-            if (keyboardManager.wasPressed("L"))
-            {
+            if (keyboardManager.wasPressed("L")) {
                 x += 0.05;
                 changedPos = true;
 
             }
 
-            if (keyboardManager.wasPressed("UP"))
-            {
+            if (keyboardManager.wasPressed("UP")) {
                 z += 0.05;
                 changedPos = true;
 
             }
-            if (keyboardManager.wasPressed("DOWN"))
-            {
+            if (keyboardManager.wasPressed("DOWN")) {
                 z -= 0.05;
                 changedPos = true;
 
             }
-            if (changedPos == true)
-            {
-            studydoor.object.position.set(x,y,z);
-            console.log("( " +x.toString() +" , " +y.toString() +" , " +z.toString() + " )");
+            if (changedPos == true) {
+                studydoor.object.position.set(x, y, z);
+                console.log("( " + x.toString() + " , " + y.toString() + " , " + z.toString() + " )");
 
             }
 
@@ -1017,38 +999,24 @@ export class SceneManager {
     }
 
 
-<<<<<<< HEAD
+
     addToHUD() {
+
         if (hudOverlayAddQueue.includes("hammer")) {
-=======
-    addToHUD()
-    {
-
-        if (hudOverlayAddQueue.includes("hammer"))
-        {
-           var hammer_obj = new Hammer();
+            var hammer_obj = new Hammer();
             hammer_obj.setForHUD();
-           this.hud.add("hammer",hammer_obj);
->>>>>>> 1a303ea2a8c57ef919a183e7b581506e6ab10876
-
-            this.hud.add("hammer", new Hammer());
+            this.hud.add("hammer", hammer_obj);
 
             hudOverlayAddQueue.shift();
 
         }
 
-<<<<<<< HEAD
-        if (hudOverlayAddQueue.includes("pin")) {
 
-            this.hud.add("pin", new Pin());
+        if (hudOverlayAddQueue.includes("pin")) {
+            console.log("adding pin");
+            this.hud.add("pin", hudPin);
             hudOverlayAddQueue.shift();
-=======
-        if (hudOverlayAddQueue.includes("pin"))
-        {
-           console.log("adding pin");
-           this.hud.add("pin",hudPin);
-           hudOverlayAddQueue.shift();
->>>>>>> 1a303ea2a8c57ef919a183e7b581506e6ab10876
+
 
         }
     }
@@ -1088,8 +1056,7 @@ export class SceneManager {
         this.pointerLockControls.unlock(); // start orbit controls to respond to input
     }
 
-    setAudio()
-    {
+    setAudio() {
         while (audioPlayQueue.length > 0) {
             var name = audioPlayQueue[0];
             audioPlayQueue.shift();
