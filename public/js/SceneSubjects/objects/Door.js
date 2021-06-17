@@ -86,9 +86,7 @@ export class Door extends THREE.Object3D {
                 subtitleManager.setDuration(5);
                 subtitleManager.changeSubtitlesText(this.subtitleText.t1);
                 this.subtitleStarted.t1 = true;
-                //display stage complete div
-                const stageComplete = document.getElementById('stageComplete');
-                stageComplete.style.display = 'block';
+
             }
 
             subtitleManager.countTime();
@@ -144,40 +142,44 @@ export class Door extends THREE.Object3D {
             this.checkVicinity = this.checkCharacterVicinity();
         }
 
-
-        if (this.showLockedSubtitles) {
-            this.showSubtitlesLocked(5);
-        } else if (this.showUnlockedSubs) {
-            this.addSubtitles();
-        }
-
+        /*
+                if (this.showLockedSubtitles) {
+                    this.showSubtitlesLocked(5);
+                } else if (this.showUnlockedSubs) {
+                    this.addSubtitles();
+                }
+        */
         if (this.open == true) {
-            this.showLockedSubtitles = false;
+            //  this.showLockedSubtitles = false;
 
             //animate
             if (this.idleMixer) {
                 if (this.animationCounter < 2) {
                     this.idleMixer.update(this.delta);
                     this.animationCounter += (1 * this.delta);
+                    //display stage complete div
+                    const stageComplete = document.getElementById('stageComplete');
+                    stageComplete.style.display = 'block';
                 } else if (this.animationCounter > 2) {
                     //pause the animation mixer-> stop the door from continuing its animation
                     this.idleMixer.paused = true;
+                    
 
                 }
             }
         }
 
         if (keyboardManager.wasPressed('E')) {
-               // console.log("e pressed by door");
+            // console.log("e pressed by door");
 
             if (this.checkVicinity) {
-               // console.log("vicinity by door");
+                // console.log("vicinity by door");
                 //if character is in vicinity of door, then they can open door
                 if (this.allowInteraction) {
                     this.playDoorSound = true;
                     //show that the door is unlocked subtitles
-                    this.showUnlockedSubs = true;
-                    this.showLockedSubtitles = false;
+                    //   this.showUnlockedSubs = true;
+                    // this.showLockedSubtitles = false;
                     //make sure the key prompt doesn't show anymore now that it is open
                     gameOverlay.hideOverlay();
                     //play the door animation
@@ -187,7 +189,7 @@ export class Door extends THREE.Object3D {
                     //checks how long the animation was playing for
                     this.animationCounter = 0;
 
-                        //console.log("door allow interaction true. now set to false");
+                    //console.log("door allow interaction true. now set to false");
 
                     /*                        WhatsApp
                                                                              
@@ -206,9 +208,9 @@ export class Door extends THREE.Object3D {
                     if (this.objectInteractionCounter == 0) {
                         this.playDoorSound = false;
 
-                        this.showLockedSubtitles = true;
-                        this.subtitleState.t2 = false;
-                        this.subtitleStarted.t2 = false;
+                        //   this.showLockedSubtitles = true;
+                        // this.subtitleState.t2 = false;
+                        //this.subtitleStarted.t2 = false;
                     }
 
                 }

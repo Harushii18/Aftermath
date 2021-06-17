@@ -315,7 +315,7 @@ export class SceneManager {
         var materialArray = [];
         for (var i = 0; i < 6; i++) {
             materialArray.push(new THREE.MeshBasicMaterial({
-                map: THREE.ImageUtils.loadTexture(urls[i]),
+                map: new THREE.TextureLoader(loadingManager).load(urls[i]),
                 //ensure the texture is on the inside of the cube
                 side: THREE.BackSide
             }));

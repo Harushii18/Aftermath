@@ -9,7 +9,7 @@ export class Woman extends THREE.Object3D {
 
         //woman object
         this.object = new THREE.Object3D();
-        this.object.position.set(0, 0, -15);
+        this.object.position.set(0, 0, -30);
         this.womanVisible = false;
         this.object.visible = false;
         this.startSubs = false;
@@ -44,7 +44,6 @@ export class Woman extends THREE.Object3D {
                 //ensure that all movement is not by frame rate
                 this.delta = this.clock.getDelta();
 
-
                 //animation
                 if (this.walkMixer) {
                     this.walkMixer.update(this.delta);
@@ -56,13 +55,14 @@ export class Woman extends THREE.Object3D {
                     if (this.checkCharacterVicinity()) {
                         this.startSubs = true;
                         this.playAnim(this.anim['injuredWalk'], 'injuredWalk');
+                        if (this.object.position.z<mainChar.getWorldPosition().z){
+                            this.object.position.z+=(this.delta*5)
+                        }
 
                         
                     }
                     if (this.startSubs) {
-                        if (this.object.position.z<mainChar.getWorldPosition().z){
-                            this.object.position.z+=(this.delta*5)
-                        }
+                        
                         if (this.subtitleState.t2 == false) {
                             this.subtitle1();
 
@@ -225,7 +225,7 @@ export class Woman extends THREE.Object3D {
     //checks if Character is in vicinity
     checkCharacterVicinity() {
 
-        var vicinityLimitZ = 50;
+        var vicinityLimitZ = 60;
         var vicinityLimitX = 5;
 
         //check how close the character is to the woman-> death limit
@@ -266,7 +266,7 @@ export class Woman extends THREE.Object3D {
             if (!this.subtitleStarted.t1) {
                 //start showing the subtitle
                 subtitleManager.startTime();
-                subtitleManager.setDuration(2);
+                subtitleManager.setDuration(5);
                 subtitleManager.changeSubtitlesText(this.subtitleText.t1);
                 this.subtitleStarted.t1 = true;
             }

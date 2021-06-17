@@ -1,12 +1,14 @@
 import { GLTFLoader } from '../../jsm/GLTFLoader.js';
 import * as THREE from '../../../jsm/three.module.js';
 import { loaded, loadingManager } from '../managers/SceneManager.js';
+
 //variable to check if house loaded
 export var loadedHouse;
+
 export class House extends THREE.Object3D {
   constructor() {
-
     super();
+    
     this.object = new THREE.Object3D();
     //this.object.castShadow = false;
     this.object.receiveShadow = true;
@@ -19,7 +21,6 @@ export class House extends THREE.Object3D {
     const loader = new GLTFLoader(loadingManager);
     loader.setPath('../models/');
     const gltf = loader.load('NEWHOUSE.glb', (gltf) => {
-      this.loadCount = 1;
       console.log("load house");
       gltf.scene.traverse(c => {
         c.castShadow = true;
@@ -35,13 +36,11 @@ export class House extends THREE.Object3D {
       this.object.scale.z = 8;
       this.object.position.set(110, -0.5, 0);
 
+      //add to scene
       this.object.add(gltf.scene);
 
       console.log('House loaded');
     });
-    //}
-
-
   }
 
   return3DObject() {
@@ -58,6 +57,5 @@ export class House extends THREE.Object3D {
         this.hideOnce = true;
       }
     }
-    //do nothing
   }
 }
