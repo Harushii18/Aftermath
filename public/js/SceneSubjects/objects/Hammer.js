@@ -90,7 +90,7 @@ export class Hammer extends THREE.Object3D {
         var checkVicinity = this.checkCharacterVicinity();
 
         if (this.startSubtitles) {
-            this.showSubtitlesAfterPickUp(5);
+            this.showSubtitlesAfterPickUp(7);
         }
 
 

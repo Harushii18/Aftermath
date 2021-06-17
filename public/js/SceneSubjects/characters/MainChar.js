@@ -13,7 +13,7 @@ export class MainChar extends THREE.Object3D {
 		this.object = new THREE.Object3D();
 		this.clock = new THREE.Clock();
 		this.object.rotateOnAxis(new THREE.Vector3(0, 1, 0), -Math.PI);
-		this.object.position.set(0, 1, 50);
+		this.object.position.set(0, 1, -50); 
 		this.object.visible = false; //Uncomment this so you don't see the player in first person view
 		this.initialiseSubtitleContents();
 
@@ -324,15 +324,10 @@ export class MainChar extends THREE.Object3D {
 		anime.setPath(path);
 		anime.load(file, (anime) => {
 
+			//store animation in dictionary for access later
 			this.anim[state] = anime;
-			//console.log(this.anim[state]);
-
 		});
-
-
 	}
-
-
 
 	loadModel() {
 		//load the main character model with an FBX Loader

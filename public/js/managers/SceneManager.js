@@ -20,7 +20,7 @@ import { CeilingLightObj } from '../SceneSubjects/objects/CeilingLightObj.js';
 
 //OBJECTS
 import { House } from '../SceneSubjects/House.js';
-import {Lock} from '../SceneSubjects/objects/Lock.js'
+import { Lock } from '../SceneSubjects/objects/Lock.js'
 import { SceneSubject } from '../SceneSubjects/objects/SceneSubject.js';
 import { TestBlock } from '../SceneSubjects/characters/TestBlock.js';
 import { Door } from '../SceneSubjects/objects/Door.js';
@@ -54,6 +54,7 @@ import * as THREE from '../../../jsm/three.module.js';
 import { characterControls } from './CharacterControls.js';
 //pre-loader
 import { HUD } from '../Overlay/HUD.js';
+import { Woman } from '../SceneSubjects/characters/woman.js';
 
 //==================================================================================================
 
@@ -84,12 +85,12 @@ var bathroomLightObj = new CeilingLightObj();
 var loungeLightObj = new CeilingLightObj();
 
 var bedroomLight = new CeilingLight();
-var kitchenLight = new CeilingLight();
-var studyLight = new CeilingLight();
-var hallwayLight1 = new CeilingLight();
-var bathroomLight = new CeilingLight();
-var hallwayLight2 = new CeilingLight();
-var loungeLight = new CeilingLight();
+// var kitchenLight = new CeilingLight();
+// var studyLight = new CeilingLight();
+// var hallwayLight1 = new CeilingLight();
+// var bathroomLight = new CeilingLight();
+// var hallwayLight2 = new CeilingLight();
+// var loungeLight = new CeilingLight();
 
 var ambientLight = new AmbientLight();
 
@@ -117,9 +118,11 @@ export var pin = new Pin();
 
 export var flashlight = new Flashlight();
 
-export var crowbar= new Crowbar();
-export var lightswitch =  new LightSwitch();
+export var crowbar = new Crowbar();
+export var lightswitch = new LightSwitch();
 export var plank = new Plank();
+export var plank1 = new Plank();
+export var plank2 = new Plank();
 
 var letterI = new LetterI();
 var key = new Key();
@@ -143,10 +146,14 @@ collisionManager.addObject(testdoor);
 //Pass collidable objects as a parameter to the main character (raycasting implementation)
 export var mainChar = new MainChar(collisionManager.returnObjects());
 
+//woman
+var woman = new Woman();
 
 export class SceneManager {
 
     constructor(canvas) {
+        //for animations
+        this.clock=new THREE.Clock();
         //this entire function renders a scene where you can add as many items as you want to it (e.g. we can create the house and add as
         //many items as we want to the house). It renders objects from other javascript files
         //------------------------------------------------------------------------------------------------------------------------------------------
@@ -165,9 +172,9 @@ export class SceneManager {
 
 
 
-       this.game_state = this.GAME_RUN;//default Game_LOGO
-       //intro paragraph state
-       this.intro_para = 4;//1
+        this.game_state = this.GAME_RUN;//default Game_LOGO
+        //intro paragraph state
+        this.intro_para = 4;//1
 
 
         this.width_screen = canvas.width;
@@ -180,6 +187,10 @@ export class SceneManager {
 
         //the essentials for rendering a scene
         this.scene = this.buildScene();
+
+        //create our skybox
+        this.skybox=this.addSkybox();
+
         this.renderer = this.buildRender(this.screenDimensions);
         this.camera = this.buildCamera(this.screenDimensions);
 
@@ -201,8 +212,8 @@ export class SceneManager {
             loadingScreen.style.display = "none";
         }
 
-        loadingManager.onError = function(){
-          console.log("Encountered Loading Error");
+        loadingManager.onError = function () {
+            console.log("Encountered Loading Error");
         }
 
         //Post-processing Effects
@@ -271,39 +282,57 @@ export class SceneManager {
 
         }
     }
+
+
+    //==================SKYBOX============================
+
+    addSkybox(){
+        //get pictures per cube face
+        var skybox_path = '../skybox/Space/';
+        var urls = [
+            skybox_path + 'space_right.png',//posx
+            skybox_path + 'space_left.png',//negx
+            skybox_path + 'space_up.png',//posy
+            skybox_path + 'space_down.png',//negy
+            skybox_path + 'space_front.png',//posz
+            skybox_path + 'space_back.png'//negz
+        ];
+
+
+        //add each image as a texture on skybox
+        var materialArray = [];
+        for (var i = 0; i < 6; i++){
+            materialArray.push(new THREE.MeshBasicMaterial({
+                map: THREE.ImageUtils.loadTexture(urls[i]),
+                //ensure the texture is on the inside of the cube
+                side: THREE.BackSide
+            }));
+        }
+
+        //create the cube and add the textures to each face
+        var skyGeometry = new THREE.BoxGeometry(200, 200, 200);
+        var skybox = new THREE.Mesh(skyGeometry, materialArray);
+        this.scene.add(skybox);
+
+        return skybox;
+    }
+
+
+    rotateSkybox(){
+         //rotate skybox on game time
+         var delta=this.clock.getDelta();
+         //skybox rotation speed
+         var speed=0.02;
+         this.skybox.rotation.x += (speed*delta);
+         this.skybox.rotation.z += (speed*delta);
+    }
+    //========================================================
+
     //this function creates our scene
     buildScene() {
         //create a new scene
         const scene = new THREE.Scene();
 
-        // //set the scene's background-> in this case it is our skybox
-        // const loader = new THREE.CubeTextureLoader();
-        // //it uses different textures per face of cube
-        // const texture = loader.load([
-        //     '../skybox/House/posx.jpg',
-        //     '../skybox/House/negx.jpg',
-        //     '../skybox/House/posy.jpg',
-        //     '../skybox/House/negy.jpg',
-        //     '../skybox/House/posz.jpg',
-        //     '../skybox/House/negz.jpg'
-        // ]);
-        // scene.background = texture;
-
-        //Experimenting with skybox
-        const textureLoader = new THREE.TextureLoader(loadingManager);
-
-			textureLoader.load( './skybox/moonless_golf.jpg', function ( texture ) {
-
-				texture.encoding = THREE.sRGBEncoding;
-				texture.mapping = THREE.EquirectangularReflectionMapping;
-
-				scene.background = texture;
-
-
-			} );
-
-        //if we wanted it to be a colour, it would have been this commented code:
-        //scene.background = new THREE.Color("#000");
         return scene;
     }
 
@@ -319,7 +348,7 @@ export class SceneManager {
         //renderer.shadowMap.type = THREE.PCFSoftShadowMap;
         renderer.shadowMapSoft = true;
         renderer.setPixelRatio(window.devicePixelRatio);
-        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setSize(window.innerWidth/2, window.innerHeight/2,false);
 
         return renderer;
     }
@@ -344,27 +373,22 @@ export class SceneManager {
 
     setCeilingLightProperties() {
         //set their light positions
+        //I COMMENTED THE LIGHTS OUT TO SEE IF IT IMPROVES PERFORMANCE
         bedroomLightObj.setLightPosition(0, 50);
-        bedroomLight.setLightPosition(0,  50);
-
-
         loungeLightObj.setLightPosition(-45, -60);
-        loungeLight.setLightPosition(-45,  -60);
-
         studyLightObj.setLightPosition(35, -50);
-        studyLight.setLightPosition(35,  -50);
-
-        kitchenLight.setLightPosition(-45,  5);
-        kitchenLightObj.setLightPosition(-45,  5);
-
-        bathroomLight.setLightPosition(45, 15);
+        kitchenLightObj.setLightPosition(-45, 5);
         bathroomLightObj.setLightPosition(45, 15);
-
         hallwayLightObj1.setLightPosition(0, -60);
-        hallwayLight1.setLightPosition(0, 16, -60);
-
         hallwayLightObj2.setLightPosition(0, 0);
-        hallwayLight2.setLightPosition(0, 0);
+
+        bedroomLight.setLightPosition(0, 50);
+        // loungeLight.setLightPosition(-45,  -60);
+        //  studyLight.setLightPosition(35,  -50);
+        //   kitchenLight.setLightPosition(-45,  5);
+        //bathroomLight.setLightPosition(45, 15);
+        // hallwayLight1.setLightPosition(0, 16, -60);
+        //  hallwayLight2.setLightPosition(0, 0);
 
     }
 
@@ -382,14 +406,14 @@ export class SceneManager {
 
         managers[0].register(ambientLight);
         managers[0].register(bedroomLight);
-        managers[0].register(loungeLight);
-        managers[0].register(studyLight);
-        managers[0].register(hallwayLight1);
-        managers[0].register(hallwayLight2);
-        managers[0].register(kitchenLight);
-        managers[0].register(bathroomLight);
+        // managers[0].register(loungeLight);
+        // managers[0].register(studyLight);
+        // managers[0].register(hallwayLight1);
+        // managers[0].register(hallwayLight2);
+        // managers[0].register(kitchenLight);
+        // managers[0].register(bathroomLight);
 
-
+        //------------------------------------------------------------
 
         //entities
 
@@ -407,8 +431,7 @@ export class SceneManager {
         managers[1].register(testdoor);
 
         managers[1].register(mainChar);
-        //managers[1].register(sceneSubject);
-        //managers[1].register(testBlock);
+        managers[1].register(woman)
 
         //study
         managers[1].register(bookshelf);
@@ -431,11 +454,23 @@ export class SceneManager {
 
         managers[1].register(crowbar);
         managers[1].register(lightswitch);
+
+
         managers[1].register(plank);
+        plank.setPosition(-4.5, 15, -77.5);
+        plank.setRotation(Math.PI / 2)
+
+        managers[1].register(plank1);
+        plank1.setPosition(-4.5, 20, -77.5);
+        plank1.setRotation(Math.PI / 2);
+
+        managers[1].register(plank2);
+        plank2.setPosition(-4.5, 10, -77.5);
+        plank2.setRotation(Math.PI / 2);
 
 
-        
-        bedroomDrawer.object.position.set(20.2,7.4,36.7);
+
+        bedroomDrawer.object.position.set(20.2, 7.4, 36.7);
         managers[1].register(bedroomDrawer);
         //------------------------------------------------------------------------
 
@@ -529,7 +564,7 @@ export class SceneManager {
             });
 
 
-        } else if(this.game_state == this.GAME_LOGO){
+        } else if (this.game_state == this.GAME_LOGO) {
             //id the divs
             const menu = document.getElementsByClassName("mainMenu");
             const logo = document.getElementsByClassName("logo");
@@ -561,49 +596,49 @@ export class SceneManager {
 
             }
 
-      //make intro screen visible
-              const intro1 = document.getElementById("para1");
-              const intro2 = document.getElementById("para2");
-              const intro3 = document.getElementById("para3");
-              const intro4 = document.getElementById("para4");
+            //make intro screen visible
+            const intro1 = document.getElementById("para1");
+            const intro2 = document.getElementById("para2");
+            const intro3 = document.getElementById("para3");
+            const intro4 = document.getElementById("para4");
 
 
-             //id the buttons
+            //id the buttons
             //  const btnNext1 = document.getElementById("next1");
             //  const btnNext2 = document.getElementById("next2");
-             const btnContinue = document.getElementById("continue");
+            const btnContinue = document.getElementById("continue");
 
-             intro1.style.display = 'flex'; //CHANGE TO FLEX
-             intro2.style.display = 'none';
-             intro3.style.display = 'none';
-             intro4.style.display = 'none';
+            intro1.style.display = 'flex'; //CHANGE TO FLEX
+            intro2.style.display = 'none';
+            intro3.style.display = 'none';
+            intro4.style.display = 'none';
 
 
-//UNCOMMENT=======================
-             setTimeout(() => {
+            //UNCOMMENT=======================
+            setTimeout(() => {
                 intro1.style.display = 'none';
                 intro2.style.display = 'flex';
                 intro3.style.display = 'none';
                 intro4.style.display = 'none';
-             }, 100);
+            }, 100);
 
-             setTimeout(() => {
+            setTimeout(() => {
                 intro1.style.display = 'none';
                 intro2.style.display = 'none';
                 intro3.style.display = 'flex';
                 intro4.style.display = 'none';
-             }, 100);
+            }, 100);
 
-             setTimeout(() => {
+            setTimeout(() => {
                 intro1.style.display = 'none';
                 intro2.style.display = 'none';
                 intro3.style.display = 'none';
                 intro4.style.display = 'flex';
-             }, 100);
-//===========================
-           
-          //  intro4.style.display = 'flex'; //COMMENT OUT
-             btnContinue.addEventListener("click", () => {
+            }, 100);
+            //===========================
+
+            //  intro4.style.display = 'flex'; //COMMENT OUT
+            btnContinue.addEventListener("click", () => {
 
                 this.intro_para = 4;
                 intro1.style.display = 'none';
@@ -656,13 +691,16 @@ export class SceneManager {
 
         } else if (this.game_state == this.GAME_RUN) {
 
+            this.rotateSkybox();
+
+
             this.managers[2].entities["background"].pause();
 
             //hud elements
             this.removeHUDItems();
             this.addToHUD();
             this.removeFromScene()
-   
+
             //testing stuff----------------------------------------------------------------
             if (keyboardManager.wasPressed("I"))
             {
@@ -674,17 +712,14 @@ export class SceneManager {
 
             if (this.hud.hasItem('key') == false && bedroomDrawer.keyFound && testdoor.open == false)
             {
-
                 var selectedObject = bedroomDrawer.object.getObjectByName('key');
                 bedroomDrawer.object.remove( selectedObject);
 
-                
-                this.hud.add("key",new Key());
+                this.hud.add("key", new Key());
                 testdoor.setAllowInteraction(true);
                 this.managers[2].entities["double_door_knock"].play();
-
-                
             }
+          
             else if (this.hud.hasItem('key') && testdoor.open)
             {
 
@@ -762,12 +797,11 @@ export class SceneManager {
 
             this.renderMainScene();
 
-            if(isFirstPersonView){
-              this.renderCrosshair();
+            if (isFirstPersonView) {
+                this.renderCrosshair();
             }
 
-        } else if (this.game_state == this.GAME_PAUSE)
-        {
+        } else if (this.game_state == this.GAME_PAUSE) {
 
             const menu = document.getElementsByClassName('pauseMenu');
             const unpause = document.getElementById('unpause');
@@ -786,7 +820,7 @@ export class SceneManager {
                 this.unpause();
             });
 
-            
+
             mainMenu.addEventListener('click', () => {
                 //make menu not visible
                 for (let i = 0; i < menu.length; i++) {
@@ -795,15 +829,11 @@ export class SceneManager {
                 this.game_state = this.GAME_MENU;
             });
 
-            
+
 
             this.renderPauseMenu();
-        }
-        else if (this.game_state == this.GAME_PAUSE) {
 
-
-            if (keyboardManager.keyDownQueue[0] == 'P')
-            {
+            if (keyboardManager.keyDownQueue[0] == 'P') {
 
                 this.unpause();
                 keyboardManager.keyDownQueue.shift();
@@ -852,15 +882,15 @@ export class SceneManager {
 
     }
 
-    renderCrosshair(){
-      this.renderer.autoClear = false;//prevent canvas from being erased with next .render call
-      this.renderer.getContext().disable(this.renderer.getContext().DEPTH_TEST);
+    renderCrosshair() {
+        this.renderer.autoClear = false;//prevent canvas from being erased with next .render call
+        this.renderer.getContext().disable(this.renderer.getContext().DEPTH_TEST);
 
 
-      this.renderer.render(this.hud.scene, this.hud.camera);
+        this.renderer.render(this.hud.scene, this.hud.camera);
 
-      this.renderer.getContext().enable(this.renderer.getContext().DEPTH_TEST);
-      this.renderer.autoClear = true;
+        this.renderer.getContext().enable(this.renderer.getContext().DEPTH_TEST);
+        this.renderer.autoClear = true;
     }
 
     //this resizes our game when screen size changed
@@ -869,7 +899,7 @@ export class SceneManager {
         this.camera.aspect = window.innerWidth / window.innerHeight;
         this.camera.updateProjectionMatrix();
 
-        this.renderer.setSize(window.innerWidth, window.innerHeight);
+        this.renderer.setSize(window.innerWidth/2, window.innerHeight/2,false);
     }
 
 
@@ -925,33 +955,30 @@ export class SceneManager {
         }
     }
 
-    removeHUDItems()
-    {
+    removeHUDItems() {
 
-        while (hudOverlayRemoveQueue.length > 0)
-        {          
+        while (hudOverlayRemoveQueue.length > 0) {
             var name = hudOverlayRemoveQueue[0];
             hudOverlayRemoveQueue.shift();
             this.hud.remove(name);
+
  
          }
 
-        
+
     }
 
 
-    removeFromScene()
-    {
+    removeFromScene() {
 
-        while (sceneRemoveQueue.length > 0)
-        {          
+        while (sceneRemoveQueue.length > 0) {
             var name = sceneRemoveQueue[0];
             sceneRemoveQueue.shift();
 
             var selectedObject = this.scene.getObjectByName(name);
             this.scene.remove(selectedObject);
 
-         }
+        }
 
     }
 
