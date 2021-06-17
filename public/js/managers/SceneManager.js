@@ -167,6 +167,7 @@ export class SceneManager {
         this.GAME_MENU = "menu";
         this.GAME_INTRO = "intro";
         this.GAME_LOGO = "logo";
+        this.GAME_CREDITS = "credits";
         //------------------------------------------------------------------------------------------------------------------------------------------
         this.audioActive = false;
         //we use (this) to make variables accessible in other classes
@@ -176,7 +177,7 @@ export class SceneManager {
 
 
 
-        this.game_state = this.GAME_RUN;//default Game_LOGO
+        this.game_state = this.GAME_LOGO;//default Game_LOGO
         //intro paragraph state
         this.intro_para = 4;//1
 
@@ -526,6 +527,8 @@ export class SceneManager {
             //id the start button
             const btnStart = document.getElementById("start");
             const btnSkipIntro = document.getElementById("skipIntro");
+            const btnShowCredits = document.getElementById("btnCredits");
+            const btnBack = document.getElementById('backfromCredits');
 
 
             //start game pressed, remove start screen items
@@ -537,8 +540,6 @@ export class SceneManager {
                 }
                 //change state to game intro
                 this.game_state = this.GAME_INTRO;
-
-
             });
 
             btnSkipIntro.addEventListener("click", () => {
@@ -550,6 +551,45 @@ export class SceneManager {
                 this.game_state = this.GAME_RUN;
             });
 
+            btnShowCredits.addEventListener("click", () => {
+                
+                const menu = document.getElementsByClassName("menu");
+                for (let i = 0; i < menu.length; i++) {
+                    menu[i].style.display = 'none';
+                }
+
+                const title = document.getElementsByClassName("title");
+                for (let i = 0; i < title.length; i++) {
+                    title[i].style.display = 'none';
+                }
+
+                document.getElementById('creditsParas').start();
+
+                const credits = document.getElementsByClassName("credits");
+                for (let i = 0; i < credits.length; i++){
+                    credits[i].style.display = 'flex';
+                }
+                
+                
+            });
+
+            btnBack.addEventListener("click", () => {
+                const menu = document.getElementsByClassName("menu");
+                for (let i = 0; i < menu.length; i++) {
+                    menu[i].style.display = 'flex';
+                }
+
+                const title = document.getElementsByClassName("title");
+                for (let i = 0; i < title.length; i++) {
+                    title[i].style.display = 'flex';
+                }
+
+                const credits = document.getElementsByClassName("credits");
+                for (let i = 0; i < credits.length; i++){
+                    credits[i].style.display = 'none';
+                }
+                document.getElementById('creditsParas').stop();
+            });
 
         } else if (this.game_state == this.GAME_LOGO) {
             //id the divs
@@ -607,21 +647,21 @@ export class SceneManager {
                 intro2.style.display = 'flex';
                 intro3.style.display = 'none';
                 intro4.style.display = 'none';
-            }, 100);
+            }, 4000);
 
             setTimeout(() => {
                 intro1.style.display = 'none';
                 intro2.style.display = 'none';
                 intro3.style.display = 'flex';
                 intro4.style.display = 'none';
-            }, 100);
+            }, 16000);
 
             setTimeout(() => {
                 intro1.style.display = 'none';
                 intro2.style.display = 'none';
                 intro3.style.display = 'none';
                 intro4.style.display = 'flex';
-            }, 100);
+            }, 30000);
             //===========================
 
             //  intro4.style.display = 'flex'; //COMMENT OUT
