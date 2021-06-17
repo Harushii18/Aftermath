@@ -6,12 +6,16 @@ export class CharacterControls {
 
     constructor() {
         //walking and running speeds
-        this.walk = 15; //Was 0.5 - can change back
-        this.run = 20; //Was 1 - can change back
+        this.walk = 15; 
+        this.run = 20; 
         this.state = 'idle';
 
         //set the char to normal walk speed initially
         this.moveDistance = this.walk;
+    }
+    setOriginalSpeed(){
+        this.run=20;
+        this.walk=15;
     }
 
     checkMovement() {
@@ -31,6 +35,13 @@ export class CharacterControls {
         }
         return this.moveDistance;
     }
+
+    setSpeed(speed){
+        this.run=speed;
+        this.walk=speed;
+    }
+
+ 
     
     getRun() {
         //checks if the character is running

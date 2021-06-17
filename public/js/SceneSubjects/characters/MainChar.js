@@ -324,15 +324,10 @@ export class MainChar extends THREE.Object3D {
 		anime.setPath(path);
 		anime.load(file, (anime) => {
 
+			//store animation in dictionary for access later
 			this.anim[state] = anime;
-			console.log(this.anim[state]);
-
 		});
-
-
 	}
-
-
 
 	loadModel() {
 		//load the main character model with an FBX Loader

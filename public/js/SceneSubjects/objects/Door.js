@@ -14,7 +14,7 @@ export class Door extends THREE.Object3D {
         this.doCheckVicinity = false;
         this.object = new THREE.Object3D();
         this.allowInteraction = false;
-
+        this.clock = new THREE.Clock();
 
 
 
@@ -29,7 +29,7 @@ export class Door extends THREE.Object3D {
 
         this.clock = new THREE.Clock();
         const loader = new GLTFLoader(loadingManager);
-        this.showUnlockedSubs=false;
+        this.showUnlockedSubs = false;
 
         this.open = false; //open door animation
 
@@ -86,12 +86,15 @@ export class Door extends THREE.Object3D {
                 subtitleManager.setDuration(5);
                 subtitleManager.changeSubtitlesText(this.subtitleText.t1);
                 this.subtitleStarted.t1 = true;
+                //display stage complete div
+                const stageComplete = document.getElementById('stageComplete');
+                stageComplete.style.display = 'block';
             }
 
             subtitleManager.countTime();
             if (!subtitleManager.checkTime()) {
                 this.subtitleState.t1 = true;
-                this.showUnlockedSubs=false;
+                this.showUnlockedSubs = false;
                 //meaning it was shown
             }
         }
@@ -129,93 +132,94 @@ export class Door extends THREE.Object3D {
     }
 
 
-    setAllowInteraction(value){
-      this.allowInteraction = value;
+    setAllowInteraction(value) {
+        this.allowInteraction = value;
     }
 
     update(time) {
         //just to show the div
 
-
+        this.delta = this.clock.getDelta();
         if (this.doCheckVicinity) {
             this.checkVicinity = this.checkCharacterVicinity();
         }
-        
+
 
         if (this.showLockedSubtitles) {
             this.showSubtitlesLocked(5);
-        }else if (this.showUnlockedSubs){
+        } else if (this.showUnlockedSubs) {
             this.addSubtitles();
         }
 
         if (this.open == true) {
-            this.showLockedSubtitles=false;
+            this.showLockedSubtitles = false;
+
             //animate
             if (this.idleMixer) {
-                if (this.animationCounter < 80) {
-                    this.idleMixer.update(this.clock.getDelta());
-                    this.animationCounter += 1;
-                } else if (this.animationCounter == 80) {
+                if (this.animationCounter < 2) {
+                    this.idleMixer.update(this.delta);
+                    this.animationCounter += (1 * this.delta);
+                } else if (this.animationCounter > 2) {
                     //pause the animation mixer-> stop the door from continuing its animation
                     this.idleMixer.paused = true;
-                    //display stage complete div
-                    const stageComplete = document.getElementById('stageComplete');
-                    stageComplete.style.display = 'block';
+
                 }
             }
         }
 
         if (keyboardManager.wasPressed('E')) {
-                console.log("e pressed by door");
+            console.log("e pressed by door");
             if (this.checkVicinity) {
                 console.log("vicinity by door");
                 //if character is in vicinity of door, then they can open door
                 if (this.allowInteraction) {
-                        this.playDoorSound = true;
-                         //show that the door is unlocked subtitles
-                   this.showUnlockedSubs=true;
-                   this.showLockedSubtitles = false;
-                        //make sure the key prompt doesn't show anymore now that it is open
-                        gameOverlay.hideOverlay();
-                        //play the door animation
-                        this.idle.play();
-                        this.idle.loop = THREE.LoopOnce;
-                        this.open = true;
-                        //checks how long the animation was playing for
-                        this.animationCounter = 0;
+                    this.playDoorSound = true;
+                    //show that the door is unlocked subtitles
+                    this.showUnlockedSubs = true;
+                    this.showLockedSubtitles = false;
+                    //make sure the key prompt doesn't show anymore now that it is open
+                    gameOverlay.hideOverlay();
+                    //play the door animation
+                    this.idle.play();
+                    this.idle.loop = THREE.LoopOnce;
+                    this.open = true;
+                    //checks how long the animation was playing for
+                    this.animationCounter = 0;
 
-                        console.log("door allow interaction true. now set to false");
+                    console.log("door allow interaction true. now set to false");
 
-                        /*                        WhatsApp
-                                                                                 
-                        //Suraksha: HIDE KEY IMAGE IN OVERLAY!!! KAMERON!!!         (double blue tick)
-                        //Kameron: THATSSSS MA NAME!!!                              (double blue tick)
-                        //Suraksha: THANK YOU!!!!!!                                 (single tick)
+                    /*                        WhatsApp
+                                                                             
+                    //Suraksha: HIDE KEY IMAGE IN OVERLAY!!! KAMERON!!!         (double blue tick)
+                    //Kameron: THATSSSS MA NAME!!!                              (double blue tick)
+                    //Suraksha: THANK YOU!!!!!!                                 (single tick)
 
-                        */
+                    */
 
 
-                        this.allowInteraction = false;
-                        this.objectInteractionCounter += 1;
+                    this.allowInteraction = false;
+                    this.objectInteractionCounter += 1;
 
-                    }
-                    else{
-                        if (this.objectInteractionCounter == 0)
-                        {
+                }
+                else {
+                    if (this.objectInteractionCounter == 0) {
                         this.playDoorSound = false;
 
                         this.showLockedSubtitles = true;
                         this.subtitleState.t2 = false;
-                        this.subtitleStarted.t2=false;
-                        }
-
+                        this.subtitleStarted.t2 = false;
                     }
+
                 }
             }
         }
+    }
 
 
 
+    level1Complete() {
+        return this.open;
+    }
 
     //checks if Character is in vicinity of door to open/ close it
     checkCharacterVicinity() {
