@@ -118,8 +118,8 @@ export var pin = new Pin();
 
 export var flashlight = new Flashlight();
 
-export var crowbar= new Crowbar();
-export var lightswitch =  new LightSwitch();
+export var crowbar = new Crowbar();
+export var lightswitch = new LightSwitch();
 export var plank = new Plank();
 export var plank1 = new Plank();
 export var plank2 = new Plank();
@@ -147,11 +147,13 @@ collisionManager.addObject(testdoor);
 export var mainChar = new MainChar(collisionManager.returnObjects());
 
 //woman
-var woman=new Woman();
+var woman = new Woman();
 
 export class SceneManager {
 
     constructor(canvas) {
+        //for animations
+        this.clock=new THREE.Clock();
         //this entire function renders a scene where you can add as many items as you want to it (e.g. we can create the house and add as
         //many items as we want to the house). It renders objects from other javascript files
         //------------------------------------------------------------------------------------------------------------------------------------------
@@ -185,6 +187,10 @@ export class SceneManager {
 
         //the essentials for rendering a scene
         this.scene = this.buildScene();
+        
+        //create our skybox
+        this.skybox=this.makeInstance(1, 0);
+
         this.renderer = this.buildRender(this.screenDimensions);
         this.camera = this.buildCamera(this.screenDimensions);
 
@@ -276,39 +282,74 @@ export class SceneManager {
 
         }
     }
+
+
+    //==================SKYBOX============================
+
+    //determine color and map
+    get255BasedColor(color) {
+        const tempColor = new THREE.Color();
+        tempColor.set(color);
+        return tempColor.toArray().map(v => v * 255);
+    }
+
+    makeRampTexture(stops) {
+        // let's just always make the ramps 256x1
+        const res = 256;
+        const data = new Uint8Array(res * 3);
+        const mixedColor = new THREE.Color();
+
+        let prevX = 0;
+        for (let ndx = 1; ndx < stops.length; ++ndx) {
+            const nextX = Math.min(stops[ndx].position * res, res - 1);
+            if (nextX > prevX) {
+                const color0 = stops[ndx - 1].color;
+                const color1 = stops[ndx].color;
+                const diff = nextX - prevX;
+                for (let x = prevX; x <= nextX; ++x) {
+                    const u = (x - prevX) / diff;
+                    mixedColor.copy(color0);
+                    mixedColor.lerp(color1, u);
+                    data.set(this.get255BasedColor(mixedColor), x * 3);
+                }
+            }
+            prevX = nextX;
+        }
+
+        return new THREE.DataTexture(data, res, 1, THREE.RGBFormat);
+    }
+
+    //create cube with calculated texture and colour co-ords
+    makeInstance(scale, rot) {
+        const texture = this.makeRampTexture([
+            //colours for the textures
+            { position: 0, color: new THREE.Color(0x0d182e), },
+            { position: 0.5, color: new THREE.Color(0x284682), },
+            { position: 1, color: new THREE.Color(0x0d182e), },
+        ]);
+        texture.repeat.set(1 / scale, 1 / scale);
+        texture.rotation = rot;
+
+
+        //create the skybox
+        var skyGeometry = new THREE.BoxGeometry(200, 200, 200);
+        const material = new THREE.MeshBasicMaterial({ map: texture, wireframe: false });
+    
+        /* Cause the material to be visible for inside and outside */
+        material.side = THREE.BackSide;
+        var skybox = new THREE.Mesh(skyGeometry, material);
+        this.scene.add(skybox);
+
+        return skybox;
+    }
+
+    //========================================================
+
     //this function creates our scene
     buildScene() {
         //create a new scene
         const scene = new THREE.Scene();
 
-        // //set the scene's background-> in this case it is our skybox
-        // const loader = new THREE.CubeTextureLoader();
-        // //it uses different textures per face of cube
-        // const texture = loader.load([
-        //     '../skybox/House/posx.jpg',
-        //     '../skybox/House/negx.jpg',
-        //     '../skybox/House/posy.jpg',
-        //     '../skybox/House/negy.jpg',
-        //     '../skybox/House/posz.jpg',
-        //     '../skybox/House/negz.jpg'
-        // ]);
-        // scene.background = texture;
-
-        //Experimenting with skybox
-        const textureLoader = new THREE.TextureLoader(loadingManager);
-
-        textureLoader.load('./skybox/moonless_golf.jpg', function (texture) {
-
-            texture.encoding = THREE.sRGBEncoding;
-            texture.mapping = THREE.EquirectangularReflectionMapping;
-
-            scene.background = texture;
-
-
-        });
-
-        //if we wanted it to be a colour, it would have been this commented code:
-        //scene.background = new THREE.Color("#000");
         return scene;
     }
 
@@ -408,7 +449,7 @@ export class SceneManager {
 
         managers[1].register(mainChar);
         managers[1].register(woman)
-    
+
         //study
         managers[1].register(bookshelf);
 
@@ -433,16 +474,16 @@ export class SceneManager {
 
 
         managers[1].register(plank);
-        plank.setPosition(-4.5,15,-77.5);
-        plank.setRotation(Math.PI/2)
+        plank.setPosition(-4.5, 15, -77.5);
+        plank.setRotation(Math.PI / 2)
 
         managers[1].register(plank1);
-        plank1.setPosition(-4.5,20,-77.5);
-        plank1.setRotation(Math.PI/2);
+        plank1.setPosition(-4.5, 20, -77.5);
+        plank1.setRotation(Math.PI / 2);
 
         managers[1].register(plank2);
-        plank2.setPosition(-4.5,10,-77.5);
-        plank2.setRotation(Math.PI/2);
+        plank2.setPosition(-4.5, 10, -77.5);
+        plank2.setRotation(Math.PI / 2);
 
 
 
@@ -664,6 +705,11 @@ export class SceneManager {
 
         } else if (this.game_state == this.GAME_RUN) {
 
+            //rotate skybox on game time
+            var delta=this.clock.getDelta();
+            //skybox rotation speed
+            this.skybox.rotation.y += 0.1*delta;
+
             this.managers[2].entities["background"].pause();
 
             //hud elements
@@ -797,9 +843,6 @@ export class SceneManager {
 
 
             this.renderPauseMenu();
-        }
-        else if (this.game_state == this.GAME_PAUSE) {
-
 
             if (keyboardManager.keyDownQueue[0] == 'P') {
 
