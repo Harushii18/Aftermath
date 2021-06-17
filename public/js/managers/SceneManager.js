@@ -37,6 +37,9 @@ import { Key } from '../SceneSubjects/objects/Key.js';
 import { Crowbar } from '../SceneSubjects/objects/Crowbar.js';
 import { LightSwitch } from '../SceneSubjects/objects/Switch.js';
 import { Plank } from '../SceneSubjects/objects/Plank.js';
+import { Boards } from '../SceneSubjects/objects/Boards.js';
+
+
 
 
 
@@ -76,6 +79,8 @@ var house = new House();
 
 //lights
 var generalLights = new GeneralLights();
+var sun  = new THREE.PointLight( 0xffffff, 3 );
+
 
 //ceiling lights
 var bedroomLightObj = new CeilingLightObj();
@@ -105,6 +110,7 @@ export var testdoor = new Door();
 var bookshelf = new Bookshelf();
 
 //bedroom
+var hudPin = new Pin();
 var bedroomPainting = new BedroomPainting();
 
 export var lockCupboard = new Lock();
@@ -122,9 +128,10 @@ export var flashlight = new Flashlight();
 
 export var crowbar = new Crowbar();
 export var lightswitch = new LightSwitch();
-export var plank = new Plank();
-export var plank1 = new Plank();
-export var plank2 = new Plank();
+//export var plank = new Plank();
+//export var plank1 = new Plank();
+//export var plank2 = new Plank();
+export var boards = new Boards();
 
 var letterI = new LetterI();
 var key = new Key();
@@ -189,6 +196,7 @@ export class SceneManager {
 
         //the essentials for rendering a scene
         this.scene = this.buildScene();
+        this.scene.add(sun);
 
         //create our skybox
         this.skybox=this.addSkybox();
@@ -426,6 +434,7 @@ export class SceneManager {
         managers[1].register(bedroomLightObj);
         managers[1].register(hallwayLightObj1);
         managers[1].register(hallwayLightObj2);
+       
 
         managers[1].register(house);
 
@@ -445,6 +454,7 @@ export class SceneManager {
         managers[1].register(hammer);
 
         pin.setForScene();
+        pin.object.name = "pin"
         managers[1].register(pin);
 
         lockCupboard.object.name = "lockCupboard";
@@ -457,8 +467,12 @@ export class SceneManager {
         managers[1].register(crowbar);
         managers[1].register(lightswitch);
 
+        boards.object.position.set(-4.5,15,-77.5);
+        managers[1].register(boards);
 
-        managers[1].register(plank);
+        
+        
+       /* managers[1].register(plank);
         plank.setPosition(-4.5, 15, -77.5);
         plank.setRotation(Math.PI / 2)
 
@@ -468,11 +482,12 @@ export class SceneManager {
 
         managers[1].register(plank2);
         plank2.setPosition(-4.5, 10, -77.5);
-        plank2.setRotation(Math.PI / 2);
+        plank2.setRotation(Math.PI / 2);*/
 
 
 
-        bedroomDrawer.object.position.set(20.2, 7.4, 36.7);
+        //bedroomDrawer.object.position.set(20.2, 7.4, 36.7);
+        bedroomDrawer.object.position.set(20.2, 7.4, 40);
         managers[1].register(bedroomDrawer);
         //------------------------------------------------------------------------
 
@@ -706,9 +721,28 @@ export class SceneManager {
             this.setAudio();
 
             //testing stuff----------------------------------------------------------------
+            var x = boards.object.position.x;
+            var y = boards.object.position.y;
+            var z = boards.object.position.z
             if (keyboardManager.wasPressed("I"))
             {
-               // 
+                boards.object.position.set(x,y+0.05,z)
+
+            }
+            if (keyboardManager.wasPressed("J"))
+            {
+                boards.object.position.set(x-0.05,y,z)
+
+            }
+            if (keyboardManager.wasPressed("K"))
+            {
+                boards.object.position.set(x,y-0.05,z)
+
+            }
+            if (keyboardManager.wasPressed("L"))
+            {
+                boards.object.position.set(x+0.05,y,z)
+
             }
 
             //testing stuff---------------------------------------------------------------
@@ -955,7 +989,7 @@ export class SceneManager {
         if (hudOverlayAddQueue.includes("pin"))
         {
            console.log("adding pin");
-           this.hud.add("pin",new Pin());
+           this.hud.add("pin",hudPin);
            hudOverlayAddQueue.shift();
 
         }
