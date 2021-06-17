@@ -57,10 +57,7 @@ export class Bookshelf extends THREE.Object3D {
 
     update(time) {
 
-        if (keyboardManager.wasPressed('E')) {
-            this.object.position.y += 0.1;
-            console.log(this.object.position.y);
-        }
+       
 
         //just to show the div
         var checkVicinity=this.checkCharacterVicinity();
