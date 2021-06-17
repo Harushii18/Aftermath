@@ -26,8 +26,8 @@ class SubtitleManager extends THREE.Object3D {
 
     countTime(){
         var delta=this.clock.getDelta();
-        console.log(this.time);
-        console.log(this.subtitleDuration);
+        // console.log(this.time);
+        // console.log(this.subtitleDuration);
          //increase the time for the subtitle duration-> makes sure it runs on seconds and not frame rates
         this.time+=(1*delta);
     }

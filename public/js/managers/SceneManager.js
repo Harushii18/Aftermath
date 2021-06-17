@@ -17,6 +17,8 @@ import { GeneralLights } from '../SceneSubjects/lighting/GeneralLights.js';
 import { CeilingLight } from '../SceneSubjects/lighting/CeilingLight.js';
 import { AmbientLight } from '../SceneSubjects/lighting/AmbientLight.js';
 import { CeilingLightObj } from '../SceneSubjects/objects/CeilingLightObj.js';
+import { testLight } from '../SceneSubjects/lighting/testlight.js';
+import { flashLight } from '../SceneSubjects/lighting/flashLight.js';
 
 //OBJECTS
 import { House } from '../SceneSubjects/House.js';
@@ -56,6 +58,8 @@ import { characterControls } from './CharacterControls.js';
 import { HUD } from '../Overlay/HUD.js';
 import { Woman } from '../SceneSubjects/characters/woman.js';
 
+
+import { Plain } from '../../js/SceneSubjects/objects/plain.js';
 //==================================================================================================
 
 //Global Variables
@@ -64,7 +68,7 @@ export var hudOverlayRemoveQueue = [];
 export var sceneRemoveQueue = [];
 
 
-
+var plain = new Plain();
 
 //FirstPersonTracker
 var isFirstPersonView = true;
@@ -91,6 +95,8 @@ var bedroomLight = new CeilingLight();
 // var bathroomLight = new CeilingLight();
 // var hallwayLight2 = new CeilingLight();
 // var loungeLight = new CeilingLight();
+var testLights = new testLight();
+var flash = new flashLight();
 
 var ambientLight = new AmbientLight();
 
@@ -319,7 +325,7 @@ export class SceneManager {
         });
         renderer.setClearColor(0xEEEEEE, 1.0);
         renderer.shadowMap.enabled = true;
-        //renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
         renderer.shadowMapSoft = true;
         renderer.setPixelRatio(window.devicePixelRatio);
         renderer.setSize(window.innerWidth, window.innerHeight);
@@ -349,14 +355,16 @@ export class SceneManager {
         //set their light positions
         //I COMMENTED THE LIGHTS OUT TO SEE IF IT IMPROVES PERFORMANCE
         bedroomLightObj.setLightPosition(0, 50);
-        loungeLightObj.setLightPosition(-45, -60);
-        studyLightObj.setLightPosition(35, -50);
-        kitchenLightObj.setLightPosition(-45, 5);
-        bathroomLightObj.setLightPosition(45, 15);
-        hallwayLightObj1.setLightPosition(0, -60);
-        hallwayLightObj2.setLightPosition(0, 0);
+        // loungeLightObj.setLightPosition(-45, -60);
+        // studyLightObj.setLightPosition(35, -50);
+        // kitchenLightObj.setLightPosition(-45, 5);
+        // bathroomLightObj.setLightPosition(45, 15);
+        // hallwayLightObj1.setLightPosition(0, -60);
+        // hallwayLightObj2.setLightPosition(0, 0);
 
-        bedroomLight.setLightPosition(0, 50);
+        //bedroomLight.setLightPosition(0, 50);
+        testLights.setLightPosition(0, 30);
+        flash.setLightPosition(7, 80);
         // loungeLight.setLightPosition(-45,  -60);
         //  studyLight.setLightPosition(35,  -50);
         //   kitchenLight.setLightPosition(-45,  5);
@@ -380,6 +388,8 @@ export class SceneManager {
 
         managers[0].register(ambientLight);
         managers[0].register(bedroomLight);
+        managers[0].register(testLights);
+        managers[0].register(flash);
         // managers[0].register(loungeLight);
         // managers[0].register(studyLight);
         // managers[0].register(hallwayLight1);
@@ -400,6 +410,7 @@ export class SceneManager {
         managers[1].register(hallwayLightObj2);
 
         managers[1].register(house);
+       // managers[1].register(plain);
 
         testdoor.setPosition(0, -0.5, 33);
         managers[1].register(testdoor);
@@ -430,7 +441,7 @@ export class SceneManager {
         managers[1].register(lightswitch);
         managers[1].register(plank);
 
-
+        
 
         bedroomDrawer.object.position.set(20.2, 7.4, 36.7);
         managers[1].register(bedroomDrawer);
@@ -717,6 +728,16 @@ export class SceneManager {
             this.managers[0].update(runTime);
 
             this.managers[1].update(runTime);
+
+
+
+            //this.managers[0].lights[3].to .setVisibility = false;
+
+            if ((keyboardManager.keyDownQueue[0] == "F")){
+                console.log("lights off pressed");
+               flash.toggleVisibility();
+                keyboardManager.keyDownQueue.shift();
+            }
 
             //check pause--------------------------------
             if ((keyboardManager.keyDownQueue[0] == "P")) {

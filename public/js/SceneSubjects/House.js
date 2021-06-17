@@ -22,6 +22,13 @@ export class House extends THREE.Object3D {
           console.log("load house");
           gltf.scene.traverse(c => {
             c.castShadow = true;
+            c.receiveShadow = true;
+          });
+          gltf.scene.traverse((node) => {
+            if(node.isMesh){
+              node.castShadow = true;
+              node.receiveShadow = true;
+            }
           });
 
       //Scaling house

@@ -41,6 +41,13 @@ export class cupboardDoorR extends THREE.Object3D {
 
       });
 
+      gltf.scene.traverse((node) => {
+        if(node.isMesh){
+          node.castShadow = true;
+          node.receiveShadow = true;
+        }
+      })
+
       // //scale door
       this.object.scale.x = 3;
       this.object.scale.y = 3;
@@ -56,7 +63,19 @@ export class cupboardDoorR extends THREE.Object3D {
       this.cupboardMixer.timeScale = 0.2; //speed of animation
       this.cupboardAnim = this.cupboardMixer.clipAction(gltf.animations[0]);
 
-      this.object.add(gltf.scene);
+      const mesh = gltf.scene.children.find((child) => child.name === "RootNode_(gltf_orientation_matrix)"
+      // {
+      //   console.log("You probaly looking for me");
+      //   console.log(child.name);
+      //   //Node_22
+      //   //RootNode_(gltf_orientation_matrix)
+      //   child.name === "RootNode_(gltf_orientation_matrix)";
+      // }
+      );
+
+      mesh.castShadow = true;
+
+      this.object.add(mesh);
     });
   }
 

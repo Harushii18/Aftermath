@@ -11,7 +11,7 @@ export class TestBlock extends THREE.Object3D {
     const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
     this.object = new THREE.Mesh(geometry, material);
     this.object.castShadow = true;
-    //this.object.receiveShadow = false;
+    this.object.receiveShadow = false;
     this.object.scale.x = 5;
     this.object.scale.y = 10;
     this.object.scale.z = 5;

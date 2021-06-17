@@ -18,6 +18,9 @@ export class Bookshelf extends THREE.Object3D {
         this.object.scale.z = 20;
         this.object.position.set(57, 0, -70);
 
+        this.object.castShadow = true;
+        this.object.receiveShadow = true;
+
         this.unlocked = false;
         this.complete = false;
 

@@ -196,6 +196,12 @@ export class Woman extends THREE.Object3D {
                 c.castShadow = true;
                 c.receiveShadow = true;
             });
+            fbx.traverse((node) => {
+				if(node.isMesh){
+				  node.castShadow = true;
+				  node.receiveShadow = true;
+				}
+			  });
 
 
             //animate character
