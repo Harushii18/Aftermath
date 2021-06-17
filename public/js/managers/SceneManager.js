@@ -24,6 +24,7 @@ import { Lock } from '../SceneSubjects/objects/Lock.js'
 import { SceneSubject } from '../SceneSubjects/objects/SceneSubject.js';
 import { TestBlock } from '../SceneSubjects/characters/TestBlock.js';
 import { Door } from '../SceneSubjects/objects/Door.js';
+import { WoodenDoor } from '../SceneSubjects/objects/WoodenDoor.js';
 
 import { BedroomPainting } from '../SceneSubjects/objects/BedroomPainting.js';
 import { BedroomDrawer } from '../SceneSubjects/objects/BedroomDrawer.js';
@@ -37,6 +38,9 @@ import { Key } from '../SceneSubjects/objects/Key.js';
 import { Crowbar } from '../SceneSubjects/objects/Crowbar.js';
 import { LightSwitch } from '../SceneSubjects/objects/Switch.js';
 import { Plank } from '../SceneSubjects/objects/Plank.js';
+import { Boards } from '../SceneSubjects/objects/Boards.js';
+
+
 
 
 
@@ -63,6 +67,8 @@ export var hudOverlayAddQueue = [];
 export var hudOverlayRemoveQueue = [];
 export var sceneRemoveQueue = [];
 
+export var audioPlayQueue = [];
+export var audioPauseQueue = [];
 
 
 
@@ -74,6 +80,8 @@ var house = new House();
 
 //lights
 var generalLights = new GeneralLights();
+var sun  = new THREE.PointLight( 0xffffff, 3 );
+
 
 //ceiling lights
 var bedroomLightObj = new CeilingLightObj();
@@ -98,11 +106,13 @@ var ambientLight = new AmbientLight();
 //var sceneSubject = new SceneSubject();
 //var testBlock = new TestBlock();
 export var testdoor = new Door();
+export var studydoor = new WoodenDoor();
 
 //study
 var bookshelf = new Bookshelf();
 
 //bedroom
+var hudPin = new Pin();
 var bedroomPainting = new BedroomPainting();
 
 export var lockCupboard = new Lock();
@@ -120,9 +130,11 @@ export var flashlight = new Flashlight();
 
 export var crowbar = new Crowbar();
 export var lightswitch = new LightSwitch();
-export var plank = new Plank();
-export var plank1 = new Plank();
-export var plank2 = new Plank();
+//export var plank = new Plank();
+//export var plank1 = new Plank();
+//export var plank2 = new Plank();
+export var boards = new Boards();
+var boards2 = new Boards();
 
 var letterI = new LetterI();
 var key = new Key();
@@ -187,6 +199,7 @@ export class SceneManager {
 
         //the essentials for rendering a scene
         this.scene = this.buildScene();
+        this.scene.add(sun);
 
         //create our skybox
         this.skybox=this.addSkybox();
@@ -424,11 +437,16 @@ export class SceneManager {
         managers[1].register(bedroomLightObj);
         managers[1].register(hallwayLightObj1);
         managers[1].register(hallwayLightObj2);
+       
 
         managers[1].register(house);
 
         testdoor.setPosition(0, -0.5, 33);
         managers[1].register(testdoor);
+
+        studydoor.object.rotateY(Math.PI /2);
+        studydoor.setPosition(7.9, -0.5, -35.3);
+        managers[1].register(studydoor);
 
         managers[1].register(mainChar);
         managers[1].register(woman)
@@ -443,6 +461,7 @@ export class SceneManager {
         managers[1].register(hammer);
 
         pin.setForScene();
+        pin.object.name = "pin"
         managers[1].register(pin);
 
         lockCupboard.object.name = "lockCupboard";
@@ -455,8 +474,16 @@ export class SceneManager {
         managers[1].register(crowbar);
         managers[1].register(lightswitch);
 
+        boards2.object.position.set(-4.5,15,-77.5);
+        managers[1].register(boards2);
 
-        managers[1].register(plank);
+        boards.object.position.set(-4.5,15,-77.5);
+        managers[1].register(boards);
+
+
+
+        
+       /* managers[1].register(plank);
         plank.setPosition(-4.5, 15, -77.5);
         plank.setRotation(Math.PI / 2)
 
@@ -466,11 +493,12 @@ export class SceneManager {
 
         managers[1].register(plank2);
         plank2.setPosition(-4.5, 10, -77.5);
-        plank2.setRotation(Math.PI / 2);
+        plank2.setRotation(Math.PI / 2);*/
 
 
 
-        bedroomDrawer.object.position.set(20.2, 7.4, 36.7);
+        //bedroomDrawer.object.position.set(20.2, 7.4, 36.7);
+        bedroomDrawer.object.position.set(20.2, 7.4, 40);
         managers[1].register(bedroomDrawer);
         //------------------------------------------------------------------------
 
@@ -701,10 +729,54 @@ export class SceneManager {
             this.addToHUD();
             this.removeFromScene()
 
+            this.setAudio();
+
             //testing stuff----------------------------------------------------------------
+            var x = studydoor.object.position.x;
+            var y = studydoor.object.position.y;
+            var z = studydoor.object.position.z
+            var changedPos = false;
             if (keyboardManager.wasPressed("I"))
             {
-               // 
+                y += 0.05;
+                changedPos = true;
+
+            }
+            if (keyboardManager.wasPressed("J"))
+            {
+                x -= 0.05;
+                changedPos = true;
+
+            }
+            if (keyboardManager.wasPressed("K"))
+            {
+                y -= 0.05;
+                changedPos = true;
+
+            }
+            if (keyboardManager.wasPressed("L"))
+            {
+                x += 0.05;
+                changedPos = true;
+
+            }
+
+            if (keyboardManager.wasPressed("UP"))
+            {
+                z += 0.05;
+                changedPos = true;
+
+            }
+            if (keyboardManager.wasPressed("DOWN"))
+            {
+                z -= 0.05;
+                changedPos = true;
+
+            }
+            if (changedPos == true)
+            {
+            studydoor.object.position.set(x,y,z);
+            console.log("( " +x.toString() +" , " +y.toString() +" , " +z.toString() + " )");
             }
 
             //testing stuff---------------------------------------------------------------
@@ -937,10 +1009,12 @@ export class SceneManager {
 
     addToHUD()
     {
+
         if (hudOverlayAddQueue.includes("hammer"))
         {
-           
-           this.hud.add("hammer",new Hammer());
+           var hammer_obj = new Hammer();
+            hammer_obj.setForHUD();
+           this.hud.add("hammer",hammer_obj);
 
            hudOverlayAddQueue.shift();
 
@@ -948,8 +1022,8 @@ export class SceneManager {
 
         if (hudOverlayAddQueue.includes("pin"))
         {
-           
-           this.hud.add("pin",new Pin());
+           console.log("adding pin");
+           this.hud.add("pin",hudPin);
            hudOverlayAddQueue.shift();
 
         }
@@ -988,5 +1062,22 @@ export class SceneManager {
         this.time.unpause();
 
         this.pointerLockControls.unlock(); // start orbit controls to respond to input
+    }
+
+    setAudio()
+    {
+        while (audioPlayQueue.length > 0) {
+            var name = audioPlayQueue[0];
+            audioPlayQueue.shift();
+
+            this.managers[2].entities[name].play();
+        }
+
+        while (audioPauseQueue.length > 0) {
+            var name = audioPauseQueue[0];
+            audioPauseQueue.shift();
+
+            this.managers[2].entities[name].pause();
+        }
     }
 }
