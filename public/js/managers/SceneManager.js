@@ -189,7 +189,7 @@ export class SceneManager {
         this.scene = this.buildScene();
         
         //create our skybox
-        this.skybox=this.makeInstance(1, 0);
+        this.skybox=this.addSkybox();
 
         this.renderer = this.buildRender(this.screenDimensions);
         this.camera = this.buildCamera(this.screenDimensions);
@@ -286,63 +286,46 @@ export class SceneManager {
 
     //==================SKYBOX============================
 
-    //determine color and map
-    get255BasedColor(color) {
-        const tempColor = new THREE.Color();
-        tempColor.set(color);
-        return tempColor.toArray().map(v => v * 255);
-    }
+    addSkybox(){
+        //get pictures per cube face
+        var skybox_path = '../skybox/Space/';
+        var urls = [
+            skybox_path + 'space_right.png',//posx
+            skybox_path + 'space_left.png',//negx
+            skybox_path + 'space_up.png',//posy
+            skybox_path + 'space_down.png',//negy
+            skybox_path + 'space_front.png',//posz
+            skybox_path + 'space_back.png'//negz
+        ];
 
-    makeRampTexture(stops) {
-        // let's just always make the ramps 256x1
-        const res = 256;
-        const data = new Uint8Array(res * 3);
-        const mixedColor = new THREE.Color();
-
-        let prevX = 0;
-        for (let ndx = 1; ndx < stops.length; ++ndx) {
-            const nextX = Math.min(stops[ndx].position * res, res - 1);
-            if (nextX > prevX) {
-                const color0 = stops[ndx - 1].color;
-                const color1 = stops[ndx].color;
-                const diff = nextX - prevX;
-                for (let x = prevX; x <= nextX; ++x) {
-                    const u = (x - prevX) / diff;
-                    mixedColor.copy(color0);
-                    mixedColor.lerp(color1, u);
-                    data.set(this.get255BasedColor(mixedColor), x * 3);
-                }
-            }
-            prevX = nextX;
+        
+        //add each image as a texture on skybox
+        var materialArray = [];
+        for (var i = 0; i < 6; i++){
+            materialArray.push(new THREE.MeshBasicMaterial({
+                map: THREE.ImageUtils.loadTexture(urls[i]),
+                //ensure the texture is on the inside of the cube
+                side: THREE.BackSide
+            }));
         }
 
-        return new THREE.DataTexture(data, res, 1, THREE.RGBFormat);
-    }
-
-    //create cube with calculated texture and colour co-ords
-    makeInstance(scale, rot) {
-        const texture = this.makeRampTexture([
-            //colours for the textures
-            { position: 0, color: new THREE.Color(0x0d182e), },
-            { position: 0.5, color: new THREE.Color(0x284682), },
-            { position: 1, color: new THREE.Color(0x0d182e), },
-        ]);
-        texture.repeat.set(1 / scale, 1 / scale);
-        texture.rotation = rot;
-
-
-        //create the skybox
+        //create the cube and add the textures to each face
         var skyGeometry = new THREE.BoxGeometry(200, 200, 200);
-        const material = new THREE.MeshBasicMaterial({ map: texture, wireframe: false });
-    
-        /* Cause the material to be visible for inside and outside */
-        material.side = THREE.BackSide;
-        var skybox = new THREE.Mesh(skyGeometry, material);
+        var skybox = new THREE.Mesh(skyGeometry, materialArray);
         this.scene.add(skybox);
 
         return skybox;
     }
 
+
+    rotateSkybox(){
+         //rotate skybox on game time
+         var delta=this.clock.getDelta();
+         //skybox rotation speed
+         var speed=0.02;
+         this.skybox.rotation.x += (speed*delta);
+         this.skybox.rotation.z += (speed*delta);
+    }
     //========================================================
 
     //this function creates our scene
@@ -705,10 +688,8 @@ export class SceneManager {
 
         } else if (this.game_state == this.GAME_RUN) {
 
-            //rotate skybox on game time
-            var delta=this.clock.getDelta();
-            //skybox rotation speed
-            this.skybox.rotation.y += 0.1*delta;
+            this.rotateSkybox();
+           
 
             this.managers[2].entities["background"].pause();
 
