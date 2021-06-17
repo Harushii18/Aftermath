@@ -3,7 +3,8 @@ import * as THREE from '../../../jsm/three.module.js';
 import { FBXLoader } from '../../../jsm/FBXLoader/FBXLoader.js';
 import { subtitleManager } from '../../managers/SubtitleManager.js';
 import { gameInstructions } from '../../Overlay/GameInstructions.js';
-import { loadingManager } from '../../managers/SceneManager.js';
+import { loaded, loadingManager } from '../../managers/SceneManager.js';
+import { loadedHouse } from '../House.js';
 
 export class MainChar extends THREE.Object3D {
 	constructor(collidableObjects) {
@@ -17,8 +18,8 @@ export class MainChar extends THREE.Object3D {
 		//this.object.position.set(0, 1, -50); 
 
 		//start from scratch-> char at original starting game position
-		this.object.position.set(0, 1, 60); 
-		
+		this.object.position.set(0, 1, 50);
+
 		this.object.visible = false; //Uncomment this so you don't see the player in first person view
 		this.initialiseSubtitleContents();
 
@@ -42,70 +43,78 @@ export class MainChar extends THREE.Object3D {
 		this.loadAllAnimations();
 
 		this.update = function (time) {
-			//add game instructions on side of screen
-			gameInstructions.checkTime();
-
-			//TODO: MAKE IT SUCH THAT THE SUBTITLES ONLY SHOW WHEN THE GAME IS RENDERED/ LOADED COMPLETELY!!!!!
-			//add subtitles
-			this.addSubtitles();
-
-			//ensure that all movement is not by frame rate
-			this.delta = this.clock.getDelta();
+			//perform everything only if the game has loaded
+			if (loaded && loadedHouse) {
 
 
-			//animation
-			if (this.walkMixer) {
-				this.determineAnimations();
-				this.walkMixer.update(this.delta);
+				//add subtitles
+				this.addSubtitles();
+
+
+				//if the second subtitle has finished
+				if (this.subtitleState.t2) {
+					//add game instructions on side of screen
+					gameInstructions.checkTime();
+
+				}
+
+				//ensure that all movement is not by frame rate
+				this.delta = this.clock.getDelta();
+
+
+				//animation
+				if (this.walkMixer) {
+					this.determineAnimations();
+					this.walkMixer.update(this.delta);
+				}
+
+				const pos = this.object.position.clone();
+				let dir = new THREE.Vector3();
+				this.object.getWorldDirection(dir);
+				//pos.y += 60;
+
+
+				//Direction of raycasters
+				let forwardDirection = new THREE.Vector3(dir.x, dir.y, dir.z);
+				let backwardDirection = new THREE.Vector3(dir.x, dir.y, -dir.z);
+				let rightDirection = new THREE.Vector3(-dir.x, dir.y, dir.z);
+				let leftDirection = new THREE.Vector3(dir.x, dir.y, dir.z);
+
+				//Raycasting to detect collisions with house object
+				let forwardRaycaster = new THREE.Raycaster(pos, forwardDirection);
+				let backwardRaycaster = new THREE.Raycaster(pos, backwardDirection);
+				let rightRaycaster = new THREE.Raycaster(pos, rightDirection);
+				let leftRaycaster = new THREE.Raycaster(pos, leftDirection);
+
+
+				//Boolean variables representing collision
+				let blockedF = false;//Blocked forward
+				let blockedB = false;//Blocked backward
+				let blockedR = false;//Blocked right
+				let blockedL = false;//Blocked left
+
+				//Check forward intersections
+				blockedF = this.checkIntersections(blockedF, forwardRaycaster);
+
+				//Check backward intersections
+				blockedB = this.checkIntersections(blockedB, backwardRaycaster);
+
+				//Check right intersections
+				blockedR = this.checkIntersections(blockedR, rightRaycaster);
+
+				//Check left intersections
+				blockedL = this.checkIntersections(blockedL, leftRaycaster);
+
+				//Player movement
+				this.move(blockedF, blockedB, blockedR, blockedL);
+
+
+				/*Note: Because the scene is warped due to the Perspective Camera, sometimes the ray (from the raycaster) doesn't detect the collision
+				because the angle between the camera and the collidable object is not orthogonal. Eg. if the wall/object is parallel to the direction
+				that the camera faces, walking right/left will result in a collision, but any other angle to the
+				wall/object doesn't result in a collision. */
+
 			}
-
-			const pos = this.object.position.clone();
-			let dir = new THREE.Vector3();
-			this.object.getWorldDirection(dir);
-			//pos.y += 60;
-
-
-			//Direction of raycasters
-			let forwardDirection = new THREE.Vector3(dir.x, dir.y, dir.z);
-			let backwardDirection = new THREE.Vector3(dir.x, dir.y, -dir.z);
-			let rightDirection = new THREE.Vector3(-dir.x, dir.y, dir.z);
-			let leftDirection = new THREE.Vector3(dir.x, dir.y, dir.z);
-
-			//Raycasting to detect collisions with house object
-			let forwardRaycaster = new THREE.Raycaster(pos, forwardDirection);
-			let backwardRaycaster = new THREE.Raycaster(pos, backwardDirection);
-			let rightRaycaster = new THREE.Raycaster(pos, rightDirection);
-			let leftRaycaster = new THREE.Raycaster(pos, leftDirection);
-
-
-			//Boolean variables representing collision
-			let blockedF = false;//Blocked forward
-			let blockedB = false;//Blocked backward
-			let blockedR = false;//Blocked right
-			let blockedL = false;//Blocked left
-
-			//Check forward intersections
-			blockedF = this.checkIntersections(blockedF, forwardRaycaster);
-
-			//Check backward intersections
-			blockedB = this.checkIntersections(blockedB, backwardRaycaster);
-
-			//Check right intersections
-			blockedR = this.checkIntersections(blockedR, rightRaycaster);
-
-			//Check left intersections
-			blockedL = this.checkIntersections(blockedL, leftRaycaster);
-
-			//Player movement
-			this.move(blockedF, blockedB, blockedR, blockedL);
-
-
-			/*Note: Because the scene is warped due to the Perspective Camera, sometimes the ray (from the raycaster) doesn't detect the collision
-			because the angle between the camera and the collidable object is not orthogonal. Eg. if the wall/object is parallel to the direction
-			that the camera faces, walking right/left will result in a collision, but any other angle to the
-			wall/object doesn't result in a collision. */
-
-
 		};
 	}
 
@@ -136,7 +145,7 @@ export class MainChar extends THREE.Object3D {
 			if (!this.subtitleStarted.t1) {
 				//start showing the subtitle
 				subtitleManager.startTime();
-				subtitleManager.setDuration(30);
+				subtitleManager.setDuration(8);
 				subtitleManager.changeSubtitlesText(this.subtitleText.t1);
 				this.subtitleStarted.t1 = true;
 			}

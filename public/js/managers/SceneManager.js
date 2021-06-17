@@ -80,7 +80,7 @@ var house = new House();
 
 //lights
 var generalLights = new GeneralLights();
-var sun  = new THREE.PointLight( 0xffffff, 3 );
+var sun = new THREE.PointLight(0xffffff, 3);
 
 
 //ceiling lights
@@ -101,7 +101,6 @@ var bedroomLight = new CeilingLight();
 // var loungeLight = new CeilingLight();
 
 var ambientLight = new AmbientLight();
-
 
 //var sceneSubject = new SceneSubject();
 //var testBlock = new TestBlock();
@@ -139,12 +138,10 @@ var boards2 = new Boards();
 var letterI = new LetterI();
 var key = new Key();
 
-
-
-
-
 //pre-loader
 export var loadingManager;
+//initial subtitles-> check if everything has loaded
+export var loaded;
 
 
 //Collision Manager to add all objects that need to be collided with
@@ -165,7 +162,7 @@ export class SceneManager {
 
     constructor(canvas) {
         //for animations
-        this.clock=new THREE.Clock();
+        this.clock = new THREE.Clock();
         //this entire function renders a scene where you can add as many items as you want to it (e.g. we can create the house and add as
         //many items as we want to the house). It renders objects from other javascript files
         //------------------------------------------------------------------------------------------------------------------------------------------
@@ -189,6 +186,8 @@ export class SceneManager {
         this.intro_para = 4;//1
 
 
+        //======SCENE BASICS=====================================================================
+
         this.width_screen = canvas.width;
         this.height_screen = canvas.height;
 
@@ -202,27 +201,27 @@ export class SceneManager {
         this.scene.add(sun);
 
         //create our skybox
-        this.skybox=this.addSkybox();
-
+        this.skybox = this.addSkybox();
         this.renderer = this.buildRender(this.screenDimensions);
         this.camera = this.buildCamera(this.screenDimensions);
+
+
+        //=========LOADING MANAGER=============================================================================
+
+        //initial display of starting subtitles-> only want it to load when everything has loaded
+        loaded = false;
 
         //loading manager
         loadingManager = new THREE.LoadingManager();
         loadingManager.onProgress = function (item, loaded, total) {
-            //  console.log(item, loaded, total);
-            const loadingScreen = document.getElementById('loading-screen');
-            loadingScreen.classList.add('fade-out');
-
-            // optional: remove loader from DOM via event listener
-            loadingScreen.addEventListener('transitionend', this.onTransitionEnd);
-
+             //do nothing
         };
 
         loadingManager.onLoad = function () {
-            //console.log('loaded all resources');
-            const loadingScreen = document.getElementById('loading-screen');
-            loadingScreen.style.display = "none";
+            if (!loaded) {
+                console.log('All objects loaded')
+                loaded = true;
+            }
         }
 
         loadingManager.onError = function () {
@@ -299,7 +298,7 @@ export class SceneManager {
 
     //==================SKYBOX============================
 
-    addSkybox(){
+    addSkybox() {
         //get pictures per cube face
         var skybox_path = '../skybox/Space/';
         var urls = [
@@ -314,7 +313,7 @@ export class SceneManager {
 
         //add each image as a texture on skybox
         var materialArray = [];
-        for (var i = 0; i < 6; i++){
+        for (var i = 0; i < 6; i++) {
             materialArray.push(new THREE.MeshBasicMaterial({
                 map: THREE.ImageUtils.loadTexture(urls[i]),
                 //ensure the texture is on the inside of the cube
@@ -331,13 +330,13 @@ export class SceneManager {
     }
 
 
-    rotateSkybox(){
-         //rotate skybox on game time
-         var delta=this.clock.getDelta();
-         //skybox rotation speed
-         var speed=0.02;
-         this.skybox.rotation.y += (speed*delta);
-         this.skybox.rotation.z += (speed*delta);
+    rotateSkybox() {
+        //rotate skybox on game time
+        var delta = this.clock.getDelta();
+        //skybox rotation speed
+        var speed = 0.02;
+        this.skybox.rotation.y += (speed * delta);
+        this.skybox.rotation.z += (speed * delta);
     }
     //========================================================
 
@@ -361,7 +360,7 @@ export class SceneManager {
         //renderer.shadowMap.type = THREE.PCFSoftShadowMap;
         renderer.shadowMapSoft = true;
         renderer.setPixelRatio(window.devicePixelRatio);
-        renderer.setSize(window.innerWidth/2, window.innerHeight/2,false);
+        renderer.setSize(window.innerWidth / 2, window.innerHeight / 2, false);
 
         return renderer;
     }
@@ -437,14 +436,14 @@ export class SceneManager {
         managers[1].register(bedroomLightObj);
         managers[1].register(hallwayLightObj1);
         managers[1].register(hallwayLightObj2);
-       
+
 
         managers[1].register(house);
 
         testdoor.setPosition(0, -0.5, 33);
         managers[1].register(testdoor);
 
-        studydoor.object.rotateY(Math.PI /2);
+        studydoor.object.rotateY(Math.PI / 2);
         studydoor.setPosition(7.9, -0.5, -35.3);
         managers[1].register(studydoor);
 
@@ -474,31 +473,31 @@ export class SceneManager {
         managers[1].register(crowbar);
         managers[1].register(lightswitch);
 
-        boards2.object.position.set(-4.5,15,-77.5);
+        boards2.object.position.set(-4.5, 15, -77.5);
         managers[1].register(boards2);
 
-        boards.object.position.set(-4.5,15,-77.5);
+        boards.object.position.set(-4.5, 15, -77.5);
         managers[1].register(boards);
 
 
 
-        
-       /* managers[1].register(plank);
-        plank.setPosition(-4.5, 15, -77.5);
-        plank.setRotation(Math.PI / 2)
 
-        managers[1].register(plank1);
-        plank1.setPosition(-4.5, 20, -77.5);
-        plank1.setRotation(Math.PI / 2);
-
-        managers[1].register(plank2);
-        plank2.setPosition(-4.5, 10, -77.5);
-        plank2.setRotation(Math.PI / 2);*/
+        /* managers[1].register(plank);
+         plank.setPosition(-4.5, 15, -77.5);
+         plank.setRotation(Math.PI / 2)
+ 
+         managers[1].register(plank1);
+         plank1.setPosition(-4.5, 20, -77.5);
+         plank1.setRotation(Math.PI / 2);
+ 
+         managers[1].register(plank2);
+         plank2.setPosition(-4.5, 10, -77.5);
+         plank2.setRotation(Math.PI / 2);*/
 
 
 
         bedroomDrawer.object.position.set(20.2, 7.4, 36.7);
-        
+
         managers[1].register(bedroomDrawer);
         //------------------------------------------------------------------------
 
@@ -508,7 +507,7 @@ export class SceneManager {
         managers[2].register("double_door_knock", "assets/double_door_knock.mpeg");
         managers[2].register("ghost_wail", "assets/ghost_wail.mpeg");
 
-        managers[2].register("background","assets/back_sound.mp3")
+        managers[2].register("background", "assets/back_sound.mp3")
 
         return managers;
     }
@@ -732,68 +731,61 @@ export class SceneManager {
             this.setAudio();
 
             //testing stuff----------------------------------------------------------------
+
             var x = studydoor.object.position.x;
             var y = studydoor.object.position.y;
             var z = studydoor.object.position.z
             var changedPos = false;
-            if (keyboardManager.wasPressed("I"))
-            {
+            if (keyboardManager.wasPressed("I")) {
                 y += 0.05;
                 changedPos = true;
 
             }
-            if (keyboardManager.wasPressed("J"))
-            {
+            if (keyboardManager.wasPressed("J")) {
                 x -= 0.05;
                 changedPos = true;
 
             }
-            if (keyboardManager.wasPressed("K"))
-            {
+            if (keyboardManager.wasPressed("K")) {
                 y -= 0.05;
                 changedPos = true;
 
             }
-            if (keyboardManager.wasPressed("L"))
-            {
+            if (keyboardManager.wasPressed("L")) {
                 x += 0.05;
                 changedPos = true;
 
             }
 
-            if (keyboardManager.wasPressed("UP"))
-            {
+            if (keyboardManager.wasPressed("UP")) {
                 z += 0.05;
                 changedPos = true;
 
             }
-            if (keyboardManager.wasPressed("DOWN"))
-            {
+            if (keyboardManager.wasPressed("DOWN")) {
                 z -= 0.05;
                 changedPos = true;
 
             }
-            if (changedPos == true)
-            {
-            studydoor.object.position.set(x,y,z);
-            console.log("( " +x.toString() +" , " +y.toString() +" , " +z.toString() + " )");
+            if (changedPos == true) {
+                studydoor.object.position.set(x, y, z);
+                console.log("( " + x.toString() + " , " + y.toString() + " , " + z.toString() + " )");
+
             }
 
             //testing stuff---------------------------------------------------------------
 
 
-            if (this.hud.hasItem('key') == false && bedroomDrawer.keyFound && testdoor.open == false)
-            {
+            if (this.hud.hasItem('key') == false && bedroomDrawer.keyFound && testdoor.open == false) {
                 var selectedObject = bedroomDrawer.object.getObjectByName('key');
-                bedroomDrawer.object.remove( selectedObject);
+                bedroomDrawer.object.remove(selectedObject);
 
                 this.hud.add("key", new Key());
                 testdoor.setAllowInteraction(true);
                 this.managers[2].entities["double_door_knock"].play();
             }
-          
-            else if (this.hud.hasItem('key') && testdoor.open)
-            {
+
+            else if (this.hud.hasItem('key') && testdoor.open) {
 
                 this.hud.remove('key');
                 this.managers[2].entities["double_door_knock"].pause();
@@ -971,7 +963,7 @@ export class SceneManager {
         this.camera.aspect = window.innerWidth / window.innerHeight;
         this.camera.updateProjectionMatrix();
 
-        this.renderer.setSize(window.innerWidth/2, window.innerHeight/2,false);
+        this.renderer.setSize(window.innerWidth / 2, window.innerHeight / 2, false);
     }
 
 
@@ -1007,24 +999,24 @@ export class SceneManager {
     }
 
 
-    addToHUD()
-    {
 
-        if (hudOverlayAddQueue.includes("hammer"))
-        {
-           var hammer_obj = new Hammer();
+    addToHUD() {
+
+        if (hudOverlayAddQueue.includes("hammer")) {
+            var hammer_obj = new Hammer();
             hammer_obj.setForHUD();
-           this.hud.add("hammer",hammer_obj);
+            this.hud.add("hammer", hammer_obj);
 
-           hudOverlayAddQueue.shift();
+            hudOverlayAddQueue.shift();
 
         }
 
-        if (hudOverlayAddQueue.includes("pin"))
-        {
-           console.log("adding pin");
-           this.hud.add("pin",hudPin);
-           hudOverlayAddQueue.shift();
+
+        if (hudOverlayAddQueue.includes("pin")) {
+            console.log("adding pin");
+            this.hud.add("pin", hudPin);
+            hudOverlayAddQueue.shift();
+
 
         }
     }
@@ -1036,8 +1028,8 @@ export class SceneManager {
             hudOverlayRemoveQueue.shift();
             this.hud.remove(name);
 
- 
-         }
+
+        }
 
 
     }
@@ -1064,8 +1056,7 @@ export class SceneManager {
         this.pointerLockControls.unlock(); // start orbit controls to respond to input
     }
 
-    setAudio()
-    {
+    setAudio() {
         while (audioPlayQueue.length > 0) {
             var name = audioPlayQueue[0];
             audioPlayQueue.shift();
