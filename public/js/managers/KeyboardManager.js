@@ -129,9 +129,6 @@ export class KeyboardManager {
 
 
 		    case 27: //escape key
-                //check if game is paused
-             //   console.log(event.repeat);
-
 
 		    case 80: //"p" key
 
@@ -216,11 +213,6 @@ export class KeyboardManager {
             case 27: //escape key
 
             case 80: //"p" key
-
-              //check if game is paused
-             // console.log(event.repeat);
-              //if (event.repeat == false)
-              //{
                   this.keys.P = false;
                  /* if (sceneManager.game_state == sceneManager.GAME_PAUSE) {
                       sceneManager.unpause();

@@ -23,7 +23,6 @@ export class AudioManager{
         });
 
         this.entities[key] = sound;
-        console.log(this.entities[key]);
 
     }
     
