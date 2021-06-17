@@ -497,8 +497,8 @@ export class SceneManager {
 
 
 
-        //bedroomDrawer.object.position.set(20.2, 7.4, 36.7);
-        bedroomDrawer.object.position.set(20.2, 7.4, 40);
+        bedroomDrawer.object.position.set(20.2, 7.4, 36.7);
+        
         managers[1].register(bedroomDrawer);
         //------------------------------------------------------------------------
 
