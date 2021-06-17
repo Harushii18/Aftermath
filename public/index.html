@@ -98,7 +98,15 @@
   <div class="pauseMenu">
       <button id="unpause" class="menu-button">UNPAUSE</button>
       <button id="mainMenu" class="menu-button">MAIN MENU</button>
+      <button id="restart" class="menu-button" onclick="restart()">RESTART</button>
   </div>
+
+  <script>
+    function restart(){
+      location.reload();
+    }
+
+  </script>
 
   <!-- PRE-LOADER -->
   <section id="loading-screen">

@@ -97,6 +97,22 @@ export class KeyboardManager {
             case 76: 
                 this.keys.L = true;
                 break;
+
+            case 38: 
+                this.keys.UP = true;
+                break;
+
+            case 40: 
+                this.keys.DOWN = true;
+                break;
+
+            case 37: 
+                this.keys.LEFT = true;
+                break;
+
+            case 39: 
+                this.keys.RIGHT = true;
+                break;
             
             case 16: // shift
                 this.keys.SHIFT = true;
@@ -129,9 +145,6 @@ export class KeyboardManager {
 
 
 		    case 27: //escape key
-                //check if game is paused
-             //   console.log(event.repeat);
-
 
 		    case 80: //"p" key
 
@@ -190,6 +203,22 @@ export class KeyboardManager {
                 this.keys.L = false;
                 break;
 
+            case 38: 
+                this.keys.UP = false;
+                break;
+
+            case 40: 
+                this.keys.DOWN = false;
+                break;
+
+            case 37: 
+                this.keys.LEFT = false;
+                break;
+
+            case 39: 
+                this.keys.RIGHT = false;
+                break;
+
             case 16: // shift
                 this.keys.SHIFT = false;
                 break;
@@ -216,11 +245,6 @@ export class KeyboardManager {
             case 27: //escape key
 
             case 80: //"p" key
-
-              //check if game is paused
-             // console.log(event.repeat);
-              //if (event.repeat == false)
-              //{
                   this.keys.P = false;
                  /* if (sceneManager.game_state == sceneManager.GAME_PAUSE) {
                       sceneManager.unpause();
@@ -255,6 +279,15 @@ export class KeyboardManager {
                 return (this.keys.K);
             case 'L': // d
                 return (this.keys.L);
+
+            case 'UP': // w
+                return (this.keys.UP);
+            case 'DOWN': // a
+                return (this.keys.DOWN);
+            case 'LEFT': // s
+                return (this.keys.LEFT);
+            case 'RIGHT': // d
+                return (this.keys.RIGHT);
 
             case 'SHIFT': // shift
                 return (this.keys.SHIFT);

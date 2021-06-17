@@ -6,7 +6,7 @@ import { gameOverlay } from '../../Overlay/GameOverlay.js';
 import { loadingManager } from '../../managers/SceneManager.js';
 import { subtitleManager } from '../../managers/SubtitleManager.js';
 
-export class Door extends THREE.Object3D {
+export class WoodenDoor extends THREE.Object3D {
     constructor() {
         super();
         this.objectInteractionCounter = 0;

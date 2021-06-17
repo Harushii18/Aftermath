@@ -27,6 +27,9 @@ export class HUD extends Overlay {
     this.scene.add( torus );
     //-------------------------------------------------------------------------------------------------
 
+    //create items box--------------------------------------------------------------------------------------------
+
+    //--------------------------------------------------------------------------------------------
 
 
     this.scene.add(this.light);
@@ -67,20 +70,20 @@ export class HUD extends Overlay {
     this.numItems += 1;
     this.items.add(name);
 
-    console.log("in add: hud has " +this.numItems.toString())
+    //console.log("in add: hud has " +this.numItems.toString())
 
   }
 
   remove(name)
   {
     var selectedObject = this.scene.getObjectByName(name);
-    console.log("removing from hud");
-    console.log(selectedObject);
+    //console.log("removing from hud");
+    //console.log(selectedObject);
     this.scene.remove( selectedObject);
 
     this.numItems -= 1;
     this.items.delete(name);
-    console.log("in remove: hud has " +this.numItems.toString())
+    //console.log("in remove: hud has " +this.numItems.toString())
 
   }
 

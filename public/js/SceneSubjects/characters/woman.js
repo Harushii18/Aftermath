@@ -1,6 +1,6 @@
 import * as THREE from '../../../jsm/three.module.js';
 import { FBXLoader } from '../../../jsm/FBXLoader/FBXLoader.js';
-import { loadingManager, mainChar, testdoor } from '../../managers/SceneManager.js';
+import { loadingManager, mainChar, testdoor, audioPlayQueue, audioPauseQueue } from '../../managers/SceneManager.js';
 import { subtitleManager } from '../../managers/SubtitleManager.js';
 import { characterControls } from '../../managers/CharacterControls.js';
 export class Woman extends THREE.Object3D {
@@ -11,18 +11,31 @@ export class Woman extends THREE.Object3D {
         this.object = new THREE.Object3D();
         this.object.position.set(0, 0, -15);
         this.womanVisible = false;
-        this.object.visible=false;
+        this.object.visible = false;
         this.startSubs = false;
 
         this.clock = new THREE.Clock();
+        this.state='idle';
 
 
         //scale to correct size
         this.object.scale.x = 9;
         this.object.scale.y = 9;
         this.object.scale.z = 9;
+
+        //load the model
         this.loadModel();
+        //make sure animations are pre-loaded
+        this.anim = {};
+        this.loadAllAnimations();
+
+        //how many times he has successfully warded off the woman for her to give up the handle
+        this.handleCount = 0;
+
+
+
         this.initialiseSubtitleContents();
+        this.initialInteraction = false;
 
 
         this.update = function (time) {
@@ -39,21 +52,32 @@ export class Woman extends THREE.Object3D {
 
                 //INITIAL INTERACTION WITH WOMAN===================
 
-                if (this.checkCharacterVicinity()) {
-                    this.startSubs = true;
-                }
-                if (this.startSubs) {
-                    if (this.subtitleState.t2 == false) {
-                        this.subtitle1();
+                if (!this.initialInteraction) {
+                    if (this.checkCharacterVicinity()) {
+                        this.startSubs = true;
+                        this.playAnim(this.anim['injuredWalk'], 'injuredWalk');
 
-                        //if first subs been shown
-                        if (this.subtitleState.t1) {
-                            this.subtitle2();
-                        }
+                        
                     }
+                    if (this.startSubs) {
+                        if (this.object.position.z<mainChar.getWorldPosition().z){
+                            this.object.position.z+=(this.delta*5)
+                        }
+                        if (this.subtitleState.t2 == false) {
+                            this.subtitle1();
+
+                            //if first subs been shown
+                            if (this.subtitleState.t1) {
+                                this.subtitle2();
+                            }
+                        }
+
+                    }
+                  
 
                 }
-                //=====================================
+
+                  //=====================================
 
 
             }
@@ -63,6 +87,105 @@ export class Woman extends THREE.Object3D {
     return3DObject() {
         return this.object;
     }
+
+
+    //ANIMATIONS===================================
+    checkAnimState(state) {
+        //checks if the curr animation is already playing
+        return (this.state == state);
+    }
+
+    setAnimState(state) {
+        //changes curr animation state
+        this.state = state;
+    }
+
+    loadAllAnimations() {
+        var womanPath = '../models/characters/WAnimations/';
+
+        //injured walk
+        this.loadAnim('injuredWalk', womanPath, 'InjuredWalk.fbx');
+        //Hurt
+        this.loadAnim('hurt', womanPath, 'Hurt.fbx');
+        //Dead
+        this.loadAnim('dead', womanPath, 'Dead.fbx');
+
+    }
+
+    determineAnimations() {
+        //if move false
+        this.playAnim(this.anim['idle'], 'idle');
+        //if move true
+        this.playAnim(this.anim['idle'], 'idle');
+    }
+
+    loadAnim(state, path, file) {
+		//load the animation
+		const anime = new FBXLoader(loadingManager);
+		anime.setPath(path);
+		anime.load(file, (anime) => {
+
+			//store animation in dictionary for access later
+			this.anim[state] = anime;
+		});
+	}
+
+
+    playAnim(animation, state) {
+        if (!this.checkAnimState(state)) {
+            //if she is not currently doing this animation, set the animation state to this new animation
+            this.setAnimState(state);
+
+            //make the walkMixer do this action
+            animation = this.walkMixer.clipAction(animation.animations[0]);
+            animation.reset();
+
+            animation.clampWhenFinished = true;
+
+            //cross fade from the previous animation
+            animation.crossFadeFrom(this.currAction, 0.2, true);
+            this.currAction = animation;
+
+            //play the loaded animation
+            animation.play();
+        }
+
+    }
+
+    loadModel() {
+        //load the main character model with an FBX Loader
+        const loader = new FBXLoader(loadingManager);
+        loader.setPath('../models/characters/');
+        loader.load('jill.fbx', (fbx) => {
+            //scale the model down
+            fbx.scale.setScalar(0.0115);
+            fbx.traverse(c => {
+                c.castShadow = true;
+                c.receiveShadow = true;
+                this.currAction = this.idle;
+
+            });
+
+
+            //animate character
+            const anim = new FBXLoader(loadingManager);
+            anim.setPath('../models/characters/WAnimations/');
+            anim.load('Idle.fbx', (anim) => {
+                this.walkMixer = new THREE.AnimationMixer(fbx);
+                //set the initial animation for our main character to be idle (as he is not moving)
+                this.animation = this.walkMixer.clipAction(anim.animations[0]);
+                this.anim['idle'] = this.animation;
+                this.currAction=this.animation;
+                this.animation.reset();
+                this.animation.play();
+
+            });
+
+            this.object.add(fbx);
+        });
+    }
+
+    //===============================================================================
 
     inVicinity(vicinityLimitZ, vicinityLimitX) {
         //get the position of the main character
@@ -88,7 +211,8 @@ export class Woman extends THREE.Object3D {
                 //show the woman now that the door has opened
                 this.object.visible = true;
                 this.womanVisible = true;
-
+                audioPlayQueue.push("ghost_wail");
+                
                 //so the character walks really slowly towards the woman
                 characterControls.setSpeed(2);
             }
@@ -154,12 +278,13 @@ export class Woman extends THREE.Object3D {
                 //hide woman
                 this.object.visible = false;
 
+                audioPauseQueue.push("ghost_wail");
                  //character returns to original walking speed
                  characterControls.setOriginalSpeed();
 
-                 //hide stage complete
-                 const stageComplete = document.getElementById('stageComplete');
-                 stageComplete.style.display = 'none';
+                //hide stage complete
+                const stageComplete = document.getElementById('stageComplete');
+                stageComplete.style.display = 'none';
 
             }
         }
@@ -167,8 +292,6 @@ export class Woman extends THREE.Object3D {
 
     }
     subtitle2() {
-
-
         if (!this.subtitleState.t2) {
             subtitleManager.showSubtitles();
             if (!this.subtitleStarted.t2) {
@@ -184,44 +307,15 @@ export class Woman extends THREE.Object3D {
             if (!subtitleManager.checkTime()) {
                 this.subtitleState.t2 = true;
                 subtitleManager.hideSubtitles();
-                 //meaning it was shown
+                //meaning it was shown
                 this.startSubs = false;
-            
+                this.initialInteraction = true;
             }
         }
 
 
     }
 
-
-    //ANIMATIONS===================================
-    loadModel() {
-        //load the main character model with an FBX Loader
-        const loader = new FBXLoader(loadingManager);
-        loader.setPath('../models/characters/');
-        loader.load('jill.fbx', (fbx) => {
-            //scale the model down
-            fbx.scale.setScalar(0.0115);
-            fbx.traverse(c => {
-                c.castShadow = true;
-                c.receiveShadow = true;
-            });
-
-
-            //animate character
-            const anim = new FBXLoader(loadingManager);
-            anim.setPath('../models/characters/WAnimations/');
-            anim.load('Idle.fbx', (anim) => {
-                this.walkMixer = new THREE.AnimationMixer(fbx);
-                //set the initial animation for our main character to be idle (as he is not moving)
-                this.animation = this.walkMixer.clipAction(anim.animations[0]);
-                this.animation.reset();
-                this.animation.play();
-            });
-
-            this.object.add(fbx);
-        });
-    }
 
 
 }

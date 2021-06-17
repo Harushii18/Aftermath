@@ -98,12 +98,13 @@ export class Pin extends THREE.Object3D {
 
                     gameOverlay.hideOverlay();
                     //Hiding Lockpick, will need to destroy it later
-                    this.object.position.set(0, 100, 0);
+                   // this.object.position.set(0, 100, 0);
                     this.pickedUp = true;
                     
                     //SHOW LOCKPICK IMAGE IN OVERLAY
                     hudOverlayAddQueue.push("pin");
-                    //sceneRemoveQueue.push("pin");
+                    sceneRemoveQueue.push("pin");
+                    this.allowInteraction = false;
 
                     //Allo bedroomDrawer to be interacted with
                     bedroomDrawer.setAllowInteraction(true);
