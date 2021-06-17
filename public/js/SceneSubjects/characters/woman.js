@@ -1,18 +1,21 @@
 import * as THREE from '../../../jsm/three.module.js';
 import { FBXLoader } from '../../../jsm/FBXLoader/FBXLoader.js';
-import { loadingManager, mainChar } from '../../managers/SceneManager.js';
+import { loadingManager, mainChar, testdoor } from '../../managers/SceneManager.js';
 import { subtitleManager } from '../../managers/SubtitleManager.js';
+import { characterControls } from '../../managers/CharacterControls.js';
 export class Woman extends THREE.Object3D {
     constructor() {
         super();
 
-        //main character object
+        //woman object
         this.object = new THREE.Object3D();
-        this.clock = new THREE.Clock();
-        // this.object.rotateOnAxis(new THREE.Vector3(0, 1, 0), -Math.PI);
-        this.object.position.set(0, 0, 0);
+        this.object.position.set(0, 0, -15);
         this.womanVisible = false;
+        this.object.visible=false;
         this.startSubs = false;
+
+        this.clock = new THREE.Clock();
+
 
         //scale to correct size
         this.object.scale.x = 9;
@@ -45,7 +48,6 @@ export class Woman extends THREE.Object3D {
 
                         //if first subs been shown
                         if (this.subtitleState.t1) {
-                            console.log(this.subtitleState.t1);
                             this.subtitle2();
                         }
                     }
@@ -77,18 +79,18 @@ export class Woman extends THREE.Object3D {
         }
     }
 
-    setLevel1Complete(value) {
-        this.level1Complete = value;
-    }
     getLevel1Complete() {
         //IF LEVEL 1 IS COMPLETE!
-        this.level1Complete = true; //comment this out and setlevel1complete
-
+        this.level1Complete = testdoor.level1Complete(); //if you want to test from lvl2 , make it true
 
         if (this.level1Complete) {
             if (!this.womanVisible) {
+                //show the woman now that the door has opened
                 this.object.visible = true;
                 this.womanVisible = true;
+
+                //so the character walks really slowly towards the woman
+                characterControls.setSpeed(2);
             }
             return true;
         }
@@ -99,7 +101,7 @@ export class Woman extends THREE.Object3D {
     //checks if Character is in vicinity
     checkCharacterVicinity() {
 
-        var vicinityLimitZ = 25;
+        var vicinityLimitZ = 50;
         var vicinityLimitX = 5;
 
         //check how close the character is to the woman-> death limit
@@ -128,7 +130,7 @@ export class Woman extends THREE.Object3D {
         //Contains the text for each subtitle
         this.subtitleText = {
             t1: "Hello??",
-            t2: "What the hell? She disappeared!"
+            t2: "What the hell? It disappeared!"
         };
     }
 
@@ -140,7 +142,7 @@ export class Woman extends THREE.Object3D {
             if (!this.subtitleStarted.t1) {
                 //start showing the subtitle
                 subtitleManager.startTime();
-                subtitleManager.setDuration(5);
+                subtitleManager.setDuration(2);
                 subtitleManager.changeSubtitlesText(this.subtitleText.t1);
                 this.subtitleStarted.t1 = true;
             }
@@ -151,6 +153,13 @@ export class Woman extends THREE.Object3D {
                 this.subtitleState.t1 = true;
                 //hide woman
                 this.object.visible = false;
+
+                 //character returns to original walking speed
+                 characterControls.setOriginalSpeed();
+
+                 //hide stage complete
+                 const stageComplete = document.getElementById('stageComplete');
+                 stageComplete.style.display = 'none';
 
             }
         }
@@ -175,8 +184,9 @@ export class Woman extends THREE.Object3D {
             if (!subtitleManager.checkTime()) {
                 this.subtitleState.t2 = true;
                 subtitleManager.hideSubtitles();
+                 //meaning it was shown
                 this.startSubs = false;
-                //meaning it was shown
+            
             }
         }
 

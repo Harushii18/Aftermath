@@ -51,12 +51,12 @@ export class Plank extends THREE.Object3D {
 
             var obj_gltf = new THREE.Object3D();
 
-            obj_gltf.scale.x = 8;
+            obj_gltf.scale.x = 6.5;
             obj_gltf.scale.y = 8;
             obj_gltf.scale.z = 8;
 
 
-            obj_gltf.position.set(0,6, 0);
+            // obj_gltf.position.set(0,6, 0);
 
 
             obj_gltf.add(gltf.scene);
@@ -64,6 +64,7 @@ export class Plank extends THREE.Object3D {
         });
 
     }
+
 
     initialiseSubtitleContents() {
         //Checks if the subtitle had started showing
@@ -85,6 +86,18 @@ export class Plank extends THREE.Object3D {
 
     setAllowInteraction(value) {
         this.allowInteraction = value;
+    }
+
+    //set position plank 
+
+    setPosition(x, y, z) {
+        this.object.position.set(x, y, z);
+    }
+
+    //set position of wooden plank 
+
+    setRotation(angle) {
+        this.object.rotateOnAxis(new THREE.Vector3(0, 1, 0), angle);
     }
 
 
