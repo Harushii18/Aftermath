@@ -168,9 +168,10 @@ export class Door extends THREE.Object3D {
         }
 
         if (keyboardManager.wasPressed('E')) {
-            console.log("e pressed by door");
+               // console.log("e pressed by door");
+
             if (this.checkVicinity) {
-                console.log("vicinity by door");
+               // console.log("vicinity by door");
                 //if character is in vicinity of door, then they can open door
                 if (this.allowInteraction) {
                     this.playDoorSound = true;
@@ -186,7 +187,7 @@ export class Door extends THREE.Object3D {
                     //checks how long the animation was playing for
                     this.animationCounter = 0;
 
-                    console.log("door allow interaction true. now set to false");
+                        //console.log("door allow interaction true. now set to false");
 
                     /*                        WhatsApp
                                                                              
