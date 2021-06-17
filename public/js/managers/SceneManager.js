@@ -365,8 +365,8 @@ export class SceneManager {
         // hallwayLightObj2.setLightPosition(0, 0);
 
         //bedroomLight.setLightPosition(0, 50);
-        testLights.setLightPosition(0, 30);
-        flash.setLightPosition(7, 80);
+        testLights.setLightPosition(0, 50);
+        flash.setLightPosition(0, 50);
         // loungeLight.setLightPosition(-45,  -60);
         //  studyLight.setLightPosition(35,  -50);
         //   kitchenLight.setLightPosition(-45,  5);
@@ -479,7 +479,8 @@ export class SceneManager {
         if (isFirstPersonView == true) {
             mainChar.setVisibility(false);
             this.pointerLockControls.getObject().position.set(pos.x, 17.5, pos.z); //Need to sort out position of camera at head height
-
+            //flash.rotateY.set(dir.y);
+            flash.setLightPosition(pos.x, pos.z);
         }
         //Third Person View
         else if (isFirstPersonView == false) {
@@ -498,6 +499,8 @@ export class SceneManager {
             mousePointer.normalize();
             this.pointerLockControls.getDirection(mousePointer);
             mainChar.updateDirection(mousePointer);
+            flash.updateDirection(mousePointer);
+            flash.setLightRotation(mousePointer.x, mousePointer.y, mousePointer.z);
         }
         if (isFirstPersonView == false) {
             var directionOfCamera = new THREE.Vector3();

@@ -3,7 +3,7 @@ import * as THREE from '../../../jsm/three.module.js';
 export class testLight extends THREE.Object3D {
     constructor() {
         super();
-        this.object = new THREE.PointLight(0xFFFFFF, 1, 100);
+        this.object = new THREE.PointLight(0xFF0000, 1, 100);
         this.object.distance=500;
         this.object.castShadow = true;
 
@@ -17,7 +17,7 @@ export class testLight extends THREE.Object3D {
     }
 
     setLightPosition(x, z) {
-        this.object.position.set(0, 8, 50);
+        this.object.position.set(x, 8, z);
 
     }
 

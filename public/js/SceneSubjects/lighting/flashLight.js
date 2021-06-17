@@ -4,7 +4,7 @@ import { mainChar } from '../../managers/SceneManager.js';
 export class flashLight extends THREE.Object3D {
     constructor() {
         super();
-        this.object = new THREE.SpotLight( 0xffffff );
+        this.object = new THREE.SpotLight( 0xffffff, 0.8, 100, Math.PI/5 );
         //this.object.position.set( 100, 1000, 100 );
         
         this.object.castShadow = true;
@@ -21,8 +21,19 @@ export class flashLight extends THREE.Object3D {
     }
 
     setLightPosition(x, z) {
-        this.object.position.set(0, 8, 50);
+        this.object.position.set(x, 14, z);
 
+    }
+
+	updateDirection(directionVector) {
+		this.object.lookAt(directionVector.x + this.object.position.x, this.object.position.y, directionVector.z + this.object.position.z);
+	}
+
+    setLightRotation(x,y,z){
+        this.object.rotateY = y;
+        this.object.rotateX = x;
+        this.object.rotateZ = z;
+        this.object.rotateOnAxis
     }
 
     toggleVisibility(){
