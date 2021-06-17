@@ -120,6 +120,8 @@ export var flashlight = new Flashlight();
 export var crowbar= new Crowbar();
 export var lightswitch =  new LightSwitch();
 export var plank = new Plank();
+export var plank1 = new Plank();
+export var plank2 = new Plank();
 
 var letterI = new LetterI();
 var key = new Key();
@@ -431,7 +433,19 @@ export class SceneManager {
 
         managers[1].register(crowbar);
         managers[1].register(lightswitch);
+
+
         managers[1].register(plank);
+        plank.setPosition(-4.5,15,-77.5);
+        plank.setRotation(Math.PI/2)
+
+        managers[1].register(plank1);
+        plank1.setPosition(-4.5,20,-77.5);
+        plank1.setRotation(Math.PI/2);
+
+        managers[1].register(plank2);
+        plank2.setPosition(-4.5,10,-77.5);
+        plank2.setRotation(Math.PI/2);
 
 
         

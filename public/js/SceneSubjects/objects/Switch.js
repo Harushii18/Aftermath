@@ -51,12 +51,17 @@ export class LightSwitch extends THREE.Object3D {
 
             var obj_gltf = new THREE.Object3D();
 
-            obj_gltf.scale.x = 8;
-            obj_gltf.scale.y = 8;
-            obj_gltf.scale.z = 8;
+            // obj_gltf.scale.x = 20;
+            // obj_gltf.scale.y = 20;
+            // obj_gltf.scale.z = 20;
 
 
-            obj_gltf.position.set(-70,0, -50);
+            //move switch
+            obj_gltf.position.set(-79,15, -50);
+
+            //rotate switch 
+            obj_gltf.rotateOnAxis(new THREE.Vector3(0,1,0),Math.PI/2);
+
 
 
             obj_gltf.add(gltf.scene);
