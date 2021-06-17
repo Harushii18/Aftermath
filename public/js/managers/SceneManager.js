@@ -187,7 +187,7 @@ export class SceneManager {
 
         //the essentials for rendering a scene
         this.scene = this.buildScene();
-        
+
         //create our skybox
         this.skybox=this.addSkybox();
 
@@ -298,7 +298,7 @@ export class SceneManager {
             skybox_path + 'space_back.png'//negz
         ];
 
-        
+
         //add each image as a texture on skybox
         var materialArray = [];
         for (var i = 0; i < 6; i++){
@@ -348,7 +348,7 @@ export class SceneManager {
         //renderer.shadowMap.type = THREE.PCFSoftShadowMap;
         renderer.shadowMapSoft = true;
         renderer.setPixelRatio(window.devicePixelRatio);
-        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setSize(window.innerWidth/2, window.innerHeight/2,false);
 
         return renderer;
     }
@@ -689,7 +689,7 @@ export class SceneManager {
         } else if (this.game_state == this.GAME_RUN) {
 
             this.rotateSkybox();
-           
+
 
             this.managers[2].entities["background"].pause();
 
@@ -891,7 +891,7 @@ export class SceneManager {
         this.camera.aspect = window.innerWidth / window.innerHeight;
         this.camera.updateProjectionMatrix();
 
-        this.renderer.setSize(window.innerWidth, window.innerHeight);
+        this.renderer.setSize(window.innerWidth/2, window.innerHeight/2,false);
     }
 
 
