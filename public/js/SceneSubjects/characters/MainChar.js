@@ -325,7 +325,7 @@ export class MainChar extends THREE.Object3D {
 		anime.load(file, (anime) => {
 
 			this.anim[state] = anime;
-			console.log(this.anim[state]);
+			//console.log(this.anim[state]);
 
 		});
 

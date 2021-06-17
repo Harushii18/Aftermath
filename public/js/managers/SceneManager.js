@@ -196,7 +196,7 @@ export class SceneManager {
         };
 
         loadingManager.onLoad = function () {
-            console.log('loaded all resources');
+            //console.log('loaded all resources');
             const loadingScreen = document.getElementById('loading-screen');
             loadingScreen.style.display = "none";
         }
@@ -442,7 +442,10 @@ export class SceneManager {
         managers[2].register("footstep", "assets/footstep.mpeg");
         managers[2].register("door_open", "assets/door_open.mpeg");
         managers[2].entities["door_open"].setLoop(false);
-        managers[2].register("background", "assets/back_sound.mp3");
+        managers[2].register("double_door_knock", "assets/double_door_knock.mpeg");
+        managers[2].register("ghost_wail", "assets/ghost_wail.mpeg");
+
+        managers[2].register("background","assets/back_sound.mp3")
 
         return managers;
     }
@@ -660,26 +663,33 @@ export class SceneManager {
             this.addToHUD();
             this.removeFromScene()
    
+            //testing stuff----------------------------------------------------------------
+            if (keyboardManager.wasPressed("I"))
+            {
+               // 
+            }
 
+            //testing stuff---------------------------------------------------------------
 
 
             if (this.hud.hasItem('key') == false && bedroomDrawer.keyFound && testdoor.open == false)
             {
-                console.log("key adde");
+
                 var selectedObject = bedroomDrawer.object.getObjectByName('key');
-                console.log(selectedObject);
                 bedroomDrawer.object.remove( selectedObject);
 
                 
                 this.hud.add("key",new Key());
                 testdoor.setAllowInteraction(true);
+                this.managers[2].entities["double_door_knock"].play();
 
                 
             }
             else if (this.hud.hasItem('key') && testdoor.open)
             {
-                console.log("key removed");
+
                 this.hud.remove('key');
+                this.managers[2].entities["double_door_knock"].pause();
 
 
             }
@@ -692,7 +702,6 @@ export class SceneManager {
                 if (keyboardManager.wasPressed('E') && testdoor.playDoorSound) {
                     if (this.managers[2].entities["door_open"].isPlaying == false) {
                         this.managers[2].entities["door_open"].setLoop(0);
-                        console.log("PLAYING DOOR");
                         this.managers[2].entities["door_open"].play();
                     }
                 }
@@ -902,7 +911,7 @@ export class SceneManager {
         {
            
            this.hud.add("hammer",new Hammer());
-           console.log("hammer added to hud");
+
            hudOverlayAddQueue.shift();
 
         }
@@ -911,7 +920,6 @@ export class SceneManager {
         {
            
            this.hud.add("pin",new Pin());
-           console.log("Pin added to hud");
            hudOverlayAddQueue.shift();
 
         }
@@ -924,11 +932,7 @@ export class SceneManager {
         {          
             var name = hudOverlayRemoveQueue[0];
             hudOverlayRemoveQueue.shift();
-
-
-            console.log(hudOverlayRemoveQueue.length);
             this.hud.remove(name);
-           console.log(name + " removed from hud");
  
          }
 
