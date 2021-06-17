@@ -38,14 +38,11 @@ import { Key } from '../SceneSubjects/objects/Key.js';
 import { Crowbar } from '../SceneSubjects/objects/Crowbar.js';
 import { LightSwitch } from '../SceneSubjects/objects/Switch.js';
 import { Plank } from '../SceneSubjects/objects/Plank.js';
-<<<<<<< HEAD
 import { TV } from '../SceneSubjects/objects/Tv.js';
 import { Shower } from '../SceneSubjects/objects/Shower.js';
-=======
+
 import { Boards } from '../SceneSubjects/objects/Boards.js';
 
-
->>>>>>> 55f3f0da3d83ad3fe484a1aa580a67a248456fe0
 
 
 
