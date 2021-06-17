@@ -184,5 +184,12 @@ export class Hammer extends THREE.Object3D {
             this.object.rotateOnAxis(new THREE.Vector3(0,1,0),Math.PI/2*0.5);
         }
 
+        setForHUD()
+        {
+            this.object.scale.x = 0.8;
+            this.object.scale.y = 0.8;
+            this.object.scale.z = 0.8;
+        }
+
 
     }

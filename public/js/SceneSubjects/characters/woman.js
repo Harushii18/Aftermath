@@ -1,6 +1,6 @@
 import * as THREE from '../../../jsm/three.module.js';
 import { FBXLoader } from '../../../jsm/FBXLoader/FBXLoader.js';
-import { loadingManager, mainChar, testdoor } from '../../managers/SceneManager.js';
+import { loadingManager, mainChar, testdoor, audioPlayQueue, audioPauseQueue } from '../../managers/SceneManager.js';
 import { subtitleManager } from '../../managers/SubtitleManager.js';
 import { characterControls } from '../../managers/CharacterControls.js';
 export class Woman extends THREE.Object3D {
@@ -88,7 +88,8 @@ export class Woman extends THREE.Object3D {
                 //show the woman now that the door has opened
                 this.object.visible = true;
                 this.womanVisible = true;
-
+                audioPlayQueue.push("ghost_wail");
+                
                 //so the character walks really slowly towards the woman
                 characterControls.setSpeed(2);
             }
@@ -153,7 +154,7 @@ export class Woman extends THREE.Object3D {
                 this.subtitleState.t1 = true;
                 //hide woman
                 this.object.visible = false;
-
+                audioPauseQueue.push("ghost_wail");
                  //character returns to original walking speed
                  characterControls.setOriginalSpeed();
 

@@ -63,6 +63,8 @@ export var hudOverlayAddQueue = [];
 export var hudOverlayRemoveQueue = [];
 export var sceneRemoveQueue = [];
 
+export var audioPlayQueue = [];
+export var audioPauseQueue = [];
 
 
 
@@ -701,6 +703,8 @@ export class SceneManager {
             this.addToHUD();
             this.removeFromScene()
 
+            this.setAudio();
+
             //testing stuff----------------------------------------------------------------
             if (keyboardManager.wasPressed("I"))
             {
@@ -937,10 +941,12 @@ export class SceneManager {
 
     addToHUD()
     {
+
         if (hudOverlayAddQueue.includes("hammer"))
         {
-           
-           this.hud.add("hammer",new Hammer());
+           var hammer_obj = new Hammer();
+            hammer_obj.setForHUD();
+           this.hud.add("hammer",hammer_obj);
 
            hudOverlayAddQueue.shift();
 
@@ -948,7 +954,7 @@ export class SceneManager {
 
         if (hudOverlayAddQueue.includes("pin"))
         {
-           
+           console.log("adding pin");
            this.hud.add("pin",new Pin());
            hudOverlayAddQueue.shift();
 
@@ -988,5 +994,22 @@ export class SceneManager {
         this.time.unpause();
 
         this.pointerLockControls.unlock(); // start orbit controls to respond to input
+    }
+
+    setAudio()
+    {
+        while (audioPlayQueue.length > 0) {
+            var name = audioPlayQueue[0];
+            audioPlayQueue.shift();
+
+            this.managers[2].entities[name].play();
+        }
+
+        while (audioPauseQueue.length > 0) {
+            var name = audioPauseQueue[0];
+            audioPauseQueue.shift();
+
+            this.managers[2].entities[name].pause();
+        }
     }
 }
