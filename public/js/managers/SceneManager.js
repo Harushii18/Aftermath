@@ -24,6 +24,7 @@ import { Lock } from '../SceneSubjects/objects/Lock.js'
 import { SceneSubject } from '../SceneSubjects/objects/SceneSubject.js';
 import { TestBlock } from '../SceneSubjects/characters/TestBlock.js';
 import { Door } from '../SceneSubjects/objects/Door.js';
+import { WoodenDoor } from '../SceneSubjects/objects/WoodenDoor.js';
 
 import { BedroomPainting } from '../SceneSubjects/objects/BedroomPainting.js';
 import { BedroomDrawer } from '../SceneSubjects/objects/BedroomDrawer.js';
@@ -105,6 +106,7 @@ var ambientLight = new AmbientLight();
 //var sceneSubject = new SceneSubject();
 //var testBlock = new TestBlock();
 export var testdoor = new Door();
+export var studydoor = new WoodenDoor();
 
 //study
 var bookshelf = new Bookshelf();
@@ -132,6 +134,7 @@ export var lightswitch = new LightSwitch();
 //export var plank1 = new Plank();
 //export var plank2 = new Plank();
 export var boards = new Boards();
+var boards2 = new Boards();
 
 var letterI = new LetterI();
 var key = new Key();
@@ -441,6 +444,10 @@ export class SceneManager {
         testdoor.setPosition(0, -0.5, 33);
         managers[1].register(testdoor);
 
+        studydoor.object.rotateY(Math.PI /2);
+        studydoor.setPosition(7.9, -0.5, -35.3);
+        managers[1].register(studydoor);
+
         managers[1].register(mainChar);
         managers[1].register(woman)
 
@@ -467,10 +474,14 @@ export class SceneManager {
         managers[1].register(crowbar);
         managers[1].register(lightswitch);
 
+        boards2.object.position.set(-4.5,15,-77.5);
+        managers[1].register(boards2);
+
         boards.object.position.set(-4.5,15,-77.5);
         managers[1].register(boards);
 
-        
+
+
         
        /* managers[1].register(plank);
         plank.setPosition(-4.5, 15, -77.5);
@@ -721,28 +732,51 @@ export class SceneManager {
             this.setAudio();
 
             //testing stuff----------------------------------------------------------------
-            var x = boards.object.position.x;
-            var y = boards.object.position.y;
-            var z = boards.object.position.z
+            var x = studydoor.object.position.x;
+            var y = studydoor.object.position.y;
+            var z = studydoor.object.position.z
+            var changedPos = false;
             if (keyboardManager.wasPressed("I"))
             {
-                boards.object.position.set(x,y+0.05,z)
+                y += 0.05;
+                changedPos = true;
 
             }
             if (keyboardManager.wasPressed("J"))
             {
-                boards.object.position.set(x-0.05,y,z)
+                x -= 0.05;
+                changedPos = true;
 
             }
             if (keyboardManager.wasPressed("K"))
             {
-                boards.object.position.set(x,y-0.05,z)
+                y -= 0.05;
+                changedPos = true;
 
             }
             if (keyboardManager.wasPressed("L"))
             {
-                boards.object.position.set(x+0.05,y,z)
+                x += 0.05;
+                changedPos = true;
 
+            }
+
+            if (keyboardManager.wasPressed("UP"))
+            {
+                z += 0.05;
+                changedPos = true;
+
+            }
+            if (keyboardManager.wasPressed("DOWN"))
+            {
+                z -= 0.05;
+                changedPos = true;
+
+            }
+            if (changedPos == true)
+            {
+            studydoor.object.position.set(x,y,z);
+            console.log("( " +x.toString() +" , " +y.toString() +" , " +z.toString() + " )");
             }
 
             //testing stuff---------------------------------------------------------------
