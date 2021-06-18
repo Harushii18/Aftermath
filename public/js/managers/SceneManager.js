@@ -13,7 +13,7 @@ import { keyboardManager } from './KeyboardManager.js';//checked
 import { CollisionsManager } from './CollisionsManager.js'; //checked
 
 //lights
-//import { GeneralLights } from '../SceneSubjects/lighting/GeneralLights.js';
+import { GeneralLights } from '../SceneSubjects/lighting/GeneralLights.js';
 //import { CeilingLight } from '../SceneSubjects/lighting/CeilingLight.js';
 //import { AmbientLight } from '../SceneSubjects/lighting/AmbientLight.js';
 //import { CeilingLightObj } from '../SceneSubjects/objects/CeilingLightObj.js';
@@ -81,9 +81,14 @@ export var loadingManager = new THREE.LoadingManager();
 const collisionManager = new CollisionsManager();
 //Pass collidable objects as a parameter to the main character (raycasting implementation)
 
+//woman
+export var woman = new Woman();
+export var womanHitBox = new WomanHitBox(woman);
+
+//Pass collidable objects as a parameter to the main character (raycasting implementation)
+export var mainChar = new MainChar(collisionManager.returnObjects(),loadingManager, womanHitBox.return3DObject());
 
 
-export var mainChar = new MainChar(collisionManager.returnObjects(),loadingManager);
 export var testdoor = new Door(mainChar, loadingManager);
 export var studydoor = new Door(mainChar, loadingManager);//must be changed to wooden door later
 export var bedroomDrawer = new BedroomDrawer(mainChar,loadingManager, hudOverlayRemoveQueue,testdoor);
@@ -94,12 +99,24 @@ export var pin = new Pin(mainChar, bedroomDrawer, hudOverlayAddQueue, sceneRemov
 export var cupBoardDoorR = new cupboardDoorR(mainChar, loadingManager, pin, hudOverlayRemoveQueue,sceneRemoveQueue);
 
 export var hammer = new Hammer(mainChar, cupBoardDoorR, hudOverlayAddQueue );
-export var flashlight = new Flashlight(loadingManager);
+export var flashlight = new Flashlight(mainChar,loadingManager,hudOverlayAddQueue);
 
-export var crowbar = new Crowbar(loadingManager);
-export var lightswitch = new LightSwitch(loadingManager);
+
+export var crowbar = new Crowbar(loadingManager, mainChar,  hudOverlayAddQueue);
+export var loungeBoards = new Boards(loadingManager, mainChar, hudOverlayRemoveQueue, studydoor, crowbar);
+loungeBoards.setBoardType("lounge");
+export var studyBoards = new Boards(loadingManager, mainChar, hudOverlayRemoveQueue, studydoor, crowbar);
+studyBoards.setBoardType("study");
+export var microwave = new Microwave(loadingManager, mainChar, studydoor, hudOverlayAddQueue);
+
+
+export var lightswitch = new LightSwitch(loadingManager, mainChar, loungeBoards, studyBoards, microwave );
 
 var bookshelf = new Bookshelf(mainChar);
+
+
+export var keypad = new Keypad(mainChar,loadingManager,bookshelf);
+
 var woman = new Woman( loadingManager, mainChar, testdoor, audioPlayQueue, audioPauseQueue);
 //FirstPersonTracker
 var isFirstPersonView = true;
@@ -119,6 +136,7 @@ var studyLightObj = new CeilingLightObj();
 var hallwayLightObj1 = new CeilingLightObj();
 var hallwayLightObj2 = new CeilingLightObj();
 var bathroomLightObj = new CeilingLightObj();
+
 var loungeLightObj = new CeilingLightObj();*/
 
 //var bedroomLight = new CeilingLight();
@@ -162,23 +180,14 @@ var boards2 = new Boards();
 
 var letterI = new LetterI();
 
-export var tv = new TV();
+export var tv = new TV(loadingManager);
 
-export var shower = new Shower();
-export var microwave = new Microwave();
+export var shower = new Shower(loadingManager);
 
-
-export var crowbar = new Crowbar();
-export var lightswitch = new LightSwitch();
-export var keypad = new Keypad();
 
 //export var plank = new Plank();
 //export var plank1 = new Plank();
 //export var plank2 = new Plank();
-export var loungeBoards = new Boards();
-loungeBoards.setBoardType("lounge");
-export var studyBoards = new Boards();
-studyBoards.setBoardType("study");
 
 var letterI = new LetterI();
 var drawerKey = new Key();
@@ -192,9 +201,6 @@ studydoorKey.setKeyType("study");
 //initial subtitles-> check if everything has loaded
 export var loaded;
 
-//woman
-export var woman = new Woman();
-export var womanHitBox = new WomanHitBox();
 
 //Add collidable objects here
 //collisionManager.addObject(house);
@@ -207,12 +213,6 @@ collisionManager.addObject(loungeBoards);
 collisionManager.addObject(bookshelf);
 collisionManager.addObject(shower);
 collisionManager.addObject(house);
-
-
-
-
-//Pass collidable objects as a parameter to the main character (raycasting implementation)
-export var mainChar = new MainChar(collisionManager.returnObjects(), womanHitBox.return3DObject());
 
 
 export class SceneManager {
@@ -281,6 +281,8 @@ export class SceneManager {
             if (!loaded) {
                 console.log('All objects loaded')
                 loaded = true;
+                house.setLoaded(loaded);
+                mainChar.setLoaded(loaded);
             }
         }
 
@@ -491,7 +493,7 @@ export class SceneManager {
         //entities
 
 
-        managers[1].register(loungeLightObj);
+       // managers[1].register(loungeLightObj);
        /// managers[1].register(studyLightObj);
        /// managers[1].register(kitchenLightObj);
       ///  managers[1].register(bathroomLightObj);

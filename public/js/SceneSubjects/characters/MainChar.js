@@ -12,9 +12,12 @@ export class MainChar extends THREE.Object3D {
 
     
 		super();
+
 		this.loadingManager = loadingManager;
 		this.collidableObjects = collidableObjects;
 		this.collidableWoman = womanModel;
+
+		this.loaded = false;
 		//main character object
 		this.object = new THREE.Object3D();
 		this.clock = new THREE.Clock();
@@ -53,7 +56,7 @@ export class MainChar extends THREE.Object3D {
 
 		this.update = function (time) {
 			//perform everything only if the game has loaded
-			if (loaded && loadedHouse) {
+			if (this.loaded && loadedHouse) {
 
 
 				//add subtitles
@@ -195,6 +198,10 @@ export class MainChar extends THREE.Object3D {
 		};
 	}
 
+	setLoaded(loaded)
+	{
+		this.loaded = loaded;
+	}
 	addSubtitles() {
 
 		//t1

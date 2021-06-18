@@ -10,7 +10,7 @@ export class House extends THREE.Object3D {
   constructor(loadingManager) {
 
     super();
-
+    this.loaded = false;
     this.loadingManager = loadingManager;
     this.object = new THREE.Object3D();
     //this.object.castShadow = false;
@@ -50,13 +50,17 @@ export class House extends THREE.Object3D {
 
   }
 
+  setLoaded(loaded)
+  {
+    this.loaded = loaded;
+  }
   return3DObject() {
     return this.object;
   }
 
   update(time) {
     if (!this.hideOnce) {
-      if (loaded && loadedHouse) {
+      if (this.loaded && loadedHouse) {
         //hide loading screen because all objects have loaded
         const loadingScreen = document.getElementById('loading-screen');
         loadingScreen.classList.add('fade-out');
