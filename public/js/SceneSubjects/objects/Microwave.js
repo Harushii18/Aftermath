@@ -177,7 +177,6 @@ export class Microwave extends THREE.Object3D {
 
 
 
-
   inVicinity(vicinityLimitZ, vicinityLimitX) {
     let pos = mainChar.returnWorldPosition();
 

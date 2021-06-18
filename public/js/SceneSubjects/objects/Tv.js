@@ -51,13 +51,7 @@ export class TV extends THREE.Object3D {
 
             var obj_gltf = new THREE.Object3D();
 
-            obj_gltf.scale.x = 18;
-            obj_gltf.scale.y = 18;
-            obj_gltf.scale.z = 18;
-
-
-            obj_gltf.position.set(-46.5,11.5, -24); //(x,y,z)
-            obj_gltf.rotateOnAxis(new THREE.Vector3(0, 1, 0), -Math.PI);
+            
 
 
             obj_gltf.add(gltf.scene);
@@ -93,5 +87,16 @@ export class TV extends THREE.Object3D {
     update(time) {
         
 
+    }
+
+    setForScene()
+    {
+        this.object.scale.x = 18;
+        this.object.scale.y = 18;
+        this.object.scale.z = 18;
+
+
+        this.object.position.set(-46.5,11.5, -24); //(x,y,z)
+        this.object.rotateOnAxis(new THREE.Vector3(0, 1, 0), -Math.PI);
     }
 }
