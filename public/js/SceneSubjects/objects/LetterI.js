@@ -12,7 +12,7 @@ export class LetterI extends THREE.Object3D {
         this.clock = new THREE.Clock();
         const loader = new GLTFLoader();
 
-        loader.setPath('../../models/3DObjects/');
+        loader.setPath('./models/3DObjects/');
 
 
 

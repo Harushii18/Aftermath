@@ -1,5 +1,4 @@
 import { Overlay } from './Overlay.js';
-//import {GLTFLoader} from '../../../jsm/GLTFLoader.js';
 import * as THREE from '../../jsm/three.module.js';
 
 export class HUD extends Overlay {

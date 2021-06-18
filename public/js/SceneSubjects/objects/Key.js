@@ -26,7 +26,7 @@ export class Key extends THREE.Object3D {
         this.count = 0;
         const loader = new GLTFLoader(this.loadingManager);
 
-        loader.setPath('../../models/3DObjects/');
+        loader.setPath('./models/3DObjects/');
 
         this.open = false;
         this.startInteractions = false;

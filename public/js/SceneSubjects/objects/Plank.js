@@ -1,17 +1,12 @@
 import * as THREE from '../../../jsm/three.module.js';
 import { GLTFLoader } from '../../../jsm/GLTFLoader.js';
-import { keyboardManager } from '../../managers/KeyboardManager.js';
-
-import { loadingManager, mainChar, hudOverlayRemoveQueue } from '../../managers/SceneManager.js';
-import { gameOverlay } from '../../Overlay/GameOverlay.js';
-import { subtitleManager } from '../../managers/SubtitleManager.js';
-
 
 export class Plank extends THREE.Object3D {
 
 
-    constructor() {
+    constructor(loadingManager) {
         super();
+        this.loadingManager=loadingManager;
         this.objectInteractionCounter = 0;
         this.object = new THREE.Object3D();
 
@@ -31,9 +26,9 @@ export class Plank extends THREE.Object3D {
         this.allowInteraction = false;
 
         this.clock = new THREE.Clock();
-        const loader = new GLTFLoader(loadingManager);
+        const loader = new GLTFLoader(this.loadingManager);
 
-        loader.setPath('../../models/3DObjects/');
+        loader.setPath('./models/3DObjects/');
 
         this.open = false; //keeps track if the drawer is openend
 
@@ -41,25 +36,12 @@ export class Plank extends THREE.Object3D {
 
 
         var gltf = loader.load('woodplank.glb', (gltf) => {
-            //console.log("loaded drawer");
-
-          /*  gltf.scene.traverse(c => {
-                c.castShadow = true;
-
-            });*/
-
-
-
 
             var obj_gltf = new THREE.Object3D();
 
             obj_gltf.scale.x = 6.5;
             obj_gltf.scale.y = 8;
             obj_gltf.scale.z = 8;
-
-
-            // obj_gltf.position.set(0,6, 0);
-
 
             obj_gltf.add(gltf.scene);
             this.object.add(obj_gltf);

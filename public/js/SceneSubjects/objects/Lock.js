@@ -16,7 +16,7 @@ export class Lock extends THREE.Object3D {
     //load lock from blender file
 
     const loader = new GLTFLoader(this.loadingManager);
-    loader.setPath('../../models/3DObjects/');
+    loader.setPath('./models/3DObjects/');
 
     const gltf = loader.load('lock.glb', (gltf) => {
       //console.log("loaded lock");

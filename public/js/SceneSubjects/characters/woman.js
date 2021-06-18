@@ -169,7 +169,7 @@ export class Woman extends THREE.Object3D {
     }
 
     loadAllAnimations() {
-        var womanPath = '../models/characters/WAnimations/';
+        var womanPath = './models/characters/WAnimations/';
 
         //injured walk
         this.loadAnim('injuredWalk', womanPath, 'InjuredWalk.fbx');
@@ -223,7 +223,7 @@ export class Woman extends THREE.Object3D {
     loadModel() {
         //load the main character model with an FBX Loader
         const loader = new FBXLoader(this.loadingManager);
-        loader.setPath('../models/characters/');
+        loader.setPath('./models/characters/');
         loader.load('jill.fbx', (fbx) => {
             //scale the model down
             fbx.scale.setScalar(0.0115);
@@ -240,7 +240,7 @@ export class Woman extends THREE.Object3D {
 
             //animate character
             const anim = new FBXLoader(this.loadingManager);
-            anim.setPath('../models/characters/WAnimations/');
+            anim.setPath('./models/characters/WAnimations/');
             anim.load('Idle.fbx', (anim) => {
                 this.walkMixer = new THREE.AnimationMixer(fbx);
                 //set the initial animation for our main character to be idle (as he is not moving)
