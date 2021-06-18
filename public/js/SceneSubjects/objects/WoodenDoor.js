@@ -27,7 +27,7 @@ export class WoodenDoor extends THREE.Object3D {
 
     this.clock = new THREE.Clock();
     const loader = new GLTFLoader(this.loadingManager);
-    loader.setPath('./models/3DObjects/');
+    loader.setPath('./models/');
     this.open = false; //open door animation
     this.count = 0;
 
