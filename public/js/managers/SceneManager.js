@@ -459,6 +459,8 @@ export class SceneManager {
         hammer.setForScene();
         managers[1].register(hammer);
 
+
+
         pin.setForScene();
         pin.object.name = "pin"
         managers[1].register(pin);
@@ -470,6 +472,7 @@ export class SceneManager {
 
         managers[1].register(flashlight);
 
+        crowbar.setForScene();
         managers[1].register(crowbar);
         managers[1].register(lightswitch);
 
@@ -485,11 +488,11 @@ export class SceneManager {
         /* managers[1].register(plank);
          plank.setPosition(-4.5, 15, -77.5);
          plank.setRotation(Math.PI / 2)
- 
+
          managers[1].register(plank1);
          plank1.setPosition(-4.5, 20, -77.5);
          plank1.setRotation(Math.PI / 2);
- 
+
          managers[1].register(plank2);
          plank2.setPosition(-4.5, 10, -77.5);
          plank2.setRotation(Math.PI / 2);*/
@@ -1016,6 +1019,16 @@ export class SceneManager {
             console.log("adding pin");
             this.hud.add("pin", hudPin);
             hudOverlayAddQueue.shift();
+
+
+        }
+
+        if (hudOverlayAddQueue.includes("crowbar")) {
+          var crowbar_obj = new Crowbar();
+          crowbar_obj.setForHUD();
+          this.hud.add("crowbar", crowbar_obj);
+
+          hudOverlayAddQueue.shift();
 
 
         }
