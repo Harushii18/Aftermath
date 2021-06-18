@@ -518,7 +518,7 @@ export class SceneManager {
         crowbar.setForScene();
         managers[1].register(crowbar);
 
-        //lightswitch.setForScene();
+        lightswitch.setForScene();
         managers[1].register(lightswitch);
 
         tv.setForScene();

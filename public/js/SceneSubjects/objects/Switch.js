@@ -178,4 +178,17 @@ export class LightSwitch extends THREE.Object3D {
         return false;
     }
 
+    setForScene()
+    {
+        this.object.scale.x = 4;
+        this.object.scale.y = 4;
+        this.object.scale.z = 4;
+        this.object.position.set(-70 , 12.45 , -28);
+        this.object.rotateOnAxis(new THREE.Vector3(0, 1, 0), -Math.PI);
+
+    }
+
 }
+
+
+
