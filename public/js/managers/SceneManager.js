@@ -44,7 +44,7 @@ import { Microwave } from '../SceneSubjects/objects/Microwave.js';
 import { Keypad } from '../SceneSubjects/objects/Keypad.js';
 
 import { Boards } from '../SceneSubjects/objects/Boards.js';
-
+import { EndDoor} from '../SceneSubjects/objects/EndDoor.js';
 
 
 
@@ -111,6 +111,7 @@ var ambientLight = new AmbientLight();
 //var testBlock = new TestBlock();
 export var testdoor = new Door();
 export var studydoor = new WoodenDoor();
+
 export var loungedoor = new WoodenDoor();
 
 
@@ -194,7 +195,7 @@ collisionManager.addObject(house);
 //Pass collidable objects as a parameter to the main character (raycasting implementation)
 export var mainChar = new MainChar(collisionManager.returnObjects(), womanHitBox.return3DObject());
 
-
+export var endDoor = new EndDoor(loadingManager, mainChar);
 
 export class SceneManager {
 
@@ -484,6 +485,12 @@ export class SceneManager {
         studydoor.object.rotateY(Math.PI / 2);
         studydoor.setPosition(7.9, -0.5, -35.3);
         managers[1].register(studydoor);
+
+
+        endDoor.object.rotateY(Math.PI);
+        endDoor.setPosition(71.7, 0.75 , -93.35);
+        managers[1].register(endDoor);
+
 
         //managers[1].register(loungedoor);
 
@@ -799,9 +806,9 @@ export class SceneManager {
 
             //testing stuff----------------------------------------------------------------
 
-            var x = keypad.object.position.x;
-            var y = keypad.object.position.y;
-            var z = keypad.object.position.z
+            var x = endDoor.object.position.x;
+            var y = endDoor.object.position.y;
+            var z = endDoor.object.position.z
             var changedPos = false;
             if (keyboardManager.wasPressed("I")) {
                 y += 0.05;
@@ -835,7 +842,7 @@ export class SceneManager {
 
             }
             if (changedPos == true) {
-                keypad.object.position.set(x, y, z);
+                endDoor.object.position.set(x, y, z);
                 console.log("( " + x.toString() + " , " + y.toString() + " , " + z.toString() + " )");
 
             }

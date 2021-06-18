@@ -2,7 +2,7 @@ import * as THREE from '../../../jsm/three.module.js';
 import { GLTFLoader } from '../../../jsm/GLTFLoader.js';
 import { keyboardManager } from '../../managers/KeyboardManager.js';
 
-import { loadingManager, mainChar, hudOverlayRemoveQueue, bookshelf } from '../../managers/SceneManager.js';
+import { loadingManager, mainChar, hudOverlayRemoveQueue, bookshelf, endDoor } from '../../managers/SceneManager.js';
 import { gameOverlay } from '../../Overlay/GameOverlay.js';
 import { subtitleManager } from '../../managers/SubtitleManager.js';
 
@@ -147,12 +147,8 @@ export class Keypad extends THREE.Object3D {
             //Animate Keypad and Bookshelf
             this.animateKeypad = true;
             bookshelf.animateBookshelf = true;
+            endDoor.setAllowInteraction(true);
 
-
-            if (this.objectInteractionCounter != 1) {
-              //sceneRemoveQueue.push("lockCupboard");
-              this.objectInteractionCounter += 1;
-            }
             //lockCupboard.setPosition(new THREE.Vector3(0,100,0));
             this.allowInteraction = false;
           }

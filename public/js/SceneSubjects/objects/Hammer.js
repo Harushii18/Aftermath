@@ -13,6 +13,7 @@ export class Hammer extends THREE.Object3D {
         this.object = new THREE.Object3D();
         this.count = 0;
         this.pickedUp = false;
+        this.objectInteractionCounter = 0;
 
         //initialise subtitle contents
         this.initialiseSubtitleContents();
@@ -67,6 +68,7 @@ export class Hammer extends THREE.Object3D {
         //subtitles that shows when he picks up the hammer
         //t1
         if (!this.subtitleState.t1) {
+            //subtitleManager.hideSubtitles();
             subtitleManager.showSubtitles();
             if (!this.subtitleStarted.t1) {
                 //start showing the subtitle
@@ -96,6 +98,8 @@ export class Hammer extends THREE.Object3D {
 
         if (keyboardManager.wasPressed('E')) {
             if (checkVicinity) {
+
+
               //Subtitles when hammer is picked up
                 this.startSubtitles = true;
 
@@ -104,8 +108,20 @@ export class Hammer extends THREE.Object3D {
                 this.object.position.set(0, 100, 0);
                 this.pickedUp = true;
 
-                //SHOW HAMMER IMAGE IN OVERLAY
-                hudOverlayAddQueue.push("hammer");
+
+                //add that he found the key
+                if (this.objectInteractionCounter != 1)
+                {
+                  //SHOW HAMMER IMAGE IN OVERLAY
+                  console.log("pushing hammer");
+                  hudOverlayAddQueue.push("hammer");
+                //sceneRemoveQueue.push("key");
+                this.objectInteractionCounter += 1;
+                }
+
+
+
+
 
             }
         }
@@ -176,10 +192,10 @@ export class Hammer extends THREE.Object3D {
             this.object.scale.x = 0.5;
             this.object.scale.y = 0.5;
             this.object.scale.z = 0.5;
-            
+
             //move hammer
             this.object.position.set(7, 2.4, 80);
-            
+
             //rotate hammer
             this.object.rotateOnAxis(new THREE.Vector3(0,1,0),Math.PI/2*0.5);
         }
