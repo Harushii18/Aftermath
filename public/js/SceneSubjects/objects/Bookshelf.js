@@ -35,14 +35,7 @@ export class Bookshelf extends THREE.Object3D {
 
             });
 
-            //scale bookshelf 
-            this.object.scale.x = 0.8;
-            this.object.scale.y = 0.8;
-            this.object.scale.z = 0.8;
-
-            this.object.position.set(55, 1.6, -70);
-
-            this.object.rotateOnAxis(new THREE.Vector3(0, 1, 0), -Math.PI/2);
+            
 
 
             this.object.add(gltf.scene);
@@ -109,6 +102,22 @@ export class Bookshelf extends THREE.Object3D {
        
         //if the character is not in the vicinity, return false
         return false;
+    }
+
+
+    
+    setForScene()
+    {
+        //scale bookshelf 
+        this.object.scale.x = 0.8;
+        this.object.scale.y = 0.8;
+        this.object.scale.z = 0.8;
+
+        //move bookshelf
+        this.object.position.set(55, 1.6, -70);
+        
+        //rotate bookshelf
+        this.object.rotateOnAxis(new THREE.Vector3(0, 1, 0), -Math.PI/2);
     }
 
 }

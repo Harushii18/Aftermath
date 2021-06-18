@@ -51,14 +51,7 @@ export class Shower extends THREE.Object3D {
 
             var obj_gltf = new THREE.Object3D();
 
-            obj_gltf.scale.x = 105;
-            obj_gltf.scale.y = 105;
-            obj_gltf.scale.z = 105;
-
-
-            obj_gltf.position.set(82,24, 20); //(x,y,z)
-            obj_gltf.rotateOnAxis(new THREE.Vector3(0, 1, 0), -Math.PI/2);
-
+            
 
             obj_gltf.add(gltf.scene);
             this.object.add(obj_gltf);
@@ -92,6 +85,18 @@ export class Shower extends THREE.Object3D {
    
     update(time) {
        
+
+    }
+
+    setForScene()
+    {
+        this.object.scale.x = 105;
+        this.object.scale.y = 105;
+        this.object.scale.z = 105;
+
+
+        this.object.position.set(82,24, 20); //(x,y,z)
+        this.object.rotateOnAxis(new THREE.Vector3(0, 1, 0), -Math.PI/2);
 
     }
 }

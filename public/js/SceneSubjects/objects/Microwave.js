@@ -51,13 +51,7 @@ export class Microwave extends THREE.Object3D {
 
             var obj_gltf = new THREE.Object3D();
 
-            obj_gltf.scale.x = 1.2;
-            obj_gltf.scale.y = 1.2;
-            obj_gltf.scale.z = 1.2;
-
-
-            obj_gltf.position.set(-44,10, 25.7); //(x,y,z)
-            obj_gltf.rotateOnAxis(new THREE.Vector3(0, 1, 0), Math.PI/2);
+            
 
 
             obj_gltf.add(gltf.scene);
@@ -87,10 +81,19 @@ export class Microwave extends THREE.Object3D {
 
    
     update(time) {
-        if (keyboardManager.wasPressed('E')) {
-            this.object.position.z += 0.1;
-            console.log(this.object.position.z);
-        }  
+  
 
     }
+
+    setForScene()
+    {
+        this.object.scale.x = 1.2;
+        this.object.scale.y = 1.2;
+        this.object.scale.z = 1.2;
+
+
+        this.object.position.set(-44,10, 25.7); //(x,y,z)
+        this.object.rotateOnAxis(new THREE.Vector3(0, 1, 0), Math.PI/2);
+    }
+
 }
