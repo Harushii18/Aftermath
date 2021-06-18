@@ -15,6 +15,7 @@ export class MainChar extends THREE.Object3D {
 		this.object = new THREE.Object3D();
 		this.clock = new THREE.Clock();
 		this.object.rotateOnAxis(new THREE.Vector3(0, 1, 0), -Math.PI);
+
 		//spawn outside house
 		// this.object.position.set(0, 1, -50);
 
@@ -22,6 +23,10 @@ export class MainChar extends THREE.Object3D {
 
 		//start from scratch-> char at original starting game position
 		// this.object.position.set(0, 1, 50);
+
+
+		this.object.position.set(0, 1, 50);
+
 
 		this.object.visible = false; //Uncomment this so you don't see the player in first person view
 		this.initialiseSubtitleContents();
@@ -415,7 +420,12 @@ export class MainChar extends THREE.Object3D {
 				c.castShadow = true;
 				c.receiveShadow = true;
 			});
-
+			fbx.traverse((node) => {
+				if(node.isMesh){
+				  node.castShadow = true;
+				  node.receiveShadow = true;
+				}
+			  });
 
 			//animate character
 			const anim = new FBXLoader(loadingManager);

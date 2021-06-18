@@ -17,6 +17,8 @@ import { GeneralLights } from '../SceneSubjects/lighting/GeneralLights.js';
 import { CeilingLight } from '../SceneSubjects/lighting/CeilingLight.js';
 import { AmbientLight } from '../SceneSubjects/lighting/AmbientLight.js';
 import { CeilingLightObj } from '../SceneSubjects/objects/CeilingLightObj.js';
+import { testLight } from '../SceneSubjects/lighting/testlight.js';
+import { flashLight } from '../SceneSubjects/lighting/flashLight.js';
 
 //OBJECTS
 import { House } from '../SceneSubjects/House.js';
@@ -64,6 +66,8 @@ import { characterControls } from './CharacterControls.js';
 import { HUD } from '../Overlay/HUD.js';
 import { Woman } from '../SceneSubjects/characters/woman.js';
 
+
+import { Plain } from '../../js/SceneSubjects/objects/plain.js';
 //==================================================================================================
 
 //Global Variables
@@ -74,7 +78,7 @@ export var sceneRemoveQueue = [];
 export var audioPlayQueue = [];
 export var audioPauseQueue = [];
 
-
+var plain = new Plain();
 
 //FirstPersonTracker
 var isFirstPersonView = true;
@@ -103,6 +107,8 @@ var bedroomLight = new CeilingLight();
 // var bathroomLight = new CeilingLight();
 // var hallwayLight2 = new CeilingLight();
 // var loungeLight = new CeilingLight();
+var testLights = new testLight();
+var flash = new flashLight();
 
 var ambientLight = new AmbientLight();
 
@@ -201,6 +207,7 @@ export class SceneManager {
         this.GAME_MENU = "menu";
         this.GAME_INTRO = "intro";
         this.GAME_LOGO = "logo";
+        this.GAME_CREDITS = "credits";
         //------------------------------------------------------------------------------------------------------------------------------------------
         this.audioActive = false;
         //we use (this) to make variables accessible in other classes
@@ -210,7 +217,7 @@ export class SceneManager {
 
 
 
-        this.game_state = this.GAME_RUN;//default Game_LOGO
+        this.game_state = this.GAME_LOGO;//default Game_LOGO
         //intro paragraph state
         this.intro_para = 4;//1
 
@@ -386,7 +393,7 @@ export class SceneManager {
         });
         renderer.setClearColor(0xEEEEEE, 1.0);
         renderer.shadowMap.enabled = true;
-        //renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
         renderer.shadowMapSoft = true;
         renderer.setPixelRatio(window.devicePixelRatio);
         renderer.setSize(window.innerWidth / 2, window.innerHeight / 2, false);
@@ -416,14 +423,16 @@ export class SceneManager {
         //set their light positions
         //I COMMENTED THE LIGHTS OUT TO SEE IF IT IMPROVES PERFORMANCE
         bedroomLightObj.setLightPosition(0, 50);
-        loungeLightObj.setLightPosition(-45, -60);
-        studyLightObj.setLightPosition(35, -50);
-        kitchenLightObj.setLightPosition(-45, 5);
-        bathroomLightObj.setLightPosition(45, 15);
-        hallwayLightObj1.setLightPosition(0, -60);
-        hallwayLightObj2.setLightPosition(0, 0);
+        // loungeLightObj.setLightPosition(-45, -60);
+        // studyLightObj.setLightPosition(35, -50);
+        // kitchenLightObj.setLightPosition(-45, 5);
+        // bathroomLightObj.setLightPosition(45, 15);
+        // hallwayLightObj1.setLightPosition(0, -60);
+        // hallwayLightObj2.setLightPosition(0, 0);
 
-        bedroomLight.setLightPosition(0, 50);
+        //bedroomLight.setLightPosition(0, 50);
+        testLights.setLightPosition(0, 50);
+        flash.setLightPosition(0, 50);
         // loungeLight.setLightPosition(-45,  -60);
         //  studyLight.setLightPosition(35,  -50);
         //   kitchenLight.setLightPosition(-45,  5);
@@ -447,6 +456,8 @@ export class SceneManager {
 
         managers[0].register(ambientLight);
         managers[0].register(bedroomLight);
+        managers[0].register(testLights);
+        managers[0].register(flash);
         // managers[0].register(loungeLight);
         // managers[0].register(studyLight);
         // managers[0].register(hallwayLight1);
@@ -468,6 +479,7 @@ export class SceneManager {
 
 
         managers[1].register(house);
+       // managers[1].register(plain);
 
         testdoor.setPosition(0, -0.5, 33);
         managers[1].register(testdoor);
@@ -551,7 +563,7 @@ export class SceneManager {
          plank2.setPosition(-4.5, 10, -77.5);
          plank2.setRotation(Math.PI / 2);*/
 
-
+        
 
         bedroomDrawer.object.position.set(20.2, 7.4, 36.7);
 
@@ -579,7 +591,8 @@ export class SceneManager {
         if (isFirstPersonView == true) {
             mainChar.setVisibility(false);
             this.pointerLockControls.getObject().position.set(pos.x, 17.5, pos.z); //Need to sort out position of camera at head height
-
+            //flash.rotateY.set(dir.y);
+            flash.setLightPosition(pos.x, pos.z);
         }
         //Third Person View
         else if (isFirstPersonView == false) {
@@ -598,6 +611,8 @@ export class SceneManager {
             mousePointer.normalize();
             this.pointerLockControls.getDirection(mousePointer);
             mainChar.updateDirection(mousePointer);
+            flash.updateDirection(mousePointer);
+            flash.setLightRotation(mousePointer.x, mousePointer.y, mousePointer.z);
         }
         if (isFirstPersonView == false) {
             var directionOfCamera = new THREE.Vector3();
@@ -623,6 +638,8 @@ export class SceneManager {
             //id the start button
             const btnStart = document.getElementById("start");
             const btnSkipIntro = document.getElementById("skipIntro");
+            const btnShowCredits = document.getElementById("btnCredits");
+            const btnBack = document.getElementById('backfromCredits');
 
 
             //start game pressed, remove start screen items
@@ -634,8 +651,6 @@ export class SceneManager {
                 }
                 //change state to game intro
                 this.game_state = this.GAME_INTRO;
-
-
             });
 
             btnSkipIntro.addEventListener("click", () => {
@@ -647,6 +662,45 @@ export class SceneManager {
                 this.game_state = this.GAME_RUN;
             });
 
+            btnShowCredits.addEventListener("click", () => {
+                
+                const menu = document.getElementsByClassName("menu");
+                for (let i = 0; i < menu.length; i++) {
+                    menu[i].style.display = 'none';
+                }
+
+                const title = document.getElementsByClassName("title");
+                for (let i = 0; i < title.length; i++) {
+                    title[i].style.display = 'none';
+                }
+
+                document.getElementById('creditsParas').start();
+
+                const credits = document.getElementsByClassName("credits");
+                for (let i = 0; i < credits.length; i++){
+                    credits[i].style.display = 'flex';
+                }
+                
+                
+            });
+
+            btnBack.addEventListener("click", () => {
+                const menu = document.getElementsByClassName("menu");
+                for (let i = 0; i < menu.length; i++) {
+                    menu[i].style.display = 'flex';
+                }
+
+                const title = document.getElementsByClassName("title");
+                for (let i = 0; i < title.length; i++) {
+                    title[i].style.display = 'flex';
+                }
+
+                const credits = document.getElementsByClassName("credits");
+                for (let i = 0; i < credits.length; i++){
+                    credits[i].style.display = 'none';
+                }
+                document.getElementById('creditsParas').stop();
+            });
 
         } else if (this.game_state == this.GAME_LOGO) {
             //id the divs
@@ -704,21 +758,21 @@ export class SceneManager {
                 intro2.style.display = 'flex';
                 intro3.style.display = 'none';
                 intro4.style.display = 'none';
-            }, 100);
+            }, 4000);
 
             setTimeout(() => {
                 intro1.style.display = 'none';
                 intro2.style.display = 'none';
                 intro3.style.display = 'flex';
                 intro4.style.display = 'none';
-            }, 100);
+            }, 16000);
 
             setTimeout(() => {
                 intro1.style.display = 'none';
                 intro2.style.display = 'none';
                 intro3.style.display = 'none';
                 intro4.style.display = 'flex';
-            }, 100);
+            }, 30000);
             //===========================
 
             //  intro4.style.display = 'flex'; //COMMENT OUT
@@ -888,6 +942,16 @@ export class SceneManager {
 
             this.managers[1].update(runTime);
 
+
+
+            //this.managers[0].lights[3].to .setVisibility = false;
+
+            if ((keyboardManager.keyDownQueue[0] == "F")){
+                console.log("lights off pressed");
+               flash.toggleVisibility();
+                keyboardManager.keyDownQueue.shift();
+            }
+
             //check pause--------------------------------
             if ((keyboardManager.keyDownQueue[0] == "P")) {
 
@@ -967,6 +1031,52 @@ export class SceneManager {
             }
 
 
+        } else if (this.game_state == this.GAME_CREDITS){
+
+            //make main menu appear
+            const mainMenu = document.getElementsByClassName("mainMenu");
+            for (let i = 0; i < mainMenu.length; i++) {
+                mainMenu[i].style.display = 'flex';
+            }
+
+            //make main menu disappear but retain the background
+            const menu = document.getElementsByClassName("menu");
+            for (let i = 0; i < menu.length; i++) {
+                menu[i].style.display = 'none';
+            }
+
+            //remove title visibility
+            const title = document.getElementsByClassName("title");
+            for (let i = 0; i < title.length; i++) {
+                title[i].style.display = 'none';
+            }
+
+            //make credits appear
+            document.getElementById('creditsParas').start();
+
+            const credits = document.getElementsByClassName("credits");
+            for (let i = 0; i < credits.length; i++){
+                credits[i].style.display = 'flex';
+            }
+
+            const btnBack = document.getElementById('backfromCredits');
+            btnBack.addEventListener("click", () => {
+                const menu = document.getElementsByClassName("menu");
+                for (let i = 0; i < menu.length; i++) {
+                    menu[i].style.display = 'flex';
+                }
+
+                const title = document.getElementsByClassName("title");
+                for (let i = 0; i < title.length; i++) {
+                    title[i].style.display = 'flex';
+                }
+
+                const credits = document.getElementsByClassName("credits");
+                for (let i = 0; i < credits.length; i++){
+                    credits[i].style.display = 'none';
+                }
+                document.getElementById('creditsParas').stop();
+            });
         }
     }
 

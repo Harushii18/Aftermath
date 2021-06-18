@@ -39,8 +39,16 @@ export class Door extends THREE.Object3D {
         var gltf = loader.load('testdoor.glb', (gltf) => {
             gltf.scene.traverse(c => {
                 c.castShadow = true;
-
+                
             });
+
+            gltf.scene.traverse((node) => {
+				if(node.isMesh){
+				  node.castShadow = true;
+				  node.receiveShadow = true;
+				}
+                console.log(node.isMesh);
+			  });
 
             //scale door
             this.object.scale.x = 0.271;

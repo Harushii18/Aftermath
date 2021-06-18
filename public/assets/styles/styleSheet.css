@@ -44,7 +44,7 @@ body {
   animation: logo 5s linear infinite;
   align-items: center;
   justify-content: center;
-  display: none; /* skip intro - remove line*/
+  /*display: none; /* skip intro - remove line*/
 }
 
 @keyframes logo {
@@ -82,7 +82,8 @@ body {
   /*background: url("../../assets/house2.jpg") no-repeat;*/
   /*background-size: cover;*/
   background: none;
-  display: none; /* skip intro - remove line*/
+  display: flex;
+  /* display: none; /* skip intro - remove line*/
   align-items: flex-end;
   justify-content: center;
 }
@@ -108,7 +109,7 @@ body {
   background: url("../../assets/house2.jpg") no-repeat;
   background-size: cover;
   overflow: hidden;
-  display: none; /* skip intro - remove */
+  /*display: none; /* skip intro - remove */
 }
 
 .intro {
@@ -123,6 +124,20 @@ body {
   align-items: center;
   justify-content: center;
   flex-direction: column;
+}
+
+.credits {
+  position: absolute;
+  z-index: 3;
+  width: 100%;
+  height: 100%;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  color: #fff;
+  font-size: 2rem;
+  white-space: nowrap;
 }
 
 .menu button {
@@ -175,7 +190,7 @@ body {
   flex-direction: column;
   align-items: center;
   animation: blinker 3s linear infinite;
-  display: none; /* skip intro - remove line */
+  /*display: none; /* skip intro - remove line */
 }
 
 @keyframes blinker {
@@ -191,15 +206,15 @@ body {
   font-weight: 700;
   text-align: center;
   text-transform: uppercase;
-  background: linear-gradient(110deg, #000, rgba(65, 62, 62, 0.808), #000);
+  /* background: linear-gradient(110deg, #000, rgba(65, 62, 62, 0.808), #000); */
   letter-spacing: 5px;
-  -webkit-background-clip: text;
+  /* -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
   background-repeat: no-repeat;
   background-size: 80%;
   animation: shine 5s linear infinite;
-  position: relative;
+  position: relative; */
 }
 
 .fog {
@@ -215,7 +230,7 @@ body {
   height: 100%;
   overflow: hidden;
   z-index: 1;
-  display: none; /* skip intro - remove line */
+  /* display: none; /* skip intro - remove line */
 }
 
 .fog-img {

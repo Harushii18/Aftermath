@@ -35,6 +35,13 @@ export class Bookshelf extends THREE.Object3D {
 
     this.startTime = 0;
 
+        this.object.castShadow = true;
+        this.object.receiveShadow = true;
+
+        this.unlocked = false;
+        this.complete = false;
+
+
     var gltf = loader.load('bookshelf.glb', (gltf) => {
       //console.log("loaded cupboard door");
       gltf.scene.traverse(c => {

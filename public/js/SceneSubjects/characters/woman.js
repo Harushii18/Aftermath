@@ -331,6 +331,41 @@ export class Woman extends THREE.Object3D {
 
     return3DObject() {
         return this.object;
+
+    }
+    //ANIMATIONS===================================
+    loadModel() {
+        //load the main character model with an FBX Loader
+        const loader = new FBXLoader(loadingManager);
+        loader.setPath('../models/characters/');
+        loader.load('jill.fbx', (fbx) => {
+            //scale the model down
+            fbx.scale.setScalar(0.0115);
+            fbx.traverse(c => {
+                c.castShadow = true;
+                c.receiveShadow = true;
+            });
+            fbx.traverse((node) => {
+				if(node.isMesh){
+				  node.castShadow = true;
+				  node.receiveShadow = true;
+				}
+			  });
+
+
+            //animate character
+            const anim = new FBXLoader(loadingManager);
+            anim.setPath('../models/characters/WAnimations/');
+            anim.load('Idle.fbx', (anim) => {
+                this.walkMixer = new THREE.AnimationMixer(fbx);
+                //set the initial animation for our main character to be idle (as he is not moving)
+                this.animation = this.walkMixer.clipAction(anim.animations[0]);
+                this.animation.reset();
+                this.animation.play();
+            });
+
+            this.object.add(fbx);
+        });
     }
 
 

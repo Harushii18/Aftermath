@@ -29,6 +29,23 @@ export class House extends THREE.Object3D {
       loadedHouse = true;
 
 
+    //while(this.loadCount==0){
+  //    console.log("in house loop");
+        const gltf = loader.load('NEWHOUSE.glb', (gltf) => {
+          this.loadCount = 1;
+          console.log("load house");
+          gltf.scene.traverse(c => {
+            c.castShadow = true;
+            c.receiveShadow = true;
+          });
+          gltf.scene.traverse((node) => {
+            if(node.isMesh){
+              node.castShadow = true;
+              node.receiveShadow = true;
+            }
+          });
+
+
       //Scaling house
       this.object.scale.x = 8;
       this.object.scale.y = 8;
@@ -40,8 +57,7 @@ export class House extends THREE.Object3D {
       console.log('House loaded');
     });
     //}
-
-
+  });
   }
 
   return3DObject() {
