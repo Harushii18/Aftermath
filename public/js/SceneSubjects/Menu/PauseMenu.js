@@ -34,7 +34,7 @@ export class PauseMenu extends Overlay {
     var menu_height = height/13;
     var geometry = new THREE.BoxGeometry(menu_height * this.aspectRatio,menu_height,2.5);
 
-    var texture = THREE.ImageUtils.loadTexture("../assets/Help.jpg");
+    var texture = THREE.ImageUtils.loadTexture("./assets/Help.jpg");
    //var texture = new THREE.TextureLoader("../assets/Help.jpg");
     var material = new THREE.MeshStandardMaterial({ flatShading: true });
     material.map = texture;
