@@ -47,7 +47,7 @@ export class Door extends THREE.Object3D {
 				  node.castShadow = true;
 				  node.receiveShadow = true;
 				}
-                console.log(node.isMesh);
+               // console.log(node.isMesh);
 			  });
 
             //scale door
