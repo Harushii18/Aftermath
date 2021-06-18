@@ -1,11 +1,16 @@
 import * as THREE from '../../../jsm/three.module.js';
 import { FBXLoader } from '../../../jsm/FBXLoader/FBXLoader.js';
-import { loadingManager, mainChar, testdoor, audioPlayQueue, audioPauseQueue } from '../../managers/SceneManager.js';
+//import { loadingManager, mainChar, testdoor, audioPlayQueue, audioPauseQueue } from '../../managers/SceneManager.js';
 import { subtitleManager } from '../../managers/SubtitleManager.js';
 import { characterControls } from '../../managers/CharacterControls.js';
 export class Woman extends THREE.Object3D {
-    constructor() {
+    constructor( loadingManager, mainChar, testdoor, audioPlayQueue, audioPauseQueue) {
         super();
+        this.loadingManager = loadingManager;
+        this.mainChar = mainChar;
+        this.testdoor = testdoor;
+        this.audioPauseQueue = audioPauseQueue;
+        this.audioPlayQueue = audioPlayQueue;
 
         //woman object
         this.object = new THREE.Object3D();
@@ -73,7 +78,9 @@ export class Woman extends THREE.Object3D {
 
                     }
                     if (this.startSubs) {
-                        if (this.object.position.z<mainChar.returnWorldPosition().z){
+
+                        if (this.object.position.z<this.mainChar.getWorldPosition().z){
+
                             this.object.position.z+=(this.delta*5)
                         }
                         if (this.subtitleState.t2 == false) {
@@ -183,7 +190,7 @@ export class Woman extends THREE.Object3D {
 
     loadAnim(state, path, file) {
 		//load the animation
-		const anime = new FBXLoader(loadingManager);
+		const anime = new FBXLoader(this.loadingManager);
 		anime.setPath(path);
 		anime.load(file, (anime) => {
 
@@ -216,21 +223,24 @@ export class Woman extends THREE.Object3D {
 
     loadModel() {
         //load the main character model with an FBX Loader
-        const loader = new FBXLoader(loadingManager);
+        const loader = new FBXLoader(this.loadingManager);
         loader.setPath('../models/characters/');
         loader.load('jill.fbx', (fbx) => {
             //scale the model down
             fbx.scale.setScalar(0.0115);
-            fbx.traverse(c => {
+
+          /*  fbx.traverse(c => {
                 c.castShadow = true;
                 c.receiveShadow = true;
                 this.currAction = this.idle;
 
-            });
+            });*/
 
+
+            this.currAction = this.idle;
 
             //animate character
-            const anim = new FBXLoader(loadingManager);
+            const anim = new FBXLoader(this.loadingManager);
             anim.setPath('../models/characters/WAnimations/');
             anim.load('Idle.fbx', (anim) => {
                 this.walkMixer = new THREE.AnimationMixer(fbx);
@@ -251,7 +261,7 @@ export class Woman extends THREE.Object3D {
 
     inVicinity(vicinityLimitZ, vicinityLimitX) {
         //get the position of the main character
-        let pos = mainChar.returnWorldPosition();
+        let pos = this.mainChar.returnWorldPosition();
 
 
         if (pos.x < this.object.position.x + vicinityLimitX && pos.x > this.object.position.x - vicinityLimitX) {
@@ -266,14 +276,16 @@ export class Woman extends THREE.Object3D {
 
     getLevel1Complete() {
         //IF LEVEL 1 IS COMPLETE!
-        this.level1Complete = testdoor.level1Complete(); //if you want to test from lvl2 , make it true
+        this.level1Complete = this.testdoor.level1Complete(); //if you want to test from lvl2 , make it true
 
         if (this.level1Complete) {
             if (!this.womanVisible) {
                 //show the woman now that the door has opened
                 this.object.visible = true;
                 this.womanVisible = true;
-                audioPlayQueue.push("ghost_wail");
+
+                this.audioPlayQueue.push("ghost_wail");
+                
 
                 //so the character walks really slowly towards the woman
                 characterControls.setSpeed(2);
@@ -340,7 +352,7 @@ export class Woman extends THREE.Object3D {
                 //hide woman
                 //this.object.visible = false;
 
-                audioPauseQueue.push("ghost_wail");
+                this.audioPauseQueue.push("ghost_wail");
                  //character returns to original walking speed
                  characterControls.setOriginalSpeed();
 

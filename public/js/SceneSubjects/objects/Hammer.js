@@ -1,15 +1,18 @@
 import * as THREE from '../../../jsm/three.module.js';
 import { GLTFLoader } from '../../../jsm/GLTFLoader.js';
-import { keyboardManager } from '../../managers/KeyboardManager.js';
-import { mainChar, cupBoardDoorR, hudOverlayAddQueue } from '../../managers/SceneManager.js';
-import { gameOverlay } from '../../Overlay/GameOverlay.js';
-import { subtitleManager } from '../../managers/SubtitleManager.js';
+import { keyboardManager } from '../../managers/KeyboardManager.js';//checked
+//import { mainChar, cupBoardDoorR, hudOverlayAddQueue } from '../../managers/SceneManager.js';
+import { gameOverlay } from '../../Overlay/GameOverlay.js';//checked
+import { subtitleManager } from '../../managers/SubtitleManager.js';//checked
 
 export class Hammer extends THREE.Object3D {
 
 
-    constructor() {
+    constructor(mainChar, cupBoardDoorR, hudOverlayAddQueue ) {
         super();
+        this.mainChar = mainChar;
+        this.cupBoardDoorR = cupBoardDoorR;
+        this.hudOverlayAddQueue = hudOverlayAddQueue;
         this.object = new THREE.Object3D();
         this.count = 0;
         this.pickedUp = false;
@@ -33,10 +36,12 @@ export class Hammer extends THREE.Object3D {
 
         var gltf = loader.load('hammer.glb', (gltf) => {
           //console.log("loaded hammer");
-            gltf.scene.traverse(c => {
+
+           /* gltf.scene.traverse(c => {
                 c.castShadow = true;
 
-            });
+            });*/
+
 
 
 
@@ -109,6 +114,7 @@ export class Hammer extends THREE.Object3D {
                 this.pickedUp = true;
 
 
+
                 //add that he found the key
                 if (this.objectInteractionCounter != 1)
                 {
@@ -123,13 +129,14 @@ export class Hammer extends THREE.Object3D {
 
 
 
+
             }
         }
 }
 
 
         inVicinity(vicinityLimitZ, vicinityLimitX){
-            let pos = mainChar.returnWorldPosition();
+            let pos = this.mainChar.returnWorldPosition();
 
 
             if(pos.x <this.object.position.x +vicinityLimitX && pos.x > this.object.position.x-vicinityLimitX){
@@ -164,7 +171,7 @@ export class Hammer extends THREE.Object3D {
                     //INTERACTION WILL SAY MOVE PAINTING
                     gameOverlay.showOverlay();
                     this.count += 1;
-                    cupBoardDoorR.setAllowInteraction(true);
+                    this.cupBoardDoorR.setAllowInteraction(true);
                     //HIDE HAMMER IMAGE IN OVERLAY
 
                     }

@@ -1,10 +1,11 @@
 import * as THREE from '../../../jsm/three.module.js';
-import { woman } from '../../managers/SceneManager.js';
+//import { woman } from '../../managers/SceneManager.js';
 export class WomanHitBox extends THREE.Object3D {
-  constructor() {
+  constructor(woman) {
     //load a model and animate it
     //TODO!
     super();
+    this.woman = woman;
 
     //creating a box (need to change it to a character with animations)
     const geometry = new THREE.BoxGeometry(1, 1, 1);
@@ -12,7 +13,7 @@ export class WomanHitBox extends THREE.Object3D {
     material.transparent = true;
     material.opacity = 0.0;
     this.object = new THREE.Mesh(geometry, material);
-    this.object.castShadow = true;
+    //this.object.castShadow = true;
     //this.object.receiveShadow = false;
     this.object.scale.x = 5;
     this.object.scale.y = 30;
@@ -28,8 +29,8 @@ export class WomanHitBox extends THREE.Object3D {
 
     this.update = function (time) {
       //Do nothing
-      var womanPos = woman.getWomanPosition();
-      var womanVis = woman.getWomanVisibility();
+      var womanPos = this.woman.getWomanPosition();
+      var womanVis = this.woman.getWomanVisibility();
 
       this.object.position.set(womanPos.x,womanPos.y,womanPos.z);
       this.object.visible = womanVis;

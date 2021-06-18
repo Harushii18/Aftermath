@@ -3,19 +3,26 @@ import * as THREE from '../../../jsm/three.module.js';
 import { FBXLoader } from '../../../jsm/FBXLoader/FBXLoader.js';
 import { subtitleManager } from '../../managers/SubtitleManager.js';
 import { gameInstructions } from '../../Overlay/GameInstructions.js';
-import { loaded, loadingManager, woman } from '../../managers/SceneManager.js';
 import { loadedHouse } from '../House.js';
+//import { loadingManager } from '../../managers/SceneManager.js';
 
 export class MainChar extends THREE.Object3D {
-	constructor(collidableObjects, womanModel) {
+
+	constructor(collidableObjects, loadingManager, womanModel) {
+
+    
 		super();
+
+		this.loadingManager = loadingManager;
 		this.collidableObjects = collidableObjects;
 		this.collidableWoman = womanModel;
+
+		this.loaded = false;
 		//main character object
 		this.object = new THREE.Object3D();
 		this.clock = new THREE.Clock();
 		this.object.rotateOnAxis(new THREE.Vector3(0, 1, 0), -Math.PI);
-		//spawn outside house
+		// //spawn outside house
 		// this.object.position.set(0, 1, -50);
 
 //SET TO TRUE FOR NOW
@@ -23,12 +30,12 @@ export class MainChar extends THREE.Object3D {
 		this.hasFlashlight = false;
 
 		//start from scratch-> char at original starting game position
-		// this.object.position.set(0, 1, 50);
+		this.object.position.set(0, 1, 50); 
 
 		this.object.visible = false; //Uncomment this so you don't see the player in first person view
 		this.initialiseSubtitleContents();
 
-		this.object.castShadow = true;
+		//this.object.castShadow = true;
 
 
 
@@ -49,7 +56,7 @@ export class MainChar extends THREE.Object3D {
 
 		this.update = function (time) {
 			//perform everything only if the game has loaded
-			if (loaded && loadedHouse) {
+			if (this.loaded && loadedHouse) {
 
 
 				//add subtitles
@@ -191,6 +198,10 @@ export class MainChar extends THREE.Object3D {
 		};
 	}
 
+	setLoaded(loaded)
+	{
+		this.loaded = loaded;
+	}
 	addSubtitles() {
 
 		//t1
@@ -399,7 +410,7 @@ export class MainChar extends THREE.Object3D {
 	}
 	loadAnim(state, path, file) {
 		//load the animation
-		const anime = new FBXLoader(loadingManager);
+		const anime = new FBXLoader(this.loadingManager);
 		anime.setPath(path);
 		anime.load(file, (anime) => {
 
@@ -410,19 +421,20 @@ export class MainChar extends THREE.Object3D {
 
 	loadModel() {
 		//load the main character model with an FBX Loader
-		const loader = new FBXLoader(loadingManager);
+		const loader = new FBXLoader(this.loadingManager);
 		loader.setPath('../models/characters/');
 		loader.load('Douglas.fbx', (fbx) => {
 			//scale the model down
 			fbx.scale.setScalar(0.0115);
-			fbx.traverse(c => {
+			/*fbx.traverse(c => {
 				c.castShadow = true;
 				c.receiveShadow = true;
-			});
+			});*/
+
 
 
 			//animate character
-			const anim = new FBXLoader(loadingManager);
+			const anim = new FBXLoader(this.loadingManager);
 			anim.setPath('../models/characters/Animations/');
 			anim.load('Idle.fbx', (anim) => {
 				this.walkMixer = new THREE.AnimationMixer(fbx);

@@ -1199,11 +1199,11 @@ class FBXTreeParser {
 
             }
 
-            if (lightAttribute.CastShadows !== undefined && lightAttribute.CastShadows.value === 1) {
+          /*  if (lightAttribute.CastShadows !== undefined && lightAttribute.CastShadows.value === 1) {
 
                 model.castShadow = true;
 
-            }
+            }*/
 
         }
 

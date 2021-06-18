@@ -1,15 +1,23 @@
 import * as THREE from '../../../jsm/three.module.js';
 import {GLTFLoader} from '../../../jsm/GLTFLoader.js';
+
 import { keyboardManager } from '../../managers/KeyboardManager.js';
-import {loadingManager, mainChar, hudOverlayRemoveQueue, hudOverlayAddQueue,} from '../../managers/SceneManager.js';
+//import {loadingManager, mainChar, hudOverlayRemoveQueue, hudOverlayAddQueue,} from '../../managers/SceneManager.js';
 import { gameOverlay } from '../../Overlay/GameOverlay.js';
 import { subtitleManager } from '../../managers/SubtitleManager.js';
+
 export class Flashlight extends THREE.Object3D {
 
 
-	constructor() {
+	constructor(mainChar,loadingManager,hudOverlayAddQueue) {
 		super();
-				this.objectInteractionCounter = 0;
+
+		this.mainChar = mainChar;
+
+		this.hudOverlayAddQueue = hudOverlayAddQueue;
+        this.loadingManager = loadingManager;
+
+		this.objectInteractionCounter = 0;
         this.object = new THREE.Object3D();
         //load house model form blender file
 
@@ -25,14 +33,14 @@ export class Flashlight extends THREE.Object3D {
 				this.showPickUpSubtitles = false;
 
 
-        const loader = new GLTFLoader(loadingManager);
+        const loader = new GLTFLoader(this.loadingManager);
         loader.setPath('../../models/3DObjects/');
 
         const gltf = loader.load('flashlight.glb', (gltf) => {
-          gltf.scene.traverse(c => {
+        //   gltf.scene.traverse(c => {
 
-            c.castShadow = true;
-          });
+        //     c.castShadow = true;
+        //   });
 
 					this.object.scale.x = 0.7;
 					this.object.scale.y = 0.7;
@@ -65,7 +73,7 @@ export class Flashlight extends THREE.Object3D {
 	}
 
 	inVicinity(vicinityLimitZ, vicinityLimitX){
-			let pos = mainChar.returnWorldPosition();
+			let pos = this.mainChar.returnWorldPosition();
 
 			if(pos.x <this.object.position.x +vicinityLimitX && pos.x > this.object.position.x-vicinityLimitX){
 				if(pos.z < this.object.position.z+vicinityLimitZ && pos.z > this.object.position.z-vicinityLimitZ){
@@ -158,9 +166,9 @@ export class Flashlight extends THREE.Object3D {
 
 						gameOverlay.hideOverlay();
 						this.pickedUp = true;
-						hudOverlayAddQueue.push("flashlight");
+						this.hudOverlayAddQueue.push("flashlight");
 						this.object.position.set(0, 100, 0);
-						mainChar.setHasFlashlight(true);
+						this.mainChar.setHasFlashlight(true);
 						//SHOW CROWBAR IMAGE IN OVERLAY
 						//hudOverlayAddQueue.push("crowbar");
 

@@ -3,67 +3,69 @@
 //style
 import anime from '../../jsm/animejs/lib/anime.es.js';
 
-import { EntityManager } from './EntityManager.js';
+import { EntityManager } from './EntityManager.js';//checked
 
-import { AudioManager } from './AudioManager.js';
-import { LightingManager } from './LightingManager.js';
-import { Time } from '../Time.js';
-import { PauseMenu } from '../SceneSubjects/Menu/PauseMenu.js';
-import { keyboardManager } from './KeyboardManager.js';
-import { CollisionsManager } from './CollisionsManager.js'; //Collision Manager
+import { AudioManager } from './AudioManager.js';//checked
+import { LightingManager } from './LightingManager.js'; //checked
+import { Time } from '../Time.js';//checked
+import { PauseMenu } from '../SceneSubjects/Menu/PauseMenu.js';//checked
+import { keyboardManager } from './KeyboardManager.js';//checked
+import { CollisionsManager } from './CollisionsManager.js'; //checked
 
 //lights
 import { GeneralLights } from '../SceneSubjects/lighting/GeneralLights.js';
-import { CeilingLight } from '../SceneSubjects/lighting/CeilingLight.js';
-import { AmbientLight } from '../SceneSubjects/lighting/AmbientLight.js';
-import { CeilingLightObj } from '../SceneSubjects/objects/CeilingLightObj.js';
+//import { CeilingLight } from '../SceneSubjects/lighting/CeilingLight.js';
+//import { AmbientLight } from '../SceneSubjects/lighting/AmbientLight.js';
+//import { CeilingLightObj } from '../SceneSubjects/objects/CeilingLightObj.js';
 
 //OBJECTS
-import { House } from '../SceneSubjects/House.js';
-import { Lock } from '../SceneSubjects/objects/Lock.js'
-import { SceneSubject } from '../SceneSubjects/objects/SceneSubject.js';
-import { TestBlock } from '../SceneSubjects/characters/TestBlock.js';
-import { Door } from '../SceneSubjects/objects/Door.js';
-import { WoodenDoor } from '../SceneSubjects/objects/WoodenDoor.js';
 
-import { BedroomPainting } from '../SceneSubjects/objects/BedroomPainting.js';
-import { BedroomDrawer } from '../SceneSubjects/objects/BedroomDrawer.js';
+import { House } from '../SceneSubjects/House.js';// removed cir. ref.
+import { Lock } from '../SceneSubjects/objects/Lock.js'// removed cir. ref.
+//import { SceneSubject } from '../SceneSubjects/objects/SceneSubject.js';
+//import { TestBlock } from '../SceneSubjects/characters/TestBlock.js';
+import { Door } from '../SceneSubjects/objects/Door.js';// removed cir. ref.
+//import { WoodenDoor } from '../SceneSubjects/objects/WoodenDoor.js';
 
-import { Hammer } from '../SceneSubjects/objects/Hammer.js';
-import { Flashlight } from '../SceneSubjects/objects/Flashlight.js';
-import { cupboardDoorR } from '../SceneSubjects/objects/cupboardDoorR.js';
-import { Pin } from '../SceneSubjects/objects/Pin.js';
-import { LetterI } from '../SceneSubjects/objects/LetterI.js';
-import { Key } from '../SceneSubjects/objects/Key.js';
-import { Crowbar } from '../SceneSubjects/objects/Crowbar.js';
-import { LightSwitch } from '../SceneSubjects/objects/Switch.js';
-import { Plank } from '../SceneSubjects/objects/Plank.js';
+import { BedroomPainting } from '../SceneSubjects/objects/BedroomPainting.js'; // removed cir. ref.
+import { BedroomDrawer } from '../SceneSubjects/objects/BedroomDrawer.js';// removed cir. ref.
+
+import { Hammer } from '../SceneSubjects/objects/Hammer.js';//// removed cir. ref.
+import { Flashlight } from '../SceneSubjects/objects/Flashlight.js';// removed cir. ref
+import { cupboardDoorR } from '../SceneSubjects/objects/cupboardDoorR.js';// removed cir. ref
+import { Pin } from '../SceneSubjects/objects/Pin.js';//removed cir. ref
+import { LetterI } from '../SceneSubjects/objects/LetterI.js';//checked
+import { Key } from '../SceneSubjects/objects/Key.js';//removed cir. ref
+import { Crowbar } from '../SceneSubjects/objects/Crowbar.js';//removed cir. ref
+import { LightSwitch } from '../SceneSubjects/objects/Switch.js'; //removed cir. ref
+//import { Plank } from '../SceneSubjects/objects/Plank.js';
+import { Boards } from '../SceneSubjects/objects/Boards.js';
+
 import { TV } from '../SceneSubjects/objects/Tv.js';
 import { Shower } from '../SceneSubjects/objects/Shower.js';
 import { Microwave } from '../SceneSubjects/objects/Microwave.js';
 import { Keypad } from '../SceneSubjects/objects/Keypad.js';
 
-import { Boards } from '../SceneSubjects/objects/Boards.js';
+
 import { EndDoor} from '../SceneSubjects/objects/EndDoor.js';
 
 
-
-//Characters
-import { MainChar } from '../SceneSubjects/characters/MainChar.js';
+//characters
+import { MainChar } from '../SceneSubjects/characters/MainChar.js';//removed cir. ref
 
 //study
-import { Bookshelf } from '../SceneSubjects/objects/Bookshelf.js';
-
-
+import { Bookshelf } from '../SceneSubjects/objects/Bookshelf.js';//removed cir. ref
 //other
-import { PointerLockControls } from '../../jsm/PointerLockControls.js';
-import { OrbitControls } from '../../jsm/OrbitControls.js';
+
+import { PointerLockControls } from '../../jsm/PointerLockControls.js';//checked
+import { OrbitControls } from '../../jsm/OrbitControls.js'; //checked
 import * as THREE from '../../jsm/three.module.js';
-import { characterControls } from './CharacterControls.js';
+import { characterControls } from './CharacterControls.js'; //checked
 //pre-loader
-import { HUD } from '../Overlay/HUD.js';
-import { Woman } from '../SceneSubjects/characters/woman.js';
+import { HUD } from '../Overlay/HUD.js';//checked
+import { Woman } from '../SceneSubjects/characters/woman.js';//removed cir. ref
 import { WomanHitBox } from '../SceneSubjects/characters/womanHitBox.js';
+
 
 //==================================================================================================
 
@@ -75,29 +77,72 @@ export var sceneRemoveQueue = [];
 export var audioPlayQueue = [];
 export var audioPauseQueue = [];
 
+//pre-loader
+export var loadingManager = new THREE.LoadingManager();
+
+//Collision Manager to add all objects that need to be collided with
+const collisionManager = new CollisionsManager();
+//Pass collidable objects as a parameter to the main character (raycasting implementation)
+
+//woman
+export var woman = new Woman();
+export var womanHitBox = new WomanHitBox(woman);
+
+//Pass collidable objects as a parameter to the main character (raycasting implementation)
+export var mainChar = new MainChar(collisionManager.returnObjects(),loadingManager, womanHitBox.return3DObject());
 
 
+export var testdoor = new Door(mainChar, loadingManager);
+export var studydoor = new Door(mainChar, loadingManager);//must be changed to wooden door later
+export var bedroomDrawer = new BedroomDrawer(mainChar,loadingManager, hudOverlayRemoveQueue,testdoor);
+
+
+export var pin = new Pin(mainChar, bedroomDrawer, hudOverlayAddQueue, sceneRemoveQueue );
+
+export var cupBoardDoorR = new cupboardDoorR(mainChar, loadingManager, pin, hudOverlayRemoveQueue,sceneRemoveQueue);
+
+export var hammer = new Hammer(mainChar, cupBoardDoorR, hudOverlayAddQueue );
+export var flashlight = new Flashlight(mainChar,loadingManager,hudOverlayAddQueue);
+
+
+export var crowbar = new Crowbar(loadingManager, mainChar,  hudOverlayAddQueue);
+export var loungeBoards = new Boards(loadingManager, mainChar, hudOverlayRemoveQueue, studydoor, crowbar);
+loungeBoards.setBoardType("lounge");
+export var studyBoards = new Boards(loadingManager, mainChar, hudOverlayRemoveQueue, studydoor, crowbar);
+studyBoards.setBoardType("study");
+export var microwave = new Microwave(loadingManager, mainChar, studydoor, hudOverlayAddQueue);
+
+
+export var lightswitch = new LightSwitch(loadingManager, mainChar, loungeBoards, studyBoards, microwave );
+
+var bookshelf = new Bookshelf(mainChar);
+
+export var endDoor = new EndDoor(loadingManager, mainChar);
+export var keypad = new Keypad(mainChar,loadingManager,bookshelf,endDoor);
+
+var woman = new Woman( loadingManager, mainChar, testdoor, audioPlayQueue, audioPauseQueue);
 //FirstPersonTracker
 var isFirstPersonView = true;
 
 //objects
-var house = new House();
+var house = new House(loadingManager);
 
 //lights
 var generalLights = new GeneralLights();
-var sun = new THREE.PointLight(0xffffff, 3);
+var sun = new THREE.PointLight(0xffffff, 1);
 
 
 //ceiling lights
-var bedroomLightObj = new CeilingLightObj();
+/*var bedroomLightObj = new CeilingLightObj();
 var kitchenLightObj = new CeilingLightObj();
 var studyLightObj = new CeilingLightObj();
 var hallwayLightObj1 = new CeilingLightObj();
 var hallwayLightObj2 = new CeilingLightObj();
 var bathroomLightObj = new CeilingLightObj();
-var loungeLightObj = new CeilingLightObj();
 
-var bedroomLight = new CeilingLight();
+var loungeLightObj = new CeilingLightObj();*/
+
+//var bedroomLight = new CeilingLight();
 // var kitchenLight = new CeilingLight();
 // var studyLight = new CeilingLight();
 // var hallwayLight1 = new CeilingLight();
@@ -105,57 +150,45 @@ var bedroomLight = new CeilingLight();
 // var hallwayLight2 = new CeilingLight();
 // var loungeLight = new CeilingLight();
 
-var ambientLight = new AmbientLight();
+//var ambientLight = new AmbientLight();
 
 //var sceneSubject = new SceneSubject();
 //var testBlock = new TestBlock();
-export var testdoor = new Door();
-export var studydoor = new WoodenDoor();
 
-export var loungedoor = new WoodenDoor();
 
 
 //study
-export var bookshelf = new Bookshelf();
+//circular ref export var bookshelf = new Bookshelf();
 
 //bedroom
 var hudPin = new Pin();
-var bedroomPainting = new BedroomPainting();
+var bedroomPainting = new BedroomPainting(mainChar, loadingManager);
 
-export var lockCupboard = new Lock();
+export var lockCupboard = new Lock(loadingManager);
 //var lockDrawer = new Lock();
 
 //lockDrawer.setScale(new THREE.Vector3(10,10,10));
 //lockDrawer.setPosition(new THREE.Vector3(20.15, 7.6, 50));
 
-export var bedroomDrawer = new BedroomDrawer();
-export var cupBoardDoorR = new cupboardDoorR();
-export var hammer = new Hammer();
-export var pin = new Pin();
-
-export var flashlight = new Flashlight();
 
 
 
 
-export var tv = new TV();
-
-export var shower = new Shower();
-export var microwave = new Microwave();
 
 
-export var crowbar = new Crowbar();
-export var lightswitch = new LightSwitch();
-export var keypad = new Keypad();
+export var boards = new Boards();
+var boards2 = new Boards();
+
+var letterI = new LetterI();
+
+export var tv = new TV(loadingManager);
+
+export var shower = new Shower(loadingManager);
+
 
 //export var plank = new Plank();
 //export var plank1 = new Plank();
 //export var plank2 = new Plank();
-export var loungeBoards = new Boards();
-loungeBoards.setBoardType("lounge");
-export var studyBoards = new Boards();
-studyBoards.setBoardType("study");
-
 
 var letterI = new LetterI();
 var drawerKey = new Key();
@@ -165,17 +198,11 @@ var studydoorKey = new Key();
 studydoorKey.setKeyType("study");
 
 
-//pre-loader
-export var loadingManager;
+
 //initial subtitles-> check if everything has loaded
 export var loaded;
 
-//woman
-export var woman = new Woman();
-export var womanHitBox = new WomanHitBox();
 
-//Collision Manager to add all objects that need to be collided with
-const collisionManager = new CollisionsManager();
 //Add collidable objects here
 //collisionManager.addObject(house);
 
@@ -192,10 +219,6 @@ collisionManager.addObject(house);
 
 
 
-//Pass collidable objects as a parameter to the main character (raycasting implementation)
-export var mainChar = new MainChar(collisionManager.returnObjects(), womanHitBox.return3DObject());
-
-export var endDoor = new EndDoor(loadingManager, mainChar);
 
 export class SceneManager {
 
@@ -220,9 +243,9 @@ export class SceneManager {
 
 
 
-        this.game_state = this.GAME_RUN;//default Game_LOGO
+        this.game_state = this.GAME_LOGO;//default Game_LOGO
         //intro paragraph state
-        this.intro_para = 4;//1
+        this.intro_para = 1;//1
 
 
         //======SCENE BASICS=====================================================================
@@ -237,6 +260,9 @@ export class SceneManager {
 
         //the essentials for rendering a scene
         this.scene = this.buildScene();
+
+        sun.position.set(20,20,50)
+
         this.scene.add(sun);
 
         //create our skybox
@@ -251,7 +277,7 @@ export class SceneManager {
         loaded = false;
 
         //loading manager
-        loadingManager = new THREE.LoadingManager();
+        
         loadingManager.onProgress = function (item, loaded, total) {
              //do nothing
         };
@@ -260,6 +286,8 @@ export class SceneManager {
             if (!loaded) {
                 console.log('All objects loaded')
                 loaded = true;
+                house.setLoaded(loaded);
+                mainChar.setLoaded(loaded);
             }
         }
 
@@ -285,12 +313,12 @@ export class SceneManager {
         //====================
 
         //adjust the ceiling light properties in the house
-        this.setCeilingLightProperties();
+        //this.setCeilingLightProperties();
 
         this.managers = this.createManagers();
 
         //load things to scene
-        this.loadToScene(this.managers[0].lights);
+        //this.loadToScene(this.managers[0].lights);
         this.loadToScene(this.managers[1].entities);
 
 
@@ -395,9 +423,10 @@ export class SceneManager {
             antialias: true, alpha: true
         });
         renderer.setClearColor(0xEEEEEE, 1.0);
-        renderer.shadowMap.enabled = true;
+        //renderer.shadowMap.enabled = true;
         //renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-        renderer.shadowMapSoft = true;
+        //renderer.shadowMapSoft = true;
+
         renderer.setPixelRatio(window.devicePixelRatio);
         renderer.setSize(window.innerWidth / 2, window.innerHeight / 2, false);
 
@@ -455,8 +484,8 @@ export class SceneManager {
         //lights
         //  managers[0].register(generalLights);
 
-        managers[0].register(ambientLight);
-        managers[0].register(bedroomLight);
+       /// managers[0].register(ambientLight);
+       /// managers[0].register(bedroomLight);
         // managers[0].register(loungeLight);
         // managers[0].register(studyLight);
         // managers[0].register(hallwayLight1);
@@ -468,13 +497,16 @@ export class SceneManager {
 
         //entities
 
-        managers[1].register(loungeLightObj);
-        managers[1].register(studyLightObj);
-        managers[1].register(kitchenLightObj);
-        managers[1].register(bathroomLightObj);
-        managers[1].register(bedroomLightObj);
-        managers[1].register(hallwayLightObj1);
-        managers[1].register(hallwayLightObj2);
+
+       // managers[1].register(loungeLightObj);
+       /// managers[1].register(studyLightObj);
+       /// managers[1].register(kitchenLightObj);
+      ///  managers[1].register(bathroomLightObj);
+       /// managers[1].register(bedroomLightObj);
+       /// managers[1].register(hallwayLightObj1);
+       /// managers[1].register(hallwayLightObj2);
+       
+
 
 
         managers[1].register(house);
@@ -524,7 +556,7 @@ export class SceneManager {
         crowbar.setForScene();
         managers[1].register(crowbar);
 
-        //lightswitch.setForScene();
+        lightswitch.setForScene();
         managers[1].register(lightswitch);
 
         tv.setForScene();
@@ -640,6 +672,8 @@ export class SceneManager {
             //id the start button
             const btnStart = document.getElementById("start");
             const btnSkipIntro = document.getElementById("skipIntro");
+            const btnShowCredits = document.getElementById("btnCredits");
+            const btnBack = document.getElementById('backfromCredits');
 
 
             //start game pressed, remove start screen items
@@ -664,8 +698,53 @@ export class SceneManager {
                 this.game_state = this.GAME_RUN;
             });
 
+            btnShowCredits.addEventListener("click", () => {
+                
+                const menu = document.getElementsByClassName("menu");
+                for (let i = 0; i < menu.length; i++) {
+                    menu[i].style.display = 'none';
+                }
+
+                const title = document.getElementsByClassName("title");
+                for (let i = 0; i < title.length; i++) {
+                    title[i].style.display = 'none';
+                }
+
+                document.getElementById('creditsParas').start();
+
+                const credits = document.getElementsByClassName("credits");
+                for (let i = 0; i < credits.length; i++){
+                    credits[i].style.display = 'flex';
+                }
+                
+                
+            });
+
+            btnBack.addEventListener("click", () => {
+                const menu = document.getElementsByClassName("menu");
+                for (let i = 0; i < menu.length; i++) {
+                    menu[i].style.display = 'flex';
+                }
+
+                const title = document.getElementsByClassName("title");
+                for (let i = 0; i < title.length; i++) {
+                    title[i].style.display = 'flex';
+                }
+
+                const credits = document.getElementsByClassName("credits");
+                for (let i = 0; i < credits.length; i++){
+                    credits[i].style.display = 'none';
+                }
+                document.getElementById('creditsParas').stop();
+            });
+
 
         } else if (this.game_state == this.GAME_LOGO) {
+
+            const loadingScreen = document.getElementById('loading-screen');
+        loadingScreen.classList.add('fade-out');
+        loadingScreen.style.display = "none";
+   
             //id the divs
             const menu = document.getElementsByClassName("mainMenu");
             const logo = document.getElementsByClassName("logo");
@@ -704,91 +783,112 @@ export class SceneManager {
             const intro4 = document.getElementById("para4");
 
 
-            //id the buttons
-            //  const btnNext1 = document.getElementById("next1");
-            //  const btnNext2 = document.getElementById("next2");
+            // id the buttons
+             const btnNext1 = document.getElementById("next1");
+             const btnNext2 = document.getElementById("next2");
+             const btnNext3 = document.getElementById("next3");
             const btnContinue = document.getElementById("continue");
 
-            intro1.style.display = 'flex'; //CHANGE TO FLEX
-            intro2.style.display = 'none';
-            intro3.style.display = 'none';
-            intro4.style.display = 'none';
+            // intro1.style.display = 'flex'; //CHANGE TO FLEX
+            // intro2.style.display = 'none';
+            // intro3.style.display = 'none';
+            // intro4.style.display = 'none';
 
 
-            //UNCOMMENT=======================
-            setTimeout(() => {
-                intro1.style.display = 'none';
-                intro2.style.display = 'flex';
+            // //UNCOMMENT=======================
+            // setTimeout(() => {
+            //     intro1.style.display = 'none';
+            //     intro2.style.display = 'flex';
+            //     intro3.style.display = 'none';
+            //     intro4.style.display = 'none';
+            // }, 4000);
+
+            // setTimeout(() => {
+            //     intro1.style.display = 'none';
+            //     intro2.style.display = 'none';
+            //     intro3.style.display = 'flex';
+            //     intro4.style.display = 'none';
+            // }, 16000);
+
+            // setTimeout(() => {
+            //     intro1.style.display = 'none';
+            //     intro2.style.display = 'none';
+            //     intro3.style.display = 'none';
+            //     intro4.style.display = 'flex';
+            // }, 30000);
+            //===========================
+
+            //  intro4.style.display = 'flex'; //COMMENT OUT
+            // btnContinue.addEventListener("click", () => {
+
+            //     this.intro_para = 4;
+            //     intro1.style.display = 'none';
+            //     intro2.style.display = 'none';
+            //     intro3.style.display = 'none';
+            //     intro4.style.display = 'none';
+
+            //     const menu = document.getElementsByClassName("mainMenu");
+            //     for (let i = 0; i < menu.length; i++) {
+            //         menu[i].style.display = 'none';
+            //     }
+            //     //change state to game run
+            //     this.game_state = this.GAME_RUN;
+
+            //     this.managers[2].entities["background"].pause();
+            // });
+
+             if(this.intro_para == 1){
+                intro1.style.display = 'flex';
+                intro2.style.display = 'none';
                 intro3.style.display = 'none';
                 intro4.style.display = 'none';
-            }, 100);
 
-            setTimeout(() => {
+                btnNext1.addEventListener("click", () => {
+                    this.intro_para = 2;
+                });
+             }
+
+             else if(this.intro_para == 2){
+                 intro1.style.display = 'none';
+                 intro2.style.display = 'flex';
+                 intro3.style.display = 'none';
+                 intro4.style.display = 'none';
+                 btnNext2.addEventListener("click", () => {
+                     this.intro_para = 3;
+                 });
+             }
+
+             else if(this.intro_para == 3){
                 intro1.style.display = 'none';
                 intro2.style.display = 'none';
                 intro3.style.display = 'flex';
                 intro4.style.display = 'none';
-            }, 100);
+                btnNext3.addEventListener("click", () => {
+                    this.intro_para = 4;
+                });
+            }
 
-            setTimeout(() => {
-                intro1.style.display = 'none';
-                intro2.style.display = 'none';
-                intro3.style.display = 'none';
-                intro4.style.display = 'flex';
-            }, 100);
-            //===========================
-
-            //  intro4.style.display = 'flex'; //COMMENT OUT
-            btnContinue.addEventListener("click", () => {
-
-                this.intro_para = 4;
-                intro1.style.display = 'none';
-                intro2.style.display = 'none';
-                intro3.style.display = 'none';
-                intro4.style.display = 'none';
-
-                const menu = document.getElementsByClassName("mainMenu");
-                for (let i = 0; i < menu.length; i++) {
-                    menu[i].style.display = 'none';
-                }
-                //change state to game run
-                this.game_state = this.GAME_RUN;
-
-                this.managers[2].entities["background"].pause();
-            });
-
-            //  if(this.intro_para == 1){
-            //  intro1.style.display = 'flex';
-            //  intro2.style.display = 'none';
-            //  intro3.style.display = 'none';
-
-            //  btnNext1.addEventListener("click", () => {
-            //     this.intro_para = 2;
-            //  });
-            //  }
-
-            //  else if(this.intro_para == 2){
-            //      intro1.style.display = 'none';
-            //      intro2.style.display = 'flex';
-            //      intro3.style.display = 'none';
-            //      btnNext2.addEventListener("click", () => {
-            //          this.intro_para = 3;
-            //      });
-            //  }
-
-            //  else if(this.intro_para == 3){
-            //      intro1.style.display = 'none';
-            //      intro2.style.display = 'none';
-            //      intro3.style.display = 'flex';
-            //      btnContinue.addEventListener("click", () => {
-            //          this.intro_para = 4;
-            //          intro1.style.display = 'none';
-            //          intro2.style.display = 'none';
-            //          intro3.style.display = 'none';
-            //          //change state to game run
-            //          this.game_state = this.GAME_RUN;
-            //      });
-            //  }
+             else if(this.intro_para == 4){
+                 intro1.style.display = 'none';
+                 intro2.style.display = 'none';
+                 intro3.style.display = 'none';
+                 intro4.style.display = 'flex';
+                 btnContinue.addEventListener("click", () => {
+                     this.intro_para = 4;
+                     intro1.style.display = 'none';
+                     intro2.style.display = 'none';
+                     intro3.style.display = 'none';
+                     intro4.style.display = 'none';
+                     const menu = document.getElementsByClassName("mainMenu");
+                     for (let i = 0; i < menu.length; i++) {
+                         menu[i].style.display = 'none';
+                     }
+                     this.intro_para = 1;
+                     this.managers[2].entities["background"].pause();
+                     //change state to game run
+                     this.game_state = this.GAME_RUN;
+                 });
+             }
 
         } else if (this.game_state == this.GAME_RUN) {
 
@@ -798,17 +898,20 @@ export class SceneManager {
             this.managers[2].entities["background"].pause();
 
             //hud elements
+            this.removeFromScene()
             this.removeHUDItems();
             this.addToHUD();
-            this.removeFromScene()
+            
 
             this.setAudio();
 
             //testing stuff----------------------------------------------------------------
 
-            var x = endDoor.object.position.x;
-            var y = endDoor.object.position.y;
-            var z = endDoor.object.position.z
+
+
+            var x = keypad.object.position.x;
+            var y = keypad.object.position.y;
+            var z = keypad.object.position.z
             var changedPos = false;
             if (keyboardManager.wasPressed("I")) {
                 y += 0.05;
@@ -841,8 +944,9 @@ export class SceneManager {
                 changedPos = true;
 
             }
+
             if (changedPos == true) {
-                endDoor.object.position.set(x, y, z);
+                keypad.object.position.set(x, y, z);
                 console.log("( " + x.toString() + " , " + y.toString() + " , " + z.toString() + " )");
 
             }
@@ -854,7 +958,7 @@ export class SceneManager {
                 var selectedObject = bedroomDrawer.object.getObjectByName('key');
                 bedroomDrawer.object.remove(selectedObject);
 
-                this.hud.add("key", new Key());
+                this.hud.add("key", new Key(loadingManager, mainChar, testdoor));
                 testdoor.setAllowInteraction(true);
                 this.managers[2].entities["double_door_knock"].play();
             }
@@ -965,6 +1069,12 @@ export class SceneManager {
                     menu[i].style.display = 'none';
                 }
                 this.game_state = this.GAME_MENU;
+
+
+                var instructions = document.getElementById('gameInstructions');
+                instructions.style.display = 'none';
+                var subtitles = document.getElementById('subtitle');
+                subtitles.style.display = 'none';
             });
 
 
@@ -1091,6 +1201,7 @@ export class SceneManager {
 
             hudOverlayAddQueue.shift();
         }
+
 
 
         if (hudOverlayAddQueue.includes("pin")) {

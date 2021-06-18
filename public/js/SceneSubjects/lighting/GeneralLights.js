@@ -6,7 +6,7 @@ export class GeneralLights extends THREE.Object3D {
         this.object = new THREE.DirectionalLight(0xFFFFFF, 1.0);
 
         this.object.target.position.set(0, 0, 0);
-        this.object.castShadow = true;
+       // this.object.castShadow = true;
         // this.object.shadow.bias = -0.001;
         // this.object.shadow.mapSize.width = 2048;
         // this.object.shadow.mapSize.height = 2048;

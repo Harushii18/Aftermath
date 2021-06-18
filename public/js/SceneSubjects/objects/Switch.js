@@ -1,7 +1,9 @@
 import * as THREE from '../../../jsm/three.module.js';
 import { GLTFLoader } from '../../../jsm/GLTFLoader.js';
 import { keyboardManager } from '../../managers/KeyboardManager.js';
-import { loadingManager, mainChar, hudOverlayRemoveQueue, hudOverlayAddQueue, loungeBoards, studyBoards, microwave  } from '../../managers/SceneManager.js';
+
+//import { mainChar, loungeBoards, studyBoards, microwave  } from '../../managers/SceneManager.js';
+
 import { gameOverlay } from '../../Overlay/GameOverlay.js';
 import { subtitleManager } from '../../managers/SubtitleManager.js';
 
@@ -10,8 +12,15 @@ import { subtitleManager } from '../../managers/SubtitleManager.js';
 export class LightSwitch extends THREE.Object3D {
 
 
-    constructor() {
+    constructor(loadingManager, mainChar, loungeBoards, studyBoards, microwave ) {
         super();
+
+        this.loadingManager = loadingManager;
+        this.mainChar = mainChar;
+        this.loungeBoards = loungeBoards;
+        this.studyBoards = studyBoards;
+        this.microwave = microwave;
+
         this.objectInteractionCounter = 0;
         this.object = new THREE.Object3D();
 
@@ -33,17 +42,12 @@ export class LightSwitch extends THREE.Object3D {
         this.allowInteraction = false;
 
         this.clock = new THREE.Clock();
-        const loader = new GLTFLoader(loadingManager);
+        const loader = new GLTFLoader(this.loadingManager);
 
         loader.setPath('../../models/3DObjects/');
 
 
         var gltf = loader.load('switch.glb', (gltf) => {
-            //console.log("loaded drawer");
-            gltf.scene.traverse(c => {
-                c.castShadow = true;
-
-            });
 
             this.object.add(gltf.scene);
         });
@@ -71,7 +75,7 @@ export class LightSwitch extends THREE.Object3D {
     }
 
     inVicinity(vicinityLimitZ, vicinityLimitX){
-        let pos = mainChar.returnWorldPosition();
+        let pos = this.mainChar.returnWorldPosition();
 
         if(pos.x <this.object.position.x +vicinityLimitX && pos.x > this.object.position.x-vicinityLimitX){
           if(pos.z < this.object.position.z+vicinityLimitZ && pos.z > this.object.position.z-vicinityLimitZ){
@@ -120,7 +124,7 @@ export class LightSwitch extends THREE.Object3D {
 
               gameOverlay.hideOverlay();
               this.pickedUp = true;
-              microwave.setAllowInteraction(true);
+              this.microwave.setAllowInteraction(true);
 
               //SHOW CROWBAR IMAGE IN OVERLAY
               //hudOverlayAddQueue.push("crowbar");
@@ -154,8 +158,9 @@ export class LightSwitch extends THREE.Object3D {
             if (this.count == 0) {
                 if (this.pickedUp==false){
                 gameOverlay.changeText('[E] TURN ON POWER');
-                loungeBoards.setAllowInteraction(true);
-                studyBoards.setAllowInteraction(true);
+                this.loungeBoards.setAllowInteraction(true);
+                this.studyBoards.setAllowInteraction(true);
+                
 
                 //LATER WE CAN ADD A CONDITION IF HE LOOKED AT IT, HE'LL NOTICE IT CAN MOVE, AND THE
                 //INTERACTION WILL SAY MOVE PAINTING
@@ -178,4 +183,17 @@ export class LightSwitch extends THREE.Object3D {
         return false;
     }
 
+    setForScene()
+    {
+        this.object.scale.x = 4;
+        this.object.scale.y = 4;
+        this.object.scale.z = 4;
+        this.object.position.set(-70 , 12.45 , -28);
+        this.object.rotateOnAxis(new THREE.Vector3(0, 1, 0), -Math.PI);
+
+    }
+
 }
+
+
+

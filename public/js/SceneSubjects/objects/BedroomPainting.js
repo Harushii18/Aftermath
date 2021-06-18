@@ -1,21 +1,23 @@
 import * as THREE from '../../../jsm/three.module.js';
 import { GLTFLoader } from '../../../jsm/GLTFLoader.js';
-import { keyboardManager } from '../../managers/KeyboardManager.js';
-import { loadingManager, mainChar } from '../../managers/SceneManager.js';
-import { gameOverlay } from '../../Overlay/GameOverlay.js';
+import { keyboardManager } from '../../managers/KeyboardManager.js';//checked
+//import { loadingManager, mainChar } from '../../managers/SceneManager.js'; // removed cir. ref.
+import { gameOverlay } from '../../Overlay/GameOverlay.js';//checked
 
 export class BedroomPainting extends THREE.Object3D {
 
 
-    constructor() {
+    constructor(mainChar, loadingManager) {
         super();
+        this.mainChar  = mainChar;
+        this.loadingManager = loadingManager;
         this.isMoved = false;
         this.object = new THREE.Object3D();
 
         //stores a variable that only allows the interaction overlay to be shown once
         this.count = 0;
         this.clock = new THREE.Clock();
-        const loader = new GLTFLoader(loadingManager);
+        const loader = new GLTFLoader(this.loadingManager);
 
         loader.setPath('../../models/3DObjects/');
 
@@ -23,10 +25,12 @@ export class BedroomPainting extends THREE.Object3D {
 
         var gltf = loader.load('bedroompainting.glb', (gltf) => {
           //console.log("loaded painting");
-            gltf.scene.traverse(c => {
+
+           /* gltf.scene.traverse(c => {
                 c.castShadow = true;
 
-            });
+            });*/
+
 
             //scale painting
             this.object.scale.x = 3.5;
@@ -69,7 +73,7 @@ export class BedroomPainting extends THREE.Object3D {
     }
 
     inVicinity(vicinityLimitZ, vicinityLimitX){
-        let pos = mainChar.returnWorldPosition();
+        let pos = this.mainChar.returnWorldPosition();
 
 
         if(pos.x <this.object.position.x +vicinityLimitX && pos.x > this.object.position.x-vicinityLimitX){
@@ -86,7 +90,7 @@ export class BedroomPainting extends THREE.Object3D {
     //checks if Character is in vicinity
     checkCharacterVicinity() {
         //get the position of the main character
-        let pos = mainChar.returnWorldPosition();
+        let pos = this.mainChar.returnWorldPosition();
 
         //variable that allows change in vicinity position in which E needs to be pressed:
         var vicinityLimitZ = 10;

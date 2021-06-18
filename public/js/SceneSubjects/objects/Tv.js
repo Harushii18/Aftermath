@@ -2,16 +2,18 @@ import * as THREE from '../../../jsm/three.module.js';
 import { GLTFLoader } from '../../../jsm/GLTFLoader.js';
 import { keyboardManager } from '../../managers/KeyboardManager.js';
 
-import { loadingManager, mainChar, hudOverlayRemoveQueue } from '../../managers/SceneManager.js';
+//import { loadingManager, mainChar, hudOverlayRemoveQueue } from '../../managers/SceneManager.js';
 import { gameOverlay } from '../../Overlay/GameOverlay.js';
 import { subtitleManager } from '../../managers/SubtitleManager.js';
+
 
 
 export class TV extends THREE.Object3D {
 
 
-    constructor() {
+    constructor(loadingManager) {
         super();
+        this.loadingManager = loadingManager;
         this.objectInteractionCounter = 0;
         this.object = new THREE.Object3D();
 
@@ -31,7 +33,7 @@ export class TV extends THREE.Object3D {
         this.allowInteraction = false;
 
         this.clock = new THREE.Clock();
-        const loader = new GLTFLoader(loadingManager);
+        const loader = new GLTFLoader(this.loadingManager);
 
         loader.setPath('../../models/3DObjects/');
 
@@ -42,10 +44,10 @@ export class TV extends THREE.Object3D {
 
         var gltf = loader.load('tv.glb', (gltf) => {
             //console.log("loaded drawer");
-            gltf.scene.traverse(c => {
-                c.castShadow = true;
+            // gltf.scene.traverse(c => {
+            //     c.castShadow = true;
 
-            });
+            // });
 
 
 
