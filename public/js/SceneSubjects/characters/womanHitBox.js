@@ -9,6 +9,8 @@ export class WomanHitBox extends THREE.Object3D {
     //creating a box (need to change it to a character with animations)
     const geometry = new THREE.BoxGeometry(1, 1, 1);
     const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+    material.transparent = true;
+    material.opacity = 0.0;
     this.object = new THREE.Mesh(geometry, material);
     this.object.castShadow = true;
     //this.object.receiveShadow = false;
