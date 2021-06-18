@@ -878,6 +878,52 @@ export class SceneManager {
             }
 
 
+        } else if (this.game_state == this.GAME_CREDITS){
+
+            //make main menu appear
+            const mainMenu = document.getElementsByClassName("mainMenu");
+            for (let i = 0; i < mainMenu.length; i++) {
+                mainMenu[i].style.display = 'flex';
+            }
+
+            //make main menu disappear but retain the background
+            const menu = document.getElementsByClassName("menu");
+            for (let i = 0; i < menu.length; i++) {
+                menu[i].style.display = 'none';
+            }
+
+            //remove title visibility
+            const title = document.getElementsByClassName("title");
+            for (let i = 0; i < title.length; i++) {
+                title[i].style.display = 'none';
+            }
+
+            //make credits appear
+            document.getElementById('creditsParas').start();
+
+            const credits = document.getElementsByClassName("credits");
+            for (let i = 0; i < credits.length; i++){
+                credits[i].style.display = 'flex';
+            }
+
+            const btnBack = document.getElementById('backfromCredits');
+            btnBack.addEventListener("click", () => {
+                const menu = document.getElementsByClassName("menu");
+                for (let i = 0; i < menu.length; i++) {
+                    menu[i].style.display = 'flex';
+                }
+
+                const title = document.getElementsByClassName("title");
+                for (let i = 0; i < title.length; i++) {
+                    title[i].style.display = 'flex';
+                }
+
+                const credits = document.getElementsByClassName("credits");
+                for (let i = 0; i < credits.length; i++){
+                    credits[i].style.display = 'none';
+                }
+                document.getElementById('creditsParas').stop();
+            });
         }
     }
 
