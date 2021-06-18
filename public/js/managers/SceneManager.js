@@ -58,7 +58,7 @@ import { Bookshelf } from '../SceneSubjects/objects/Bookshelf.js';
 //other
 import { PointerLockControls } from '../../jsm/PointerLockControls.js';
 import { OrbitControls } from '../../jsm/OrbitControls.js';
-import * as THREE from '../../../jsm/three.module.js';
+import * as THREE from '../../jsm/three.module.js';
 import { characterControls } from './CharacterControls.js';
 //pre-loader
 import { HUD } from '../Overlay/HUD.js';
