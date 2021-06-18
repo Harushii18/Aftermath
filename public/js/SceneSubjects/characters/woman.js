@@ -65,6 +65,7 @@ export class Woman extends THREE.Object3D {
                   let dir = new THREE.Vector3();
           				this.mainChar.getWorldDirection(dir);
                   let forwardDirection = new THREE.Vector3(dir.x, dir.y, dir.z);
+                  const pos = this.mainChar.returnWorldPosition();
                   let flashLightRaycaster = new THREE.Raycaster(pos,forwardDirection);
                   womanThere = this.mainChar.checkForWoman(womanThere, flashLightRaycaster);
                   if(womanThere){

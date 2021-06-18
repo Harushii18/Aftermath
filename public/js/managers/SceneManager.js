@@ -643,7 +643,7 @@ export class SceneManager {
             const spotLightTarget = new THREE.Object3D;
             spotLightTarget.position.set(pos.x, this.camera.position.y, pos.z);
             flash.target = spotLightTarget;
-            console.log("target " + flash.target);
+           // console.log("target " + flash.target);
         }
         //Third Person View
         else if (isFirstPersonView == false) {
