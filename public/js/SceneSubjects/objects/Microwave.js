@@ -81,10 +81,7 @@ export class Microwave extends THREE.Object3D {
 
    
     update(time) {
-        if (keyboardManager.wasPressed('E')) {
-            this.object.position.z += 0.1;
-            console.log(this.object.position.z);
-        }  
+  
 
     }
 

@@ -41,6 +41,7 @@ import { Plank } from '../SceneSubjects/objects/Plank.js';
 import { TV } from '../SceneSubjects/objects/Tv.js';
 import { Shower } from '../SceneSubjects/objects/Shower.js';
 import { Microwave } from '../SceneSubjects/objects/Microwave.js';
+import { Keypad } from '../SceneSubjects/objects/Keypad.js';
 
 import { Boards } from '../SceneSubjects/objects/Boards.js';
 
@@ -141,6 +142,8 @@ export var microwave = new Microwave();
 
 export var crowbar = new Crowbar();
 export var lightswitch = new LightSwitch();
+export var keypad = new Keypad();
+
 //export var plank = new Plank();
 //export var plank1 = new Plank();
 //export var plank2 = new Plank();
@@ -498,6 +501,9 @@ export class SceneManager {
 
         microwave.setForScene();
         managers[1].register(microwave);
+
+        keypad.setForScene();
+        managers[1].register(keypad);
 
         boards2.object.position.set(-4.5, 15, -77.5);
         managers[1].register(boards2);
