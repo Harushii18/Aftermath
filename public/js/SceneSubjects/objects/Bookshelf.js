@@ -37,10 +37,10 @@ export class Bookshelf extends THREE.Object3D {
 
     var gltf = loader.load('bookshelf.glb', (gltf) => {
       //console.log("loaded cupboard door");
-      gltf.scene.traverse(c => {
-        c.castShadow = true;
+      // gltf.scene.traverse(c => {
+      //   c.castShadow = true;
 
-      });
+      // });
 
       //scale bookshelf
       this.object.scale.x = 0.8;

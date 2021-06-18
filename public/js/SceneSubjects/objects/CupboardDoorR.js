@@ -36,10 +36,10 @@ export class cupboardDoorR extends THREE.Object3D {
 
     var gltf = loader.load('cupboard.glb', (gltf) => {
       //console.log("loaded cupboard door");
-      gltf.scene.traverse(c => {
-        c.castShadow = true;
+      // gltf.scene.traverse(c => {
+      //   c.castShadow = true;
 
-      });
+      // });
 
       // //scale door
       this.object.scale.x = 3;

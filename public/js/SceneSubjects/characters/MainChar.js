@@ -23,12 +23,12 @@ export class MainChar extends THREE.Object3D {
 		this.hasFlashlight = false;
 
 		//start from scratch-> char at original starting game position
-		// this.object.position.set(0, 1, 50);
+		this.object.position.set(0, 1, 50);
 
 		this.object.visible = false; //Uncomment this so you don't see the player in first person view
 		this.initialiseSubtitleContents();
 
-		this.object.castShadow = true;
+		//this.object.castShadow = true;
 
 
 
@@ -415,10 +415,10 @@ export class MainChar extends THREE.Object3D {
 		loader.load('Douglas.fbx', (fbx) => {
 			//scale the model down
 			fbx.scale.setScalar(0.0115);
-			fbx.traverse(c => {
-				c.castShadow = true;
-				c.receiveShadow = true;
-			});
+			// fbx.traverse(c => {
+			// 	c.castShadow = true;
+			// 	c.receiveShadow = true;
+			// });
 
 
 			//animate character
