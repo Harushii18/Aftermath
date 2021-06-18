@@ -2,7 +2,9 @@ import * as THREE from '../../../jsm/three.module.js';
 import { GLTFLoader } from '../../../jsm/GLTFLoader.js';
 import { keyboardManager } from '../../managers/KeyboardManager.js';
 
+
 //import { loadingManager, mainChar, hudOverlayRemoveQueue, bookshelf } from '../../managers/SceneManager.js';
+
 import { gameOverlay } from '../../Overlay/GameOverlay.js';
 import { subtitleManager } from '../../managers/SubtitleManager.js';
 
@@ -10,9 +12,10 @@ import { subtitleManager } from '../../managers/SubtitleManager.js';
 export class Keypad extends THREE.Object3D {
 
 
-    constructor(mainChar,loadingManager,bookshelf) {
+    constructor(mainChar,loadingManager,bookshelf,endDoor) {
         super();
         this.mainChar = mainChar;
+        this.endDoor = endDoor;
         this.loadingManager = loadingManager;
         this.bookshelf = bookshelf;
         this.objectInteractionCounter = 0;
@@ -149,13 +152,11 @@ export class Keypad extends THREE.Object3D {
 
             //Animate Keypad and Bookshelf
             this.animateKeypad = true;
+
             this.bookshelf.animateBookshelf = true;
+            this.endDoor.setAllowInteraction(true);
 
 
-            if (this.objectInteractionCounter != 1) {
-              //sceneRemoveQueue.push("lockCupboard");
-              this.objectInteractionCounter += 1;
-            }
             //lockCupboard.setPosition(new THREE.Vector3(0,100,0));
             this.allowInteraction = false;
           }
