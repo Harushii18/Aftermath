@@ -12,7 +12,7 @@ export class WomanHitBox extends THREE.Object3D {
     material.transparent = true;
     material.opacity = 0.0;
     this.object = new THREE.Mesh(geometry, material);
-    this.object.castShadow = true;
+    //this.object.castShadow = true;
     //this.object.receiveShadow = false;
     this.object.scale.x = 5;
     this.object.scale.y = 30;

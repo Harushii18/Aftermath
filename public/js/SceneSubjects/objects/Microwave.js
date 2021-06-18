@@ -36,10 +36,10 @@ export class Microwave extends THREE.Object3D {
 
     var gltf = loader.load('microwave.glb', (gltf) => {
       //console.log("loaded cupboard door");
-      gltf.scene.traverse(c => {
-        c.castShadow = true;
+      // gltf.scene.traverse(c => {
+      //   c.castShadow = true;
 
-      });
+      // });
 
        this.object.scale.x = 1.2;
        this.object.scale.y = 1.2;

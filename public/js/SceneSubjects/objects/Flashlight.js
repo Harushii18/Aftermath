@@ -29,10 +29,10 @@ export class Flashlight extends THREE.Object3D {
         loader.setPath('../../models/3DObjects/');
 
         const gltf = loader.load('flashlight.glb', (gltf) => {
-          gltf.scene.traverse(c => {
+        //   gltf.scene.traverse(c => {
 
-            c.castShadow = true;
-          });
+        //     c.castShadow = true;
+        //   });
 
 					this.object.scale.x = 0.7;
 					this.object.scale.y = 0.7;

@@ -42,10 +42,10 @@ export class TV extends THREE.Object3D {
 
         var gltf = loader.load('tv.glb', (gltf) => {
             //console.log("loaded drawer");
-            gltf.scene.traverse(c => {
-                c.castShadow = true;
+            // gltf.scene.traverse(c => {
+            //     c.castShadow = true;
 
-            });
+            // });
 
 
 

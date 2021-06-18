@@ -85,7 +85,7 @@ var house = new House();
 
 //lights
 var generalLights = new GeneralLights();
-var sun = new THREE.PointLight(0xffffff, 3);
+var sun = new THREE.PointLight(0xffffff, 1);
 
 
 //ceiling lights
@@ -236,6 +236,7 @@ export class SceneManager {
 
         //the essentials for rendering a scene
         this.scene = this.buildScene();
+        sun.position.set(20, 20, 50);
         this.scene.add(sun);
 
         //create our skybox
@@ -289,7 +290,7 @@ export class SceneManager {
         this.managers = this.createManagers();
 
         //load things to scene
-        this.loadToScene(this.managers[0].lights);
+        //this.loadToScene(this.managers[0].lights);
         this.loadToScene(this.managers[1].entities);
 
 
@@ -394,9 +395,9 @@ export class SceneManager {
             antialias: true, alpha: true
         });
         renderer.setClearColor(0xEEEEEE, 1.0);
-        renderer.shadowMap.enabled = true;
+        // renderer.shadowMap.enabled = true;
         //renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-        renderer.shadowMapSoft = true;
+        // renderer.shadowMapSoft = true;
         renderer.setPixelRatio(window.devicePixelRatio);
         renderer.setSize(window.innerWidth / 2, window.innerHeight / 2, false);
 
@@ -633,6 +634,8 @@ export class SceneManager {
             //id the start button
             const btnStart = document.getElementById("start");
             const btnSkipIntro = document.getElementById("skipIntro");
+            const btnShowCredits = document.getElementById("btnCredits");
+            const btnBack = document.getElementById('backfromCredits');
 
 
             //start game pressed, remove start screen items
@@ -655,6 +658,46 @@ export class SceneManager {
                 }
                 //change state to game intro
                 this.game_state = this.GAME_RUN;
+            });
+
+            btnShowCredits.addEventListener("click", () => {
+                
+                const menu = document.getElementsByClassName("menu");
+                for (let i = 0; i < menu.length; i++) {
+                    menu[i].style.display = 'none';
+                }
+
+                const title = document.getElementsByClassName("title");
+                for (let i = 0; i < title.length; i++) {
+                    title[i].style.display = 'none';
+                }
+
+                document.getElementById('creditsParas').start();
+
+                const credits = document.getElementsByClassName("credits");
+                for (let i = 0; i < credits.length; i++){
+                    credits[i].style.display = 'flex';
+                }
+                
+                
+            });
+
+            btnBack.addEventListener("click", () => {
+                const menu = document.getElementsByClassName("menu");
+                for (let i = 0; i < menu.length; i++) {
+                    menu[i].style.display = 'flex';
+                }
+
+                const title = document.getElementsByClassName("title");
+                for (let i = 0; i < title.length; i++) {
+                    title[i].style.display = 'flex';
+                }
+
+                const credits = document.getElementsByClassName("credits");
+                for (let i = 0; i < credits.length; i++){
+                    credits[i].style.display = 'none';
+                }
+                document.getElementById('creditsParas').stop();
             });
 
 
@@ -984,8 +1027,12 @@ export class SceneManager {
                     menu[i].style.display = 'none';
                 }
                 this.game_state = this.GAME_MENU;
-                const instructions = document.getElementById('gameInstructions');
+
+
+                var instructions = document.getElementById('gameInstructions');
                 instructions.style.display = 'none';
+                var subtitles = document.getElementById('subtitle');
+                subtitles.style.display = 'none';
             });
 
 

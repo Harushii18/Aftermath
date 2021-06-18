@@ -7,14 +7,14 @@ export class flashLight extends THREE.Object3D {
         this.object = new THREE.SpotLight( 0xffffff, 0.8, 100, Math.PI/5 );
         //this.object.position.set( 100, 1000, 100 );
         
-        this.object.castShadow = true;
+        // this.object.castShadow = true;
         
-        this.object.shadow.mapSize.width = 1024;
-        this.object.shadow.mapSize.height = 1024;
+        // this.object.shadow.mapSize.width = 1024;
+        // this.object.shadow.mapSize.height = 1024;
         
-        this.object.shadow.camera.near = 500;
-        this.object.shadow.camera.far = 4000;
-        this.object.shadow.camera.fov = 30;
+        // this.object.shadow.camera.near = 500;
+        // this.object.shadow.camera.far = 4000;
+        // this.object.shadow.camera.fov = 30;
 
         this.object.visible = false;
 

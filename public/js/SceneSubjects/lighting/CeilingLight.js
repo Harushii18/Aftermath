@@ -5,14 +5,14 @@ export class CeilingLight extends THREE.Object3D {
         super();
         this.object = new THREE.PointLight(0xFFFFFF, 1, 100);
         this.object.distance=500;
-        this.object.castShadow = true;
+        // this.object.castShadow = true;
 
-        this.object.shadow.mapSize.width = 1024;
-        this.object.shadow.mapSize.height = 1024;
+        // this.object.shadow.mapSize.width = 1024;
+        // this.object.shadow.mapSize.height = 1024;
 
-        this.object.shadow.camera.near = 500;
-        this.object.shadow.camera.far = 4000;
-        this.object.shadow.camera.fov = 30;
+        // this.object.shadow.camera.near = 500;
+        // this.object.shadow.camera.far = 4000;
+        // this.object.shadow.camera.fov = 30;
     }
 
     setLightPosition(x, z) {

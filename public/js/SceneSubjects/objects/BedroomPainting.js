@@ -23,10 +23,10 @@ export class BedroomPainting extends THREE.Object3D {
 
         var gltf = loader.load('bedroompainting.glb', (gltf) => {
           //console.log("loaded painting");
-            gltf.scene.traverse(c => {
-                c.castShadow = true;
+            // gltf.scene.traverse(c => {
+            //     c.castShadow = true;
 
-            });
+            // });
 
             //scale painting
             this.object.scale.x = 3.5;

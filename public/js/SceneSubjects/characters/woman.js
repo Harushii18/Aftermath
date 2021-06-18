@@ -220,13 +220,14 @@ export class Woman extends THREE.Object3D {
         loader.load('jill.fbx', (fbx) => {
             //scale the model down
             fbx.scale.setScalar(0.0115);
-            fbx.traverse(c => {
-                c.castShadow = true;
-                c.receiveShadow = true;
-                this.currAction = this.idle;
+            // fbx.traverse(c => {
+            //     // c.castShadow = true;
+            //     // c.receiveShadow = true;
+                
 
-            });
+            // });
 
+            this.currAction = this.idle;
 
             //animate character
             const anim = new FBXLoader(loadingManager);
