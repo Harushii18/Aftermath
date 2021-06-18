@@ -84,7 +84,6 @@ export class Keypad extends THREE.Object3D {
 
     update(time) {
 
-       
 
     }
 

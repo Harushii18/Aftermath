@@ -89,13 +89,24 @@ export class LightSwitch extends THREE.Object3D {
 
     update(time) {
 
+        
+        if (keyboardManager.wasPressed('E')) {
+            this.object.position.x -=0.1;
+            console.log(this.object.position.x);
+        }  
+
 
     }
 
     setForScene()
     {
+        //scale
+        this.object.scale.x = 4;
+        this.object.scale.y = 4;
+        this.object.scale.z = 4;
+
          //move switch
-         this.object.position.set(-79,15, -50);
+         this.object.position.set(-75,15, -74);
 
          //rotate switch 
          this.object.rotateOnAxis(new THREE.Vector3(0,1,0),Math.PI/2);
