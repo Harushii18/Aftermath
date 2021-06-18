@@ -482,7 +482,7 @@ export class SceneManager {
         managers[1].register(woman)
 
         //study
-        bookshelf.setForScene();
+        //bookshelf.setForScene();
         managers[1].register(bookshelf);
 
         //bedroom
@@ -507,7 +507,7 @@ export class SceneManager {
         crowbar.setForScene();
         managers[1].register(crowbar);
 
-        lightswitch.setForScene();
+        //lightswitch.setForScene();
         managers[1].register(lightswitch);
 
         tv.setForScene();
