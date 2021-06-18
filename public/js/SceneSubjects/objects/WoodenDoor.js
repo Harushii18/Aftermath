@@ -80,8 +80,8 @@ export class WoodenDoor extends THREE.Object3D {
     };
     //Contains the text for each subtitle
     this.subtitleText = {
-      t1: "It's locked?? Since when do I need power to open a microwave!?",
-      t2: "Another key..."
+      t1: "It's locked. I need the key.",
+      t2: "This must be the study."
     };
   }
 
@@ -159,7 +159,12 @@ export class WoodenDoor extends THREE.Object3D {
           this.showOpenedSubtitles = true;
           //SHOW KEY IMAGE IN OVERLAY
           //hudOverlayAddQueue.push("studykey");
-          hudOverlayRemoveQueue.push("key");
+
+          if (this.objectInteractionCounter != 1) {
+            hudOverlayRemoveQueue.push("studykey");
+            this.objectInteractionCounter += 1;
+          }
+
           //studydoor.updateAllowInteraction();
           this.object.position.set(0,100,0);
 

@@ -50,6 +50,7 @@ export class Woman extends THREE.Object3D {
 
         this.update = function (time) {
 
+
           //console.log(this.spawnCoolDown);
 
 
@@ -99,7 +100,7 @@ export class Woman extends THREE.Object3D {
                 else{
                   if(this.playerKilledCount<=3){
 
-                    console.log(this.spawnCoolDown);
+                  //console.log(this.spawnCoolDown);
                   ///Allow main character to use the flashlight to get rid of the woman
                   mainChar.setAllowAttack(true);
                   if(this.spawnCoolDown<=0){
@@ -365,6 +366,7 @@ export class Woman extends THREE.Object3D {
 
     }
     subtitle2() {
+      //console.log("Playing subtitle 2");
         if (!this.subtitleState.t2) {
             subtitleManager.showSubtitles();
             if (!this.subtitleStarted.t2) {

@@ -47,6 +47,9 @@ import { Microwave } from '../SceneSubjects/objects/Microwave.js';
 import { Keypad } from '../SceneSubjects/objects/Keypad.js';
 
 
+import { EndDoor} from '../SceneSubjects/objects/EndDoor.js';
+
+
 //characters
 import { MainChar } from '../SceneSubjects/characters/MainChar.js';//removed cir. ref
 
@@ -114,8 +117,8 @@ export var lightswitch = new LightSwitch(loadingManager, mainChar, loungeBoards,
 
 var bookshelf = new Bookshelf(mainChar);
 
-
-export var keypad = new Keypad(mainChar,loadingManager,bookshelf);
+export var endDoor = new EndDoor(loadingManager, mainChar);
+export var keypad = new Keypad(mainChar,loadingManager,bookshelf,endDoor);
 
 var woman = new Woman( loadingManager, mainChar, testdoor, audioPlayQueue, audioPauseQueue);
 //FirstPersonTracker
@@ -152,8 +155,6 @@ var loungeLightObj = new CeilingLightObj();*/
 //var sceneSubject = new SceneSubject();
 //var testBlock = new TestBlock();
 
-// circular ref export var studydoor = new WoodenDoor();
-//circular ref export var loungedoor = new WoodenDoor();
 
 
 //study
@@ -213,6 +214,10 @@ collisionManager.addObject(loungeBoards);
 collisionManager.addObject(bookshelf);
 collisionManager.addObject(shower);
 collisionManager.addObject(house);
+
+
+
+
 
 
 export class SceneManager {
@@ -512,6 +517,12 @@ export class SceneManager {
         studydoor.object.rotateY(Math.PI / 2);
         studydoor.setPosition(7.9, -0.5, -35.3);
         managers[1].register(studydoor);
+
+
+        endDoor.object.rotateY(Math.PI);
+        endDoor.setPosition(71.7, 0.75 , -93.35);
+        managers[1].register(endDoor);
+
 
         //managers[1].register(loungedoor);
 
@@ -895,6 +906,7 @@ export class SceneManager {
             this.setAudio();
 
             //testing stuff----------------------------------------------------------------
+
 
 
             var x = keypad.object.position.x;

@@ -37,12 +37,12 @@ class SubtitleManager extends THREE.Object3D {
             this.show=false;
             return false;
         }
-        return true;
+        else{
+          return true;
+        }
+
     }
 
-    hideSubtitles(){
-        this.hideSubtitles(); 
-    }
     setDuration(duration){
         //set how long the subtitle displays for
         this.subtitleDuration=duration;
@@ -53,14 +53,16 @@ class SubtitleManager extends THREE.Object3D {
     }
 
     showSubtitles(){
+            //console.log("Showing Subtitles");
             this.subtitles.style.display = 'block';
     }
 
     hideSubtitles(){
+            //console.log("Hiding Subtitles");
             this.subtitles.style.display = 'none';
     }
 
- 
+
 }
 
 export var subtitleManager = new SubtitleManager();

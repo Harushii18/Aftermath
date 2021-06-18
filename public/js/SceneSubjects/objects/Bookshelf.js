@@ -164,9 +164,7 @@ export class Bookshelf extends THREE.Object3D {
           gameOverlay.hideOverlay();
           this.showOpenedSubtitles = true;
 
-          this.animateBookshelf = true;
-
-
+        
           if (this.objectInteractionCounter != 1) {
             //sceneRemoveQueue.push("lockCupboard");
             this.objectInteractionCounter += 1;
