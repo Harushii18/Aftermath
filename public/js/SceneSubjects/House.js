@@ -1,8 +1,8 @@
 import { GLTFLoader } from '../../jsm/GLTFLoader.js';
-import * as THREE from '../../../jsm/three.module.js';
+import * as THREE from '../../jsm/three.module.js';
 import { loaded, loadingManager } from '../managers/SceneManager.js';
 //variable to check if house loaded
-export var loadedHouse;
+export var loadedHouse=false;
 export class House extends THREE.Object3D {
   constructor() {
 
