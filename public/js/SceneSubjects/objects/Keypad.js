@@ -2,7 +2,7 @@ import * as THREE from '../../../jsm/three.module.js';
 import { GLTFLoader } from '../../../jsm/GLTFLoader.js';
 import { keyboardManager } from '../../managers/KeyboardManager.js';
 
-import { loadingManager, mainChar, hudOverlayRemoveQueue } from '../../managers/SceneManager.js';
+import { loadingManager, mainChar, hudOverlayRemoveQueue, bookshelf } from '../../managers/SceneManager.js';
 import { gameOverlay } from '../../Overlay/GameOverlay.js';
 import { subtitleManager } from '../../managers/SubtitleManager.js';
 
@@ -14,21 +14,16 @@ export class Keypad extends THREE.Object3D {
         super();
         this.objectInteractionCounter = 0;
         this.object = new THREE.Object3D();
+        this.animateKeypad = false;
 
-        //initialise subtitle contents
-        this.initialiseSubtitleContents();
 
         //stores a variable that only allows the interaction overlay to be shown once
         this.count = 0;
 
-        //variable to start subtitles
-        this.startSubtitles = false;
-        this.showNoKeySubtitles = false;
-
 
         this.doCheckVicinity = true;
         //we change this to true when the other events have been allowed
-        this.allowInteraction = false;
+        this.allowInteraction = true;
 
         this.clock = new THREE.Clock();
         const loader = new GLTFLoader(loadingManager);
@@ -51,9 +46,9 @@ export class Keypad extends THREE.Object3D {
 
             var obj_gltf = new THREE.Object3D();
 
-           
 
-            
+
+
 
 
             obj_gltf.add(gltf.scene);
@@ -62,31 +57,118 @@ export class Keypad extends THREE.Object3D {
 
     }
 
-    initialiseSubtitleContents() {
-        //Checks if the subtitle had started showing
-        this.subtitleStarted = {
-            t1: false,
-            t2: false
-        };
-        //Checks if the subtitle had been shown already
-        this.subtitleState = {
-            t1: false,
-            t2: false
-        };
-     
+
+    inVicinity(vicinityLimitZ, vicinityLimitX) {
+      let pos = mainChar.returnWorldPosition();
+
+
+      if (pos.x < this.object.position.x + vicinityLimitX && pos.x > this.object.position.x - vicinityLimitX) {
+        if (pos.z < this.object.position.z + vicinityLimitZ && pos.z > this.object.position.z - vicinityLimitZ) {
+          return true;
+        }
+      }
+      else {
+        return false;
+      }
     }
+
+
 
     setAllowInteraction(value) {
-        this.allowInteraction = value;
+      this.allowInteraction = value;
     }
 
+
+    //checks if Character is in vicinity
+    checkCharacterVicinity() {
+      //  console.log("Vinicinity Hammer function running");
+      //get the position of the main character
+
+
+      //variable that allows change in vicinity position in which E needs to be pressed:
+      var vicinityLimitZ = 10;
+      var vicinityLimitX = 10;
+
+      //if the character is in the vicinity
+      if (this.inVicinity(vicinityLimitZ, vicinityLimitX)) {
+
+        //  console.log("Player is near the Cupboard");
+        //display interaction overlay if it isn't being shown
+        if (this.count == 0) {
+          if (this.open == false) {
+            gameOverlay.changeText('[E] ENTER CODE');
+            //LATER WE CAN ADD A CONDITION IF HE LOOKED AT IT, HE'LL NOTICE IT CAN MOVE, AND THE
+            //INTERACTION WILL SAY MOVE PAINTING
+            gameOverlay.showOverlay();
+            this.count += 1;
+          }
+        }
+        return true;
+      }
+      //if the character is not in the vicinity, return false
+      //hide interaction overlay
+      if (this.count == 1) {
+        gameOverlay.hideOverlay();
+        this.count = 0;
+      }
+
+      return false;
+    }
 
 
     update(time) {
+      if(this.animateKeypad){
+        if(this.object.position.z<-33.7 ){
+          this.object.position.z+=(this.delta*5);
+        }
+        else{
+          this.animateKeypad = false;
+        }
+      }
 
-       
+
+      this.delta = this.clock.getDelta();
+      //pause the cupboard animation at the right moment
+
+      var checkVicinity = this.checkCharacterVicinity();
+      if (keyboardManager.wasPressed('E')) {
+
+
+        if (checkVicinity) {
+          if (this.allowInteraction) {
+
+            //Animation goes here
+            //***********
+            //  this.object.rotateOnAxis(new THREE.Vector3(0,1,0), this.object.rotation.y+0.1); // This happens for now
+            this.open = true;
+            gameOverlay.hideOverlay();
+            this.showOpenedSubtitles = true;
+
+            //Animate Keypad and Bookshelf
+            this.animateKeypad = true;
+            bookshelf.animateBookshelf = true;
+
+
+            if (this.objectInteractionCounter != 1) {
+              //sceneRemoveQueue.push("lockCupboard");
+              this.objectInteractionCounter += 1;
+            }
+            //lockCupboard.setPosition(new THREE.Vector3(0,100,0));
+            this.allowInteraction = false;
+          }
+          else {
+
+
+          }
+
+        }
+
+      }
+
 
     }
+
+
 
     setForScene()
     {
@@ -95,7 +177,8 @@ export class Keypad extends THREE.Object3D {
         this.object.scale.y = 1.5;
         this.object.scale.z = 1.5;
 
-        this.object.position.set(57,20, -35);
-        this.object.rotateOnAxis(new THREE.Vector3(0, 1, 0), Math.PI/2);
+        this.object.position.set(54.7 , 15.05 , -54.2);
+        this.object.rotateOnAxis(new THREE.Vector3(0, 1, 0), -Math.PI);
     }
+
 }

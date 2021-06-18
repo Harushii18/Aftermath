@@ -160,8 +160,6 @@ export class Bookshelf extends THREE.Object3D {
           gameOverlay.hideOverlay();
           this.showOpenedSubtitles = true;
 
-          studydoor.updateAllowInteraction();
-
           this.animateBookshelf = true;
 
 
