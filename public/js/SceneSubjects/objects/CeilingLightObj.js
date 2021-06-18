@@ -10,7 +10,7 @@ export class CeilingLightObj extends THREE.Object3D {
         //load house model form blender file
 
         const loader = new GLTFLoader(loadingManager);
-        loader.setPath('../../models/objects/');
+        loader.setPath('./models/objects/');
 
         const gltf = loader.load('ceilingLight2.glb', (gltf) => {
 

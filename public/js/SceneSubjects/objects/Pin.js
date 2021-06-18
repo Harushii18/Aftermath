@@ -28,7 +28,7 @@ export class Pin extends THREE.Object3D {
         this.clock = new THREE.Clock();
         const loader = new GLTFLoader();
 
-        loader.setPath('../../models/3DObjects/');
+        loader.setPath('./models/3DObjects/');
 
         var gltf = loader.load('pin.glb', (gltf) => {
           //console.log("loaded pin");

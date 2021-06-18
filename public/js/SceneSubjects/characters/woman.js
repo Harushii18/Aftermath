@@ -54,11 +54,29 @@ export class Woman extends THREE.Object3D {
           //console.log(this.spawnCoolDown);
 
 
+
             //IF LEVEL 1 IS COMPLETE ONLY!
             if (this.getLevel1Complete()) {
                 //ensure that all movement is not by frame rate
                 this.delta = this.clock.getDelta();
 
+                if(this.mainChar.allowAttack==true && this.mainChar.hasFlashlight==true){
+                  let womanThere = false;
+                  let dir = new THREE.Vector3();
+          				this.mainChar.getWorldDirection(dir);
+                  let forwardDirection = new THREE.Vector3(dir.x, dir.y, dir.z);
+                  let flashLightRaycaster = new THREE.Raycaster(pos,forwardDirection);
+                  womanThere = this.mainChar.checkForWoman(womanThere, flashLightRaycaster);
+                  if(womanThere){
+                    //console.log("Woman is in front of me");
+
+                    this.despawnWoman();
+                    this.updatePlayerKilledCount();
+                  }
+                  else{
+
+                  }
+                }
 
 
 
@@ -170,7 +188,7 @@ export class Woman extends THREE.Object3D {
     }
 
     loadAllAnimations() {
-        var womanPath = '../models/characters/WAnimations/';
+        var womanPath = './models/characters/WAnimations/';
 
         //injured walk
         this.loadAnim('injuredWalk', womanPath, 'InjuredWalk.fbx');
@@ -224,7 +242,7 @@ export class Woman extends THREE.Object3D {
     loadModel() {
         //load the main character model with an FBX Loader
         const loader = new FBXLoader(this.loadingManager);
-        loader.setPath('../models/characters/');
+        loader.setPath('./models/characters/');
         loader.load('jill.fbx', (fbx) => {
             //scale the model down
             fbx.scale.setScalar(0.0115);
@@ -241,7 +259,7 @@ export class Woman extends THREE.Object3D {
 
             //animate character
             const anim = new FBXLoader(this.loadingManager);
-            anim.setPath('../models/characters/WAnimations/');
+            anim.setPath('./models/characters/WAnimations/');
             anim.load('Idle.fbx', (anim) => {
                 this.walkMixer = new THREE.AnimationMixer(fbx);
                 //set the initial animation for our main character to be idle (as he is not moving)
@@ -285,7 +303,7 @@ export class Woman extends THREE.Object3D {
                 this.womanVisible = true;
 
                 this.audioPlayQueue.push("ghost_wail");
-                
+
 
                 //so the character walks really slowly towards the woman
                 characterControls.setSpeed(2);

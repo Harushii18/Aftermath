@@ -1,5 +1,4 @@
 import { GLTFLoader } from '../../jsm/GLTFLoader.js';
-
 import * as THREE from '../../jsm/three.module.js';
 //import {loadingManager} from '../managers/SceneManager.js';  //circular ref
 
@@ -23,8 +22,8 @@ export class House extends THREE.Object3D {
 
     const loader = new GLTFLoader(this.loadingManager);
 
-    loader.setPath('../models/');
-    const gltf = loader.load('newhouse.glb', (gltf) => {
+    loader.setPath('./models/');
+    const gltf = loader.load('NEWHOUSE.glb', (gltf) => {
       this.loadCount = 1;
       console.log("load house");
       // gltf.scene.traverse(c => {

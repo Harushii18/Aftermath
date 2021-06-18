@@ -35,7 +35,7 @@ export class TV extends THREE.Object3D {
         this.clock = new THREE.Clock();
         const loader = new GLTFLoader(this.loadingManager);
 
-        loader.setPath('../../models/3DObjects/');
+        loader.setPath('./models/3DObjects/');
 
         this.open = false; //keeps track if the drawer is openend
 

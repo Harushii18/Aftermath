@@ -33,8 +33,7 @@ export class Boards extends THREE.Object3D {
 
     this.clock = new THREE.Clock();
     const loader = new GLTFLoader(loadingManager);
-    loader.setPath('../../models/');
-    loader.setPath('../../models/3DObjects/');
+    loader.setPath('./models/3DObjects/');
     this.open = false; //open door animation
     this.count = 0;
 
@@ -46,9 +45,9 @@ export class Boards extends THREE.Object3D {
 
       this.object = new THREE.Object3D();
 
-      this.plank = new Plank();
-      this.plank1 = new Plank();
-      this.plank2 = new Plank();
+      this.plank = new Plank(loadingManager);
+      this.plank1 = new Plank(loadingManager);
+      this.plank2 = new Plank(loadingManager);
 
 
       this.plank.setPosition(0, 5,0);
@@ -178,7 +177,7 @@ export class Boards extends THREE.Object3D {
 
 
           if (this.objectInteractionCounter != 1) {
-            hudOverlayRemoveQueue.push("crowbar");
+            this.hudOverlayRemoveQueue.push("crowbar");
             this.objectInteractionCounter += 1;
           }
 

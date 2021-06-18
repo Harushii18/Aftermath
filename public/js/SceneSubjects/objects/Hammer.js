@@ -29,7 +29,7 @@ export class Hammer extends THREE.Object3D {
         this.clock = new THREE.Clock();
         const loader = new GLTFLoader();
 
-        loader.setPath('../../models/3DObjects/');
+        loader.setPath('./models/3DObjects/');
 
         this.up= true; //hover animation
                     //if hammer should move up or down
@@ -120,7 +120,7 @@ export class Hammer extends THREE.Object3D {
                 {
                   //SHOW HAMMER IMAGE IN OVERLAY
                   console.log("pushing hammer");
-                  hudOverlayAddQueue.push("hammer");
+                  this.hudOverlayAddQueue.push("hammer");
                 //sceneRemoveQueue.push("key");
                 this.objectInteractionCounter += 1;
                 }

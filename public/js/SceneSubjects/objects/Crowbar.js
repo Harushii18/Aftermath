@@ -6,18 +6,14 @@ import { keyboardManager } from '../../managers/KeyboardManager.js';
 
 import { gameOverlay } from '../../Overlay/GameOverlay.js';
 import { subtitleManager } from '../../managers/SubtitleManager.js';
-import { studydoor } from '../../managers/SceneManager.js';
-//import { Loader } from 'three';
 
 
 
 export class Crowbar extends THREE.Object3D {
 
-
     constructor(loadingManager, mainChar,  hudOverlayAddQueue  ) {
         super();
         this.loadingManager = loadingManager;
-
         this.mainChar = mainChar;
         this.hudOverlayAddQueue = hudOverlayAddQueue;
 
@@ -41,17 +37,10 @@ export class Crowbar extends THREE.Object3D {
         this.clock = new THREE.Clock();
         const loader = new GLTFLoader(this.loadingManager);
 
-        loader.setPath('../../models/3DObjects/');
+        loader.setPath('./models/3DObjects/');
 
 
         var gltf = loader.load('crowbar.glb', (gltf) => {
-            //console.log("loaded drawer");
-
-         /*   gltf.scene.traverse(c => {
-                c.castShadow = true;
-
-            });*/
-
             var obj_gltf = new THREE.Object3D();
             obj_gltf.add(gltf.scene);
             this.object.add(obj_gltf);
@@ -148,7 +137,7 @@ export class Crowbar extends THREE.Object3D {
               {
                 //SHOW HAMMER IMAGE IN OVERLAY
                 console.log("pushing hammer");
-                hudOverlayAddQueue.push("crowbar");
+                this.hudOverlayAddQueue.push("crowbar");
               //sceneRemoveQueue.push("key");
                 this.objectInteractionCounter += 1;
               }

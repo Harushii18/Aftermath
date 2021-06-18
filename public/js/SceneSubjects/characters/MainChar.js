@@ -10,12 +10,13 @@ export class MainChar extends THREE.Object3D {
 
 	constructor(collidableObjects, loadingManager, womanModel) {
 
-    
+
 		super();
 
 		this.loadingManager = loadingManager;
 		this.collidableObjects = collidableObjects;
 		this.collidableWoman = womanModel;
+
 
 		this.loaded = false;
 		//main character object
@@ -31,7 +32,7 @@ export class MainChar extends THREE.Object3D {
 
 		//start from scratch-> char at original starting game position
 
-		this.object.position.set(0, 1, 50); 
+		this.object.position.set(0, 1, 50);
 
 		this.object.visible = false; //Uncomment this so you don't see the player in first person view
 		this.initialiseSubtitleContents();
@@ -110,23 +111,10 @@ export class MainChar extends THREE.Object3D {
 				let bottomRightRaycaster = new THREE.Raycaster(pos, bottomRightDirection);
 				let bottomLeftRaycaster = new THREE.Raycaster(pos, bottomLeftDirection);
 
-				let flashLightRaycaster = new THREE.Raycaster(pos,forwardDirection);
 
 
 
-				if(this.allowAttack==true && this.hasFlashlight==true){
-					let womanThere = false;
-					womanThere = this.checkForWoman(womanThere, flashLightRaycaster);
-					if(womanThere){
-						//console.log("Woman is in front of me");
 
-						woman.despawnWoman();
-						woman.updatePlayerKilledCount();
-					}
-					else{
-
-					}
-				}
 
 
 
@@ -303,10 +291,10 @@ export class MainChar extends THREE.Object3D {
 	//==========================MOVEMENT ANIMATIONS=================================================
 
 	loadAllAnimations() {
-		var runPath = '../models/characters/Animations/Run/';
-		var walkPath = '../models/characters/Animations/Walk/';
+		var runPath = './models/characters/Animations/Run/';
+		var walkPath = './models/characters/Animations/Walk/';
 		//idle
-		this.loadAnim('idle', '../models/characters/Animations/', 'Idle.fbx');
+		this.loadAnim('idle', './models/characters/Animations/', 'Idle.fbx');
 		//RunBack
 		this.loadAnim('runBack', runPath, 'RunBack.fbx');
 		//RunBackLeft
@@ -423,7 +411,7 @@ export class MainChar extends THREE.Object3D {
 	loadModel() {
 		//load the main character model with an FBX Loader
 		const loader = new FBXLoader(this.loadingManager);
-		loader.setPath('../models/characters/');
+		loader.setPath('./models/characters/');
 		loader.load('Douglas.fbx', (fbx) => {
 			//scale the model down
 			fbx.scale.setScalar(0.0115);
@@ -436,7 +424,7 @@ export class MainChar extends THREE.Object3D {
 
 			//animate character
 			const anim = new FBXLoader(this.loadingManager);
-			anim.setPath('../models/characters/Animations/');
+			anim.setPath('./models/characters/Animations/');
 			anim.load('Idle.fbx', (anim) => {
 				this.walkMixer = new THREE.AnimationMixer(fbx);
 				//set the initial animation for our main character to be idle (as he is not moving)

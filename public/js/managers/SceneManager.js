@@ -36,6 +36,8 @@ import { Hammer } from '../SceneSubjects/objects/Hammer.js';//// removed cir. re
 import { Flashlight } from '../SceneSubjects/objects/Flashlight.js';// removed cir. ref
 import { cupboardDoorR } from '../SceneSubjects/objects/cupboardDoorR.js';// removed cir. ref
 import { Pin } from '../SceneSubjects/objects/Pin.js';//removed cir. ref
+//pre-loader
+import { HUD } from '../Overlay/HUD.js';//checked
 import { LetterI } from '../SceneSubjects/objects/LetterI.js';//checked
 import { Key } from '../SceneSubjects/objects/Key.js';//removed cir. ref
 import { Crowbar } from '../SceneSubjects/objects/Crowbar.js';//removed cir. ref
@@ -48,7 +50,7 @@ import { Shower } from '../SceneSubjects/objects/Shower.js';
 import { Microwave } from '../SceneSubjects/objects/Microwave.js';
 import { Keypad } from '../SceneSubjects/objects/Keypad.js';
 
-
+import { WoodenDoor} from '../SceneSubjects/objects/WoodenDoor.js';
 import { EndDoor} from '../SceneSubjects/objects/EndDoor.js';
 
 
@@ -63,8 +65,6 @@ import { PointerLockControls } from '../../jsm/PointerLockControls.js';//checked
 import { OrbitControls } from '../../jsm/OrbitControls.js'; //checked
 import * as THREE from '../../jsm/three.module.js';
 import { characterControls } from './CharacterControls.js'; //checked
-//pre-loader
-import { HUD } from '../Overlay/HUD.js';//checked
 import { Woman } from '../SceneSubjects/characters/woman.js';//removed cir. ref
 import { WomanHitBox } from '../SceneSubjects/characters/womanHitBox.js';
 
@@ -95,7 +95,7 @@ export var mainChar = new MainChar(collisionManager.returnObjects(),loadingManag
 
 
 export var testdoor = new Door(mainChar, loadingManager);
-export var studydoor = new Door(mainChar, loadingManager);//must be changed to wooden door later
+export var studydoor = new WoodenDoor(mainChar, loadingManager, hudOverlayRemoveQueue);//must be changed to wooden door later
 export var bedroomDrawer = new BedroomDrawer(mainChar,loadingManager, hudOverlayRemoveQueue,testdoor);
 
 
@@ -106,16 +106,9 @@ export var cupBoardDoorR = new cupboardDoorR(mainChar, loadingManager, pin, hudO
 export var hammer = new Hammer(mainChar, cupBoardDoorR, hudOverlayAddQueue );
 export var flashlight = new Flashlight(mainChar,loadingManager,hudOverlayAddQueue);
 
-
-export var crowbar = new Crowbar(loadingManager, mainChar,  hudOverlayAddQueue);
-export var loungeBoards = new Boards(loadingManager, mainChar, hudOverlayRemoveQueue, studydoor, crowbar);
-loungeBoards.setBoardType("lounge");
-export var studyBoards = new Boards(loadingManager, mainChar, hudOverlayRemoveQueue, studydoor, crowbar);
-studyBoards.setBoardType("study");
 export var microwave = new Microwave(loadingManager, mainChar, studydoor, hudOverlayAddQueue);
 
 
-export var lightswitch = new LightSwitch(loadingManager, mainChar, loungeBoards, studyBoards, microwave );
 
 var bookshelf = new Bookshelf(mainChar);
 
@@ -132,6 +125,15 @@ var house = new House(loadingManager);
 //lights
 var generalLights = new GeneralLights();
 var sun = new THREE.PointLight(0xffffff, 1);
+
+var crowbar = new Crowbar(loadingManager, mainChar,  hudOverlayAddQueue);
+export var loungeBoards = new Boards(loadingManager, mainChar, hudOverlayRemoveQueue, studydoor, crowbar);
+loungeBoards.setBoardType("lounge");
+export var studyBoards = new Boards(loadingManager, mainChar, hudOverlayRemoveQueue, studydoor, crowbar);
+studyBoards.setBoardType("study");
+
+export var lightswitch = new LightSwitch(loadingManager, mainChar, loungeBoards, studyBoards, microwave );
+
 
 
 //ceiling lights
@@ -216,7 +218,7 @@ collisionManager.addObject(studyBoards);
 collisionManager.addObject(loungeBoards);
 collisionManager.addObject(bookshelf);
 collisionManager.addObject(shower);
-collisionManager.addObject(house);
+//collisionManager.addObject(house);
 
 
 
@@ -280,7 +282,7 @@ export class SceneManager {
         loaded = false;
 
         //loading manager
-        
+
         loadingManager.onProgress = function (item, loaded, total) {
              //do nothing
         };
@@ -370,7 +372,7 @@ export class SceneManager {
 
     addSkybox() {
         //get pictures per cube face
-        var skybox_path = '../skybox/Space/';
+        var skybox_path = './skybox/Space/';
         var urls = [
             skybox_path + 'space_right.png',//posx
             skybox_path + 'space_left.png',//negx
@@ -514,7 +516,7 @@ export class SceneManager {
        /// managers[1].register(bedroomLightObj);
        /// managers[1].register(hallwayLightObj1);
        /// managers[1].register(hallwayLightObj2);
-       
+
 
 
 
@@ -718,7 +720,7 @@ export class SceneManager {
             });
 
             btnShowCredits.addEventListener("click", () => {
-                
+
                 const menu = document.getElementsByClassName("menu");
                 for (let i = 0; i < menu.length; i++) {
                     menu[i].style.display = 'none';
@@ -736,8 +738,8 @@ export class SceneManager {
                 for (let i = 0; i < credits.length; i++){
                     credits[i].style.display = 'flex';
                 }
-                
-                
+
+
             });
 
             btnBack.addEventListener("click", () => {
@@ -764,7 +766,7 @@ export class SceneManager {
             const loadingScreen = document.getElementById('loading-screen');
         loadingScreen.classList.add('fade-out');
         loadingScreen.style.display = "none";
-   
+
             //id the divs
             const menu = document.getElementsByClassName("mainMenu");
             const logo = document.getElementsByClassName("logo");
@@ -921,7 +923,7 @@ export class SceneManager {
             this.removeFromScene()
             this.removeHUDItems();
             this.addToHUD();
-            
+
 
             this.setAudio();
 
@@ -929,9 +931,9 @@ export class SceneManager {
 
 
 
-            var x = keypad.object.position.x;
-            var y = keypad.object.position.y;
-            var z = keypad.object.position.z
+            var x = lightswitch.object.position.x;
+            var y = lightswitch.object.position.y;
+            var z = lightswitch.object.position.z
             var changedPos = false;
             if (keyboardManager.wasPressed("I")) {
                 y += 0.05;
@@ -966,7 +968,7 @@ export class SceneManager {
             }
 
             if (changedPos == true) {
-                keypad.object.position.set(x, y, z);
+                lightswitch.object.position.set(x, y, z);
                 console.log("( " + x.toString() + " , " + y.toString() + " , " + z.toString() + " )");
 
             }

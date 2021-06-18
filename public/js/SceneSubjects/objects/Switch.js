@@ -44,7 +44,7 @@ export class LightSwitch extends THREE.Object3D {
         this.clock = new THREE.Clock();
         const loader = new GLTFLoader(this.loadingManager);
 
-        loader.setPath('../../models/3DObjects/');
+        loader.setPath('./models/3DObjects/');
 
 
         var gltf = loader.load('switch.glb', (gltf) => {
@@ -160,7 +160,7 @@ export class LightSwitch extends THREE.Object3D {
                 gameOverlay.changeText('[E] TURN ON POWER');
                 this.loungeBoards.setAllowInteraction(true);
                 this.studyBoards.setAllowInteraction(true);
-                
+
 
                 //LATER WE CAN ADD A CONDITION IF HE LOOKED AT IT, HE'LL NOTICE IT CAN MOVE, AND THE
                 //INTERACTION WILL SAY MOVE PAINTING
@@ -188,12 +188,9 @@ export class LightSwitch extends THREE.Object3D {
         this.object.scale.x = 4;
         this.object.scale.y = 4;
         this.object.scale.z = 4;
-        this.object.position.set(-70 , 12.45 , -28);
-        this.object.rotateOnAxis(new THREE.Vector3(0, 1, 0), -Math.PI);
+        this.object.position.set(-12.9, 16.3, -91.3);
+        this.object.rotateOnAxis(new THREE.Vector3(0, 1, 0), Math.PI);
 
     }
 
 }
-
-
-
