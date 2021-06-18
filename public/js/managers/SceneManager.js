@@ -17,6 +17,7 @@ import { GeneralLights } from '../SceneSubjects/lighting/GeneralLights.js';
 import { CeilingLight } from '../SceneSubjects/lighting/CeilingLight.js';
 import { AmbientLight } from '../SceneSubjects/lighting/AmbientLight.js';
 import { CeilingLightObj } from '../SceneSubjects/objects/CeilingLightObj.js';
+import { flashLight } from '../SceneSubjects/lighting/flashLight.js';
 
 //OBJECTS
 import { House } from '../SceneSubjects/House.js';
@@ -104,6 +105,7 @@ var bedroomLight = new CeilingLight();
 // var bathroomLight = new CeilingLight();
 // var hallwayLight2 = new CeilingLight();
 // var loungeLight = new CeilingLight();
+var flash = new flashLight();
 
 var ambientLight = new AmbientLight();
 
@@ -290,7 +292,7 @@ export class SceneManager {
         this.managers = this.createManagers();
 
         //load things to scene
-        //this.loadToScene(this.managers[0].lights);
+        this.loadToScene(this.managers[0].lights);
         this.loadToScene(this.managers[1].entities);
 
 
@@ -434,6 +436,9 @@ export class SceneManager {
         hallwayLightObj2.setLightPosition(0, 0);
 
         bedroomLight.setLightPosition(0, 50);
+
+        // let pos = mainChar.returnWorldPosition();
+        flash.setLightPosition(0, 50);
         // loungeLight.setLightPosition(-45,  -60);
         //  studyLight.setLightPosition(35,  -50);
         //   kitchenLight.setLightPosition(-45,  5);
@@ -457,6 +462,7 @@ export class SceneManager {
 
         managers[0].register(ambientLight);
         managers[0].register(bedroomLight);
+        managers[0].register(flash);
         // managers[0].register(loungeLight);
         // managers[0].register(studyLight);
         // managers[0].register(hallwayLight1);
@@ -590,7 +596,7 @@ export class SceneManager {
         if (isFirstPersonView == true) {
             mainChar.setVisibility(false);
             this.pointerLockControls.getObject().position.set(pos.x, 17.5, pos.z); //Need to sort out position of camera at head height
-
+            flash.setLightPosition(pos.x, pos.z);
         }
         //Third Person View
         else if (isFirstPersonView == false) {
@@ -598,6 +604,9 @@ export class SceneManager {
             this.pointerLockControls.unlock(); //Keep PointerLockControls unlocked
             this.controls.target.set(pos.x, 17.5, pos.z + dir.z);//Set position at player model and face the same direction as model
             this.controls.update();//Update Orbital Controls
+
+            flash.target.set(pos.x, 17.5, pos.z + dir.z);
+            
         }
 
         this.updatePlayerRotation();//Make player face direction of mouse movement
@@ -609,6 +618,9 @@ export class SceneManager {
             mousePointer.normalize();
             this.pointerLockControls.getDirection(mousePointer);
             mainChar.updateDirection(mousePointer);
+
+           // flash.updateDirection(mousePointer);
+            //flash.setLightRotation(mousePointer.x, mousePointer.y, mousePointer.z);
         }
         if (isFirstPersonView == false) {
             var directionOfCamera = new THREE.Vector3();
@@ -966,6 +978,13 @@ export class SceneManager {
             this.managers[0].update(runTime);
 
             this.managers[1].update(runTime);
+
+            //turn flash on or off
+            if ((keyboardManager.keyDownQueue[0] == "F") && flashlight.pickedUp == true){
+                console.log("lights on/off pressed");
+               flash.toggleVisibility();
+                keyboardManager.keyDownQueue.shift();
+            }
 
             //check pause--------------------------------
             if ((keyboardManager.keyDownQueue[0] == "P")) {

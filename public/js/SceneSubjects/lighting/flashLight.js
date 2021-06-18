@@ -4,7 +4,7 @@ import { mainChar } from '../../managers/SceneManager.js';
 export class flashLight extends THREE.Object3D {
     constructor() {
         super();
-        this.object = new THREE.SpotLight( 0xffffff, 0.8, 100, Math.PI/5 );
+        this.object = new THREE.SpotLight( 0xffffff, 0.8, 100, Math.PI/10 );
         //this.object.position.set( 100, 1000, 100 );
         
         // this.object.castShadow = true;

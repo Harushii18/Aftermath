@@ -23,7 +23,7 @@ export class MainChar extends THREE.Object3D {
 		this.hasFlashlight = false;
 
 		//start from scratch-> char at original starting game position
-		this.object.position.set(0, 1, 50);
+		// this.object.position.set(0, 1, 50);
 
 		this.object.visible = false; //Uncomment this so you don't see the player in first person view
 		this.initialiseSubtitleContents();
