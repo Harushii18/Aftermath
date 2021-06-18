@@ -61,7 +61,7 @@ export class Crowbar extends THREE.Object3D {
           };
         // //Contains the text for each subtitle
          this.subtitleText = {
-             t1: "Crowbar in the bathtub... That's not normal.",
+             t1: "What's a crowbar doing in the bathroom?",
          };
     }
 
@@ -112,6 +112,7 @@ export class Crowbar extends THREE.Object3D {
     }
 
     update(time) {
+      //subtitleManager.countTime();
       //just to show the div
       var checkVicinity = this.checkCharacterVicinity();
 
@@ -129,7 +130,19 @@ export class Crowbar extends THREE.Object3D {
               this.object.position.set(0, 100, 0);
               this.pickedUp = true;
               //SHOW CROWBAR IMAGE IN OVERLAY
-              this.hudOverlayAddQueue.push("crowbar");
+
+
+              //add that he found the key
+              if (this.objectInteractionCounter != 1)
+              {
+                //SHOW HAMMER IMAGE IN OVERLAY
+                console.log("pushing hammer");
+                this.hudOverlayAddQueue.push("crowbar");
+              //sceneRemoveQueue.push("key");
+                this.objectInteractionCounter += 1;
+              }
+
+
 
           }
       }
@@ -150,6 +163,8 @@ export class Crowbar extends THREE.Object3D {
 
     setForHUD()
     {
+
+      this.object.rotateOnAxis(new THREE.Vector3(0,1,0),Math.PI);
 
         this.object.scale.x = 0.8;
         this.object.scale.y = 0.8;

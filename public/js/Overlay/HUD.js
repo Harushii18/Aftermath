@@ -59,7 +59,7 @@ export class HUD extends Overlay {
   add(name,object)
   {
     object.object.name = name;
- 
+
     object.object.rotateX(Math.PI/4);
     object.object.rotateY(Math.PI/4);
     object.object.rotateZ(Math.PI/4);
@@ -72,6 +72,8 @@ export class HUD extends Overlay {
     //console.log("in add: hud has " +this.numItems.toString())
 
   }
+
+
 
   remove(name)
   {

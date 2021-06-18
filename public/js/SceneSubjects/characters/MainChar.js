@@ -10,12 +10,13 @@ export class MainChar extends THREE.Object3D {
 
 	constructor(collidableObjects, loadingManager, womanModel) {
 
-    
+
 		super();
 
 		this.loadingManager = loadingManager;
 		this.collidableObjects = collidableObjects;
 		this.collidableWoman = womanModel;
+
 
 		this.loaded = false;
 		//main character object
@@ -30,7 +31,7 @@ export class MainChar extends THREE.Object3D {
 		this.hasFlashlight = false;
 
 		//start from scratch-> char at original starting game position
-		this.object.position.set(0, 1, 50); 
+		this.object.position.set(0, 1, 50);
 
 		this.object.visible = false; //Uncomment this so you don't see the player in first person view
 		this.initialiseSubtitleContents();
@@ -109,23 +110,10 @@ export class MainChar extends THREE.Object3D {
 				let bottomRightRaycaster = new THREE.Raycaster(pos, bottomRightDirection);
 				let bottomLeftRaycaster = new THREE.Raycaster(pos, bottomLeftDirection);
 
-				let flashLightRaycaster = new THREE.Raycaster(pos,forwardDirection);
 
 
 
-				if(this.allowAttack==true && this.hasFlashlight==true){
-					let womanThere = false;
-					womanThere = this.checkForWoman(womanThere, flashLightRaycaster);
-					if(womanThere){
-						//console.log("Woman is in front of me");
 
-						woman.despawnWoman();
-						woman.updatePlayerKilledCount();
-					}
-					else{
-
-					}
-				}
 
 
 

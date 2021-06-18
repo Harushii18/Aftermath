@@ -7,9 +7,11 @@ import { subtitleManager } from '../../managers/SubtitleManager.js';
 
 export class WoodenDoor extends THREE.Object3D {
 
-  constructor() {
+  constructor(mainChar, loadingManager, hudOverlayRemoveQueue) {
     super();
-
+    this.mainChar = mainChar;
+    this.loadingManager = loadingManager;
+    this.hudOverlayRemoveQueue = hudOverlayRemoveQueue;
     this.objectInteractionCounter = 0;
     this.object = new THREE.Object3D();
     this.allowInteraction = 0;
@@ -24,7 +26,7 @@ export class WoodenDoor extends THREE.Object3D {
     this.showOpenedSubtitles = false;
 
     this.clock = new THREE.Clock();
-    const loader = new GLTFLoader(loadingManager);
+    const loader = new GLTFLoader(this.loadingManager);
     loader.setPath('./models/3DObjects/');
     this.open = false; //open door animation
     this.count = 0;
@@ -79,8 +81,8 @@ export class WoodenDoor extends THREE.Object3D {
     };
     //Contains the text for each subtitle
     this.subtitleText = {
-      t1: "It's locked?? Since when do I need power to open a microwave!?",
-      t2: "Another key..."
+      t1: "It's locked. I need the key.",
+      t2: "This must be the study."
     };
   }
 
@@ -158,7 +160,12 @@ export class WoodenDoor extends THREE.Object3D {
           this.showOpenedSubtitles = true;
           //SHOW KEY IMAGE IN OVERLAY
           //hudOverlayAddQueue.push("studykey");
-          hudOverlayRemoveQueue.push("key");
+
+          if (this.objectInteractionCounter != 1) {
+            this.hudOverlayRemoveQueue.push("studykey");
+            this.objectInteractionCounter += 1;
+          }
+
           //studydoor.updateAllowInteraction();
           this.object.position.set(0,100,0);
 
@@ -189,7 +196,7 @@ export class WoodenDoor extends THREE.Object3D {
 
 
   inVicinity(vicinityLimitZ, vicinityLimitX) {
-    let pos = mainChar.returnWorldPosition();
+    let pos = this.mainChar.returnWorldPosition();
 
 
     if (pos.x < this.object.position.x + vicinityLimitX && pos.x > this.object.position.x - vicinityLimitX) {

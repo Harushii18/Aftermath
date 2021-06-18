@@ -173,22 +173,29 @@ export class Boards extends THREE.Object3D {
           this.open = true;
           gameOverlay.hideOverlay();
           this.object.visible = false;
-          this.hudOverlayRemoveQueue.push("crowbar");
+
+
+
+          if (this.objectInteractionCounter != 1) {
+            this.hudOverlayRemoveQueue.push("crowbar");
+            this.objectInteractionCounter += 1;
+          }
+
+
           this.showOpenedSubtitles = true;
           if (this.boardType=="study"){
+
+
             console.log(this.boardType);
             this.studydoor.setBoardsRemoved();
           }
           else{
             console.log(this.boardType);
-            loungedoor.setAllowInteraction(true);
+            //loungedoor.setAllowInteraction(true);
           }
 
 
-          if (this.objectInteractionCounter != 1) {
-            //sceneRemoveQueue.push("lockCupboard");
-            this.objectInteractionCounter += 1;
-          }
+
           //lockCupboard.setPosition(new THREE.Vector3(0,100,0));
         }
         else {

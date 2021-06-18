@@ -50,7 +50,9 @@ export class Woman extends THREE.Object3D {
 
         this.update = function (time) {
 
+
           //console.log(this.spawnCoolDown);
+
 
 
             //IF LEVEL 1 IS COMPLETE ONLY!
@@ -58,6 +60,23 @@ export class Woman extends THREE.Object3D {
                 //ensure that all movement is not by frame rate
                 this.delta = this.clock.getDelta();
 
+                if(this.mainChar.allowAttack==true && this.mainChar.hasFlashlight==true){
+                  let womanThere = false;
+                  let dir = new THREE.Vector3();
+          				this.mainChar.getWorldDirection(dir);
+                  let forwardDirection = new THREE.Vector3(dir.x, dir.y, dir.z);
+                  let flashLightRaycaster = new THREE.Raycaster(pos,forwardDirection);
+                  womanThere = this.mainChar.checkForWoman(womanThere, flashLightRaycaster);
+                  if(womanThere){
+                    //console.log("Woman is in front of me");
+
+                    this.despawnWoman();
+                    this.updatePlayerKilledCount();
+                  }
+                  else{
+
+                  }
+                }
 
 
 
@@ -99,7 +118,7 @@ export class Woman extends THREE.Object3D {
                 else{
                   if(this.playerKilledCount<=3){
 
-                    console.log(this.spawnCoolDown);
+                  //console.log(this.spawnCoolDown);
                   ///Allow main character to use the flashlight to get rid of the woman
                   mainChar.setAllowAttack(true);
                   if(this.spawnCoolDown<=0){
@@ -284,7 +303,7 @@ export class Woman extends THREE.Object3D {
                 this.womanVisible = true;
 
                 this.audioPlayQueue.push("ghost_wail");
-                
+
 
                 //so the character walks really slowly towards the woman
                 characterControls.setSpeed(2);
@@ -365,6 +384,7 @@ export class Woman extends THREE.Object3D {
 
     }
     subtitle2() {
+      //console.log("Playing subtitle 2");
         if (!this.subtitleState.t2) {
             subtitleManager.showSubtitles();
             if (!this.subtitleStarted.t2) {
