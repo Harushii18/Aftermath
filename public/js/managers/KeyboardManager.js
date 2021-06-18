@@ -11,6 +11,7 @@ export class KeyboardManager {
             S: false,
             D: false,
 
+            F: false,
             
             I: false,
             K: false,
@@ -162,6 +163,14 @@ export class KeyboardManager {
                 }
                 break;
 
+            case 70: //f key
+            
+            if (event.repeat == false)
+            {
+                this.keys.F = true;
+                this.keyDownQueue.push("F");
+            }
+            break;
             
 
 
@@ -256,6 +265,10 @@ export class KeyboardManager {
               //}
               break;
 
+              
+            case 70: //f key
+            this.keys.F = false;
+            break;
         }
     }
 
@@ -314,6 +327,11 @@ export class KeyboardManager {
             return (this.keys.P);
 
 
+            case 'F': //F
+            return (this.keys.F);
+
+            default:
+                return;
         return;
     }
   }
