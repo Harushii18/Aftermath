@@ -3,7 +3,7 @@ import * as THREE from '../../../jsm/three.module.js';
 export class CeilingLight extends THREE.Object3D {
     constructor() {
         super();
-        this.object = new THREE.PointLight(0x7E0B0A, 1, 100);
+        this.object = new THREE.PointLight(0xFFFFFF, 1, 100);
         this.object.distance=500;
         this.object.castShadow = true;
 

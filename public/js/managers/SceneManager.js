@@ -38,8 +38,11 @@ import { Key } from '../SceneSubjects/objects/Key.js';
 import { Crowbar } from '../SceneSubjects/objects/Crowbar.js';
 import { LightSwitch } from '../SceneSubjects/objects/Switch.js';
 import { Plank } from '../SceneSubjects/objects/Plank.js';
-import { Boards } from '../SceneSubjects/objects/Boards.js';
+import { TV } from '../SceneSubjects/objects/Tv.js';
+import { Shower } from '../SceneSubjects/objects/Shower.js';
+import { Microwave } from '../SceneSubjects/objects/Microwave.js';
 
+import { Boards } from '../SceneSubjects/objects/Boards.js';
 
 
 
@@ -127,6 +130,15 @@ export var pin = new Pin();
 
 export var flashlight = new Flashlight();
 
+
+
+
+export var tv = new TV();
+
+export var shower = new Shower();
+export var microwave = new Microwave();
+
+
 export var crowbar = new Crowbar();
 export var lightswitch = new LightSwitch();
 //export var plank = new Plank();
@@ -134,6 +146,7 @@ export var lightswitch = new LightSwitch();
 //export var plank2 = new Plank();
 export var boards = new Boards();
 var boards2 = new Boards();
+
 
 var letterI = new LetterI();
 var key = new Key();
@@ -475,6 +488,9 @@ export class SceneManager {
         crowbar.setForScene();
         managers[1].register(crowbar);
         managers[1].register(lightswitch);
+        managers[1].register(tv);
+        managers[1].register(shower);
+        managers[1].register(microwave);
 
         boards2.object.position.set(-4.5, 15, -77.5);
         managers[1].register(boards2);

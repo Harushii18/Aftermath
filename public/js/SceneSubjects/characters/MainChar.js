@@ -15,7 +15,7 @@ export class MainChar extends THREE.Object3D {
 		this.clock = new THREE.Clock();
 		this.object.rotateOnAxis(new THREE.Vector3(0, 1, 0), -Math.PI);
 		//spawn outside house
-		//this.object.position.set(0, 1, -50);
+		// this.object.position.set(0, 1, -50);
 
 		//start from scratch-> char at original starting game position
 		this.object.position.set(0, 1, 50);

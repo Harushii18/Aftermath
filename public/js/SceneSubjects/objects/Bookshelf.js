@@ -12,11 +12,11 @@ export class Bookshelf extends THREE.Object3D {
         const geometry = new THREE.BoxGeometry(1, 1, 1);
         const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
         const cube = new THREE.Mesh(geometry, material);
-        this.object.add(cube);
-        this.object.scale.x = 2;
-        this.object.scale.y = 40;
-        this.object.scale.z = 20;
-        this.object.position.set(57, 0, -70);
+        // this.object.add(cube);
+        // this.object.scale.x = 2;
+        // this.object.scale.y = 40;
+        // this.object.scale.z = 20;
+        
 
         this.unlocked = false;
         this.complete = false;
@@ -24,27 +24,31 @@ export class Bookshelf extends THREE.Object3D {
         this.clock = new THREE.Clock();
 
         //LOAD GLTF BOOKSHELF INSTEAD
-        /*
+       
                 const loader = new GLTFLoader();
-        loader.setPath('../../models/');
+        loader.setPath('../../models/3DObjects/');
 
 
-        var gltf = loader.load('testdoor.glb', (gltf) => {
+        var gltf = loader.load('bookshelf.glb', (gltf) => {
             gltf.scene.traverse(c => {
                 c.castShadow = true;
 
             });
 
             //scale bookshelf 
-            this.object.scale.x = 0.271;
-            this.object.scale.y = 0.271;
-            this.object.scale.z = 0.271;
+            this.object.scale.x = 0.8;
+            this.object.scale.y = 0.8;
+            this.object.scale.z = 0.8;
+
+            this.object.position.set(55, 1.6, -70);
+
+            this.object.rotateOnAxis(new THREE.Vector3(0, 1, 0), -Math.PI/2);
 
 
             this.object.add(gltf.scene);
         });
 
-        */
+   
     }
 
     setPosition(x, y, z) {
@@ -52,6 +56,9 @@ export class Bookshelf extends THREE.Object3D {
     }
 
     update(time) {
+
+       
+
         //just to show the div
         var checkVicinity=this.checkCharacterVicinity();
         if (keyboardManager.wasPressed('E')) {
