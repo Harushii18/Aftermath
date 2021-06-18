@@ -63,6 +63,7 @@ import { characterControls } from './CharacterControls.js';
 //pre-loader
 import { HUD } from '../Overlay/HUD.js';
 import { Woman } from '../SceneSubjects/characters/woman.js';
+import { WomanHitBox } from '../SceneSubjects/characters/womanHitBox.js';
 
 //==================================================================================================
 
@@ -114,7 +115,7 @@ export var loungedoor = new WoodenDoor();
 
 
 //study
-var bookshelf = new Bookshelf();
+export var bookshelf = new Bookshelf();
 
 //bedroom
 var hudPin = new Pin();
@@ -168,6 +169,9 @@ export var loadingManager;
 //initial subtitles-> check if everything has loaded
 export var loaded;
 
+//woman
+export var woman = new Woman();
+export var womanHitBox = new WomanHitBox();
 
 //Collision Manager to add all objects that need to be collided with
 const collisionManager = new CollisionsManager();
@@ -177,13 +181,18 @@ const collisionManager = new CollisionsManager();
 //collisionManager.addObject(cupBoardDoorR);
 //collisionManager.addObject(testBlock);
 collisionManager.addObject(testdoor);
+collisionManager.addObject(studyBoards);
+collisionManager.addObject(loungeBoards);
+collisionManager.addObject(bookshelf);
+collisionManager.addObject(shower);
+collisionManager.addObject(house);
 
 
-//woman
-export var woman = new Woman();
+
+
 
 //Pass collidable objects as a parameter to the main character (raycasting implementation)
-export var mainChar = new MainChar(collisionManager.returnObjects(), woman.return3DObject());
+export var mainChar = new MainChar(collisionManager.returnObjects(), womanHitBox.return3DObject());
 
 
 
@@ -480,6 +489,7 @@ export class SceneManager {
 
         managers[1].register(mainChar);
         managers[1].register(woman)
+        managers[1].register(womanHitBox);
 
         //study
         //bookshelf.setForScene();
@@ -789,9 +799,9 @@ export class SceneManager {
 
             //testing stuff----------------------------------------------------------------
 
-            var x = crowbar.object.position.x;
-            var y = crowbar.object.position.y;
-            var z = crowbar.object.position.z
+            var x = keypad.object.position.x;
+            var y = keypad.object.position.y;
+            var z = keypad.object.position.z
             var changedPos = false;
             if (keyboardManager.wasPressed("I")) {
                 y += 0.05;
@@ -825,7 +835,7 @@ export class SceneManager {
 
             }
             if (changedPos == true) {
-                crowbar.object.position.set(x, y, z);
+                keypad.object.position.set(x, y, z);
                 console.log("( " + x.toString() + " , " + y.toString() + " , " + z.toString() + " )");
 
             }

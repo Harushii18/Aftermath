@@ -160,6 +160,7 @@ export class Flashlight extends THREE.Object3D {
 						this.pickedUp = true;
 						hudOverlayAddQueue.push("flashlight");
 						this.object.position.set(0, 100, 0);
+						mainChar.setHasFlashlight(true);
 						//SHOW CROWBAR IMAGE IN OVERLAY
 						//hudOverlayAddQueue.push("crowbar");
 
