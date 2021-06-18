@@ -1,14 +1,18 @@
 import * as THREE from '../../../jsm/three.module.js';
 import { GLTFLoader } from '../../../jsm/GLTFLoader.js';
 import { keyboardManager } from '../../managers/KeyboardManager.js';
-import { loadingManager, mainChar, hammer, studydoor, lockCupboard, hudOverlayRemoveQueue,hudOverlayAddQueue, sceneRemoveQueue } from '../../managers/SceneManager.js';
+
+//import { loadingManager, mainChar, hammer, studydoor, lockCupboard, hudOverlayRemoveQueue,hudOverlayAddQueue, sceneRemoveQueue } from '../../managers/SceneManager.js';
 import { gameOverlay } from '../../Overlay/GameOverlay.js';
 import { subtitleManager } from '../../managers/SubtitleManager.js';
 
+
 export class Bookshelf extends THREE.Object3D {
 
-  constructor() {
+  constructor(mainChar, loadingManager  ) {
     super();
+    this.mainChar = mainChar;
+    this.loadingManager = loadingManager;
 
     this.objectInteractionCounter = 0;
     this.object = new THREE.Object3D();
@@ -23,7 +27,7 @@ export class Bookshelf extends THREE.Object3D {
     this.showOpenedSubtitles = false;
 
     this.clock = new THREE.Clock();
-    const loader = new GLTFLoader(loadingManager);
+    const loader = new GLTFLoader(this.loadingManager);
     loader.setPath('../../models/');
     loader.setPath('../../models/3DObjects/');
     this.open = false; //open door animation
@@ -187,7 +191,7 @@ export class Bookshelf extends THREE.Object3D {
 
 
   inVicinity(vicinityLimitZ, vicinityLimitX) {
-    let pos = mainChar.returnWorldPosition();
+    let pos = this.mainChar.returnWorldPosition();
 
 
     if (pos.x < this.object.position.x + vicinityLimitX && pos.x > this.object.position.x - vicinityLimitX) {
@@ -199,6 +203,7 @@ export class Bookshelf extends THREE.Object3D {
       return false;
     }
   }
+
 
 
 

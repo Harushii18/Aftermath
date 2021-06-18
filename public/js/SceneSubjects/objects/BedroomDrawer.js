@@ -1,17 +1,21 @@
 import * as THREE from '../../../jsm/three.module.js';
 import { GLTFLoader } from '../../../jsm/GLTFLoader.js';
-import { keyboardManager } from '../../managers/KeyboardManager.js';
+import { keyboardManager } from '../../managers/KeyboardManager.js';//checked
 
-import { loadingManager, mainChar, hudOverlayRemoveQueue } from '../../managers/SceneManager.js';
-import { gameOverlay } from '../../Overlay/GameOverlay.js';
-import { subtitleManager } from '../../managers/SubtitleManager.js';
-import { Key } from './Key.js';
+//import { loadingManager, mainChar, hudOverlayRemoveQueue } from '../../managers/SceneManager.js';
+import { gameOverlay } from '../../Overlay/GameOverlay.js';//checked
+import { subtitleManager } from '../../managers/SubtitleManager.js';//checked
+import { Key } from './Key.js';//checked
 
 export class BedroomDrawer extends THREE.Object3D {
 
 
-    constructor() {
+    constructor(mainChar,loadingManager, hudOverlayRemoveQueue,testdoor) {
         super();
+this.testdoor = testdoor;
+        this.mainChar = mainChar;
+        this.loadingManager = loadingManager;
+        this.hudOverlayRemoveQueue = hudOverlayRemoveQueue;
         this.objectInteractionCounter = 0;
         this.object = new THREE.Object3D();
 
@@ -33,7 +37,7 @@ export class BedroomDrawer extends THREE.Object3D {
         this.allowInteraction = false;
 
         this.clock = new THREE.Clock();
-        const loader = new GLTFLoader(loadingManager);
+        const loader = new GLTFLoader(this.loadingManager);
 
         loader.setPath('../../models/3DObjects/');
 
@@ -41,7 +45,7 @@ export class BedroomDrawer extends THREE.Object3D {
 
         //add key to object
         //set key transforms--------------------------------------------------------------------------
-        this.key = new Key();
+        this.key = new Key(loadingManager, mainChar, this.testdoor);
         this.key.object.scale.x = 0.5;
         this.key.object.scale.y = 0.5;
         this.key.object.scale.z = 0.5;
@@ -57,10 +61,12 @@ export class BedroomDrawer extends THREE.Object3D {
 
         var gltf = loader.load('bedroomDrawer.glb', (gltf) => {
           //console.log("loaded drawer");
-            // gltf.scene.traverse(c => {
-            //     c.castShadow = true;
 
-            // });
+       /*     gltf.scene.traverse(c => {
+                c.castShadow = true;
+
+            });*/
+
 
             // //scale drawer
          
@@ -170,7 +176,7 @@ export class BedroomDrawer extends THREE.Object3D {
                         //add that he found the key
                         if (this.objectInteractionCounter != 1)
                         {
-                        hudOverlayRemoveQueue.push("pin");
+                        this.hudOverlayRemoveQueue.push("pin");
                         //sceneRemoveQueue.push("key");
                         this.objectInteractionCounter += 1;
                         }
@@ -209,7 +215,7 @@ export class BedroomDrawer extends THREE.Object3D {
     checkCharacterVicinity() {
         if (this.doCheckVicinity) {
             //get the position of the main character
-            let pos = mainChar.returnWorldPosition();
+            let pos = this.mainChar.returnWorldPosition();
 
             //variable that allows change in vicinity position in which E needs to be pressed:
             var vicinityLimitZ = 20;

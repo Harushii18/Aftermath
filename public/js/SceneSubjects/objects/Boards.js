@@ -1,15 +1,22 @@
 import * as THREE from '../../../jsm/three.module.js';
 import { GLTFLoader } from '../../../jsm/GLTFLoader.js';
 import { keyboardManager } from '../../managers/KeyboardManager.js';
-import { loadingManager, mainChar, pin, lockCupboard, hudOverlayRemoveQueue, sceneRemoveQueue, studydoor, crowbar } from '../../managers/SceneManager.js';
+
+//import { loadingManager, mainChar, hudOverlayRemoveQueue, studydoor, crowbar } from '../../managers/SceneManager.js';
 import { gameOverlay } from '../../Overlay/GameOverlay.js';
 import { subtitleManager } from '../../managers/SubtitleManager.js';
 import { Plank } from './Plank.js';
 
 export class Boards extends THREE.Object3D {
 
-  constructor() {
+  constructor( loadingManager, mainChar, hudOverlayRemoveQueue, studydoor, crowbar) {
     super();
+
+    this.loadingManager = loadingManager;
+    this.mainChar = mainChar;
+    this.hudOverlayRemoveQueue = hudOverlayRemoveQueue;
+    this.studydoor = studydoor;
+    this.crowbar = crowbar;
 
     this.objectIdentifier = ""
     this.objectInteractionCounter = 0;
@@ -159,7 +166,7 @@ export class Boards extends THREE.Object3D {
     var checkVicinity = this.checkCharacterVicinity();
     if (keyboardManager.wasPressed('E')) {
       if (checkVicinity) {
-        if (this.allowInteraction && crowbar.pickedUp) {
+        if (this.crowbar.pickedUp) {
 
           //Animation goes here
           //***********
@@ -167,11 +174,11 @@ export class Boards extends THREE.Object3D {
           this.open = true;
           gameOverlay.hideOverlay();
           this.object.visible = false;
-          hudOverlayRemoveQueue.push("crowbar");
+          this.hudOverlayRemoveQueue.push("crowbar");
           this.showOpenedSubtitles = true;
           if (this.boardType=="study"){
             console.log(this.boardType);
-            studydoor.setBoardsRemoved();
+            this.studydoor.setBoardsRemoved();
           }
           else{
             console.log(this.boardType);
@@ -202,7 +209,7 @@ export class Boards extends THREE.Object3D {
 
 
   inVicinity(vicinityLimitZ, vicinityLimitX) {
-    let pos = mainChar.returnWorldPosition();
+    let pos = this.mainChar.returnWorldPosition();
 
 
     if (pos.x < this.object.position.x + vicinityLimitX && pos.x > this.object.position.x - vicinityLimitX) {
