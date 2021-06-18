@@ -1,7 +1,9 @@
 import * as THREE from '../../../jsm/three.module.js';
 import { GLTFLoader } from '../../../jsm/GLTFLoader.js';
 import { keyboardManager } from '../../managers/KeyboardManager.js';
-import { loadingManager, mainChar, hudOverlayRemoveQueue, hudOverlayAddQueue, loungeBoards, studyBoards, microwave  } from '../../managers/SceneManager.js';
+
+//import { loadingManager, mainChar, hudOverlayRemoveQueue, hudOverlayAddQueue, loungeBoards, studyBoards, microwave  } from '../../managers/SceneManager.js';
+
 import { gameOverlay } from '../../Overlay/GameOverlay.js';
 import { subtitleManager } from '../../managers/SubtitleManager.js';
 
@@ -10,8 +12,9 @@ import { subtitleManager } from '../../managers/SubtitleManager.js';
 export class LightSwitch extends THREE.Object3D {
 
 
-    constructor() {
+    constructor(loadingManager) {
         super();
+        this.loadingManager = loadingManager;
         this.objectInteractionCounter = 0;
         this.object = new THREE.Object3D();
 
@@ -33,17 +36,12 @@ export class LightSwitch extends THREE.Object3D {
         this.allowInteraction = false;
 
         this.clock = new THREE.Clock();
-        const loader = new GLTFLoader(loadingManager);
+        const loader = new GLTFLoader(this.loadingManager);
 
         loader.setPath('../../models/3DObjects/');
 
 
         var gltf = loader.load('switch.glb', (gltf) => {
-            //console.log("loaded drawer");
-            // gltf.scene.traverse(c => {
-            //     c.castShadow = true;
-
-            // });
 
             this.object.add(gltf.scene);
         });

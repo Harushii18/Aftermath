@@ -1,14 +1,19 @@
 import * as THREE from '../../../jsm/three.module.js';
 import { GLTFLoader } from '../../../jsm/GLTFLoader.js';
-import { keyboardManager } from '../../managers/KeyboardManager.js';
-import { mainChar } from '../../managers/SceneManager.js';
-import { gameOverlay } from '../../Overlay/GameOverlay.js';
-import { loadingManager } from '../../managers/SceneManager.js';
-import { subtitleManager } from '../../managers/SubtitleManager.js';
+import { keyboardManager } from '../../managers/KeyboardManager.js';//checked
+//import { mainChar } from '../../managers/SceneManager.js';
+import { gameOverlay } from '../../Overlay/GameOverlay.js';//checked
+//import { loadingManager } from '../../managers/SceneManager.js';
+import { subtitleManager } from '../../managers/SubtitleManager.js';//checked
 
 export class Door extends THREE.Object3D {
-    constructor() {
+    constructor(mainChar, loadingManager) {
         super();
+
+        this.mainChar = mainChar;
+        this.loadingManager = loadingManager;
+        this.subtitleManager = subtitleManager;
+
         this.objectInteractionCounter = 0;
         this.playDoorSound = false;
         this.doCheckVicinity = false;
@@ -28,7 +33,7 @@ export class Door extends THREE.Object3D {
         this.count = 0;
 
         this.clock = new THREE.Clock();
-        const loader = new GLTFLoader(loadingManager);
+        const loader = new GLTFLoader(this.loadingManager);
         this.showUnlockedSubs = false;
 
         this.open = false; //open door animation
@@ -37,10 +42,10 @@ export class Door extends THREE.Object3D {
 
         loader.setPath('../../models/3DObjects/');
         var gltf = loader.load('testdoor.glb', (gltf) => {
-            gltf.scene.traverse(c => {
+         /*   gltf.scene.traverse(c => {
                 c.castShadow = true;
 
-            });
+            });*/
 
             //scale door
             this.object.scale.x = 0.271;
@@ -79,20 +84,20 @@ export class Door extends THREE.Object3D {
     addSubtitles() {
         //t1
         if (!this.subtitleState.t1) {
-            subtitleManager.showSubtitles();
+            this.subtitleManager.showSubtitles();
             if (!this.subtitleStarted.t1) {
                 //start showing the subtitle
-                subtitleManager.startTime();
-                subtitleManager.setDuration(5);
-                subtitleManager.changeSubtitlesText(this.subtitleText.t1);
+                this.subtitleManager.startTime();
+                this.subtitleManager.setDuration(5);
+                this.subtitleManager.changeSubtitlesText(this.subtitleText.t1);
                 this.subtitleStarted.t1 = true;
                 //display stage complete div
                 const stageComplete = document.getElementById('stageComplete');
                 stageComplete.style.display = 'block';
             }
 
-            subtitleManager.countTime();
-            if (!subtitleManager.checkTime()) {
+            this.subtitleManager.countTime();
+            if (!this.subtitleManager.checkTime()) {
                 this.subtitleState.t1 = true;
                 this.showUnlockedSubs = false;
                 //meaning it was shown
@@ -103,17 +108,17 @@ export class Door extends THREE.Object3D {
     showSubtitlesLocked(duration) {
         //subtitles that need to be shown if he has the key
         if (!this.showLockedSubtitles.t2) {
-            subtitleManager.showSubtitles();
+            this.subtitleManager.showSubtitles();
             if (!this.subtitleStarted.t2) {
                 //start showing the subtitle
-                subtitleManager.startTime();
-                subtitleManager.setDuration(duration);
-                subtitleManager.changeSubtitlesText(this.subtitleText.t2);
+                this.subtitleManager.startTime();
+                this.subtitleManager.setDuration(duration);
+                this.subtitleManager.changeSubtitlesText(this.subtitleText.t2);
                 this.subtitleStarted.t2 = true;
             }
 
-            subtitleManager.countTime();
-            if (!subtitleManager.checkTime()) {
+            this.subtitleManager.countTime();
+            if (!this.subtitleManager.checkTime()) {
                 this.subtitleState.t2 = true;
                 this.showLockedSubtitles = false;
                 //meaning it was shown
@@ -225,7 +230,7 @@ export class Door extends THREE.Object3D {
     //checks if Character is in vicinity of door to open/ close it
     checkCharacterVicinity() {
         //get the position of the main character
-        let pos = mainChar.returnWorldPosition();
+        let pos = this.mainChar.returnWorldPosition();
 
         //variable that allows change in vicinity position in which E needs to be pressed:
         var vicinityLimitZ = 10;

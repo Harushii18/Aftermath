@@ -1,7 +1,8 @@
 import * as THREE from '../../../jsm/three.module.js';
 import { GLTFLoader } from '../../../jsm/GLTFLoader.js';
 import { keyboardManager } from '../../managers/KeyboardManager.js';
-import { loadingManager, mainChar, pin, lockCupboard, hudOverlayRemoveQueue, sceneRemoveQueue, studydoor, crowbar } from '../../managers/SceneManager.js';
+
+//import { loadingManager, mainChar, pin, lockCupboard, hudOverlayRemoveQueue, sceneRemoveQueue, studydoor, crowbar } from '../../managers/SceneManager.js';
 import { gameOverlay } from '../../Overlay/GameOverlay.js';
 import { subtitleManager } from '../../managers/SubtitleManager.js';
 import { Plank } from './Plank.js';

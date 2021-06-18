@@ -1,17 +1,21 @@
 import * as THREE from '../../../jsm/three.module.js';
 import { GLTFLoader } from '../../../jsm/GLTFLoader.js';
 import { keyboardManager } from '../../managers/KeyboardManager.js';
-import { loadingManager, mainChar, hudOverlayRemoveQueue, hudOverlayAddQueue, loungeBoards, studyBoards  } from '../../managers/SceneManager.js';
+
+//import { loadingManager, mainChar, hudOverlayRemoveQueue, hudOverlayAddQueue, loungeBoards, studyBoards  } from '../../managers/SceneManager.js';
+
 import { gameOverlay } from '../../Overlay/GameOverlay.js';
 import { subtitleManager } from '../../managers/SubtitleManager.js';
+//import { Loader } from 'three';
 
 
 
 export class Crowbar extends THREE.Object3D {
 
 
-    constructor() {
+    constructor(loadingManager) {
         super();
+        this.loadingManager = loadingManager;
         this.objectInteractionCounter = 0;
         this.object = new THREE.Object3D();
 
@@ -30,19 +34,23 @@ export class Crowbar extends THREE.Object3D {
         this.allowInteraction = false;
 
         this.clock = new THREE.Clock();
-        const loader = new GLTFLoader(loadingManager);
+        const loader = new GLTFLoader(this.loadingManager);
 
         loader.setPath('../../models/3DObjects/');
 
 
         var gltf = loader.load('crowbar.glb', (gltf) => {
             //console.log("loaded drawer");
-            // gltf.scene.traverse(c => {
-            //     c.castShadow = true;
 
-            // });
+         /*   gltf.scene.traverse(c => {
+                c.castShadow = true;
 
-            this.object.add(gltf.scene);
+            });*/
+
+            var obj_gltf = new THREE.Object3D();
+            obj_gltf.add(gltf.scene);
+            this.object.add(obj_gltf);
+
         });
 
     }
@@ -67,6 +75,14 @@ export class Crowbar extends THREE.Object3D {
         this.allowInteraction = value;
     }
 
+/*<<<<<<< Overlay
+    setForScene()
+    {
+        this.object.rotateY(Math.PI/2);
+        this.object.position.set(63.75,2.85,18);
+    }
+
+=======*/
     inVicinity(vicinityLimitZ, vicinityLimitX){
         let pos = mainChar.returnWorldPosition();
 
@@ -100,7 +116,6 @@ export class Crowbar extends THREE.Object3D {
             }
         }
     }
-
 
     update(time) {
       //just to show the div
