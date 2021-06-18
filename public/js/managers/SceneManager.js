@@ -181,6 +181,11 @@ const collisionManager = new CollisionsManager();
 //collisionManager.addObject(cupBoardDoorR);
 //collisionManager.addObject(testBlock);
 collisionManager.addObject(testdoor);
+collisionManager.addObject(studyBoards);
+collisionManager.addObject(loungeBoards);
+collisionManager.addObject(bookshelf);
+collisionManager.addObject(shower);
+
 
 
 
