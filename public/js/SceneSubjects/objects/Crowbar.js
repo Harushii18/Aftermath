@@ -2,16 +2,18 @@ import * as THREE from '../../../jsm/three.module.js';
 import { GLTFLoader } from '../../../jsm/GLTFLoader.js';
 import { keyboardManager } from '../../managers/KeyboardManager.js';
 
-import { loadingManager, mainChar, hudOverlayRemoveQueue } from '../../managers/SceneManager.js';
+//import { loadingManager, mainChar, hudOverlayRemoveQueue } from '../../managers/SceneManager.js';
 import { gameOverlay } from '../../Overlay/GameOverlay.js';
 import { subtitleManager } from '../../managers/SubtitleManager.js';
+//import { Loader } from 'three';
 
 
 export class Crowbar extends THREE.Object3D {
 
 
-    constructor() {
+    constructor(loadingManager) {
         super();
+        this.loadingManager = loadingManager;
         this.objectInteractionCounter = 0;
         this.object = new THREE.Object3D();
 
@@ -31,7 +33,7 @@ export class Crowbar extends THREE.Object3D {
         this.allowInteraction = false;
 
         this.clock = new THREE.Clock();
-        const loader = new GLTFLoader(loadingManager);
+        const loader = new GLTFLoader(this.loadingManager);
 
         loader.setPath('../../models/3DObjects/');
 
@@ -42,23 +44,12 @@ export class Crowbar extends THREE.Object3D {
 
         var gltf = loader.load('crowbar.glb', (gltf) => {
             //console.log("loaded drawer");
-            gltf.scene.traverse(c => {
+         /*   gltf.scene.traverse(c => {
                 c.castShadow = true;
 
-            });
-
-
+            });*/
 
             var obj_gltf = new THREE.Object3D();
-
-            // obj_gltf.scale.x = 8;
-            // obj_gltf.scale.y = 8;
-            // obj_gltf.scale.z = 8;
-
-
-            obj_gltf.position.set(20,4, -2);
-
-
             obj_gltf.add(gltf.scene);
             this.object.add(obj_gltf);
         });
@@ -85,6 +76,12 @@ export class Crowbar extends THREE.Object3D {
 
     setAllowInteraction(value) {
         this.allowInteraction = value;
+    }
+
+    setForScene()
+    {
+        this.object.rotateY(Math.PI/2);
+        this.object.position.set(63.75,2.85,18);
     }
 
 

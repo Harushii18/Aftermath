@@ -42,10 +42,10 @@ export class Plank extends THREE.Object3D {
 
         var gltf = loader.load('woodplank.glb', (gltf) => {
             //console.log("loaded drawer");
-            gltf.scene.traverse(c => {
+          /*  gltf.scene.traverse(c => {
                 c.castShadow = true;
 
-            });
+            });*/
 
 
 

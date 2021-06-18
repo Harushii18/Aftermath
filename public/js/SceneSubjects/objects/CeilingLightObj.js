@@ -13,10 +13,10 @@ export class CeilingLightObj extends THREE.Object3D {
         loader.setPath('../../models/objects/');
 
         const gltf = loader.load('ceilingLight2.glb', (gltf) => {
-          gltf.scene.traverse(c => {
+         /* gltf.scene.traverse(c => {
 						//console.log("loaded ceiling light");
             c.castShadow = true;
-          });
+          });*/
 
           this.object.scale.x = 1;
           this.object.scale.y = 1;

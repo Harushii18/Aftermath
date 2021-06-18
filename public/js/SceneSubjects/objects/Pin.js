@@ -1,15 +1,22 @@
 import * as THREE from '../../../jsm/three.module.js';
 import { GLTFLoader } from '../../../jsm/GLTFLoader.js';
 import { keyboardManager } from '../../managers/KeyboardManager.js';
-import { mainChar, cupBoardDoorR, bedroomDrawer, hudOverlayAddQueue, sceneRemoveQueue } from '../../managers/SceneManager.js';
+//import { mainChar, cupBoardDoorR, bedroomDrawer, hudOverlayAddQueue, sceneRemoveQueue } from '../../managers/SceneManager.js';
 import { gameOverlay } from '../../Overlay/GameOverlay.js';
 import { subtitleManager } from '../../managers/SubtitleManager.js';
 
 export class Pin extends THREE.Object3D {
 
 
-    constructor() {
+    constructor(mainChar, bedroomDrawer, hudOverlayAddQueue, sceneRemoveQueue ) {
         super();
+
+        this.mainChar = mainChar;
+        this.bedroomDrawer = bedroomDrawer;
+        this.hudOverlayAddQueue = hudOverlayAddQueue;
+        this.sceneRemoveQueue = sceneRemoveQueue;
+
+
         this.object = new THREE.Object3D();
         this.count = 0;
         this.pickedUp = false;
@@ -25,10 +32,10 @@ export class Pin extends THREE.Object3D {
 
         var gltf = loader.load('pin.glb', (gltf) => {
           //console.log("loaded pin");
-            gltf.scene.traverse(c => {
-                c.castShadow = true;
+            //gltf.scene.traverse(c => {
+             //   c.castShadow = true;
 
-            });
+            //});
 
 
             //rotate pin
@@ -102,12 +109,12 @@ export class Pin extends THREE.Object3D {
                     this.pickedUp = true;
                     
                     //SHOW LOCKPICK IMAGE IN OVERLAY
-                    hudOverlayAddQueue.push("pin");
-                    sceneRemoveQueue.push("pin");
+                    this.hudOverlayAddQueue.push("pin");
+                    this.sceneRemoveQueue.push("pin");
                     this.allowInteraction = false;
 
                     //Allo bedroomDrawer to be interacted with
-                    bedroomDrawer.setAllowInteraction(true);
+                    this.bedroomDrawer.setAllowInteraction(true);
                   }
                   else{
 
@@ -123,7 +130,7 @@ export class Pin extends THREE.Object3D {
     }
 
         inVicinity(vicinityLimitZ, vicinityLimitX){
-            let pos = mainChar.returnWorldPosition();
+            let pos = this.mainChar.returnWorldPosition();
 
 
             if(pos.x <this.object.position.x +vicinityLimitX && pos.x > this.object.position.x-vicinityLimitX){

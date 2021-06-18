@@ -3,11 +3,12 @@ import * as THREE from '../../../jsm/three.module.js';
 import { FBXLoader } from '../../../jsm/FBXLoader/FBXLoader.js';
 import { subtitleManager } from '../../managers/SubtitleManager.js';
 import { gameInstructions } from '../../Overlay/GameInstructions.js';
-import { loadingManager } from '../../managers/SceneManager.js';
+//import { loadingManager } from '../../managers/SceneManager.js';
 
 export class MainChar extends THREE.Object3D {
-	constructor(collidableObjects) {
+	constructor(collidableObjects, loadingManager) {
 		super();
+		this.loadingManager = loadingManager;
 		this.collidableObjects = collidableObjects;
 		//main character object
 		this.object = new THREE.Object3D();
@@ -17,12 +18,12 @@ export class MainChar extends THREE.Object3D {
 		//this.object.position.set(0, 1, -50); 
 
 		//start from scratch-> char at original starting game position
-		this.object.position.set(0, 1, 60); 
+		this.object.position.set(0, 1, 50); 
 		
 		this.object.visible = false; //Uncomment this so you don't see the player in first person view
 		this.initialiseSubtitleContents();
 
-		this.object.castShadow = true;
+		//this.object.castShadow = true;
 
 
 
@@ -325,7 +326,7 @@ export class MainChar extends THREE.Object3D {
 	}
 	loadAnim(state, path, file) {
 		//load the animation
-		const anime = new FBXLoader(loadingManager);
+		const anime = new FBXLoader(this.loadingManager);
 		anime.setPath(path);
 		anime.load(file, (anime) => {
 
@@ -336,19 +337,19 @@ export class MainChar extends THREE.Object3D {
 
 	loadModel() {
 		//load the main character model with an FBX Loader
-		const loader = new FBXLoader(loadingManager);
+		const loader = new FBXLoader(this.loadingManager);
 		loader.setPath('../models/characters/');
 		loader.load('Douglas.fbx', (fbx) => {
 			//scale the model down
 			fbx.scale.setScalar(0.0115);
-			fbx.traverse(c => {
+			/*fbx.traverse(c => {
 				c.castShadow = true;
 				c.receiveShadow = true;
-			});
+			});*/
 
 
 			//animate character
-			const anim = new FBXLoader(loadingManager);
+			const anim = new FBXLoader(this.loadingManager);
 			anim.setPath('../models/characters/Animations/');
 			anim.load('Idle.fbx', (anim) => {
 				this.walkMixer = new THREE.AnimationMixer(fbx);

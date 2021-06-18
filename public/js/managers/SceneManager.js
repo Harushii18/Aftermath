@@ -3,62 +3,58 @@
 //style
 import anime from '../../jsm/animejs/lib/anime.es.js';
 
-import { EntityManager } from './EntityManager.js';
+import { EntityManager } from './EntityManager.js';//checked
 
-import { AudioManager } from './AudioManager.js';
-import { LightingManager } from './LightingManager.js';
-import { Time } from '../Time.js';
-import { PauseMenu } from '../SceneSubjects/Menu/PauseMenu.js';
-import { keyboardManager } from './KeyboardManager.js';
-import { CollisionsManager } from './CollisionsManager.js'; //Collision Manager
+import { AudioManager } from './AudioManager.js';//checked
+import { LightingManager } from './LightingManager.js'; //checked
+import { Time } from '../Time.js';//checked
+import { PauseMenu } from '../SceneSubjects/Menu/PauseMenu.js';//checked
+import { keyboardManager } from './KeyboardManager.js';//checked
+import { CollisionsManager } from './CollisionsManager.js'; //checked
 
 //lights
-import { GeneralLights } from '../SceneSubjects/lighting/GeneralLights.js';
-import { CeilingLight } from '../SceneSubjects/lighting/CeilingLight.js';
-import { AmbientLight } from '../SceneSubjects/lighting/AmbientLight.js';
-import { CeilingLightObj } from '../SceneSubjects/objects/CeilingLightObj.js';
+//import { GeneralLights } from '../SceneSubjects/lighting/GeneralLights.js';
+//import { CeilingLight } from '../SceneSubjects/lighting/CeilingLight.js';
+//import { AmbientLight } from '../SceneSubjects/lighting/AmbientLight.js';
+//import { CeilingLightObj } from '../SceneSubjects/objects/CeilingLightObj.js';
 
 //OBJECTS
-import { House } from '../SceneSubjects/House.js';
-import { Lock } from '../SceneSubjects/objects/Lock.js'
-import { SceneSubject } from '../SceneSubjects/objects/SceneSubject.js';
-import { TestBlock } from '../SceneSubjects/characters/TestBlock.js';
-import { Door } from '../SceneSubjects/objects/Door.js';
-import { WoodenDoor } from '../SceneSubjects/objects/WoodenDoor.js';
+import { House } from '../SceneSubjects/House.js';// removed cir. ref.
+import { Lock } from '../SceneSubjects/objects/Lock.js'// removed cir. ref.
+//import { SceneSubject } from '../SceneSubjects/objects/SceneSubject.js';
+//import { TestBlock } from '../SceneSubjects/characters/TestBlock.js';
+import { Door } from '../SceneSubjects/objects/Door.js';// removed cir. ref.
+//import { WoodenDoor } from '../SceneSubjects/objects/WoodenDoor.js';
 
-import { BedroomPainting } from '../SceneSubjects/objects/BedroomPainting.js';
-import { BedroomDrawer } from '../SceneSubjects/objects/BedroomDrawer.js';
+import { BedroomPainting } from '../SceneSubjects/objects/BedroomPainting.js'; // removed cir. ref.
+import { BedroomDrawer } from '../SceneSubjects/objects/BedroomDrawer.js';// removed cir. ref.
 
-import { Hammer } from '../SceneSubjects/objects/Hammer.js';
-import { Flashlight } from '../SceneSubjects/objects/Flashlight.js';
-import { cupboardDoorR } from '../SceneSubjects/objects/cupboardDoorR.js';
-import { Pin } from '../SceneSubjects/objects/Pin.js';
-import { LetterI } from '../SceneSubjects/objects/LetterI.js';
-import { Key } from '../SceneSubjects/objects/Key.js';
-import { Crowbar } from '../SceneSubjects/objects/Crowbar.js';
-import { LightSwitch } from '../SceneSubjects/objects/Switch.js';
-import { Plank } from '../SceneSubjects/objects/Plank.js';
+import { Hammer } from '../SceneSubjects/objects/Hammer.js';//// removed cir. ref.
+import { Flashlight } from '../SceneSubjects/objects/Flashlight.js';// removed cir. ref
+import { cupboardDoorR } from '../SceneSubjects/objects/cupboardDoorR.js';// removed cir. ref
+import { Pin } from '../SceneSubjects/objects/Pin.js';//removed cir. ref
+import { LetterI } from '../SceneSubjects/objects/LetterI.js';//checked
+import { Key } from '../SceneSubjects/objects/Key.js';//removed cir. ref
+import { Crowbar } from '../SceneSubjects/objects/Crowbar.js';//removed cir. ref
+import { LightSwitch } from '../SceneSubjects/objects/Switch.js'; //removed cir. ref
+//import { Plank } from '../SceneSubjects/objects/Plank.js';
 import { Boards } from '../SceneSubjects/objects/Boards.js';
 
 
 
-
-
 //Characters
-import { MainChar } from '../SceneSubjects/characters/MainChar.js';
+import { MainChar } from '../SceneSubjects/characters/MainChar.js';//removed cir. ref
 
 //study
-import { Bookshelf } from '../SceneSubjects/objects/Bookshelf.js';
-
-
+import { Bookshelf } from '../SceneSubjects/objects/Bookshelf.js';//removed cir. ref
 //other
-import { PointerLockControls } from '../../jsm/PointerLockControls.js';
-import { OrbitControls } from '../../jsm/OrbitControls.js';
-import * as THREE from '../../../jsm/three.module.js';
-import { characterControls } from './CharacterControls.js';
+import { PointerLockControls } from '../../jsm/PointerLockControls.js';//checked
+import { OrbitControls } from '../../jsm/OrbitControls.js'; //checked
+import * as THREE from '../../jsm/three.module.js';
+import { characterControls } from './CharacterControls.js'; //checked
 //pre-loader
-import { HUD } from '../Overlay/HUD.js';
-import { Woman } from '../SceneSubjects/characters/woman.js';
+import { HUD } from '../Overlay/HUD.js';//checked
+import { Woman } from '../SceneSubjects/characters/woman.js';//removed cir. ref
 
 //==================================================================================================
 
@@ -70,29 +66,54 @@ export var sceneRemoveQueue = [];
 export var audioPlayQueue = [];
 export var audioPauseQueue = [];
 
+//pre-loader
+export var loadingManager = new THREE.LoadingManager();
+
+//Collision Manager to add all objects that need to be collided with
+const collisionManager = new CollisionsManager();
+//Pass collidable objects as a parameter to the main character (raycasting implementation)
 
 
+
+export var mainChar = new MainChar(collisionManager.returnObjects(),loadingManager);
+export var testdoor = new Door(mainChar, loadingManager);
+export var studydoor = new Door(mainChar, loadingManager);//must be changed to wooden door later
+export var bedroomDrawer = new BedroomDrawer(mainChar,loadingManager, hudOverlayRemoveQueue,testdoor);
+
+
+export var pin = new Pin(mainChar, bedroomDrawer, hudOverlayAddQueue, sceneRemoveQueue );
+
+export var cupBoardDoorR = new cupboardDoorR(mainChar, loadingManager, pin, hudOverlayRemoveQueue,sceneRemoveQueue);
+
+export var hammer = new Hammer(mainChar, cupBoardDoorR, hudOverlayAddQueue );
+export var flashlight = new Flashlight(loadingManager);
+
+export var crowbar = new Crowbar(loadingManager);
+export var lightswitch = new LightSwitch(loadingManager);
+
+var bookshelf = new Bookshelf(mainChar);
+var woman = new Woman( loadingManager, mainChar, testdoor, audioPlayQueue, audioPauseQueue);
 //FirstPersonTracker
 var isFirstPersonView = true;
 
 //objects
-var house = new House();
+var house = new House(loadingManager);
 
 //lights
-var generalLights = new GeneralLights();
-var sun  = new THREE.PointLight( 0xffffff, 3 );
+//var generalLights = new GeneralLights();
+var sun  = new THREE.PointLight( 0xffffff, 1 );
 
 
 //ceiling lights
-var bedroomLightObj = new CeilingLightObj();
+/*var bedroomLightObj = new CeilingLightObj();
 var kitchenLightObj = new CeilingLightObj();
 var studyLightObj = new CeilingLightObj();
 var hallwayLightObj1 = new CeilingLightObj();
 var hallwayLightObj2 = new CeilingLightObj();
 var bathroomLightObj = new CeilingLightObj();
-var loungeLightObj = new CeilingLightObj();
+var loungeLightObj = new CeilingLightObj();*/
 
-var bedroomLight = new CeilingLight();
+//var bedroomLight = new CeilingLight();
 // var kitchenLight = new CeilingLight();
 // var studyLight = new CeilingLight();
 // var hallwayLight1 = new CeilingLight();
@@ -100,36 +121,31 @@ var bedroomLight = new CeilingLight();
 // var hallwayLight2 = new CeilingLight();
 // var loungeLight = new CeilingLight();
 
-var ambientLight = new AmbientLight();
+//var ambientLight = new AmbientLight();
 
 
 //var sceneSubject = new SceneSubject();
 //var testBlock = new TestBlock();
-export var testdoor = new Door();
-export var studydoor = new WoodenDoor();
 
-//study
-var bookshelf = new Bookshelf();
 
 //bedroom
 var hudPin = new Pin();
-var bedroomPainting = new BedroomPainting();
+var bedroomPainting = new BedroomPainting(mainChar, loadingManager);
 
-export var lockCupboard = new Lock();
+export var lockCupboard = new Lock(loadingManager);
 //var lockDrawer = new Lock();
 
 //lockDrawer.setScale(new THREE.Vector3(10,10,10));
 //lockDrawer.setPosition(new THREE.Vector3(20.15, 7.6, 50));
 
-export var bedroomDrawer = new BedroomDrawer();
-export var cupBoardDoorR = new cupboardDoorR();
-export var hammer = new Hammer();
-export var pin = new Pin();
 
-export var flashlight = new Flashlight();
 
-export var crowbar = new Crowbar();
-export var lightswitch = new LightSwitch();
+
+
+
+
+
+
 //export var plank = new Plank();
 //export var plank1 = new Plank();
 //export var plank2 = new Plank();
@@ -137,29 +153,20 @@ export var boards = new Boards();
 var boards2 = new Boards();
 
 var letterI = new LetterI();
-var key = new Key();
 
 
 
 
 
-//pre-loader
-export var loadingManager;
-
-
-//Collision Manager to add all objects that need to be collided with
-const collisionManager = new CollisionsManager();
 //Add collidable objects here
 collisionManager.addObject(house);
 //collisionManager.addObject(cupBoardDoorR);
 //collisionManager.addObject(testBlock);
 collisionManager.addObject(testdoor);
 
-//Pass collidable objects as a parameter to the main character (raycasting implementation)
-export var mainChar = new MainChar(collisionManager.returnObjects());
 
-//woman
-var woman = new Woman();
+
+
 
 export class SceneManager {
 
@@ -199,6 +206,7 @@ export class SceneManager {
 
         //the essentials for rendering a scene
         this.scene = this.buildScene();
+        sun.position.set(20,20,50)
         this.scene.add(sun);
 
         //create our skybox
@@ -208,7 +216,7 @@ export class SceneManager {
         this.camera = this.buildCamera(this.screenDimensions);
 
         //loading manager
-        loadingManager = new THREE.LoadingManager();
+        
         loadingManager.onProgress = function (item, loaded, total) {
             //  console.log(item, loaded, total);
             const loadingScreen = document.getElementById('loading-screen');
@@ -247,7 +255,7 @@ export class SceneManager {
         //====================
 
         //adjust the ceiling light properties in the house
-        this.setCeilingLightProperties();
+        //this.setCeilingLightProperties();
 
         this.managers = this.createManagers();
 
@@ -357,9 +365,9 @@ export class SceneManager {
             antialias: true, alpha: true
         });
         renderer.setClearColor(0xEEEEEE, 1.0);
-        renderer.shadowMap.enabled = true;
+        //renderer.shadowMap.enabled = true;
         //renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-        renderer.shadowMapSoft = true;
+        //renderer.shadowMapSoft = true;
         renderer.setPixelRatio(window.devicePixelRatio);
         renderer.setSize(window.innerWidth/2, window.innerHeight/2,false);
 
@@ -417,8 +425,8 @@ export class SceneManager {
         //lights
         //  managers[0].register(generalLights);
 
-        managers[0].register(ambientLight);
-        managers[0].register(bedroomLight);
+       /// managers[0].register(ambientLight);
+       /// managers[0].register(bedroomLight);
         // managers[0].register(loungeLight);
         // managers[0].register(studyLight);
         // managers[0].register(hallwayLight1);
@@ -430,13 +438,13 @@ export class SceneManager {
 
         //entities
 
-        managers[1].register(loungeLightObj);
-        managers[1].register(studyLightObj);
-        managers[1].register(kitchenLightObj);
-        managers[1].register(bathroomLightObj);
-        managers[1].register(bedroomLightObj);
-        managers[1].register(hallwayLightObj1);
-        managers[1].register(hallwayLightObj2);
+       /// managers[1].register(loungeLightObj);
+       /// managers[1].register(studyLightObj);
+       /// managers[1].register(kitchenLightObj);
+      ///  managers[1].register(bathroomLightObj);
+       /// managers[1].register(bedroomLightObj);
+       /// managers[1].register(hallwayLightObj1);
+       /// managers[1].register(hallwayLightObj2);
        
 
         managers[1].register(house);
@@ -471,6 +479,7 @@ export class SceneManager {
 
         managers[1].register(flashlight);
 
+        crowbar.setForScene();
         managers[1].register(crowbar);
         managers[1].register(lightswitch);
 
@@ -725,19 +734,21 @@ export class SceneManager {
             this.managers[2].entities["background"].pause();
 
             //hud elements
+            this.removeFromScene()
             this.removeHUDItems();
             this.addToHUD();
-            this.removeFromScene()
+            
 
             this.setAudio();
 
             //testing stuff----------------------------------------------------------------
-            var x = studydoor.object.position.x;
-            var y = studydoor.object.position.y;
-            var z = studydoor.object.position.z
+            var x = crowbar.object.position.x;
+            var y = crowbar.object.position.y;
+            var z = crowbar.object.position.z
             var changedPos = false;
             if (keyboardManager.wasPressed("I"))
             {
+                console.log(loadingManager);
                 y += 0.05;
                 changedPos = true;
 
@@ -775,7 +786,7 @@ export class SceneManager {
             }
             if (changedPos == true)
             {
-            studydoor.object.position.set(x,y,z);
+            crowbar.object.position.set(x,y,z);
             console.log("( " +x.toString() +" , " +y.toString() +" , " +z.toString() + " )");
             }
 
@@ -787,7 +798,7 @@ export class SceneManager {
                 var selectedObject = bedroomDrawer.object.getObjectByName('key');
                 bedroomDrawer.object.remove( selectedObject);
 
-                this.hud.add("key", new Key());
+                this.hud.add("key", new Key(loadingManager, mainChar, testdoor));
                 testdoor.setAllowInteraction(true);
                 this.managers[2].entities["double_door_knock"].play();
             }
@@ -1023,7 +1034,7 @@ export class SceneManager {
         if (hudOverlayAddQueue.includes("pin"))
         {
            console.log("adding pin");
-           this.hud.add("pin",hudPin);
+           this.hud.add("pin",new Pin());
            hudOverlayAddQueue.shift();
 
         }

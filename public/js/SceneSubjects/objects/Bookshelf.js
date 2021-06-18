@@ -1,13 +1,14 @@
 import * as THREE from '../../../jsm/three.module.js';
 import { GLTFLoader } from '../../../jsm/GLTFLoader.js';
 import { keyboardManager } from '../../managers/KeyboardManager.js';
-import { mainChar } from '../../managers/SceneManager.js';
+//import { mainChar } from '../../managers/SceneManager.js';
 
 
 
 export class Bookshelf extends THREE.Object3D {
-    constructor() {
+    constructor(mainChar) {
         super();
+        this.mainChar = mainChar;
         this.object = new THREE.Object3D();
         const geometry = new THREE.BoxGeometry(1, 1, 1);
         const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
@@ -77,7 +78,7 @@ export class Bookshelf extends THREE.Object3D {
     //checks if Character is in vicinity of object to move it
     checkCharacterVicinity() {
         //get the position of the main character
-        let pos = mainChar.returnWorldPosition();
+        let pos = this.mainChar.returnWorldPosition();
 
         //variable that allows change in vicinity position in which E needs to be pressed:
         var vicinityLimitZ = 20;

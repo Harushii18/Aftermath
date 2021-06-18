@@ -2,15 +2,20 @@ import * as THREE from '../../../jsm/three.module.js';
 import { GLTFLoader } from '../../../jsm/GLTFLoader.js';
 import { keyboardManager } from '../../managers/KeyboardManager.js';
 
-import { loadingManager, mainChar, testdoor } from '../../managers/SceneManager.js';
+//import { loadingManager, mainChar, testdoor } from '../../managers/SceneManager.js';
 import { gameOverlay } from '../../Overlay/GameOverlay.js';
-import { bedroomDrawer } from '../../managers/SceneManager.js';
+//import { bedroomDrawer } from '../../managers/SceneManager.js';
 
 export class Key extends THREE.Object3D {
 
 
-    constructor() {
+    constructor(loadingManager, mainChar, testdoor) {
         super();
+
+        this.loadingManager = loadingManager;
+        this.mainChar = mainChar;
+        this.testdoor = testdoor;
+
         this.object = new THREE.Object3D();
 
         this.count = 0;
@@ -18,7 +23,7 @@ export class Key extends THREE.Object3D {
         this.keyTaken = false;
         //stores a variable that only allows the interaction overlay to be shown once
         this.count = 0;
-        const loader = new GLTFLoader(loadingManager);
+        const loader = new GLTFLoader(this.loadingManager);
 
         loader.setPath('../../models/3DObjects/');
 
@@ -27,10 +32,10 @@ export class Key extends THREE.Object3D {
 
         var gltf = loader.load('key.glb', (gltf) => {
           //console.log("loaded key");
-            gltf.scene.traverse(c => {
+        /*    gltf.scene.traverse(c => {
                 c.castShadow = true;
 
-            });
+            });*/
 
 
          //   this.object.position.set(20.15, 7.6, 37 );//Perfect
@@ -59,7 +64,7 @@ export class Key extends THREE.Object3D {
                         //TODO-> DESTROY KEY OBJECT!
                         //just hiding key for now
                         this.object.position.set(0, 100, 0);
-                        testdoor.setAllowInteraction(true);
+                        this.testdoor.setAllowInteraction(true);
 
                         //DISPLAY KEY IN OVERLAY!!!
                         //KAMERON!
@@ -80,7 +85,7 @@ export class Key extends THREE.Object3D {
     checkCharacterVicinity() {
 
         //get the position of the main character
-        let pos = mainChar.returnWorldPosition();
+        let pos = this.mainChar.returnWorldPosition();
 
         //variable that allows change in vicinity position in which E needs to be pressed:
         var vicinityLimitZ = 5;
