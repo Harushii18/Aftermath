@@ -723,7 +723,7 @@ export class SceneManager {
                     logo[i].style.display = 'none';
                 }
                 this.game_state = this.GAME_MENU;
-            }, 3000);//deafault 12000
+            }, 12000);//deafault 12000
 
         } else if (this.game_state == this.GAME_INTRO) {
             if (this.audioActive == false) {
