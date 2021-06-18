@@ -173,7 +173,7 @@ export class WoodenDoor extends THREE.Object3D {
             if (this.checkVicinity) {
                // console.log("vicinity by door");
                 //if character is in vicinity of door, then they can open door
-                if (this.allowInteraction == 3) {
+                if (this.allowInteraction >= 2) {
                     this.playDoorSound = true;
                     //show that the door is unlocked subtitles
                     this.showUnlockedSubs = true;

@@ -63,6 +63,7 @@ import { characterControls } from './CharacterControls.js';
 //pre-loader
 import { HUD } from '../Overlay/HUD.js';
 import { Woman } from '../SceneSubjects/characters/woman.js';
+import { WomanHitBox } from '../SceneSubjects/characters/womanHitBox.js';
 
 //==================================================================================================
 
@@ -168,6 +169,9 @@ export var loadingManager;
 //initial subtitles-> check if everything has loaded
 export var loaded;
 
+//woman
+export var woman = new Woman();
+export var womanHitBox = new WomanHitBox();
 
 //Collision Manager to add all objects that need to be collided with
 const collisionManager = new CollisionsManager();
@@ -179,11 +183,10 @@ const collisionManager = new CollisionsManager();
 collisionManager.addObject(testdoor);
 
 
-//woman
-export var woman = new Woman();
+
 
 //Pass collidable objects as a parameter to the main character (raycasting implementation)
-export var mainChar = new MainChar(collisionManager.returnObjects(), woman.return3DObject());
+export var mainChar = new MainChar(collisionManager.returnObjects(), womanHitBox.return3DObject());
 
 
 
@@ -480,6 +483,7 @@ export class SceneManager {
 
         managers[1].register(mainChar);
         managers[1].register(woman)
+        managers[1].register(womanHitBox);
 
         //study
         //bookshelf.setForScene();
