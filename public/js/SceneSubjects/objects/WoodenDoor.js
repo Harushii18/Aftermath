@@ -13,7 +13,7 @@ export class WoodenDoor extends THREE.Object3D {
         this.playDoorSound = false;
         this.doCheckVicinity = false;
         this.object = new THREE.Object3D();
-        this.allowInteraction = false;
+        this.allowInteraction = 0;
         this.clock = new THREE.Clock();
 
 
@@ -132,8 +132,8 @@ export class WoodenDoor extends THREE.Object3D {
     }
 
 
-    setAllowInteraction(value) {
-        this.allowInteraction = value;
+    updateAllowInteraction() {
+        this.allowInteraction += 1;
     }
 
     update(time) {
@@ -173,7 +173,7 @@ export class WoodenDoor extends THREE.Object3D {
             if (this.checkVicinity) {
                // console.log("vicinity by door");
                 //if character is in vicinity of door, then they can open door
-                if (this.allowInteraction) {
+                if (this.allowInteraction == 3) {
                     this.playDoorSound = true;
                     //show that the door is unlocked subtitles
                     this.showUnlockedSubs = true;
@@ -190,7 +190,7 @@ export class WoodenDoor extends THREE.Object3D {
                         //console.log("door allow interaction true. now set to false");
 
                     /*                        WhatsApp
-                                                                             
+
                     //Suraksha: HIDE KEY IMAGE IN OVERLAY!!! KAMERON!!!         (double blue tick)
                     //Kameron: THATSSSS MA NAME!!!                              (double blue tick)
                     //Suraksha: THANK YOU!!!!!!                                 (single tick)
@@ -198,7 +198,7 @@ export class WoodenDoor extends THREE.Object3D {
                     */
 
 
-                    this.allowInteraction = false;
+                    this.allowInteraction = 0;
                     this.objectInteractionCounter += 1;
 
                 }

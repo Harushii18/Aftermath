@@ -109,6 +109,8 @@ var ambientLight = new AmbientLight();
 //var testBlock = new TestBlock();
 export var testdoor = new Door();
 export var studydoor = new WoodenDoor();
+export var loungedoor = new WoodenDoor();
+
 
 //study
 var bookshelf = new Bookshelf();
@@ -144,12 +146,19 @@ export var lightswitch = new LightSwitch();
 //export var plank = new Plank();
 //export var plank1 = new Plank();
 //export var plank2 = new Plank();
-export var boards = new Boards();
-var boards2 = new Boards();
+export var loungeBoards = new Boards();
+loungeBoards.setBoardType("lounge");
+export var studyBoards = new Boards();
+studyBoards.setBoardType("study");
 
 
 var letterI = new LetterI();
-var key = new Key();
+var drawerKey = new Key();
+drawerKey.setKeyType("drawer");
+
+var studydoorKey = new Key();
+studydoorKey.setKeyType("study");
+
 
 //pre-loader
 export var loadingManager;
@@ -160,16 +169,20 @@ export var loaded;
 //Collision Manager to add all objects that need to be collided with
 const collisionManager = new CollisionsManager();
 //Add collidable objects here
-collisionManager.addObject(house);
+//collisionManager.addObject(house);
+
 //collisionManager.addObject(cupBoardDoorR);
 //collisionManager.addObject(testBlock);
 collisionManager.addObject(testdoor);
 
-//Pass collidable objects as a parameter to the main character (raycasting implementation)
-export var mainChar = new MainChar(collisionManager.returnObjects());
 
 //woman
-var woman = new Woman();
+export var woman = new Woman();
+
+//Pass collidable objects as a parameter to the main character (raycasting implementation)
+export var mainChar = new MainChar(collisionManager.returnObjects(), woman.return3DObject());
+
+
 
 export class SceneManager {
 
@@ -460,6 +473,8 @@ export class SceneManager {
         studydoor.setPosition(7.9, -0.5, -35.3);
         managers[1].register(studydoor);
 
+        //managers[1].register(loungedoor);
+
         managers[1].register(mainChar);
         managers[1].register(woman)
 
@@ -490,13 +505,21 @@ export class SceneManager {
         managers[1].register(lightswitch);
         managers[1].register(tv);
         managers[1].register(shower);
+
         managers[1].register(microwave);
 
-        boards2.object.position.set(-4.5, 15, -77.5);
-        managers[1].register(boards2);
+        //loungeBoards.object.position.set(-4.5, 15, -77.5);
+        loungeBoards.setPosition(-4.5, 15, -77.5);
+        studyBoards.setPosition(5.4, 13.5 , -35.35);
 
-        boards.object.position.set(-4.5, 15, -77.5);
-        managers[1].register(boards);
+        //studyBoards.object.position.set(6, 15, 50);
+        //loungeBoards.setPosition(0, 4, 20);
+      //  studyBoards.setPosition(0, 1, 10);
+
+        managers[1].register(loungeBoards);
+
+      //  boards.object.position.set(-4.5, 15, -77.5);
+        managers[1].register(studyBoards);
 
 
 
@@ -751,9 +774,9 @@ export class SceneManager {
 
             //testing stuff----------------------------------------------------------------
 
-            var x = studydoor.object.position.x;
-            var y = studydoor.object.position.y;
-            var z = studydoor.object.position.z
+            var x = crowbar.object.position.x;
+            var y = crowbar.object.position.y;
+            var z = crowbar.object.position.z
             var changedPos = false;
             if (keyboardManager.wasPressed("I")) {
                 y += 0.05;
@@ -787,7 +810,7 @@ export class SceneManager {
 
             }
             if (changedPos == true) {
-                studydoor.object.position.set(x, y, z);
+                crowbar.object.position.set(x, y, z);
                 console.log("( " + x.toString() + " , " + y.toString() + " , " + z.toString() + " )");
 
             }
@@ -1027,7 +1050,14 @@ export class SceneManager {
             this.hud.add("hammer", hammer_obj);
 
             hudOverlayAddQueue.shift();
+        }
 
+        if (hudOverlayAddQueue.includes("studykey")) {
+            var key_obj = new Key();
+            //key_obj.setForHUD();
+            this.hud.add("studykey", key_obj);
+
+            hudOverlayAddQueue.shift();
         }
 
 
@@ -1046,6 +1076,13 @@ export class SceneManager {
 
           hudOverlayAddQueue.shift();
 
+        }
+
+        if (hudOverlayAddQueue.includes("flashlight")) {
+          var flashlight_obj = new Flashlight();
+          flashlight_obj.setForHUD();
+          this.hud.add("flashlight", flashlight_obj);
+          hudOverlayAddQueue.shift();
 
         }
     }

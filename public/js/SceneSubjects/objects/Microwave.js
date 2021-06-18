@@ -1,96 +1,248 @@
 import * as THREE from '../../../jsm/three.module.js';
 import { GLTFLoader } from '../../../jsm/GLTFLoader.js';
 import { keyboardManager } from '../../managers/KeyboardManager.js';
-
-import { loadingManager, mainChar, hudOverlayRemoveQueue } from '../../managers/SceneManager.js';
+import { loadingManager, mainChar, hammer, studydoor, lockCupboard, hudOverlayRemoveQueue,hudOverlayAddQueue, sceneRemoveQueue } from '../../managers/SceneManager.js';
 import { gameOverlay } from '../../Overlay/GameOverlay.js';
 import { subtitleManager } from '../../managers/SubtitleManager.js';
 
-
 export class Microwave extends THREE.Object3D {
 
+  constructor() {
+    super();
 
-    constructor() {
-        super();
-        this.objectInteractionCounter = 0;
-        this.object = new THREE.Object3D();
+    this.objectInteractionCounter = 0;
+    this.object = new THREE.Object3D();
+    this.allowInteraction = false;
 
-        //initialise subtitle contents
-        this.initialiseSubtitleContents();
+    //initialise subtitle contents
+    this.initialiseSubtitleContents();
 
-        //stores a variable that only allows the interaction overlay to be shown once
-        this.count = 0;
+    //variable to start subtitles
+    this.showLockedSubtitles = false;
+    this.showOpenedSubtitles = false;
 
-        //variable to start subtitles
-        this.startSubtitles = false;
-        this.showNoKeySubtitles = false;
+    this.clock = new THREE.Clock();
+    const loader = new GLTFLoader(loadingManager);
+    loader.setPath('../../models/');
+    loader.setPath('../../models/3DObjects/');
+    this.open = false; //open door animation
+    this.count = 0;
 
-
-        this.doCheckVicinity = true;
-        //we change this to true when the other events have been allowed
-        this.allowInteraction = false;
-
-        this.clock = new THREE.Clock();
-        const loader = new GLTFLoader(loadingManager);
-
-        loader.setPath('../../models/3DObjects/');
-
-        this.open = false; //keeps track if the drawer is openend
+    var axis = new THREE.Vector3(0, 0, 1);
+    var rad = 0;
 
 
+    this.startTime = 0;
+
+    var gltf = loader.load('microwave.glb', (gltf) => {
+      //console.log("loaded cupboard door");
+      gltf.scene.traverse(c => {
+        c.castShadow = true;
+
+      });
+
+       this.object.scale.x = 1.2;
+       this.object.scale.y = 1.2;
+       this.object.scale.z = 1.2;
+
+       //this.object.position.set(-44,10, 25.7); //(x,y,z)
+       this.object.position.set(-48.2 , 9.55 , 24.55);
+
+       this.object.rotateOnAxis(new THREE.Vector3(0, 1, 0), Math.PI/2);
+
+      //move door
+      //this.object.position.set(-20, -4, 83);
 
 
-        var gltf = loader.load('microwave.glb', (gltf) => {
-            //console.log("loaded drawer");
-            gltf.scene.traverse(c => {
-                c.castShadow = true;
 
-            });
+      this.object.add(gltf.scene);
+    });
+  }
 
 
+  initialiseSubtitleContents() {
+    //Checks if the subtitle had started showing
+    this.subtitleStarted = {
+      t1: false,
+      t2: false
+    };
+    //Checks if the subtitle had been shown already
+    this.subtitleState = {
+      t1: false,
+      t2: false
+    };
+    //Contains the text for each subtitle
+    this.subtitleText = {
+      t1: "It's locked?? Since when do I need power to open a microwave!?",
+      t2: "Another key..."
+    };
+  }
 
-            var obj_gltf = new THREE.Object3D();
 
-            obj_gltf.scale.x = 1.2;
-            obj_gltf.scale.y = 1.2;
-            obj_gltf.scale.z = 1.2;
+  showSubtitlesLocked(duration) {
+    //subtitles that show if he doesn't have the key
+    //t1
+    if (!this.subtitleState.t1) {
+      subtitleManager.showSubtitles();
+      if (!this.subtitleStarted.t1) {
+        //start showing the subtitle
+        subtitleManager.startTime();
+        subtitleManager.setDuration(duration);
+        subtitleManager.changeSubtitlesText(this.subtitleText.t1);
+        this.subtitleStarted.t1 = true;
+      }
+
+      subtitleManager.countTime();
+      if (!subtitleManager.checkTime()) {
+        this.subtitleState.t1 = true;
+        this.showLockedSubtitles = false;
+        //meaning it was shown
+      }
+    }
+  }
+  showSubtitlesUnlocked(duration) {
+    //subtitles that need to be shown if he has the key
+    if (!this.showOpenedSubtitles.t2) {
+      subtitleManager.showSubtitles();
+      if (!this.subtitleStarted.t2) {
+        //start showing the subtitle
+        subtitleManager.startTime();
+        subtitleManager.setDuration(duration);
+        subtitleManager.changeSubtitlesText(this.subtitleText.t2);
+        this.subtitleStarted.t2 = true;
+      }
+
+      subtitleManager.countTime();
+      if (!subtitleManager.checkTime()) {
+        this.subtitleState.t2 = true;
+        this.showOpenedSubtitles = false;
+        //meaning it was shown
+      }
+    }
+
+  }
 
 
-            obj_gltf.position.set(-44,10, 25.7); //(x,y,z)
-            obj_gltf.rotateOnAxis(new THREE.Vector3(0, 1, 0), Math.PI/2);
+
+  update(time) {
+
+    if (this.showLockedSubtitles) {
+      this.showSubtitlesLocked(5);
+    }
+    if (this.showOpenedSubtitles) {
+      this.showSubtitlesUnlocked(5);
+    }
+
+    this.delta = this.clock.getDelta();
+    //pause the cupboard animation at the right moment
+
+    var checkVicinity = this.checkCharacterVicinity();
+    if (keyboardManager.wasPressed('E')) {
 
 
-            obj_gltf.add(gltf.scene);
-            this.object.add(obj_gltf);
-        });
+      if (checkVicinity) {
+        if (this.allowInteraction) {
+
+          //Animation goes here
+          //***********
+          //  this.object.rotateOnAxis(new THREE.Vector3(0,1,0), this.object.rotation.y+0.1); // This happens for now
+          this.open = true;
+          gameOverlay.hideOverlay();
+          this.showOpenedSubtitles = true;
+          //SHOW KEY IMAGE IN OVERLAY
+          hudOverlayAddQueue.push("studykey");
+
+          studydoor.updateAllowInteraction();
+
+
+          if (this.objectInteractionCounter != 1) {
+            //sceneRemoveQueue.push("lockCupboard");
+            this.objectInteractionCounter += 1;
+          }
+          //lockCupboard.setPosition(new THREE.Vector3(0,100,0));
+          this.allowInteraction = false;
+        }
+        else {
+          this.showLockedSubtitles = true;
+          this.subtitleState.t1 = false;
+          this.subtitleStarted.t1 = false;
+        }
+
+      }
 
     }
 
+  }
 
-    initialiseSubtitleContents() {
-        //Checks if the subtitle had started showing
-        this.subtitleStarted = {
-            t1: false,
-            t2: false
-        };
-        //Checks if the subtitle had been shown already
-        this.subtitleState = {
-            t1: false,
-            t2: false
-        };
-     
+
+
+
+
+  inVicinity(vicinityLimitZ, vicinityLimitX) {
+    let pos = mainChar.returnWorldPosition();
+
+
+    if (pos.x < this.object.position.x + vicinityLimitX && pos.x > this.object.position.x - vicinityLimitX) {
+      if (pos.z < this.object.position.z + vicinityLimitZ && pos.z > this.object.position.z - vicinityLimitZ) {
+        return true;
+      }
+    }
+    else {
+      return false;
+    }
+  }
+
+
+
+  setAllowInteraction(value) {
+    this.allowInteraction = value;
+  }
+
+
+
+  //checks if Character is in vicinity
+  checkCharacterVicinity() {
+    //  console.log("Vinicinity Hammer function running");
+    //get the position of the main character
+
+
+    //variable that allows change in vicinity position in which E needs to be pressed:
+    var vicinityLimitZ = 10;
+    var vicinityLimitX = 10;
+
+    //if the character is in the vicinity
+    if (this.inVicinity(vicinityLimitZ, vicinityLimitX)) {
+
+      //  console.log("Player is near the Cupboard");
+      //display interaction overlay if it isn't being shown
+      if (this.count == 0) {
+        if (this.open == false) {
+          gameOverlay.changeText('[E] OPEN MICROWAVE');
+          //LATER WE CAN ADD A CONDITION IF HE LOOKED AT IT, HE'LL NOTICE IT CAN MOVE, AND THE
+          //INTERACTION WILL SAY MOVE PAINTING
+          gameOverlay.showOverlay();
+          this.count += 1;
+        }
+      }
+      return true;
+    }
+    //if the character is not in the vicinity, return false
+    //hide interaction overlay
+    if (this.count == 1) {
+      gameOverlay.hideOverlay();
+      this.count = 0;
     }
 
-    setAllowInteraction(value) {
-        this.allowInteraction = value;
-    }
+    return false;
+  }
 
-   
-    update(time) {
-        if (keyboardManager.wasPressed('E')) {
-            this.object.position.z += 0.1;
-            console.log(this.object.position.z);
-        }  
 
-    }
+  isOpen() {
+    return this.open;
+  }
+
+  return3DObject() {
+    return this.object;
+  }
+
 }

@@ -3,19 +3,22 @@ import * as THREE from '../../../jsm/three.module.js';
 import { FBXLoader } from '../../../jsm/FBXLoader/FBXLoader.js';
 import { subtitleManager } from '../../managers/SubtitleManager.js';
 import { gameInstructions } from '../../Overlay/GameInstructions.js';
-import { loaded, loadingManager } from '../../managers/SceneManager.js';
+import { loaded, loadingManager, woman } from '../../managers/SceneManager.js';
 import { loadedHouse } from '../House.js';
 
 export class MainChar extends THREE.Object3D {
-	constructor(collidableObjects) {
+	constructor(collidableObjects, womanModel) {
 		super();
 		this.collidableObjects = collidableObjects;
+		this.collidableWoman = womanModel;
 		//main character object
 		this.object = new THREE.Object3D();
 		this.clock = new THREE.Clock();
 		this.object.rotateOnAxis(new THREE.Vector3(0, 1, 0), -Math.PI);
 		//spawn outside house
 		// this.object.position.set(0, 1, -50);
+
+		this.allowAttack = false;
 
 		//start from scratch-> char at original starting game position
 		this.object.position.set(0, 1, 50);
@@ -96,6 +99,22 @@ export class MainChar extends THREE.Object3D {
 				let topLeftRaycaster = new THREE.Raycaster(pos, topLeftDirection);
 				let bottomRightRaycaster = new THREE.Raycaster(pos, bottomRightDirection);
 				let bottomLeftRaycaster = new THREE.Raycaster(pos, bottomLeftDirection);
+
+				let flashLightRaycaster = new THREE.Raycaster(pos,forwardDirection);
+
+
+
+				if(this.allowAttack==true){
+					let womanThere = false;
+					womanThere = this.checkForWoman(womanThere, flashLightRaycaster);
+					if(womanThere){
+						woman.despawnWoman();
+					}
+					else{
+
+					}
+				}
+
 
 
 				//Boolean variables representing collision
@@ -213,6 +232,18 @@ export class MainChar extends THREE.Object3D {
 
 	//=============RAYCASTER AND CAMERA==============================================================
 
+
+	//Check intersections of a raycaster with collidable objects
+	checkForWoman(blocked, raycaster) {
+		const intersect = raycaster.intersectObject(this.collidableObject, true);
+		if (intersect.length > 0) {
+			if (intersect[0].distance < 5) {
+				console.log("woman is in front of him");
+				blocked = true;
+			}
+		}
+		return blocked;
+	}
 
 	//Check intersections of a raycaster with collidable objects
 	checkIntersections(blocked, raycaster) {
@@ -399,6 +430,10 @@ export class MainChar extends THREE.Object3D {
 
 			this.object.add(fbx);
 		});
+	}
+
+	setAllowAttack(value){
+		this.allowAttack = value;
 	}
 
 

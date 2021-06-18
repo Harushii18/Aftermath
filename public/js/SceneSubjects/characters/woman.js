@@ -14,6 +14,8 @@ export class Woman extends THREE.Object3D {
         this.object.visible = false;
         this.startSubs = false;
 
+      //  this.womanState = "entering";
+
         this.clock = new THREE.Clock();
         this.state='idle';
 
@@ -50,6 +52,7 @@ export class Woman extends THREE.Object3D {
                     this.walkMixer.update(this.delta);
                 }
 
+
                 //INITIAL INTERACTION WITH WOMAN===================
 
                 if (!this.initialInteraction) {
@@ -57,10 +60,10 @@ export class Woman extends THREE.Object3D {
                         this.startSubs = true;
                         this.playAnim(this.anim['injuredWalk'], 'injuredWalk');
 
-                        
+
                     }
                     if (this.startSubs) {
-                        if (this.object.position.z<mainChar.getWorldPosition().z){
+                        if (this.object.position.z<mainChar.returnWorldPosition().z){
                             this.object.position.z+=(this.delta*5)
                         }
                         if (this.subtitleState.t2 == false) {
@@ -69,13 +72,19 @@ export class Woman extends THREE.Object3D {
                             //if first subs been shown
                             if (this.subtitleState.t1) {
                                 this.subtitle2();
+
                             }
                         }
 
                     }
-                  
+
 
                 }
+                else{
+                  ///Allow main character to use the flashlight to get rid of the woman
+                  mainChar.setAllowAttack(true);
+                }
+
 
                   //=====================================
 
@@ -88,6 +97,10 @@ export class Woman extends THREE.Object3D {
         return this.object;
     }
 
+
+    despawnWoman(){
+      this.object.position.set(0,100,0);
+    }
 
     //ANIMATIONS===================================
     checkAnimState(state) {
@@ -212,7 +225,7 @@ export class Woman extends THREE.Object3D {
                 this.object.visible = true;
                 this.womanVisible = true;
                 audioPlayQueue.push("ghost_wail");
-                
+
                 //so the character walks really slowly towards the woman
                 characterControls.setSpeed(2);
             }
@@ -276,7 +289,7 @@ export class Woman extends THREE.Object3D {
                 //meaning it was shown
                 this.subtitleState.t1 = true;
                 //hide woman
-                this.object.visible = false;
+                //this.object.visible = false;
 
                 audioPauseQueue.push("ghost_wail");
                  //character returns to original walking speed
@@ -314,6 +327,10 @@ export class Woman extends THREE.Object3D {
         }
 
 
+    }
+
+    return3DObject() {
+        return this.object;
     }
 
 
