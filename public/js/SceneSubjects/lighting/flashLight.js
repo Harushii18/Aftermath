@@ -1,5 +1,4 @@
 import * as THREE from '../../../jsm/three.module.js';
-import { mainChar } from '../../managers/SceneManager.js';
 
 export class flashLight extends THREE.Object3D {
     constructor() {

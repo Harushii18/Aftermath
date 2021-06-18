@@ -2,7 +2,7 @@ import * as THREE from '../../../jsm/three.module.js';
 import { GLTFLoader } from '../../../jsm/GLTFLoader.js';
 import { keyboardManager } from '../../managers/KeyboardManager.js';
 
-import { loadingManager, mainChar, hudOverlayRemoveQueue, bookshelf } from '../../managers/SceneManager.js';
+//import { loadingManager, mainChar, hudOverlayRemoveQueue, bookshelf } from '../../managers/SceneManager.js';
 import { gameOverlay } from '../../Overlay/GameOverlay.js';
 import { subtitleManager } from '../../managers/SubtitleManager.js';
 
@@ -10,8 +10,11 @@ import { subtitleManager } from '../../managers/SubtitleManager.js';
 export class Keypad extends THREE.Object3D {
 
 
-    constructor() {
+    constructor(mainChar,loadingManager,bookshelf) {
         super();
+        this.mainChar = mainChar;
+        this.loadingManager = loadingManager;
+        this.bookshelf = bookshelf;
         this.objectInteractionCounter = 0;
         this.object = new THREE.Object3D();
         this.animateKeypad = false;
@@ -26,7 +29,7 @@ export class Keypad extends THREE.Object3D {
         this.allowInteraction = true;
 
         this.clock = new THREE.Clock();
-        const loader = new GLTFLoader(loadingManager);
+        const loader = new GLTFLoader(this.loadingManager);
 
         loader.setPath('../../models/3DObjects/');
 
@@ -59,7 +62,7 @@ export class Keypad extends THREE.Object3D {
 
 
     inVicinity(vicinityLimitZ, vicinityLimitX) {
-      let pos = mainChar.returnWorldPosition();
+      let pos = this.mainChar.returnWorldPosition();
 
 
       if (pos.x < this.object.position.x + vicinityLimitX && pos.x > this.object.position.x - vicinityLimitX) {
@@ -146,7 +149,7 @@ export class Keypad extends THREE.Object3D {
 
             //Animate Keypad and Bookshelf
             this.animateKeypad = true;
-            bookshelf.animateBookshelf = true;
+            this.bookshelf.animateBookshelf = true;
 
 
             if (this.objectInteractionCounter != 1) {

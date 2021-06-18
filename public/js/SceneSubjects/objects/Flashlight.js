@@ -9,12 +9,15 @@ import { subtitleManager } from '../../managers/SubtitleManager.js';
 export class Flashlight extends THREE.Object3D {
 
 
-	constructor(loadingManager) {
+	constructor(mainChar,loadingManager,hudOverlayAddQueue) {
 		super();
 
-                this.loadingManager = loadingManager;
+		this.mainChar = mainChar;
 
-				this.objectInteractionCounter = 0;
+		this.hudOverlayAddQueue = hudOverlayAddQueue;
+        this.loadingManager = loadingManager;
+
+		this.objectInteractionCounter = 0;
         this.object = new THREE.Object3D();
         //load house model form blender file
 
@@ -70,7 +73,7 @@ export class Flashlight extends THREE.Object3D {
 	}
 
 	inVicinity(vicinityLimitZ, vicinityLimitX){
-			let pos = mainChar.returnWorldPosition();
+			let pos = this.mainChar.returnWorldPosition();
 
 			if(pos.x <this.object.position.x +vicinityLimitX && pos.x > this.object.position.x-vicinityLimitX){
 				if(pos.z < this.object.position.z+vicinityLimitZ && pos.z > this.object.position.z-vicinityLimitZ){
@@ -163,9 +166,9 @@ export class Flashlight extends THREE.Object3D {
 
 						gameOverlay.hideOverlay();
 						this.pickedUp = true;
-						hudOverlayAddQueue.push("flashlight");
+						this.hudOverlayAddQueue.push("flashlight");
 						this.object.position.set(0, 100, 0);
-						mainChar.setHasFlashlight(true);
+						this.mainChar.setHasFlashlight(true);
 						//SHOW CROWBAR IMAGE IN OVERLAY
 						//hudOverlayAddQueue.push("crowbar");
 

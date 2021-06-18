@@ -2,10 +2,11 @@ import * as THREE from '../../../jsm/three.module.js';
 import { GLTFLoader } from '../../../jsm/GLTFLoader.js';
 import { keyboardManager } from '../../managers/KeyboardManager.js';
 
-//import { loadingManager, mainChar, hudOverlayRemoveQueue, hudOverlayAddQueue, loungeBoards, studyBoards  } from '../../managers/SceneManager.js';
+//import {  mainChar,  hudOverlayAddQueue, loungeBoards, studyBoards  } from '../../managers/SceneManager.js';
 
 import { gameOverlay } from '../../Overlay/GameOverlay.js';
 import { subtitleManager } from '../../managers/SubtitleManager.js';
+import { studydoor } from '../../managers/SceneManager.js';
 //import { Loader } from 'three';
 
 
@@ -13,9 +14,13 @@ import { subtitleManager } from '../../managers/SubtitleManager.js';
 export class Crowbar extends THREE.Object3D {
 
 
-    constructor(loadingManager) {
+    constructor(loadingManager, mainChar,  hudOverlayAddQueue  ) {
         super();
         this.loadingManager = loadingManager;
+
+        this.mainChar = mainChar;
+        this.hudOverlayAddQueue = hudOverlayAddQueue;
+
         this.objectInteractionCounter = 0;
         this.object = new THREE.Object3D();
 
@@ -84,7 +89,7 @@ export class Crowbar extends THREE.Object3D {
 
 =======*/
     inVicinity(vicinityLimitZ, vicinityLimitX){
-        let pos = mainChar.returnWorldPosition();
+        let pos = this.mainChar.returnWorldPosition();
 
         if(pos.x <this.object.position.x +vicinityLimitX && pos.x > this.object.position.x-vicinityLimitX){
           if(pos.z < this.object.position.z+vicinityLimitZ && pos.z > this.object.position.z-vicinityLimitZ){
@@ -134,10 +139,8 @@ export class Crowbar extends THREE.Object3D {
               //Hiding crowbar, will need to destroy it later
               this.object.position.set(0, 100, 0);
               this.pickedUp = true;
-              loungeBoards.setAllowInteraction(true);
-              studyBoards.setAllowInteraction(true);
               //SHOW CROWBAR IMAGE IN OVERLAY
-              hudOverlayAddQueue.push("crowbar");
+              this.hudOverlayAddQueue.push("crowbar");
 
           }
       }
