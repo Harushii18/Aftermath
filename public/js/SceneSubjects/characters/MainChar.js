@@ -15,8 +15,8 @@ export class MainChar extends THREE.Object3D {
 		this.object = new THREE.Object3D();
 		this.clock = new THREE.Clock();
 		this.object.rotateOnAxis(new THREE.Vector3(0, 1, 0), -Math.PI);
-		//spawn outside house
-		this.object.position.set(0, 1, -50);
+		// //spawn outside house
+		// this.object.position.set(0, 1, -50);
 
 //SET TO TRUE FOR NOW
 		this.allowAttack = false;
