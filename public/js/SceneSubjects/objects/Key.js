@@ -2,7 +2,7 @@ import * as THREE from '../../../jsm/three.module.js';
 import { GLTFLoader } from '../../../jsm/GLTFLoader.js';
 import { keyboardManager } from '../../managers/KeyboardManager.js';
 
-import { loadingManager, mainChar, testdoor } from '../../managers/SceneManager.js';
+import { loadingManager, mainChar, testdoor, studydoor } from '../../managers/SceneManager.js';
 import { gameOverlay } from '../../Overlay/GameOverlay.js';
 import { bedroomDrawer } from '../../managers/SceneManager.js';
 
@@ -12,9 +12,8 @@ export class Key extends THREE.Object3D {
     constructor() {
         super();
         this.object = new THREE.Object3D();
-
         this.count = 0;
-
+        this.keyType = ""
         this.keyTaken = false;
         //stores a variable that only allows the interaction overlay to be shown once
         this.count = 0;
@@ -40,10 +39,11 @@ export class Key extends THREE.Object3D {
 
     }
 
+    setKeyType(type){
+      this.keyType = type;
+    }
+
     update(time) {
-
-
-
         if (this.open) {
             //since drawer was opened, can interact with key now
 
@@ -52,6 +52,8 @@ export class Key extends THREE.Object3D {
                 var checkVicinity = this.checkCharacterVicinity();
                 //on button E press, move drawer
                 if (keyboardManager.wasPressed('E')) {
+              //  if((keyboardManager.keyDownQueue[0] == "E")){
+              //    keyboardManager.keyDownQueue.shift();
                     if (checkVicinity) {
 
                         this.keyTaken = true;
@@ -59,10 +61,16 @@ export class Key extends THREE.Object3D {
                         //TODO-> DESTROY KEY OBJECT!
                         //just hiding key for now
                         this.object.position.set(0, 100, 0);
-                        testdoor.setAllowInteraction(true);
+                        //These if statements currently don't work
+                        if(keyType.localeCompare("drawer")){
+                          console.log("This is drawer key");
+                        //  testdoor.setAllowInteraction(true);
+                        }
+                        else if (keyType.localeCompare("study")){
+                          console.log("This is study key");
+                          //studydoor.updateAllowInteraction();
+                        }
 
-                        //DISPLAY KEY IN OVERLAY!!!
-                        //KAMERON!
 
                     }
                 }
@@ -75,6 +83,12 @@ export class Key extends THREE.Object3D {
         return this.keyTaken;
     }
 
+
+    setPosition(posx, posy, posz){
+      this.object.position.x = posx;
+      this.object.position.y = posy;
+      this.object.position.z = posz;
+    }
 
     //checks if Character is in vicinity of drawer to open/ close it
     checkCharacterVicinity() {

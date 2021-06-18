@@ -61,6 +61,12 @@ export class BedroomDrawer extends THREE.Object3D {
                 c.castShadow = true;
 
             });
+            gltf.scene.traverse((node) => {
+                if(node.isMesh){
+                  node.castShadow = true;
+                  node.receiveShadow = true;
+                }
+              });
 
             // //scale drawer
          

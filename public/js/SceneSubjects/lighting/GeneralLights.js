@@ -3,7 +3,7 @@ import * as THREE from '../../../jsm/three.module.js';
 export class GeneralLights extends THREE.Object3D {
     constructor() {
         super();
-        this.object = new THREE.DirectionalLight(0xFFFFFF, 1.0);
+        this.object = new THREE.DirectionalLight(0xFF0000, 1.0);
 
         this.object.target.position.set(0, 0, 0);
         this.object.castShadow = true;
