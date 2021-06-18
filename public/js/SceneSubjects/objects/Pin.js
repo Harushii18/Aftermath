@@ -32,10 +32,12 @@ export class Pin extends THREE.Object3D {
 
         var gltf = loader.load('pin.glb', (gltf) => {
           //console.log("loaded pin");
+
             //gltf.scene.traverse(c => {
              //   c.castShadow = true;
 
             //});
+
 
 
             //rotate pin

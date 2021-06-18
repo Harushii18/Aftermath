@@ -19,6 +19,7 @@ import { CollisionsManager } from './CollisionsManager.js'; //checked
 //import { CeilingLightObj } from '../SceneSubjects/objects/CeilingLightObj.js';
 
 //OBJECTS
+
 import { House } from '../SceneSubjects/House.js';// removed cir. ref.
 import { Lock } from '../SceneSubjects/objects/Lock.js'// removed cir. ref.
 //import { SceneSubject } from '../SceneSubjects/objects/SceneSubject.js';
@@ -40,14 +41,19 @@ import { LightSwitch } from '../SceneSubjects/objects/Switch.js'; //removed cir.
 //import { Plank } from '../SceneSubjects/objects/Plank.js';
 import { Boards } from '../SceneSubjects/objects/Boards.js';
 
+import { TV } from '../SceneSubjects/objects/Tv.js';
+import { Shower } from '../SceneSubjects/objects/Shower.js';
+import { Microwave } from '../SceneSubjects/objects/Microwave.js';
+import { Keypad } from '../SceneSubjects/objects/Keypad.js';
 
 
-//Characters
+//characters
 import { MainChar } from '../SceneSubjects/characters/MainChar.js';//removed cir. ref
 
 //study
 import { Bookshelf } from '../SceneSubjects/objects/Bookshelf.js';//removed cir. ref
 //other
+
 import { PointerLockControls } from '../../jsm/PointerLockControls.js';//checked
 import { OrbitControls } from '../../jsm/OrbitControls.js'; //checked
 import * as THREE from '../../jsm/three.module.js';
@@ -55,6 +61,8 @@ import { characterControls } from './CharacterControls.js'; //checked
 //pre-loader
 import { HUD } from '../Overlay/HUD.js';//checked
 import { Woman } from '../SceneSubjects/characters/woman.js';//removed cir. ref
+import { WomanHitBox } from '../SceneSubjects/characters/womanHitBox.js';
+
 
 //==================================================================================================
 
@@ -100,8 +108,8 @@ var isFirstPersonView = true;
 var house = new House(loadingManager);
 
 //lights
-//var generalLights = new GeneralLights();
-var sun  = new THREE.PointLight( 0xffffff, 1 );
+var generalLights = new GeneralLights();
+var sun = new THREE.PointLight(0xffffff, 1);
 
 
 //ceiling lights
@@ -123,10 +131,15 @@ var loungeLightObj = new CeilingLightObj();*/
 
 //var ambientLight = new AmbientLight();
 
-
 //var sceneSubject = new SceneSubject();
 //var testBlock = new TestBlock();
 
+// circular ref export var studydoor = new WoodenDoor();
+//circular ref export var loungedoor = new WoodenDoor();
+
+
+//study
+//circular ref export var bookshelf = new Bookshelf();
 
 //bedroom
 var hudPin = new Pin();
@@ -144,35 +157,69 @@ export var lockCupboard = new Lock(loadingManager);
 
 
 
-
-
-//export var plank = new Plank();
-//export var plank1 = new Plank();
-//export var plank2 = new Plank();
 export var boards = new Boards();
 var boards2 = new Boards();
 
 var letterI = new LetterI();
 
+export var tv = new TV();
+
+export var shower = new Shower();
+export var microwave = new Microwave();
+
+
+export var crowbar = new Crowbar();
+export var lightswitch = new LightSwitch();
+export var keypad = new Keypad();
+
+//export var plank = new Plank();
+//export var plank1 = new Plank();
+//export var plank2 = new Plank();
+export var loungeBoards = new Boards();
+loungeBoards.setBoardType("lounge");
+export var studyBoards = new Boards();
+studyBoards.setBoardType("study");
+
+var letterI = new LetterI();
+var drawerKey = new Key();
+drawerKey.setKeyType("drawer");
+
+var studydoorKey = new Key();
+studydoorKey.setKeyType("study");
 
 
 
+//initial subtitles-> check if everything has loaded
+export var loaded;
+
+//woman
+export var woman = new Woman();
+export var womanHitBox = new WomanHitBox();
 
 //Add collidable objects here
-collisionManager.addObject(house);
+//collisionManager.addObject(house);
+
 //collisionManager.addObject(cupBoardDoorR);
 //collisionManager.addObject(testBlock);
 collisionManager.addObject(testdoor);
+collisionManager.addObject(studyBoards);
+collisionManager.addObject(loungeBoards);
+collisionManager.addObject(bookshelf);
+collisionManager.addObject(shower);
+collisionManager.addObject(house);
 
 
 
+
+//Pass collidable objects as a parameter to the main character (raycasting implementation)
+export var mainChar = new MainChar(collisionManager.returnObjects(), womanHitBox.return3DObject());
 
 
 export class SceneManager {
 
     constructor(canvas) {
         //for animations
-        this.clock=new THREE.Clock();
+        this.clock = new THREE.Clock();
         //this entire function renders a scene where you can add as many items as you want to it (e.g. we can create the house and add as
         //many items as we want to the house). It renders objects from other javascript files
         //------------------------------------------------------------------------------------------------------------------------------------------
@@ -191,10 +238,12 @@ export class SceneManager {
 
 
 
-        this.game_state = this.GAME_RUN;//default Game_LOGO
+        this.game_state = this.GAME_LOGO;//default Game_LOGO
         //intro paragraph state
-        this.intro_para = 4;//1
+        this.intro_para = 1;//1
 
+
+        //======SCENE BASICS=====================================================================
 
         this.width_screen = canvas.width;
         this.height_screen = canvas.height;
@@ -206,31 +255,33 @@ export class SceneManager {
 
         //the essentials for rendering a scene
         this.scene = this.buildScene();
+
         sun.position.set(20,20,50)
+
         this.scene.add(sun);
 
         //create our skybox
-        this.skybox=this.addSkybox();
-
+        this.skybox = this.addSkybox();
         this.renderer = this.buildRender(this.screenDimensions);
         this.camera = this.buildCamera(this.screenDimensions);
+
+
+        //=========LOADING MANAGER=============================================================================
+
+        //initial display of starting subtitles-> only want it to load when everything has loaded
+        loaded = false;
 
         //loading manager
         
         loadingManager.onProgress = function (item, loaded, total) {
-            //  console.log(item, loaded, total);
-            const loadingScreen = document.getElementById('loading-screen');
-            loadingScreen.classList.add('fade-out');
-
-            // optional: remove loader from DOM via event listener
-            loadingScreen.addEventListener('transitionend', this.onTransitionEnd);
-
+             //do nothing
         };
 
         loadingManager.onLoad = function () {
-            //console.log('loaded all resources');
-            const loadingScreen = document.getElementById('loading-screen');
-            loadingScreen.style.display = "none";
+            if (!loaded) {
+                console.log('All objects loaded')
+                loaded = true;
+            }
         }
 
         loadingManager.onError = function () {
@@ -260,7 +311,7 @@ export class SceneManager {
         this.managers = this.createManagers();
 
         //load things to scene
-        this.loadToScene(this.managers[0].lights);
+        //this.loadToScene(this.managers[0].lights);
         this.loadToScene(this.managers[1].entities);
 
 
@@ -307,7 +358,7 @@ export class SceneManager {
 
     //==================SKYBOX============================
 
-    addSkybox(){
+    addSkybox() {
         //get pictures per cube face
         var skybox_path = '../skybox/Space/';
         var urls = [
@@ -322,7 +373,7 @@ export class SceneManager {
 
         //add each image as a texture on skybox
         var materialArray = [];
-        for (var i = 0; i < 6; i++){
+        for (var i = 0; i < 6; i++) {
             materialArray.push(new THREE.MeshBasicMaterial({
                 map: THREE.ImageUtils.loadTexture(urls[i]),
                 //ensure the texture is on the inside of the cube
@@ -339,13 +390,13 @@ export class SceneManager {
     }
 
 
-    rotateSkybox(){
-         //rotate skybox on game time
-         var delta=this.clock.getDelta();
-         //skybox rotation speed
-         var speed=0.02;
-         this.skybox.rotation.y += (speed*delta);
-         this.skybox.rotation.z += (speed*delta);
+    rotateSkybox() {
+        //rotate skybox on game time
+        var delta = this.clock.getDelta();
+        //skybox rotation speed
+        var speed = 0.02;
+        this.skybox.rotation.y += (speed * delta);
+        this.skybox.rotation.z += (speed * delta);
     }
     //========================================================
 
@@ -368,8 +419,9 @@ export class SceneManager {
         //renderer.shadowMap.enabled = true;
         //renderer.shadowMap.type = THREE.PCFSoftShadowMap;
         //renderer.shadowMapSoft = true;
+
         renderer.setPixelRatio(window.devicePixelRatio);
-        renderer.setSize(window.innerWidth/2, window.innerHeight/2,false);
+        renderer.setSize(window.innerWidth / 2, window.innerHeight / 2, false);
 
         return renderer;
     }
@@ -438,7 +490,8 @@ export class SceneManager {
 
         //entities
 
-       /// managers[1].register(loungeLightObj);
+
+        managers[1].register(loungeLightObj);
        /// managers[1].register(studyLightObj);
        /// managers[1].register(kitchenLightObj);
       ///  managers[1].register(bathroomLightObj);
@@ -447,19 +500,25 @@ export class SceneManager {
        /// managers[1].register(hallwayLightObj2);
        
 
+
+
         managers[1].register(house);
 
         testdoor.setPosition(0, -0.5, 33);
         managers[1].register(testdoor);
 
-        studydoor.object.rotateY(Math.PI /2);
+        studydoor.object.rotateY(Math.PI / 2);
         studydoor.setPosition(7.9, -0.5, -35.3);
         managers[1].register(studydoor);
 
+        //managers[1].register(loungedoor);
+
         managers[1].register(mainChar);
         managers[1].register(woman)
+        managers[1].register(womanHitBox);
 
         //study
+        //bookshelf.setForScene();
         managers[1].register(bookshelf);
 
         //bedroom
@@ -467,6 +526,8 @@ export class SceneManager {
 
         hammer.setForScene();
         managers[1].register(hammer);
+
+
 
         pin.setForScene();
         pin.object.name = "pin"
@@ -481,33 +542,55 @@ export class SceneManager {
 
         crowbar.setForScene();
         managers[1].register(crowbar);
+
+        lightswitch.setForScene();
         managers[1].register(lightswitch);
 
-        boards2.object.position.set(-4.5,15,-77.5);
-        managers[1].register(boards2);
+        tv.setForScene();
+        managers[1].register(tv);
 
-        boards.object.position.set(-4.5,15,-77.5);
-        managers[1].register(boards);
+        shower.setForScene();
+        managers[1].register(shower);
+
+        managers[1].register(microwave);
+
+        //loungeBoards.object.position.set(-4.5, 15, -77.5);
+        loungeBoards.setPosition(-4.5, 15, -77.5);
+        studyBoards.setPosition(5.4, 13.5 , -35.35);
+
+        //studyBoards.object.position.set(6, 15, 50);
+        //loungeBoards.setPosition(0, 4, 20);
+      //  studyBoards.setPosition(0, 1, 10);
+
+
+        managers[1].register(loungeBoards);
+
+      //  boards.object.position.set(-4.5, 15, -77.5);
+        managers[1].register(studyBoards);
+
+
+        keypad.setForScene();
+        managers[1].register(keypad);
 
 
 
-        
-       /* managers[1].register(plank);
-        plank.setPosition(-4.5, 15, -77.5);
-        plank.setRotation(Math.PI / 2)
 
-        managers[1].register(plank1);
-        plank1.setPosition(-4.5, 20, -77.5);
-        plank1.setRotation(Math.PI / 2);
+        /* managers[1].register(plank);
+         plank.setPosition(-4.5, 15, -77.5);
+         plank.setRotation(Math.PI / 2)
 
-        managers[1].register(plank2);
-        plank2.setPosition(-4.5, 10, -77.5);
-        plank2.setRotation(Math.PI / 2);*/
+         managers[1].register(plank1);
+         plank1.setPosition(-4.5, 20, -77.5);
+         plank1.setRotation(Math.PI / 2);
+
+         managers[1].register(plank2);
+         plank2.setPosition(-4.5, 10, -77.5);
+         plank2.setRotation(Math.PI / 2);*/
 
 
 
         bedroomDrawer.object.position.set(20.2, 7.4, 36.7);
-        
+
         managers[1].register(bedroomDrawer);
         //------------------------------------------------------------------------
 
@@ -517,7 +600,7 @@ export class SceneManager {
         managers[2].register("double_door_knock", "assets/double_door_knock.mpeg");
         managers[2].register("ghost_wail", "assets/ghost_wail.mpeg");
 
-        managers[2].register("background","assets/back_sound.mp3")
+        managers[2].register("background", "assets/back_sound.mp3")
 
         return managers;
     }
@@ -576,6 +659,8 @@ export class SceneManager {
             //id the start button
             const btnStart = document.getElementById("start");
             const btnSkipIntro = document.getElementById("skipIntro");
+            const btnShowCredits = document.getElementById("btnCredits");
+            const btnBack = document.getElementById('backfromCredits');
 
 
             //start game pressed, remove start screen items
@@ -600,8 +685,53 @@ export class SceneManager {
                 this.game_state = this.GAME_RUN;
             });
 
+            btnShowCredits.addEventListener("click", () => {
+                
+                const menu = document.getElementsByClassName("menu");
+                for (let i = 0; i < menu.length; i++) {
+                    menu[i].style.display = 'none';
+                }
+
+                const title = document.getElementsByClassName("title");
+                for (let i = 0; i < title.length; i++) {
+                    title[i].style.display = 'none';
+                }
+
+                document.getElementById('creditsParas').start();
+
+                const credits = document.getElementsByClassName("credits");
+                for (let i = 0; i < credits.length; i++){
+                    credits[i].style.display = 'flex';
+                }
+                
+                
+            });
+
+            btnBack.addEventListener("click", () => {
+                const menu = document.getElementsByClassName("menu");
+                for (let i = 0; i < menu.length; i++) {
+                    menu[i].style.display = 'flex';
+                }
+
+                const title = document.getElementsByClassName("title");
+                for (let i = 0; i < title.length; i++) {
+                    title[i].style.display = 'flex';
+                }
+
+                const credits = document.getElementsByClassName("credits");
+                for (let i = 0; i < credits.length; i++){
+                    credits[i].style.display = 'none';
+                }
+                document.getElementById('creditsParas').stop();
+            });
+
 
         } else if (this.game_state == this.GAME_LOGO) {
+
+            const loadingScreen = document.getElementById('loading-screen');
+        loadingScreen.classList.add('fade-out');
+        loadingScreen.style.display = "none";
+   
             //id the divs
             const menu = document.getElementsByClassName("mainMenu");
             const logo = document.getElementsByClassName("logo");
@@ -640,91 +770,112 @@ export class SceneManager {
             const intro4 = document.getElementById("para4");
 
 
-            //id the buttons
-            //  const btnNext1 = document.getElementById("next1");
-            //  const btnNext2 = document.getElementById("next2");
+            // id the buttons
+             const btnNext1 = document.getElementById("next1");
+             const btnNext2 = document.getElementById("next2");
+             const btnNext3 = document.getElementById("next3");
             const btnContinue = document.getElementById("continue");
 
-            intro1.style.display = 'flex'; //CHANGE TO FLEX
-            intro2.style.display = 'none';
-            intro3.style.display = 'none';
-            intro4.style.display = 'none';
+            // intro1.style.display = 'flex'; //CHANGE TO FLEX
+            // intro2.style.display = 'none';
+            // intro3.style.display = 'none';
+            // intro4.style.display = 'none';
 
 
-            //UNCOMMENT=======================
-            setTimeout(() => {
-                intro1.style.display = 'none';
-                intro2.style.display = 'flex';
+            // //UNCOMMENT=======================
+            // setTimeout(() => {
+            //     intro1.style.display = 'none';
+            //     intro2.style.display = 'flex';
+            //     intro3.style.display = 'none';
+            //     intro4.style.display = 'none';
+            // }, 4000);
+
+            // setTimeout(() => {
+            //     intro1.style.display = 'none';
+            //     intro2.style.display = 'none';
+            //     intro3.style.display = 'flex';
+            //     intro4.style.display = 'none';
+            // }, 16000);
+
+            // setTimeout(() => {
+            //     intro1.style.display = 'none';
+            //     intro2.style.display = 'none';
+            //     intro3.style.display = 'none';
+            //     intro4.style.display = 'flex';
+            // }, 30000);
+            //===========================
+
+            //  intro4.style.display = 'flex'; //COMMENT OUT
+            // btnContinue.addEventListener("click", () => {
+
+            //     this.intro_para = 4;
+            //     intro1.style.display = 'none';
+            //     intro2.style.display = 'none';
+            //     intro3.style.display = 'none';
+            //     intro4.style.display = 'none';
+
+            //     const menu = document.getElementsByClassName("mainMenu");
+            //     for (let i = 0; i < menu.length; i++) {
+            //         menu[i].style.display = 'none';
+            //     }
+            //     //change state to game run
+            //     this.game_state = this.GAME_RUN;
+
+            //     this.managers[2].entities["background"].pause();
+            // });
+
+             if(this.intro_para == 1){
+                intro1.style.display = 'flex';
+                intro2.style.display = 'none';
                 intro3.style.display = 'none';
                 intro4.style.display = 'none';
-            }, 100);
 
-            setTimeout(() => {
+                btnNext1.addEventListener("click", () => {
+                    this.intro_para = 2;
+                });
+             }
+
+             else if(this.intro_para == 2){
+                 intro1.style.display = 'none';
+                 intro2.style.display = 'flex';
+                 intro3.style.display = 'none';
+                 intro4.style.display = 'none';
+                 btnNext2.addEventListener("click", () => {
+                     this.intro_para = 3;
+                 });
+             }
+
+             else if(this.intro_para == 3){
                 intro1.style.display = 'none';
                 intro2.style.display = 'none';
                 intro3.style.display = 'flex';
                 intro4.style.display = 'none';
-            }, 100);
+                btnNext3.addEventListener("click", () => {
+                    this.intro_para = 4;
+                });
+            }
 
-            setTimeout(() => {
-                intro1.style.display = 'none';
-                intro2.style.display = 'none';
-                intro3.style.display = 'none';
-                intro4.style.display = 'flex';
-            }, 100);
-            //===========================
-
-            //  intro4.style.display = 'flex'; //COMMENT OUT
-            btnContinue.addEventListener("click", () => {
-
-                this.intro_para = 4;
-                intro1.style.display = 'none';
-                intro2.style.display = 'none';
-                intro3.style.display = 'none';
-                intro4.style.display = 'none';
-
-                const menu = document.getElementsByClassName("mainMenu");
-                for (let i = 0; i < menu.length; i++) {
-                    menu[i].style.display = 'none';
-                }
-                //change state to game run
-                this.game_state = this.GAME_RUN;
-
-                this.managers[2].entities["background"].pause();
-            });
-
-            //  if(this.intro_para == 1){
-            //  intro1.style.display = 'flex';
-            //  intro2.style.display = 'none';
-            //  intro3.style.display = 'none';
-
-            //  btnNext1.addEventListener("click", () => {
-            //     this.intro_para = 2;
-            //  });
-            //  }
-
-            //  else if(this.intro_para == 2){
-            //      intro1.style.display = 'none';
-            //      intro2.style.display = 'flex';
-            //      intro3.style.display = 'none';
-            //      btnNext2.addEventListener("click", () => {
-            //          this.intro_para = 3;
-            //      });
-            //  }
-
-            //  else if(this.intro_para == 3){
-            //      intro1.style.display = 'none';
-            //      intro2.style.display = 'none';
-            //      intro3.style.display = 'flex';
-            //      btnContinue.addEventListener("click", () => {
-            //          this.intro_para = 4;
-            //          intro1.style.display = 'none';
-            //          intro2.style.display = 'none';
-            //          intro3.style.display = 'none';
-            //          //change state to game run
-            //          this.game_state = this.GAME_RUN;
-            //      });
-            //  }
+             else if(this.intro_para == 4){
+                 intro1.style.display = 'none';
+                 intro2.style.display = 'none';
+                 intro3.style.display = 'none';
+                 intro4.style.display = 'flex';
+                 btnContinue.addEventListener("click", () => {
+                     this.intro_para = 4;
+                     intro1.style.display = 'none';
+                     intro2.style.display = 'none';
+                     intro3.style.display = 'none';
+                     intro4.style.display = 'none';
+                     const menu = document.getElementsByClassName("mainMenu");
+                     for (let i = 0; i < menu.length; i++) {
+                         menu[i].style.display = 'none';
+                     }
+                     this.intro_para = 1;
+                     this.managers[2].entities["background"].pause();
+                     //change state to game run
+                     this.game_state = this.GAME_RUN;
+                 });
+             }
 
         } else if (this.game_state == this.GAME_RUN) {
 
@@ -742,69 +893,63 @@ export class SceneManager {
             this.setAudio();
 
             //testing stuff----------------------------------------------------------------
-            var x = crowbar.object.position.x;
-            var y = crowbar.object.position.y;
-            var z = crowbar.object.position.z
+
+
+            var x = keypad.object.position.x;
+            var y = keypad.object.position.y;
+            var z = keypad.object.position.z
             var changedPos = false;
-            if (keyboardManager.wasPressed("I"))
-            {
-                console.log(loadingManager);
+            if (keyboardManager.wasPressed("I")) {
                 y += 0.05;
                 changedPos = true;
 
             }
-            if (keyboardManager.wasPressed("J"))
-            {
+            if (keyboardManager.wasPressed("J")) {
                 x -= 0.05;
                 changedPos = true;
 
             }
-            if (keyboardManager.wasPressed("K"))
-            {
+            if (keyboardManager.wasPressed("K")) {
                 y -= 0.05;
                 changedPos = true;
 
             }
-            if (keyboardManager.wasPressed("L"))
-            {
+            if (keyboardManager.wasPressed("L")) {
                 x += 0.05;
                 changedPos = true;
 
             }
 
-            if (keyboardManager.wasPressed("UP"))
-            {
+            if (keyboardManager.wasPressed("UP")) {
                 z += 0.05;
                 changedPos = true;
 
             }
-            if (keyboardManager.wasPressed("DOWN"))
-            {
+            if (keyboardManager.wasPressed("DOWN")) {
                 z -= 0.05;
                 changedPos = true;
 
             }
-            if (changedPos == true)
-            {
-            crowbar.object.position.set(x,y,z);
-            console.log("( " +x.toString() +" , " +y.toString() +" , " +z.toString() + " )");
+
+            if (changedPos == true) {
+                keypad.object.position.set(x, y, z);
+                console.log("( " + x.toString() + " , " + y.toString() + " , " + z.toString() + " )");
+
             }
 
             //testing stuff---------------------------------------------------------------
 
 
-            if (this.hud.hasItem('key') == false && bedroomDrawer.keyFound && testdoor.open == false)
-            {
+            if (this.hud.hasItem('key') == false && bedroomDrawer.keyFound && testdoor.open == false) {
                 var selectedObject = bedroomDrawer.object.getObjectByName('key');
-                bedroomDrawer.object.remove( selectedObject);
+                bedroomDrawer.object.remove(selectedObject);
 
                 this.hud.add("key", new Key(loadingManager, mainChar, testdoor));
                 testdoor.setAllowInteraction(true);
                 this.managers[2].entities["double_door_knock"].play();
             }
-          
-            else if (this.hud.hasItem('key') && testdoor.open)
-            {
+
+            else if (this.hud.hasItem('key') && testdoor.open) {
 
                 this.hud.remove('key');
                 this.managers[2].entities["double_door_knock"].pause();
@@ -910,6 +1055,12 @@ export class SceneManager {
                     menu[i].style.display = 'none';
                 }
                 this.game_state = this.GAME_MENU;
+
+
+                var instructions = document.getElementById('gameInstructions');
+                instructions.style.display = 'none';
+                var subtitles = document.getElementById('subtitle');
+                subtitles.style.display = 'none';
             });
 
 
@@ -982,7 +1133,7 @@ export class SceneManager {
         this.camera.aspect = window.innerWidth / window.innerHeight;
         this.camera.updateProjectionMatrix();
 
-        this.renderer.setSize(window.innerWidth/2, window.innerHeight/2,false);
+        this.renderer.setSize(window.innerWidth / 2, window.innerHeight / 2, false);
     }
 
 
@@ -1018,24 +1169,49 @@ export class SceneManager {
     }
 
 
-    addToHUD()
-    {
 
-        if (hudOverlayAddQueue.includes("hammer"))
-        {
-           var hammer_obj = new Hammer();
+    addToHUD() {
+
+        if (hudOverlayAddQueue.includes("hammer")) {
+            var hammer_obj = new Hammer();
             hammer_obj.setForHUD();
-           this.hud.add("hammer",hammer_obj);
+            this.hud.add("hammer", hammer_obj);
 
-           hudOverlayAddQueue.shift();
+            hudOverlayAddQueue.shift();
+        }
+
+        if (hudOverlayAddQueue.includes("studykey")) {
+            var key_obj = new Key();
+            //key_obj.setForHUD();
+            this.hud.add("studykey", key_obj);
+
+            hudOverlayAddQueue.shift();
+        }
+
+
+
+        if (hudOverlayAddQueue.includes("pin")) {
+            console.log("adding pin");
+            this.hud.add("pin", hudPin);
+            hudOverlayAddQueue.shift();
+
 
         }
 
-        if (hudOverlayAddQueue.includes("pin"))
-        {
-           console.log("adding pin");
-           this.hud.add("pin",new Pin());
-           hudOverlayAddQueue.shift();
+        if (hudOverlayAddQueue.includes("crowbar")) {
+          var crowbar_obj = new Crowbar();
+          crowbar_obj.setForHUD();
+          this.hud.add("crowbar", crowbar_obj);
+
+          hudOverlayAddQueue.shift();
+
+        }
+
+        if (hudOverlayAddQueue.includes("flashlight")) {
+          var flashlight_obj = new Flashlight();
+          flashlight_obj.setForHUD();
+          this.hud.add("flashlight", flashlight_obj);
+          hudOverlayAddQueue.shift();
 
         }
     }
@@ -1047,8 +1223,8 @@ export class SceneManager {
             hudOverlayRemoveQueue.shift();
             this.hud.remove(name);
 
- 
-         }
+
+        }
 
 
     }
@@ -1075,8 +1251,7 @@ export class SceneManager {
         this.pointerLockControls.unlock(); // start orbit controls to respond to input
     }
 
-    setAudio()
-    {
+    setAudio() {
         while (audioPlayQueue.length > 0) {
             var name = audioPlayQueue[0];
             audioPlayQueue.shift();

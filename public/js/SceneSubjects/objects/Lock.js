@@ -2,7 +2,9 @@
 
 import { GLTFLoader } from '../../../jsm/GLTFLoader.js';
 import * as THREE from '../../../jsm/three.module.js';
+
 //import {loadingManager} from '../../managers/SceneManager.js'; //circular ref
+
 export class Lock extends THREE.Object3D {
   constructor(loadingManager) {
 
@@ -10,7 +12,7 @@ export class Lock extends THREE.Object3D {
     this.loadingManager = loadingManager;
     this.object = new THREE.Object3D();
     //this.object.castShadow = false;
-    this.object.receiveShadow = true;
+    //this.object.receiveShadow = true;
     //load lock from blender file
 
     const loader = new GLTFLoader(this.loadingManager);
@@ -18,9 +20,11 @@ export class Lock extends THREE.Object3D {
 
     const gltf = loader.load('lock.glb', (gltf) => {
       //console.log("loaded lock");
+
   /*    gltf.scene.traverse(c => {
         c.castShadow = true;
       });*/
+
 
   //===============================================
       //CHANGE SCALE + POSITION IT TO RIGHT PLACE!!

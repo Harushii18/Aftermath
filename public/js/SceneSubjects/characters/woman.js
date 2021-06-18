@@ -18,6 +18,11 @@ export class Woman extends THREE.Object3D {
         this.womanVisible = false;
         this.object.visible = false;
         this.startSubs = false;
+        this.spawnCoolDown = 0;
+        this.playerKilledCount = 0;
+
+
+      //  this.womanState = "entering";
 
         this.clock = new THREE.Clock();
         this.state='idle';
@@ -44,16 +49,23 @@ export class Woman extends THREE.Object3D {
 
 
         this.update = function (time) {
+
+          //console.log(this.spawnCoolDown);
+
+
             //IF LEVEL 1 IS COMPLETE ONLY!
             if (this.getLevel1Complete()) {
                 //ensure that all movement is not by frame rate
                 this.delta = this.clock.getDelta();
 
 
+
+
                 //animation
                 if (this.walkMixer) {
                     this.walkMixer.update(this.delta);
                 }
+
 
                 //INITIAL INTERACTION WITH WOMAN===================
 
@@ -62,10 +74,12 @@ export class Woman extends THREE.Object3D {
                         this.startSubs = true;
                         this.playAnim(this.anim['injuredWalk'], 'injuredWalk');
 
-                        
+
                     }
                     if (this.startSubs) {
+
                         if (this.object.position.z<this.mainChar.getWorldPosition().z){
+
                             this.object.position.z+=(this.delta*5)
                         }
                         if (this.subtitleState.t2 == false) {
@@ -74,13 +88,51 @@ export class Woman extends THREE.Object3D {
                             //if first subs been shown
                             if (this.subtitleState.t1) {
                                 this.subtitle2();
+                                this.despawnWoman();
                             }
                         }
 
                     }
-                  
+
 
                 }
+                else{
+                  if(this.playerKilledCount<=3){
+
+                    console.log(this.spawnCoolDown);
+                  ///Allow main character to use the flashlight to get rid of the woman
+                  mainChar.setAllowAttack(true);
+                  if(this.spawnCoolDown<=0){
+                    this.spawnCoolDown = 0;
+                    //console.log("Spawned Woman");
+                    //Woman must respawn
+                    this.object.visible = true;
+                    var charPos = mainChar.returnWorldPosition();
+                    var charDirection = mainChar.returnObjectDirection();
+                  //  this.object.position.set(this.object.position.x + charDirection.x, this.object.position.y, this.object.position.z + charDirection.z)
+
+                    if(this.object.position.x < charPos.x){
+                      this.object.position.x += (this.delta*4);
+                    }
+                    if(this.object.position.x > charPos.x){
+                      this.object.position.x -= (this.delta*4);
+                    }
+
+                    if(this.object.position.z < charPos.z){
+                      this.object.position.z += (this.delta*4);
+                    }
+                    if(this.object.position.z > charPos.z){
+                      this.object.position.z -= (this.delta*4);
+                    }
+
+                  }
+                  else{
+                    this.spawnCoolDown -= (this.delta*0.25);
+                    //console.log(this.spawnCoolDown);
+                  }
+                }
+              }
+
 
                   //=====================================
 
@@ -93,6 +145,17 @@ export class Woman extends THREE.Object3D {
         return this.object;
     }
 
+
+    despawnWoman(){
+      //console.log("Despawned Woman");
+      this.object.position.set(0, 0, -15);
+      this.object.visible = false;
+      this.spawnCoolDown = 5;
+    }
+
+    updatePlayerKilledCount(){
+      this.playerKilledCount += 1;
+    }
 
     //ANIMATIONS===================================
     checkAnimState(state) {
@@ -164,6 +227,7 @@ export class Woman extends THREE.Object3D {
         loader.load('jill.fbx', (fbx) => {
             //scale the model down
             fbx.scale.setScalar(0.0115);
+
           /*  fbx.traverse(c => {
                 c.castShadow = true;
                 c.receiveShadow = true;
@@ -171,6 +235,8 @@ export class Woman extends THREE.Object3D {
 
             });*/
 
+
+            this.currAction = this.idle;
 
             //animate character
             const anim = new FBXLoader(this.loadingManager);
@@ -216,8 +282,10 @@ export class Woman extends THREE.Object3D {
                 //show the woman now that the door has opened
                 this.object.visible = true;
                 this.womanVisible = true;
+
                 this.audioPlayQueue.push("ghost_wail");
                 
+
                 //so the character walks really slowly towards the woman
                 characterControls.setSpeed(2);
             }
@@ -281,7 +349,7 @@ export class Woman extends THREE.Object3D {
                 //meaning it was shown
                 this.subtitleState.t1 = true;
                 //hide woman
-                this.object.visible = false;
+                //this.object.visible = false;
 
                 this.audioPauseQueue.push("ghost_wail");
                  //character returns to original walking speed
@@ -315,10 +383,24 @@ export class Woman extends THREE.Object3D {
                 //meaning it was shown
                 this.startSubs = false;
                 this.initialInteraction = true;
-            }
+              }
         }
 
 
+    }
+
+    getWomanPosition() {
+      let worldPos = new THREE.Vector3();
+      this.object.getWorldPosition(worldPos);
+      return worldPos;
+    }
+
+    getWomanVisibility(){
+      return this.object.visible;
+    }
+
+    return3DObject() {
+        return this.object;
     }
 
 

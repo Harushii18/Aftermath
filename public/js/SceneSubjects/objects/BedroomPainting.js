@@ -25,10 +25,12 @@ export class BedroomPainting extends THREE.Object3D {
 
         var gltf = loader.load('bedroompainting.glb', (gltf) => {
           //console.log("loaded painting");
+
            /* gltf.scene.traverse(c => {
                 c.castShadow = true;
 
             });*/
+
 
             //scale painting
             this.object.scale.x = 3.5;
@@ -97,7 +99,7 @@ export class BedroomPainting extends THREE.Object3D {
         //if the character is in the vicinity
         if (this.inVicinity(vicinityLimitZ, vicinityLimitX)) {
             //display interaction overlay if it isn't being shown
-            console.log("Player is near the painting");
+          //  console.log("Player is near the painting");
             if (this.count == 0) {
                 if (this.isMoved==false){
                     gameOverlay.changeText('[E] MOVE PAINTING');

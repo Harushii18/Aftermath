@@ -8,7 +8,7 @@ class GameInstructions extends THREE.Object3D {
         this.count=0;
 
         //THE BELOW ARE ALL IN SECONDS:
-        this.startValue=40; //what second the first instruction stops displaying at
+        this.startValue=7; //what second the first instruction stops displaying at
         this.hideDuration=2; //how long to hide the instruction
         this.showDuration=7;//how long to show the instruction
         this.start=true;

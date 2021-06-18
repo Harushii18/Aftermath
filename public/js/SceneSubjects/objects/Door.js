@@ -150,14 +150,14 @@ export class Door extends THREE.Object3D {
         }
 
 
-        if (this.showLockedSubtitles) {
-            this.showSubtitlesLocked(5);
-        } else if (this.showUnlockedSubs) {
-            this.addSubtitles();
-        }
+        // if (this.showLockedSubtitles) {
+        //     this.showSubtitlesLocked(5);
+        // } else if (this.showUnlockedSubs) {
+        //     this.addSubtitles();
+        // }
 
         if (this.open == true) {
-            this.showLockedSubtitles = false;
+           // this.showLockedSubtitles = false;
 
             //animate
             if (this.idleMixer) {
@@ -181,8 +181,8 @@ export class Door extends THREE.Object3D {
                 if (this.allowInteraction) {
                     this.playDoorSound = true;
                     //show that the door is unlocked subtitles
-                    this.showUnlockedSubs = true;
-                    this.showLockedSubtitles = false;
+                    // this.showUnlockedSubs = true;
+                    // this.showLockedSubtitles = false;
                     //make sure the key prompt doesn't show anymore now that it is open
                     gameOverlay.hideOverlay();
                     //play the door animation
@@ -211,9 +211,9 @@ export class Door extends THREE.Object3D {
                     if (this.objectInteractionCounter == 0) {
                         this.playDoorSound = false;
 
-                        this.showLockedSubtitles = true;
-                        this.subtitleState.t2 = false;
-                        this.subtitleStarted.t2 = false;
+                        // this.showLockedSubtitles = true;
+                        // this.subtitleState.t2 = false;
+                        // this.subtitleStarted.t2 = false;
                     }
 
                 }
