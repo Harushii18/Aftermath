@@ -18,7 +18,9 @@ export class MainChar extends THREE.Object3D {
 		//spawn outside house
 		// this.object.position.set(0, 1, -50);
 
+//SET TO TRUE FOR NOW
 		this.allowAttack = false;
+		this.hasFlashlight = false;
 
 		//start from scratch-> char at original starting game position
 		// this.object.position.set(0, 1, 50);
@@ -104,11 +106,14 @@ export class MainChar extends THREE.Object3D {
 
 
 
-				if(this.allowAttack==true){
+				if(this.allowAttack==true && this.hasFlashlight==true){
 					let womanThere = false;
 					womanThere = this.checkForWoman(womanThere, flashLightRaycaster);
 					if(womanThere){
+						//console.log("Woman is in front of me");
+
 						woman.despawnWoman();
+						woman.updatePlayerKilledCount();
 					}
 					else{
 
@@ -235,10 +240,9 @@ export class MainChar extends THREE.Object3D {
 
 	//Check intersections of a raycaster with collidable objects
 	checkForWoman(blocked, raycaster) {
-		const intersect = raycaster.intersectObject(this.collidableObject, true);
+		const intersect = raycaster.intersectObject(this.collidableWoman, true);
 		if (intersect.length > 0) {
-			if (intersect[0].distance < 5) {
-				console.log("woman is in front of him");
+			if (intersect[0].distance < 30) {
 				blocked = true;
 			}
 		}
@@ -434,6 +438,10 @@ export class MainChar extends THREE.Object3D {
 
 	setAllowAttack(value){
 		this.allowAttack = value;
+	}
+
+	setHasFlashlight(value){
+		this.hasFlashlight = value;
 	}
 
 

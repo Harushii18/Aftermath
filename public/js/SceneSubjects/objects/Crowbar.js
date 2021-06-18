@@ -135,9 +135,9 @@ export class Crowbar extends THREE.Object3D {
     {
 
         //move crowbar
-          this.object.position.set(20,4, -2);
+          this.object.position.set(66.75 , 2.2 , 14.8);
+          this.object.rotateOnAxis(new THREE.Vector3(0, 1, 0), Math.PI/2);
         //this.object.position.set(8, 4, 80);
-
 
     }
 

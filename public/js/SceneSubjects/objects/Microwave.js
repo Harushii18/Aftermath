@@ -152,7 +152,7 @@ export class Microwave extends THREE.Object3D {
           //SHOW KEY IMAGE IN OVERLAY
           hudOverlayAddQueue.push("studykey");
 
-          studydoor.updateAllowInteraction();
+          studydoor.setHasKey();
 
 
           if (this.objectInteractionCounter != 1) {
