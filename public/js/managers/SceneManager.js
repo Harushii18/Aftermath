@@ -120,7 +120,7 @@ export var loungedoor = new WoodenDoor();
 
 
 //study
-var bookshelf = new Bookshelf();
+export var bookshelf = new Bookshelf();
 
 //bedroom
 var hudPin = new Pin();
@@ -843,9 +843,9 @@ export class SceneManager {
 
             //testing stuff----------------------------------------------------------------
 
-            var x = crowbar.object.position.x;
-            var y = crowbar.object.position.y;
-            var z = crowbar.object.position.z
+            var x = keypad.object.position.x;
+            var y = keypad.object.position.y;
+            var z = keypad.object.position.z
             var changedPos = false;
             if (keyboardManager.wasPressed("I")) {
                 y += 0.05;
@@ -879,7 +879,7 @@ export class SceneManager {
 
             }
             if (changedPos == true) {
-                crowbar.object.position.set(x, y, z);
+                keypad.object.position.set(x, y, z);
                 console.log("( " + x.toString() + " , " + y.toString() + " , " + z.toString() + " )");
 
             }
