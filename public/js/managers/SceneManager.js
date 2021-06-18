@@ -637,7 +637,11 @@ export class SceneManager {
         if (isFirstPersonView == true) {
             mainChar.setVisibility(false);
             this.pointerLockControls.getObject().position.set(pos.x, 17.5, pos.z); //Need to sort out position of camera at head height
-            flash.setLightPosition(pos.x, pos.z);
+            flash.setLightPosition(pos.x,this.camera.position.y, pos.z);
+            const spotLightTarget = new THREE.Object3D;
+            spotLightTarget.position.set(pos.x, this.camera.position.y, pos.z);
+            flash.target = spotLightTarget;
+            console.log("target " + flash.target);
         }
         //Third Person View
         else if (isFirstPersonView == false) {
@@ -646,7 +650,7 @@ export class SceneManager {
             this.controls.target.set(pos.x, 17.5, pos.z + dir.z);//Set position at player model and face the same direction as model
             this.controls.update();//Update Orbital Controls
 
-            flash.target.set(pos.x, 17.5, pos.z + dir.z);
+            
             
         }
 
@@ -725,6 +729,7 @@ export class SceneManager {
                     title[i].style.display = 'none';
                 }
 
+                document.getElementById('creditsParas').stop();
                 document.getElementById('creditsParas').start();
 
                 const credits = document.getElementsByClassName("credits");

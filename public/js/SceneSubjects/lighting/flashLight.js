@@ -19,8 +19,8 @@ export class flashLight extends THREE.Object3D {
 
     }
 
-    setLightPosition(x, z) {
-        this.object.position.set(x, 14, z);
+    setLightPosition(x, y, z) {
+        this.object.position.set(x, y, z);
 
     }
 

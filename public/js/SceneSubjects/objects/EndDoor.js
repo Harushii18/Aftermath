@@ -17,7 +17,7 @@ export class EndDoor extends THREE.Object3D {
 
     this.objectInteractionCounter = 0;
     this.object = new THREE.Object3D();
-    this.allowInteraction = false;
+    this.allowInteraction = false;//default false
     this.hasKey = false;
     this.boardsRemoved = false;
 
@@ -89,6 +89,28 @@ export class EndDoor extends THREE.Object3D {
           console.log("End Game");
           //MAKE CREDITS START HERE
 
+          const menu = document.getElementsByClassName("menu");
+          for (let i = 0; i < menu.length; i++) {
+              menu[i].style.display = 'none';
+          }
+
+          const title = document.getElementsByClassName("title");
+          for (let i = 0; i < title.length; i++) {
+              title[i].style.display = 'none';
+          }
+
+          document.getElementById('creditsParas').start();
+
+          const credits = document.getElementsByClassName("credits");
+          for (let i = 0; i < credits.length; i++){
+              credits[i].style.display = 'flex';
+          }
+
+
+          const btnBack = document.getElementById('backfromCredits');
+          btnBack.addEventListener("click", () => {
+            location.reload();
+        });
 
         }
         else {
