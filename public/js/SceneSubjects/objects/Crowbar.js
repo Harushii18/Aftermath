@@ -148,7 +148,7 @@ export class Crowbar extends THREE.Object3D {
               {
                 //SHOW HAMMER IMAGE IN OVERLAY
                 console.log("pushing hammer");
-                hudOverlayAddQueue.push("crowbar");
+                this.hudOverlayAddQueue.push("crowbar");
               //sceneRemoveQueue.push("key");
                 this.objectInteractionCounter += 1;
               }

@@ -54,11 +54,29 @@ export class Woman extends THREE.Object3D {
           //console.log(this.spawnCoolDown);
 
 
+
             //IF LEVEL 1 IS COMPLETE ONLY!
             if (this.getLevel1Complete()) {
                 //ensure that all movement is not by frame rate
                 this.delta = this.clock.getDelta();
 
+                if(this.mainChar.allowAttack==true && this.mainChar.hasFlashlight==true){
+                  let womanThere = false;
+                  let dir = new THREE.Vector3();
+          				this.mainChar.getWorldDirection(dir);
+                  let forwardDirection = new THREE.Vector3(dir.x, dir.y, dir.z);
+                  let flashLightRaycaster = new THREE.Raycaster(pos,forwardDirection);
+                  womanThere = this.mainChar.checkForWoman(womanThere, flashLightRaycaster);
+                  if(womanThere){
+                    //console.log("Woman is in front of me");
+
+                    this.despawnWoman();
+                    this.updatePlayerKilledCount();
+                  }
+                  else{
+
+                  }
+                }
 
 
 
@@ -285,7 +303,7 @@ export class Woman extends THREE.Object3D {
                 this.womanVisible = true;
 
                 this.audioPlayQueue.push("ghost_wail");
-                
+
 
                 //so the character walks really slowly towards the woman
                 characterControls.setSpeed(2);

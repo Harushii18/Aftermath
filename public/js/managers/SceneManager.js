@@ -46,7 +46,7 @@ import { Shower } from '../SceneSubjects/objects/Shower.js';
 import { Microwave } from '../SceneSubjects/objects/Microwave.js';
 import { Keypad } from '../SceneSubjects/objects/Keypad.js';
 
-
+import { WoodenDoor} from '../SceneSubjects/objects/WoodenDoor.js';
 import { EndDoor} from '../SceneSubjects/objects/EndDoor.js';
 
 
@@ -93,7 +93,7 @@ export var mainChar = new MainChar(collisionManager.returnObjects(),loadingManag
 
 
 export var testdoor = new Door(mainChar, loadingManager);
-export var studydoor = new Door(mainChar, loadingManager);//must be changed to wooden door later
+export var studydoor = new WoodenDoor(mainChar, loadingManager, hudOverlayRemoveQueue);//must be changed to wooden door later
 export var bedroomDrawer = new BedroomDrawer(mainChar,loadingManager, hudOverlayRemoveQueue,testdoor);
 
 
@@ -213,7 +213,7 @@ collisionManager.addObject(studyBoards);
 collisionManager.addObject(loungeBoards);
 collisionManager.addObject(bookshelf);
 collisionManager.addObject(shower);
-collisionManager.addObject(house);
+//collisionManager.addObject(house);
 
 
 
@@ -277,7 +277,7 @@ export class SceneManager {
         loaded = false;
 
         //loading manager
-        
+
         loadingManager.onProgress = function (item, loaded, total) {
              //do nothing
         };
@@ -505,7 +505,7 @@ export class SceneManager {
        /// managers[1].register(bedroomLightObj);
        /// managers[1].register(hallwayLightObj1);
        /// managers[1].register(hallwayLightObj2);
-       
+
 
 
 
@@ -699,7 +699,7 @@ export class SceneManager {
             });
 
             btnShowCredits.addEventListener("click", () => {
-                
+
                 const menu = document.getElementsByClassName("menu");
                 for (let i = 0; i < menu.length; i++) {
                     menu[i].style.display = 'none';
@@ -716,8 +716,8 @@ export class SceneManager {
                 for (let i = 0; i < credits.length; i++){
                     credits[i].style.display = 'flex';
                 }
-                
-                
+
+
             });
 
             btnBack.addEventListener("click", () => {
@@ -744,7 +744,7 @@ export class SceneManager {
             const loadingScreen = document.getElementById('loading-screen');
         loadingScreen.classList.add('fade-out');
         loadingScreen.style.display = "none";
-   
+
             //id the divs
             const menu = document.getElementsByClassName("mainMenu");
             const logo = document.getElementsByClassName("logo");
@@ -901,7 +901,7 @@ export class SceneManager {
             this.removeFromScene()
             this.removeHUDItems();
             this.addToHUD();
-            
+
 
             this.setAudio();
 
@@ -909,9 +909,9 @@ export class SceneManager {
 
 
 
-            var x = keypad.object.position.x;
-            var y = keypad.object.position.y;
-            var z = keypad.object.position.z
+            var x = lightswitch.object.position.x;
+            var y = lightswitch.object.position.y;
+            var z = lightswitch.object.position.z
             var changedPos = false;
             if (keyboardManager.wasPressed("I")) {
                 y += 0.05;
@@ -946,7 +946,7 @@ export class SceneManager {
             }
 
             if (changedPos == true) {
-                keypad.object.position.set(x, y, z);
+                lightswitch.object.position.set(x, y, z);
                 console.log("( " + x.toString() + " , " + y.toString() + " , " + z.toString() + " )");
 
             }

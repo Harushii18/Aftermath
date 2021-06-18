@@ -120,7 +120,7 @@ export class Hammer extends THREE.Object3D {
                 {
                   //SHOW HAMMER IMAGE IN OVERLAY
                   console.log("pushing hammer");
-                  hudOverlayAddQueue.push("hammer");
+                  this.hudOverlayAddQueue.push("hammer");
                 //sceneRemoveQueue.push("key");
                 this.objectInteractionCounter += 1;
                 }

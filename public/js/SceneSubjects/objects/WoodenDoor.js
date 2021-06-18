@@ -7,9 +7,11 @@ import { subtitleManager } from '../../managers/SubtitleManager.js';
 
 export class WoodenDoor extends THREE.Object3D {
 
-  constructor() {
+  constructor(mainChar, loadingManager, hudOverlayRemoveQueue) {
     super();
-
+    this.mainChar = mainChar;
+    this.loadingManager = loadingManager;
+    this.hudOverlayRemoveQueue = hudOverlayRemoveQueue;
     this.objectInteractionCounter = 0;
     this.object = new THREE.Object3D();
     this.allowInteraction = 0;
@@ -24,7 +26,7 @@ export class WoodenDoor extends THREE.Object3D {
     this.showOpenedSubtitles = false;
 
     this.clock = new THREE.Clock();
-    const loader = new GLTFLoader(loadingManager);
+    const loader = new GLTFLoader(this.loadingManager);
     loader.setPath('../../models/');
     loader.setPath('../../models/3DObjects/');
     this.open = false; //open door animation
@@ -161,7 +163,7 @@ export class WoodenDoor extends THREE.Object3D {
           //hudOverlayAddQueue.push("studykey");
 
           if (this.objectInteractionCounter != 1) {
-            hudOverlayRemoveQueue.push("studykey");
+            this.hudOverlayRemoveQueue.push("studykey");
             this.objectInteractionCounter += 1;
           }
 
@@ -195,7 +197,7 @@ export class WoodenDoor extends THREE.Object3D {
 
 
   inVicinity(vicinityLimitZ, vicinityLimitX) {
-    let pos = mainChar.returnWorldPosition();
+    let pos = this.mainChar.returnWorldPosition();
 
 
     if (pos.x < this.object.position.x + vicinityLimitX && pos.x > this.object.position.x - vicinityLimitX) {

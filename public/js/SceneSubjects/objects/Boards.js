@@ -178,7 +178,7 @@ export class Boards extends THREE.Object3D {
 
 
           if (this.objectInteractionCounter != 1) {
-            hudOverlayRemoveQueue.push("crowbar");
+            this.hudOverlayRemoveQueue.push("crowbar");
             this.objectInteractionCounter += 1;
           }
 
