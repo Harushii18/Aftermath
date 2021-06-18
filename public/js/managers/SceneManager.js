@@ -34,6 +34,8 @@ import { Hammer } from '../SceneSubjects/objects/Hammer.js';//// removed cir. re
 import { Flashlight } from '../SceneSubjects/objects/Flashlight.js';// removed cir. ref
 import { cupboardDoorR } from '../SceneSubjects/objects/cupboardDoorR.js';// removed cir. ref
 import { Pin } from '../SceneSubjects/objects/Pin.js';//removed cir. ref
+//pre-loader
+import { HUD } from '../Overlay/HUD.js';//checked
 import { LetterI } from '../SceneSubjects/objects/LetterI.js';//checked
 import { Key } from '../SceneSubjects/objects/Key.js';//removed cir. ref
 import { Crowbar } from '../SceneSubjects/objects/Crowbar.js';//removed cir. ref
@@ -61,8 +63,6 @@ import { PointerLockControls } from '../../jsm/PointerLockControls.js';//checked
 import { OrbitControls } from '../../jsm/OrbitControls.js'; //checked
 import * as THREE from '../../jsm/three.module.js';
 import { characterControls } from './CharacterControls.js'; //checked
-//pre-loader
-import { HUD } from '../Overlay/HUD.js';//checked
 import { Woman } from '../SceneSubjects/characters/woman.js';//removed cir. ref
 import { WomanHitBox } from '../SceneSubjects/characters/womanHitBox.js';
 
@@ -104,16 +104,9 @@ export var cupBoardDoorR = new cupboardDoorR(mainChar, loadingManager, pin, hudO
 export var hammer = new Hammer(mainChar, cupBoardDoorR, hudOverlayAddQueue );
 export var flashlight = new Flashlight(mainChar,loadingManager,hudOverlayAddQueue);
 
-
-export var crowbar = new Crowbar(loadingManager, mainChar,  hudOverlayAddQueue);
-export var loungeBoards = new Boards(loadingManager, mainChar, hudOverlayRemoveQueue, studydoor, crowbar);
-loungeBoards.setBoardType("lounge");
-export var studyBoards = new Boards(loadingManager, mainChar, hudOverlayRemoveQueue, studydoor, crowbar);
-studyBoards.setBoardType("study");
 export var microwave = new Microwave(loadingManager, mainChar, studydoor, hudOverlayAddQueue);
 
 
-export var lightswitch = new LightSwitch(loadingManager, mainChar, loungeBoards, studyBoards, microwave );
 
 var bookshelf = new Bookshelf(mainChar);
 
@@ -130,6 +123,15 @@ var house = new House(loadingManager);
 //lights
 var generalLights = new GeneralLights();
 var sun = new THREE.PointLight(0xffffff, 1);
+
+var crowbar = new Crowbar(loadingManager, mainChar,  hudOverlayAddQueue);
+export var loungeBoards = new Boards(loadingManager, mainChar, hudOverlayRemoveQueue, studydoor, crowbar);
+loungeBoards.setBoardType("lounge");
+export var studyBoards = new Boards(loadingManager, mainChar, hudOverlayRemoveQueue, studydoor, crowbar);
+studyBoards.setBoardType("study");
+
+export var lightswitch = new LightSwitch(loadingManager, mainChar, loungeBoards, studyBoards, microwave );
+
 
 
 //ceiling lights
@@ -367,7 +369,7 @@ export class SceneManager {
 
     addSkybox() {
         //get pictures per cube face
-        var skybox_path = '../skybox/Space/';
+        var skybox_path = './skybox/Space/';
         var urls = [
             skybox_path + 'space_right.png',//posx
             skybox_path + 'space_left.png',//negx

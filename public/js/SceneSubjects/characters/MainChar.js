@@ -290,10 +290,10 @@ export class MainChar extends THREE.Object3D {
 	//==========================MOVEMENT ANIMATIONS=================================================
 
 	loadAllAnimations() {
-		var runPath = '../models/characters/Animations/Run/';
-		var walkPath = '../models/characters/Animations/Walk/';
+		var runPath = './models/characters/Animations/Run/';
+		var walkPath = './models/characters/Animations/Walk/';
 		//idle
-		this.loadAnim('idle', '../models/characters/Animations/', 'Idle.fbx');
+		this.loadAnim('idle', './models/characters/Animations/', 'Idle.fbx');
 		//RunBack
 		this.loadAnim('runBack', runPath, 'RunBack.fbx');
 		//RunBackLeft
@@ -410,7 +410,7 @@ export class MainChar extends THREE.Object3D {
 	loadModel() {
 		//load the main character model with an FBX Loader
 		const loader = new FBXLoader(this.loadingManager);
-		loader.setPath('../models/characters/');
+		loader.setPath('./models/characters/');
 		loader.load('Douglas.fbx', (fbx) => {
 			//scale the model down
 			fbx.scale.setScalar(0.0115);
@@ -423,7 +423,7 @@ export class MainChar extends THREE.Object3D {
 
 			//animate character
 			const anim = new FBXLoader(this.loadingManager);
-			anim.setPath('../models/characters/Animations/');
+			anim.setPath('./models/characters/Animations/');
 			anim.load('Idle.fbx', (anim) => {
 				this.walkMixer = new THREE.AnimationMixer(fbx);
 				//set the initial animation for our main character to be idle (as he is not moving)

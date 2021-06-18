@@ -34,7 +34,7 @@ export class Flashlight extends THREE.Object3D {
 
 
         const loader = new GLTFLoader(this.loadingManager);
-        loader.setPath('../../models/3DObjects/');
+        loader.setPath('./models/3DObjects/');
 
         const gltf = loader.load('flashlight.glb', (gltf) => {
         //   gltf.scene.traverse(c => {
