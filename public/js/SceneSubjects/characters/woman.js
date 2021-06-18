@@ -13,11 +13,15 @@ export class Woman extends THREE.Object3D {
         this.womanVisible = false;
         this.object.visible = false;
         this.startSubs = false;
+        this.notPlayForever = false;
+        this.notPlayForeverTime = 0;
+        this.stopNow = false;
+        this.stopNow2 = false;
 
-      //  this.womanState = "entering";
+        //  this.womanState = "entering";
 
         this.clock = new THREE.Clock();
-        this.state='idle';
+        this.state = 'idle';
 
 
         //scale to correct size
@@ -57,14 +61,18 @@ export class Woman extends THREE.Object3D {
 
                 if (!this.initialInteraction) {
                     if (this.checkCharacterVicinity()) {
-                        this.startSubs = true;
-                        this.playAnim(this.anim['injuredWalk'], 'injuredWalk');
+                        if (!this.notPlayForever) {
 
-
+                            this.notPlayForever = true;
+                            this.startSubs = true;
+                            this.playAnim(this.anim['injuredWalk'], 'injuredWalk');
+                        } else {
+                            this.notPlayForeverTime += 1 * this.delta;
+                        }
                     }
                     if (this.startSubs) {
-                        if (this.object.position.z<mainChar.returnWorldPosition().z){
-                            this.object.position.z+=(this.delta*5)
+                        if (this.object.position.z < mainChar.returnWorldPosition().z) {
+                            this.object.position.z += (this.delta * 5)
                         }
                         if (this.subtitleState.t2 == false) {
                             this.subtitle1();
@@ -77,16 +85,43 @@ export class Woman extends THREE.Object3D {
                         }
 
                     }
+                    if (notPlayForeverTime > 2 && (this.stopNow == false)) {
+                        if (!this.stopNow) {
+                            this.stopNow = true;
+                            //meaning it was shown
+                            this.subtitleState.t1 = true;
+                            //hide woman
+                            this.object.visible = false;
+
+                            audioPauseQueue.push("ghost_wail");
+                            //character returns to original walking speed
+                            characterControls.setOriginalSpeed();
+
+                            //hide stage complete
+                            const stageComplete = document.getElementById('stageComplete');
+                            stageComplete.style.display = 'none';
+                        }
+                    }
+                    if (notPlayForeverTime > 7 && (this.stopNow2 == false)) {
+                        if (!this.stopNow2) {
+                            this.stopNow2=false;
+                            this.subtitleState.t2 = true;
+                            subtitleManager.hideSubtitles();
+                            //meaning it was shown
+                            this.startSubs = false;
+                            this.initialInteraction = true;
+                        }
+                    }
 
 
                 }
-                else{
-                  ///Allow main character to use the flashlight to get rid of the woman
-                  mainChar.setAllowAttack(true);
+                else {
+                    ///Allow main character to use the flashlight to get rid of the woman
+                    mainChar.setAllowAttack(true);
                 }
 
 
-                  //=====================================
+                //=====================================
 
 
             }
@@ -98,8 +133,8 @@ export class Woman extends THREE.Object3D {
     }
 
 
-    despawnWoman(){
-      this.object.position.set(0,100,0);
+    despawnWoman() {
+        this.object.position.set(0, 100, 0);
     }
 
     //ANIMATIONS===================================
@@ -133,15 +168,15 @@ export class Woman extends THREE.Object3D {
     }
 
     loadAnim(state, path, file) {
-		//load the animation
-		const anime = new FBXLoader(loadingManager);
-		anime.setPath(path);
-		anime.load(file, (anime) => {
+        //load the animation
+        const anime = new FBXLoader(loadingManager);
+        anime.setPath(path);
+        anime.load(file, (anime) => {
 
-			//store animation in dictionary for access later
-			this.anim[state] = anime;
-		});
-	}
+            //store animation in dictionary for access later
+            this.anim[state] = anime;
+        });
+    }
 
 
     playAnim(animation, state) {
@@ -188,7 +223,7 @@ export class Woman extends THREE.Object3D {
                 //set the initial animation for our main character to be idle (as he is not moving)
                 this.animation = this.walkMixer.clipAction(anim.animations[0]);
                 this.anim['idle'] = this.animation;
-                this.currAction=this.animation;
+                this.currAction = this.animation;
                 this.animation.reset();
                 this.animation.play();
 
@@ -292,8 +327,8 @@ export class Woman extends THREE.Object3D {
                 //this.object.visible = false;
 
                 audioPauseQueue.push("ghost_wail");
-                 //character returns to original walking speed
-                 characterControls.setOriginalSpeed();
+                //character returns to original walking speed
+                characterControls.setOriginalSpeed();
 
                 //hide stage complete
                 const stageComplete = document.getElementById('stageComplete');
