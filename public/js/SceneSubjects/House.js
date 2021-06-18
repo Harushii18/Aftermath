@@ -18,7 +18,7 @@ export class House extends THREE.Object3D {
     //load house model from blender file
     const loader = new GLTFLoader(loadingManager);
     loader.setPath('../models/');
-    const gltf = loader.load('emptyhouse.glb', (gltf) => {
+    const gltf = loader.load('newhouse.glb', (gltf) => {
       this.loadCount = 1;
       console.log("load house");
       // gltf.scene.traverse(c => {
