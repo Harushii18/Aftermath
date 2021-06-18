@@ -37,10 +37,10 @@ export class Keypad extends THREE.Object3D {
 
         var gltf = loader.load('keypad.glb', (gltf) => {
             //console.log("loaded drawer");
-            gltf.scene.traverse(c => {
-                c.castShadow = true;
+            // gltf.scene.traverse(c => {
+            //     c.castShadow = true;
 
-            });
+            // });
 
 
 

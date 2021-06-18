@@ -36,10 +36,10 @@ export class Microwave extends THREE.Object3D {
 
     var gltf = loader.load('microwave.glb', (gltf) => {
       //console.log("loaded cupboard door");
-      gltf.scene.traverse(c => {
-        c.castShadow = true;
+      // gltf.scene.traverse(c => {
+      //   c.castShadow = true;
 
-      });
+      // });
 
        this.object.scale.x = 1.2;
        this.object.scale.y = 1.2;
@@ -152,7 +152,7 @@ export class Microwave extends THREE.Object3D {
           //SHOW KEY IMAGE IN OVERLAY
           hudOverlayAddQueue.push("studykey");
 
-          studydoor.updateAllowInteraction();
+          studydoor.setHasKey();
 
 
           if (this.objectInteractionCounter != 1) {

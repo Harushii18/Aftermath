@@ -9,7 +9,7 @@ export class House extends THREE.Object3D {
     super();
     this.object = new THREE.Object3D();
     //this.object.castShadow = false;
-    this.object.receiveShadow = true;
+    //this.object.receiveShadow = true;
 
     this.loadCount = 0;
     loadedHouse = false;
@@ -21,9 +21,9 @@ export class House extends THREE.Object3D {
     const gltf = loader.load('emptyhouse.glb', (gltf) => {
       this.loadCount = 1;
       console.log("load house");
-      gltf.scene.traverse(c => {
-        c.castShadow = true;
-      });
+      // gltf.scene.traverse(c => {
+      //   c.castShadow = true;
+      // });
 
       //the house has loaded
       loadedHouse = true;

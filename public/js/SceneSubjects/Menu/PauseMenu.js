@@ -19,13 +19,13 @@ export class PauseMenu extends Overlay {
     this.light = new THREE.DirectionalLight(0xFFFFFF, 1.0);
 
     this.light.target.position.set(0, 0, -20);
-    this.light.castShadow = true;
+    //this.light.castShadow = true;
     this.light.position.set(-20, 50, 10);
 
     this.light2 = new THREE.DirectionalLight(0xFFFFFF, 1.0);
 
     this.light2.target.position.set(0, 0, 20);
-    this.light2.castShadow = true;
+    //this.light2.castShadow = true;
     this.light2.position.set(20, 50, 10);
 
   
@@ -124,9 +124,9 @@ export class PauseMenu extends Overlay {
   
     var geometry = new THREE.BoxGeometry( width, height, 1 );
     var mesh = new THREE.Mesh( geometry, material );
-    mesh.castShadow = true;
-    mesh.receiveShadow = true;
-    obj.lightShadowMesh = mesh
+    // mesh.castShadow = true;
+    // mesh.receiveShadow = true;
+    // obj.lightShadowMesh = mesh
     obj.add( mesh );
   
     return obj

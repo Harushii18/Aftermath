@@ -42,16 +42,16 @@ export class Shower extends THREE.Object3D {
 
         var gltf = loader.load('shower.glb', (gltf) => {
             //console.log("loaded drawer");
-            gltf.scene.traverse(c => {
-                c.castShadow = true;
+            // gltf.scene.traverse(c => {
+            //     c.castShadow = true;
 
-            });
+            // });
 
 
 
             var obj_gltf = new THREE.Object3D();
 
-            
+
 
             obj_gltf.add(gltf.scene);
             this.object.add(obj_gltf);
@@ -82,9 +82,9 @@ export class Shower extends THREE.Object3D {
         this.allowInteraction = value;
     }
 
-   
+
     update(time) {
-       
+
 
     }
 
@@ -99,4 +99,9 @@ export class Shower extends THREE.Object3D {
         this.object.rotateOnAxis(new THREE.Vector3(0, 1, 0), -Math.PI/2);
 
     }
+
+
+      return3DObject() {
+        return this.object;
+      }
 }

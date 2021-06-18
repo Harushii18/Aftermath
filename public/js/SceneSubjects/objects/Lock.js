@@ -9,7 +9,7 @@ export class Lock extends THREE.Object3D {
     super();
     this.object = new THREE.Object3D();
     //this.object.castShadow = false;
-    this.object.receiveShadow = true;
+    //this.object.receiveShadow = true;
     //load lock from blender file
 
     const loader = new GLTFLoader(loadingManager);
@@ -17,9 +17,9 @@ export class Lock extends THREE.Object3D {
 
     const gltf = loader.load('lock.glb', (gltf) => {
       //console.log("loaded lock");
-      gltf.scene.traverse(c => {
-        c.castShadow = true;
-      });
+      // gltf.scene.traverse(c => {
+      //   c.castShadow = true;
+      // });
 
   //===============================================
       //CHANGE SCALE + POSITION IT TO RIGHT PLACE!!

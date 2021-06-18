@@ -26,10 +26,10 @@ export class Key extends THREE.Object3D {
 
         var gltf = loader.load('key.glb', (gltf) => {
           //console.log("loaded key");
-            gltf.scene.traverse(c => {
-                c.castShadow = true;
+            // gltf.scene.traverse(c => {
+            //     c.castShadow = true;
 
-            });
+            // });
 
 
          //   this.object.position.set(20.15, 7.6, 37 );//Perfect

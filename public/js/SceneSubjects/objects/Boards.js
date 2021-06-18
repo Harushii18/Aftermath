@@ -171,7 +171,7 @@ export class Boards extends THREE.Object3D {
           this.showOpenedSubtitles = true;
           if (this.boardType=="study"){
             console.log(this.boardType);
-            studydoor.updateAllowInteraction();
+            studydoor.setBoardsRemoved();
           }
           else{
             console.log(this.boardType);

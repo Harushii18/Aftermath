@@ -85,7 +85,7 @@ var house = new House();
 
 //lights
 var generalLights = new GeneralLights();
-var sun = new THREE.PointLight(0xffffff, 3);
+var sun = new THREE.PointLight(0xffffff, 1);
 
 
 //ceiling lights
@@ -181,6 +181,12 @@ const collisionManager = new CollisionsManager();
 //collisionManager.addObject(cupBoardDoorR);
 //collisionManager.addObject(testBlock);
 collisionManager.addObject(testdoor);
+collisionManager.addObject(studyBoards);
+collisionManager.addObject(loungeBoards);
+collisionManager.addObject(bookshelf);
+collisionManager.addObject(shower);
+collisionManager.addObject(house);
+
 
 
 
@@ -213,9 +219,9 @@ export class SceneManager {
 
 
 
-        this.game_state = this.GAME_RUN;//default Game_LOGO
+        this.game_state = this.GAME_LOGO;//default Game_LOGO
         //intro paragraph state
-        this.intro_para = 4;//1
+        this.intro_para = 1;//1
 
 
         //======SCENE BASICS=====================================================================
@@ -230,6 +236,7 @@ export class SceneManager {
 
         //the essentials for rendering a scene
         this.scene = this.buildScene();
+        sun.position.set(20, 20, 50);
         this.scene.add(sun);
 
         //create our skybox
@@ -283,7 +290,7 @@ export class SceneManager {
         this.managers = this.createManagers();
 
         //load things to scene
-        this.loadToScene(this.managers[0].lights);
+        //this.loadToScene(this.managers[0].lights);
         this.loadToScene(this.managers[1].entities);
 
 
@@ -388,9 +395,9 @@ export class SceneManager {
             antialias: true, alpha: true
         });
         renderer.setClearColor(0xEEEEEE, 1.0);
-        renderer.shadowMap.enabled = true;
+        // renderer.shadowMap.enabled = true;
         //renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-        renderer.shadowMapSoft = true;
+        // renderer.shadowMapSoft = true;
         renderer.setPixelRatio(window.devicePixelRatio);
         renderer.setSize(window.innerWidth / 2, window.innerHeight / 2, false);
 
@@ -627,6 +634,8 @@ export class SceneManager {
             //id the start button
             const btnStart = document.getElementById("start");
             const btnSkipIntro = document.getElementById("skipIntro");
+            const btnShowCredits = document.getElementById("btnCredits");
+            const btnBack = document.getElementById('backfromCredits');
 
 
             //start game pressed, remove start screen items
@@ -651,8 +660,53 @@ export class SceneManager {
                 this.game_state = this.GAME_RUN;
             });
 
+            btnShowCredits.addEventListener("click", () => {
+                
+                const menu = document.getElementsByClassName("menu");
+                for (let i = 0; i < menu.length; i++) {
+                    menu[i].style.display = 'none';
+                }
+
+                const title = document.getElementsByClassName("title");
+                for (let i = 0; i < title.length; i++) {
+                    title[i].style.display = 'none';
+                }
+
+                document.getElementById('creditsParas').start();
+
+                const credits = document.getElementsByClassName("credits");
+                for (let i = 0; i < credits.length; i++){
+                    credits[i].style.display = 'flex';
+                }
+                
+                
+            });
+
+            btnBack.addEventListener("click", () => {
+                const menu = document.getElementsByClassName("menu");
+                for (let i = 0; i < menu.length; i++) {
+                    menu[i].style.display = 'flex';
+                }
+
+                const title = document.getElementsByClassName("title");
+                for (let i = 0; i < title.length; i++) {
+                    title[i].style.display = 'flex';
+                }
+
+                const credits = document.getElementsByClassName("credits");
+                for (let i = 0; i < credits.length; i++){
+                    credits[i].style.display = 'none';
+                }
+                document.getElementById('creditsParas').stop();
+            });
+
 
         } else if (this.game_state == this.GAME_LOGO) {
+
+            const loadingScreen = document.getElementById('loading-screen');
+        loadingScreen.classList.add('fade-out');
+        loadingScreen.style.display = "none";
+   
             //id the divs
             const menu = document.getElementsByClassName("mainMenu");
             const logo = document.getElementsByClassName("logo");
@@ -691,91 +745,112 @@ export class SceneManager {
             const intro4 = document.getElementById("para4");
 
 
-            //id the buttons
-            //  const btnNext1 = document.getElementById("next1");
-            //  const btnNext2 = document.getElementById("next2");
+            // id the buttons
+             const btnNext1 = document.getElementById("next1");
+             const btnNext2 = document.getElementById("next2");
+             const btnNext3 = document.getElementById("next3");
             const btnContinue = document.getElementById("continue");
 
-            intro1.style.display = 'flex'; //CHANGE TO FLEX
-            intro2.style.display = 'none';
-            intro3.style.display = 'none';
-            intro4.style.display = 'none';
+            // intro1.style.display = 'flex'; //CHANGE TO FLEX
+            // intro2.style.display = 'none';
+            // intro3.style.display = 'none';
+            // intro4.style.display = 'none';
 
 
-            //UNCOMMENT=======================
-            setTimeout(() => {
-                intro1.style.display = 'none';
-                intro2.style.display = 'flex';
+            // //UNCOMMENT=======================
+            // setTimeout(() => {
+            //     intro1.style.display = 'none';
+            //     intro2.style.display = 'flex';
+            //     intro3.style.display = 'none';
+            //     intro4.style.display = 'none';
+            // }, 4000);
+
+            // setTimeout(() => {
+            //     intro1.style.display = 'none';
+            //     intro2.style.display = 'none';
+            //     intro3.style.display = 'flex';
+            //     intro4.style.display = 'none';
+            // }, 16000);
+
+            // setTimeout(() => {
+            //     intro1.style.display = 'none';
+            //     intro2.style.display = 'none';
+            //     intro3.style.display = 'none';
+            //     intro4.style.display = 'flex';
+            // }, 30000);
+            //===========================
+
+            //  intro4.style.display = 'flex'; //COMMENT OUT
+            // btnContinue.addEventListener("click", () => {
+
+            //     this.intro_para = 4;
+            //     intro1.style.display = 'none';
+            //     intro2.style.display = 'none';
+            //     intro3.style.display = 'none';
+            //     intro4.style.display = 'none';
+
+            //     const menu = document.getElementsByClassName("mainMenu");
+            //     for (let i = 0; i < menu.length; i++) {
+            //         menu[i].style.display = 'none';
+            //     }
+            //     //change state to game run
+            //     this.game_state = this.GAME_RUN;
+
+            //     this.managers[2].entities["background"].pause();
+            // });
+
+             if(this.intro_para == 1){
+                intro1.style.display = 'flex';
+                intro2.style.display = 'none';
                 intro3.style.display = 'none';
                 intro4.style.display = 'none';
-            }, 100);
 
-            setTimeout(() => {
+                btnNext1.addEventListener("click", () => {
+                    this.intro_para = 2;
+                });
+             }
+
+             else if(this.intro_para == 2){
+                 intro1.style.display = 'none';
+                 intro2.style.display = 'flex';
+                 intro3.style.display = 'none';
+                 intro4.style.display = 'none';
+                 btnNext2.addEventListener("click", () => {
+                     this.intro_para = 3;
+                 });
+             }
+
+             else if(this.intro_para == 3){
                 intro1.style.display = 'none';
                 intro2.style.display = 'none';
                 intro3.style.display = 'flex';
                 intro4.style.display = 'none';
-            }, 100);
+                btnNext3.addEventListener("click", () => {
+                    this.intro_para = 4;
+                });
+            }
 
-            setTimeout(() => {
-                intro1.style.display = 'none';
-                intro2.style.display = 'none';
-                intro3.style.display = 'none';
-                intro4.style.display = 'flex';
-            }, 100);
-            //===========================
-
-            //  intro4.style.display = 'flex'; //COMMENT OUT
-            btnContinue.addEventListener("click", () => {
-
-                this.intro_para = 4;
-                intro1.style.display = 'none';
-                intro2.style.display = 'none';
-                intro3.style.display = 'none';
-                intro4.style.display = 'none';
-
-                const menu = document.getElementsByClassName("mainMenu");
-                for (let i = 0; i < menu.length; i++) {
-                    menu[i].style.display = 'none';
-                }
-                //change state to game run
-                this.game_state = this.GAME_RUN;
-
-                this.managers[2].entities["background"].pause();
-            });
-
-            //  if(this.intro_para == 1){
-            //  intro1.style.display = 'flex';
-            //  intro2.style.display = 'none';
-            //  intro3.style.display = 'none';
-
-            //  btnNext1.addEventListener("click", () => {
-            //     this.intro_para = 2;
-            //  });
-            //  }
-
-            //  else if(this.intro_para == 2){
-            //      intro1.style.display = 'none';
-            //      intro2.style.display = 'flex';
-            //      intro3.style.display = 'none';
-            //      btnNext2.addEventListener("click", () => {
-            //          this.intro_para = 3;
-            //      });
-            //  }
-
-            //  else if(this.intro_para == 3){
-            //      intro1.style.display = 'none';
-            //      intro2.style.display = 'none';
-            //      intro3.style.display = 'flex';
-            //      btnContinue.addEventListener("click", () => {
-            //          this.intro_para = 4;
-            //          intro1.style.display = 'none';
-            //          intro2.style.display = 'none';
-            //          intro3.style.display = 'none';
-            //          //change state to game run
-            //          this.game_state = this.GAME_RUN;
-            //      });
-            //  }
+             else if(this.intro_para == 4){
+                 intro1.style.display = 'none';
+                 intro2.style.display = 'none';
+                 intro3.style.display = 'none';
+                 intro4.style.display = 'flex';
+                 btnContinue.addEventListener("click", () => {
+                     this.intro_para = 4;
+                     intro1.style.display = 'none';
+                     intro2.style.display = 'none';
+                     intro3.style.display = 'none';
+                     intro4.style.display = 'none';
+                     const menu = document.getElementsByClassName("mainMenu");
+                     for (let i = 0; i < menu.length; i++) {
+                         menu[i].style.display = 'none';
+                     }
+                     this.intro_para = 1;
+                     this.managers[2].entities["background"].pause();
+                     //change state to game run
+                     this.game_state = this.GAME_RUN;
+                 });
+             }
 
         } else if (this.game_state == this.GAME_RUN) {
 
@@ -952,6 +1027,12 @@ export class SceneManager {
                     menu[i].style.display = 'none';
                 }
                 this.game_state = this.GAME_MENU;
+
+
+                var instructions = document.getElementById('gameInstructions');
+                instructions.style.display = 'none';
+                var subtitles = document.getElementById('subtitle');
+                subtitles.style.display = 'none';
             });
 
 

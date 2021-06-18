@@ -40,10 +40,10 @@ export class LightSwitch extends THREE.Object3D {
 
         var gltf = loader.load('switch.glb', (gltf) => {
             //console.log("loaded drawer");
-            gltf.scene.traverse(c => {
-                c.castShadow = true;
+            // gltf.scene.traverse(c => {
+            //     c.castShadow = true;
 
-            });
+            // });
 
             this.object.add(gltf.scene);
         });

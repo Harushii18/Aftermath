@@ -91,7 +91,8 @@ export class Woman extends THREE.Object3D {
                 }
                 else{
                   if(this.playerKilledCount<=3){
-                    //console.log(this.spawnCoolDown);
+
+                    console.log(this.spawnCoolDown);
                   ///Allow main character to use the flashlight to get rid of the woman
                   mainChar.setAllowAttack(true);
                   if(this.spawnCoolDown<=0){
@@ -100,6 +101,8 @@ export class Woman extends THREE.Object3D {
                     //Woman must respawn
                     this.object.visible = true;
                     var charPos = mainChar.returnWorldPosition();
+                    var charDirection = mainChar.returnObjectDirection();
+                  //  this.object.position.set(this.object.position.x + charDirection.x, this.object.position.y, this.object.position.z + charDirection.z)
 
                     if(this.object.position.x < charPos.x){
                       this.object.position.x += (this.delta*4);
@@ -217,13 +220,14 @@ export class Woman extends THREE.Object3D {
         loader.load('jill.fbx', (fbx) => {
             //scale the model down
             fbx.scale.setScalar(0.0115);
-            fbx.traverse(c => {
-                c.castShadow = true;
-                c.receiveShadow = true;
-                this.currAction = this.idle;
+            // fbx.traverse(c => {
+            //     // c.castShadow = true;
+            //     // c.receiveShadow = true;
+                
 
-            });
+            // });
 
+            this.currAction = this.idle;
 
             //animate character
             const anim = new FBXLoader(loadingManager);
