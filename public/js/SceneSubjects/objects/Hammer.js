@@ -118,6 +118,7 @@ export class Hammer extends THREE.Object3D {
                 //add that he found the key
                 if (this.objectInteractionCounter != 1)
                 {
+                    this.cupBoardDoorR.setAllowInteraction(true);
                   //SHOW HAMMER IMAGE IN OVERLAY
                   console.log("pushing hammer");
                   this.hudOverlayAddQueue.push("hammer");
@@ -171,7 +172,7 @@ export class Hammer extends THREE.Object3D {
                     //INTERACTION WILL SAY MOVE PAINTING
                     gameOverlay.showOverlay();
                     this.count += 1;
-                    this.cupBoardDoorR.setAllowInteraction(true);
+                  
                     //HIDE HAMMER IMAGE IN OVERLAY
 
                     }
