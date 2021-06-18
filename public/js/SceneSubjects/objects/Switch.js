@@ -156,10 +156,7 @@ export class LightSwitch extends THREE.Object3D {
                 gameOverlay.changeText('[E] TURN ON POWER');
                 loungeBoards.setAllowInteraction(true);
                 studyBoards.setAllowInteraction(true);
-                
 
-                //LATER WE CAN ADD A CONDITION IF HE LOOKED AT IT, HE'LL NOTICE IT CAN MOVE, AND THE
-                //INTERACTION WILL SAY MOVE PAINTING
                 gameOverlay.showOverlay();
                 this.count += 1;
                 //cupBoardDoorR.setAllowInteraction(true);

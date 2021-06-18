@@ -186,18 +186,6 @@ export class Door extends THREE.Object3D {
                     this.open = true;
                     //checks how long the animation was playing for
                     this.animationCounter = 0;
-
-                        //console.log("door allow interaction true. now set to false");
-
-                    /*                        WhatsApp
-                                                                             
-                    //Suraksha: HIDE KEY IMAGE IN OVERLAY!!! KAMERON!!!         (double blue tick)
-                    //Kameron: THATSSSS MA NAME!!!                              (double blue tick)
-                    //Suraksha: THANK YOU!!!!!!                                 (single tick)
-
-                    */
-
-
                     this.allowInteraction = false;
                     this.objectInteractionCounter += 1;
 
