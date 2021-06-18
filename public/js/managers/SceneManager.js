@@ -185,6 +185,7 @@ collisionManager.addObject(studyBoards);
 collisionManager.addObject(loungeBoards);
 collisionManager.addObject(bookshelf);
 collisionManager.addObject(shower);
+collisionManager.addObject(house);
 
 
 
