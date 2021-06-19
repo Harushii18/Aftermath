@@ -124,7 +124,7 @@ var house = new House(loadingManager);
 
 //lights
 var generalLights = new GeneralLights();
-var sun = new THREE.PointLight(0xffffff, 1);
+var sun = new THREE.PointLight(0xff0000, 1);
 
 var crowbar = new Crowbar(loadingManager, mainChar,  hudOverlayAddQueue);
 export var loungeBoards = new Boards(loadingManager, mainChar, hudOverlayRemoveQueue, studydoor, crowbar);
@@ -211,8 +211,8 @@ export var loaded;
 //Add collidable objects here
 //collisionManager.addObject(house);
 
-//collisionManager.addObject(cupBoardDoorR);
-//collisionManager.addObject(testBlock);
+// collisionManager.addObject(cupBoardDoorR);
+// collisionManager.addObject(testBlock);
 collisionManager.addObject(testdoor);
 collisionManager.addObject(studyBoards);
 collisionManager.addObject(loungeBoards);
