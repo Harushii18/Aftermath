@@ -4,7 +4,6 @@ import { FBXLoader } from '../../../jsm/FBXLoader/FBXLoader.js';
 import { subtitleManager } from '../../managers/SubtitleManager.js';
 import { gameInstructions } from '../../Overlay/GameInstructions.js';
 import { loadedHouse } from '../House.js';
-//import { loadingManager } from '../../managers/SceneManager.js';
 
 export class MainChar extends THREE.Object3D {
 
@@ -24,15 +23,15 @@ export class MainChar extends THREE.Object3D {
 		this.clock = new THREE.Clock();
 		this.object.rotateOnAxis(new THREE.Vector3(0, 1, 0), -Math.PI);
 		// //spawn outside house
-		// this.object.position.set(0, 1, -50);
+		 this.object.position.set(0, 1, -50);
+		//start from scratch-> char at original starting game position
 
-//SET TO TRUE FOR NOW
+		//this.object.position.set(0, 1, 50);
+
+		//SET TO TRUE FOR NOW
 		this.allowAttack = false;
 		this.hasFlashlight = false;
 
-		//start from scratch-> char at original starting game position
-
-		this.object.position.set(0, 1, 50);
 
 		this.object.visible = false; //Uncomment this so you don't see the player in first person view
 		this.initialiseSubtitleContents();
@@ -94,10 +93,10 @@ export class MainChar extends THREE.Object3D {
 				let rightDirection = new THREE.Vector3(-dir.x, dir.y, dir.z);
 				let leftDirection = new THREE.Vector3(dir.x, dir.y, dir.z);
 
-				let topRightDirection = new THREE.Vector3(dir.x*0.5, dir.y, dir.z*0.5);
-				let topLeftDirection = new THREE.Vector3(dir.x*0.5, dir.y, -dir.z*0.5);
-				let bottomRightDirection = new THREE.Vector3(-dir.x*0.5, dir.y, dir.z*0.5);
-				let bottomLeftDirection = new THREE.Vector3(dir.x*0.5, dir.y, dir.z*0.5);
+				let topRightDirection = new THREE.Vector3(dir.x * 0.5, dir.y, dir.z * 0.5);
+				let topLeftDirection = new THREE.Vector3(dir.x * 0.5, dir.y, -dir.z * 0.5);
+				let bottomRightDirection = new THREE.Vector3(-dir.x * 0.5, dir.y, dir.z * 0.5);
+				let bottomLeftDirection = new THREE.Vector3(dir.x * 0.5, dir.y, dir.z * 0.5);
 
 
 				//Raycasting to detect collisions with house object
@@ -187,8 +186,7 @@ export class MainChar extends THREE.Object3D {
 		};
 	}
 
-	setLoaded(loaded)
-	{
+	setLoaded(loaded) {
 		this.loaded = loaded;
 	}
 	addSubtitles() {
@@ -437,11 +435,11 @@ export class MainChar extends THREE.Object3D {
 		});
 	}
 
-	setAllowAttack(value){
+	setAllowAttack(value) {
 		this.allowAttack = value;
 	}
 
-	setHasFlashlight(value){
+	setHasFlashlight(value) {
 		this.hasFlashlight = value;
 	}
 
@@ -466,31 +464,31 @@ export class MainChar extends THREE.Object3D {
 		//moves character around
 		this.moveDistance = characterControls.getSpeed() * this.delta;
 
-		if(!blockedTR){
+		if (!blockedTR) {
 			//If trying to move forward
-			if ((characterControls.moveForward() && characterControls.moveRight()) || (characterControls.moveRight() && characterControls.moveForward()) ) {
+			if ((characterControls.moveForward() && characterControls.moveRight()) || (characterControls.moveRight() && characterControls.moveForward())) {
 				this.object.translateZ(this.moveDistance);
 				this.object.translateX(-this.moveDistance);
 			}
 		}
 
-		if(!blockedTL){
-			if (characterControls.moveForward() && characterControls.moveLeft() || (characterControls.moveLeft() && characterControls.moveForward()) ) {
+		if (!blockedTL) {
+			if (characterControls.moveForward() && characterControls.moveLeft() || (characterControls.moveLeft() && characterControls.moveForward())) {
 				this.object.translateZ(this.moveDistance);
 				this.object.translateX(this.moveDistance);
 			}
 		}
 
-		if(!blockedBR){
-			if (characterControls.moveBackward() && characterControls.moveRight() || (characterControls.moveRight() && characterControls.moveBackward()) ) {
+		if (!blockedBR) {
+			if (characterControls.moveBackward() && characterControls.moveRight() || (characterControls.moveRight() && characterControls.moveBackward())) {
 				this.object.translateZ(-this.moveDistance);
 				this.object.translateX(-this.moveDistance);
 			}
 
 		}
 
-		if(!blockedBL){
-			if (characterControls.moveBackward() && characterControls.moveLeft() || (characterControls.moveLeft() && characterControls.moveBackward()) ) {
+		if (!blockedBL) {
+			if (characterControls.moveBackward() && characterControls.moveLeft() || (characterControls.moveLeft() && characterControls.moveBackward())) {
 				this.object.translateZ(-this.moveDistance);
 				this.object.translateX(this.moveDistance);
 			}

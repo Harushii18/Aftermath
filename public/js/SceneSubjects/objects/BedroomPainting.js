@@ -1,7 +1,6 @@
 import * as THREE from '../../../jsm/three.module.js';
 import { GLTFLoader } from '../../../jsm/GLTFLoader.js';
 import { keyboardManager } from '../../managers/KeyboardManager.js';//checked
-//import { loadingManager, mainChar } from '../../managers/SceneManager.js'; // removed cir. ref.
 import { gameOverlay } from '../../Overlay/GameOverlay.js';//checked
 
 export class BedroomPainting extends THREE.Object3D {

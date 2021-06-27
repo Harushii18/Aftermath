@@ -1,12 +1,7 @@
 import * as THREE from '../../../jsm/three.module.js';
 import { GLTFLoader } from '../../../jsm/GLTFLoader.js';
 import { keyboardManager } from '../../managers/KeyboardManager.js';
-
-
-//import { loadingManager, mainChar, testdoor, studydoor } from '../../managers/SceneManager.js';
-
 import { gameOverlay } from '../../Overlay/GameOverlay.js';
-//import { bedroomDrawer } from '../../managers/SceneManager.js';
 
 export class Key extends THREE.Object3D {
 

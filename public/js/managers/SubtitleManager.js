@@ -59,6 +59,7 @@ class SubtitleManager extends THREE.Object3D {
 
     hideSubtitles(){
             //console.log("Hiding Subtitles");
+            this.subtitles.innerHTML = "";
             this.subtitles.style.display = 'none';
     }
 

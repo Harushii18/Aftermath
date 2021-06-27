@@ -1,13 +1,12 @@
 import * as THREE from '../../../jsm/three.module.js';
 import { GLTFLoader } from '../../../jsm/GLTFLoader.js';
 import { keyboardManager } from '../../managers/KeyboardManager.js'; //checked
-//import { loadingManager, mainChar, pin, hudOverlayRemoveQueue, sceneRemoveQueue } from '../../managers/SceneManager.js';
 import { gameOverlay } from '../../Overlay/GameOverlay.js';//checked
 import { subtitleManager } from '../../managers/SubtitleManager.js';//checked
 
 export class cupboardDoorR extends THREE.Object3D {
 
-  constructor(mainChar, loadingManager, pin, hudOverlayRemoveQueue,sceneRemoveQueue) {
+  constructor(mainChar, loadingManager, pin, hudOverlayRemoveQueue, sceneRemoveQueue) {
     super();
 
     this.mainChar = mainChar;
@@ -42,10 +41,10 @@ export class cupboardDoorR extends THREE.Object3D {
     var gltf = loader.load('cupboard.glb', (gltf) => {
       //console.log("loaded cupboard door");
 
-   /*   gltf.scene.traverse(c => {
-        c.castShadow = true;
-
-      });*/
+      /*   gltf.scene.traverse(c => {
+           c.castShadow = true;
+   
+         });*/
 
 
       // //scale door
@@ -158,10 +157,8 @@ export class cupboardDoorR extends THREE.Object3D {
 
     if (keyboardManager.wasPressed('E')) {
       if (checkVicinity) {
-        if (this.allowInteraction) {
+        if (this.allowInteraction && this.open == false) {
 
-          //Animation goes here
-          //***********
           //  this.object.rotateOnAxis(new THREE.Vector3(0,1,0), this.object.rotation.y+0.1); // This happens for now
           this.open = true;
           gameOverlay.hideOverlay();
@@ -169,7 +166,7 @@ export class cupboardDoorR extends THREE.Object3D {
           this.showOpenedSubtitles = true;
           //play the cupboard animation
           this.cupboardAnim.play();
-        //  this.cupboardAnim.loop = THREE.LoopRepeat;
+          //  this.cupboardAnim.loop = THREE.LoopRepeat;
           //this variable is to ensure that we can stop the animation at a specific time
           this.animationCounter = 0;
 
@@ -177,13 +174,16 @@ export class cupboardDoorR extends THREE.Object3D {
             this.hudOverlayRemoveQueue.push("hammer");
             this.sceneRemoveQueue.push("lockCupboard");
             this.objectInteractionCounter += 1;
+            this.allowInteraction = false;
           }
           //lockCupboard.setPosition(new THREE.Vector3(0,100,0));
         }
         else {
-          this.showLockedSubtitles = true;
-          this.subtitleState.t1 = false;
-          this.subtitleStarted.t1 = false;
+          if (this.open == false) {
+            this.showLockedSubtitles = true;
+            this.subtitleState.t1 = false;
+            this.subtitleStarted.t1 = false;
+          }
         }
 
       }

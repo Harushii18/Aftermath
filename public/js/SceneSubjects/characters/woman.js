@@ -1,10 +1,9 @@
 import * as THREE from '../../../jsm/three.module.js';
 import { FBXLoader } from '../../../jsm/FBXLoader/FBXLoader.js';
-//import { loadingManager, mainChar, testdoor, audioPlayQueue, audioPauseQueue } from '../../managers/SceneManager.js';
 import { subtitleManager } from '../../managers/SubtitleManager.js';
 import { characterControls } from '../../managers/CharacterControls.js';
 export class Woman extends THREE.Object3D {
-    constructor( loadingManager, mainChar, testdoor, audioPlayQueue, audioPauseQueue) {
+    constructor(loadingManager, mainChar, testdoor, audioPlayQueue, audioPauseQueue) {
         super();
         this.loadingManager = loadingManager;
         this.mainChar = mainChar;
@@ -21,11 +20,15 @@ export class Woman extends THREE.Object3D {
         this.spawnCoolDown = 0;
         this.playerKilledCount = 0;
 
+        //reset counter because sometimes sub messes up things
+        this.resetCounter = 0;
+        this.completeDespawn = false;
 
-      //  this.womanState = "entering";
+
+        //  this.womanState = "entering";
 
         this.clock = new THREE.Clock();
-        this.state='idle';
+        this.state = 'idle';
 
 
         //scale to correct size
@@ -51,7 +54,7 @@ export class Woman extends THREE.Object3D {
         this.update = function (time) {
 
 
-          //console.log(this.spawnCoolDown);
+            //console.log(this.spawnCoolDown);
 
 
 
@@ -60,23 +63,23 @@ export class Woman extends THREE.Object3D {
                 //ensure that all movement is not by frame rate
                 this.delta = this.clock.getDelta();
 
-                if(this.mainChar.allowAttack==true && this.mainChar.hasFlashlight==true){
-                  let womanThere = false;
-                  let dir = new THREE.Vector3();
-          				this.mainChar.getWorldDirection(dir);
-                  let forwardDirection = new THREE.Vector3(dir.x, dir.y, dir.z);
-                  const pos = this.mainChar.returnWorldPosition();
-                  let flashLightRaycaster = new THREE.Raycaster(pos,forwardDirection);
-                  womanThere = this.mainChar.checkForWoman(womanThere, flashLightRaycaster);
-                  if(womanThere){
-                    //console.log("Woman is in front of me");
+                if (this.mainChar.allowAttack == true && this.mainChar.hasFlashlight == true) {
+                    let womanThere = false;
+                    let dir = new THREE.Vector3();
+                    this.mainChar.getWorldDirection(dir);
+                    let forwardDirection = new THREE.Vector3(dir.x, dir.y, dir.z);
+                    const pos = this.mainChar.returnWorldPosition();
+                    let flashLightRaycaster = new THREE.Raycaster(pos, forwardDirection);
+                    womanThere = this.mainChar.checkForWoman(womanThere, flashLightRaycaster);
+                    if (womanThere) {
+                        //console.log("Woman is in front of me");
 
-                    this.despawnWoman();
-                    this.updatePlayerKilledCount();
-                  }
-                  else{
+                        this.despawnWoman();
+                        this.updatePlayerKilledCount();
+                    }
+                    else {
 
-                  }
+                    }
                 }
 
 
@@ -93,68 +96,79 @@ export class Woman extends THREE.Object3D {
                     if (this.checkCharacterVicinity()) {
                         this.startSubs = true;
                         this.playAnim(this.anim['injuredWalk'], 'injuredWalk');
+                        this.resetCounter += (1 * this.delta);
+                    }
+                    if (this.resetCounter >= 2 && !this.completeDespawn) {
+                        if (this.subtitleState.t1) {
+                            this.subtitle2();
+                        }
+                        //make sure we cannot access this if statement again
+                        this.resetCounter = 0;
+                        this.completeDespawn = true;
+                        //moved these here so that they are not dependent on the subs
+                        this.object.visible = false;
+                        this.audioPauseQueue.push("ghost_wail");
+                        //character returns to original walking speed
+                        characterControls.setOriginalSpeed();
 
+                        //hide stage complete
+                        const stageComplete = document.getElementById('stageComplete');
+                        stageComplete.style.display = 'none';
 
                     }
                     if (this.startSubs) {
 
-                        if (this.object.position.z<this.mainChar.getWorldPosition().z){
+                        if (this.object.position.z < this.mainChar.getWorldPosition().z) {
 
-                            this.object.position.z+=(this.delta*5)
+                            this.object.position.z += (this.delta * 5)
                         }
                         if (this.subtitleState.t2 == false) {
                             this.subtitle1();
-
-                            //if first subs been shown
-                            if (this.subtitleState.t1) {
-                                this.subtitle2();
-                                this.despawnWoman();
-                            }
                         }
 
                     }
 
 
                 }
-                else{
-                  if(this.playerKilledCount<=3){
+                else {
+                    if (this.playerKilledCount <= 3) {
 
-                  //console.log(this.spawnCoolDown);
-                  ///Allow main character to use the flashlight to get rid of the woman
-                  mainChar.setAllowAttack(true);
-                  if(this.spawnCoolDown<=0){
-                    this.spawnCoolDown = 0;
-                    //console.log("Spawned Woman");
-                    //Woman must respawn
-                    this.object.visible = true;
-                    var charPos = mainChar.returnWorldPosition();
-                    var charDirection = mainChar.returnObjectDirection();
-                  //  this.object.position.set(this.object.position.x + charDirection.x, this.object.position.y, this.object.position.z + charDirection.z)
+                        //console.log(this.spawnCoolDown);
+                        ///Allow main character to use the flashlight to get rid of the woman
+                        this.mainChar.setAllowAttack(true);
+                        if (this.spawnCoolDown <= 0) {
+                            this.spawnCoolDown = 0;
+                            //console.log("Spawned Woman");
+                            //Woman must respawn
+                            this.object.visible = true;
+                            var charPos = this.mainChar.returnWorldPosition();
+                            var charDirection = this.mainChar.returnObjectDirection();
+                            //  this.object.position.set(this.object.position.x + charDirection.x, this.object.position.y, this.object.position.z + charDirection.z)
 
-                    if(this.object.position.x < charPos.x){
-                      this.object.position.x += (this.delta*4);
-                    }
-                    if(this.object.position.x > charPos.x){
-                      this.object.position.x -= (this.delta*4);
-                    }
+                            if (this.object.position.x < charPos.x) {
+                                this.object.position.x += (this.delta * 4);
+                            }
+                            if (this.object.position.x > charPos.x) {
+                                this.object.position.x -= (this.delta * 4);
+                            }
 
-                    if(this.object.position.z < charPos.z){
-                      this.object.position.z += (this.delta*4);
-                    }
-                    if(this.object.position.z > charPos.z){
-                      this.object.position.z -= (this.delta*4);
-                    }
+                            if (this.object.position.z < charPos.z) {
+                                this.object.position.z += (this.delta * 4);
+                            }
+                            if (this.object.position.z > charPos.z) {
+                                this.object.position.z -= (this.delta * 4);
+                            }
 
-                  }
-                  else{
-                    this.spawnCoolDown -= (this.delta*0.25);
-                    //console.log(this.spawnCoolDown);
-                  }
+                        }
+                        else {
+                            this.spawnCoolDown -= (this.delta * 0.25);
+                            //console.log(this.spawnCoolDown);
+                        }
+                    }
                 }
-              }
 
 
-                  //=====================================
+                //=====================================
 
 
             }
@@ -166,15 +180,15 @@ export class Woman extends THREE.Object3D {
     }
 
 
-    despawnWoman(){
-      //console.log("Despawned Woman");
-      this.object.position.set(0, 0, -15);
-      this.object.visible = false;
-      this.spawnCoolDown = 5;
+    despawnWoman() {
+        //console.log("Despawned Woman");
+        this.object.position.set(0, 0, -15);
+        this.object.visible = false;
+        this.spawnCoolDown = 5;
     }
 
-    updatePlayerKilledCount(){
-      this.playerKilledCount += 1;
+    updatePlayerKilledCount() {
+        this.playerKilledCount += 1;
     }
 
     //ANIMATIONS===================================
@@ -208,15 +222,15 @@ export class Woman extends THREE.Object3D {
     }
 
     loadAnim(state, path, file) {
-		//load the animation
-		const anime = new FBXLoader(this.loadingManager);
-		anime.setPath(path);
-		anime.load(file, (anime) => {
+        //load the animation
+        const anime = new FBXLoader(this.loadingManager);
+        anime.setPath(path);
+        anime.load(file, (anime) => {
 
-			//store animation in dictionary for access later
-			this.anim[state] = anime;
-		});
-	}
+            //store animation in dictionary for access later
+            this.anim[state] = anime;
+        });
+    }
 
 
     playAnim(animation, state) {
@@ -248,12 +262,12 @@ export class Woman extends THREE.Object3D {
             //scale the model down
             fbx.scale.setScalar(0.0115);
 
-          /*  fbx.traverse(c => {
-                c.castShadow = true;
-                c.receiveShadow = true;
-                this.currAction = this.idle;
-
-            });*/
+            /*  fbx.traverse(c => {
+                  c.castShadow = true;
+                  c.receiveShadow = true;
+                  this.currAction = this.idle;
+  
+              });*/
 
 
             this.currAction = this.idle;
@@ -266,7 +280,7 @@ export class Woman extends THREE.Object3D {
                 //set the initial animation for our main character to be idle (as he is not moving)
                 this.animation = this.walkMixer.clipAction(anim.animations[0]);
                 this.anim['idle'] = this.animation;
-                this.currAction=this.animation;
+                this.currAction = this.animation;
                 this.animation.reset();
                 this.animation.play();
 
@@ -368,16 +382,18 @@ export class Woman extends THREE.Object3D {
             if (!subtitleManager.checkTime()) {
                 //meaning it was shown
                 this.subtitleState.t1 = true;
+
+                //commented out the below because they depended on subs
                 //hide woman
                 //this.object.visible = false;
 
-                this.audioPauseQueue.push("ghost_wail");
-                 //character returns to original walking speed
-                 characterControls.setOriginalSpeed();
+                // this.audioPauseQueue.push("ghost_wail");
+                //  //character returns to original walking speed
+                //  characterControls.setOriginalSpeed();
 
-                //hide stage complete
-                const stageComplete = document.getElementById('stageComplete');
-                stageComplete.style.display = 'none';
+                // //hide stage complete
+                // const stageComplete = document.getElementById('stageComplete');
+                // stageComplete.style.display = 'none';
 
             }
         }
@@ -385,7 +401,7 @@ export class Woman extends THREE.Object3D {
 
     }
     subtitle2() {
-      //console.log("Playing subtitle 2");
+        //console.log("Playing subtitle 2");
         if (!this.subtitleState.t2) {
             subtitleManager.showSubtitles();
             if (!this.subtitleStarted.t2) {
@@ -404,20 +420,20 @@ export class Woman extends THREE.Object3D {
                 //meaning it was shown
                 this.startSubs = false;
                 this.initialInteraction = true;
-              }
+            }
         }
 
 
     }
 
     getWomanPosition() {
-      let worldPos = new THREE.Vector3();
-      this.object.getWorldPosition(worldPos);
-      return worldPos;
+        let worldPos = new THREE.Vector3();
+        this.object.getWorldPosition(worldPos);
+        return worldPos;
     }
 
-    getWomanVisibility(){
-      return this.object.visible;
+    getWomanVisibility() {
+        return this.object.visible;
     }
 
     return3DObject() {

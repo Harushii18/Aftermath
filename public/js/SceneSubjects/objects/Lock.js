@@ -1,9 +1,5 @@
-//TO CODE!!
-
 import { GLTFLoader } from '../../../jsm/GLTFLoader.js';
 import * as THREE from '../../../jsm/three.module.js';
-
-//import {loadingManager} from '../../managers/SceneManager.js'; //circular ref
 
 export class Lock extends THREE.Object3D {
   constructor(loadingManager) {

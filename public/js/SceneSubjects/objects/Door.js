@@ -1,9 +1,7 @@
 import * as THREE from '../../../jsm/three.module.js';
 import { GLTFLoader } from '../../../jsm/GLTFLoader.js';
 import { keyboardManager } from '../../managers/KeyboardManager.js';//checked
-//import { mainChar } from '../../managers/SceneManager.js';
 import { gameOverlay } from '../../Overlay/GameOverlay.js';//checked
-//import { loadingManager } from '../../managers/SceneManager.js';
 import { subtitleManager } from '../../managers/SubtitleManager.js';//checked
 
 export class Door extends THREE.Object3D {
@@ -42,10 +40,10 @@ export class Door extends THREE.Object3D {
 
         loader.setPath('./models/');
         var gltf = loader.load('testdoor.glb', (gltf) => {
-         /*   gltf.scene.traverse(c => {
-                c.castShadow = true;
-
-            });*/
+            /*   gltf.scene.traverse(c => {
+                   c.castShadow = true;
+   
+               });*/
 
             //scale door
             this.object.scale.x = 0.271;
@@ -91,9 +89,7 @@ export class Door extends THREE.Object3D {
                 this.subtitleManager.setDuration(5);
                 this.subtitleManager.changeSubtitlesText(this.subtitleText.t1);
                 this.subtitleStarted.t1 = true;
-                //display stage complete div
-                const stageComplete = document.getElementById('stageComplete');
-                stageComplete.style.display = 'block';
+
             }
 
             this.subtitleManager.countTime();
@@ -157,7 +153,7 @@ export class Door extends THREE.Object3D {
         // }
 
         if (this.open == true) {
-           // this.showLockedSubtitles = false;
+            // this.showLockedSubtitles = false;
 
             //animate
             if (this.idleMixer) {
@@ -173,13 +169,17 @@ export class Door extends THREE.Object3D {
         }
 
         if (keyboardManager.wasPressed('E')) {
-               // console.log("e pressed by door");
+            // console.log("e pressed by door");
 
             if (this.checkVicinity) {
-               // console.log("vicinity by door");
+                // console.log("vicinity by door");
                 //if character is in vicinity of door, then they can open door
                 if (this.allowInteraction) {
                     this.playDoorSound = true;
+
+                    //display stage complete div
+                    const stageComplete = document.getElementById('stageComplete');
+                    stageComplete.style.display = 'block';
                     //show that the door is unlocked subtitles
                     // this.showUnlockedSubs = true;
                     // this.showLockedSubtitles = false;
@@ -192,15 +192,6 @@ export class Door extends THREE.Object3D {
                     //checks how long the animation was playing for
                     this.animationCounter = 0;
 
-                        //console.log("door allow interaction true. now set to false");
-
-                    /*                        WhatsApp
-                                                                             
-                    //Suraksha: HIDE KEY IMAGE IN OVERLAY!!! KAMERON!!!         (double blue tick)
-                    //Kameron: THATSSSS MA NAME!!!                              (double blue tick)
-                    //Suraksha: THANK YOU!!!!!!                                 (single tick)
-
-                    */
 
 
                     this.allowInteraction = false;
@@ -208,7 +199,7 @@ export class Door extends THREE.Object3D {
 
                 }
                 else {
-                    if (this.objectInteractionCounter == 0) {
+                    if (this.objectInteractionCounter == 0 && this.open==false) {
                         this.playDoorSound = false;
 
                         // this.showLockedSubtitles = true;

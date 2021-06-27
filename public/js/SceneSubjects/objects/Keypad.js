@@ -1,10 +1,6 @@
 import * as THREE from '../../../jsm/three.module.js';
 import { GLTFLoader } from '../../../jsm/GLTFLoader.js';
 import { keyboardManager } from '../../managers/KeyboardManager.js';
-
-
-//import { loadingManager, mainChar, hudOverlayRemoveQueue, bookshelf } from '../../managers/SceneManager.js';
-
 import { gameOverlay } from '../../Overlay/GameOverlay.js';
 import { subtitleManager } from '../../managers/SubtitleManager.js';
 
@@ -48,15 +44,7 @@ export class Keypad extends THREE.Object3D {
 
             // });
 
-
-
             var obj_gltf = new THREE.Object3D();
-
-
-
-
-
-
             obj_gltf.add(gltf.scene);
             this.object.add(obj_gltf);
         });
@@ -87,7 +75,7 @@ export class Keypad extends THREE.Object3D {
 
     //checks if Character is in vicinity
     checkCharacterVicinity() {
-      //  console.log("Vinicinity Hammer function running");
+
       //get the position of the main character
 
 
@@ -98,7 +86,7 @@ export class Keypad extends THREE.Object3D {
       //if the character is in the vicinity
       if (this.inVicinity(vicinityLimitZ, vicinityLimitX)) {
 
-        //  console.log("Player is near the Cupboard");
+
         //display interaction overlay if it isn't being shown
         if (this.count == 0) {
           if (this.open == false) {
@@ -134,7 +122,7 @@ export class Keypad extends THREE.Object3D {
 
 
       this.delta = this.clock.getDelta();
-      //pause the cupboard animation at the right moment
+
 
       var checkVicinity = this.checkCharacterVicinity();
       if (keyboardManager.wasPressed('E')) {
@@ -145,7 +133,6 @@ export class Keypad extends THREE.Object3D {
 
             //Animation goes here
             //***********
-            //  this.object.rotateOnAxis(new THREE.Vector3(0,1,0), this.object.rotation.y+0.1); // This happens for now
             this.open = true;
             gameOverlay.hideOverlay();
             this.showOpenedSubtitles = true;
@@ -156,8 +143,6 @@ export class Keypad extends THREE.Object3D {
             this.bookshelf.animateBookshelf = true;
             this.endDoor.setAllowInteraction(true);
 
-
-            //lockCupboard.setPosition(new THREE.Vector3(0,100,0));
             this.allowInteraction = false;
           }
           else {

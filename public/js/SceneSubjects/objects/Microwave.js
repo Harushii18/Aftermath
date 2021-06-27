@@ -1,7 +1,6 @@
 import * as THREE from '../../../jsm/three.module.js';
 import { GLTFLoader } from '../../../jsm/GLTFLoader.js';
 import { keyboardManager } from '../../managers/KeyboardManager.js';
-//import { loadingManager, mainChar, studydoor, hudOverlayAddQueue} from '../../managers/SceneManager.js';
 import { gameOverlay } from '../../Overlay/GameOverlay.js';
 import { subtitleManager } from '../../managers/SubtitleManager.js';
 
@@ -32,6 +31,9 @@ export class Microwave extends THREE.Object3D {
     this.open = false; //open door animation
     this.count = 0;
 
+    //animation
+    this.animationCounter = 0;
+
     var axis = new THREE.Vector3(0, 0, 1);
     var rad = 0;
 
@@ -45,17 +47,22 @@ export class Microwave extends THREE.Object3D {
 
       // });
 
-       this.object.scale.x = 1.2;
-       this.object.scale.y = 1.2;
-       this.object.scale.z = 1.2;
+      this.object.scale.x = 1.2;
+      this.object.scale.y = 1.2;
+      this.object.scale.z = 1.2;
 
-       //this.object.position.set(-44,10, 25.7); //(x,y,z)
-       this.object.position.set(-48.2 , 9.55 , 24.55);
+      //this.object.position.set(-44,10, 25.7); //(x,y,z)
+      this.object.position.set(-48.2, 9.55, 24.55);
 
-       this.object.rotateOnAxis(new THREE.Vector3(0, 1, 0), Math.PI/2);
+      this.object.rotateOnAxis(new THREE.Vector3(0, 1, 0), Math.PI / 2);
 
       //move door
       //this.object.position.set(-20, -4, 83);
+
+      //get animation for microwave
+      this.microMixer = new THREE.AnimationMixer(gltf.scene);
+      this.microMixer.timeScale = 2; //speed of animation
+      this.microAnim = this.microMixer.clipAction(gltf.animations[0]);
 
 
 
@@ -139,15 +146,25 @@ export class Microwave extends THREE.Object3D {
 
     this.delta = this.clock.getDelta();
     //pause the cupboard animation at the right moment
-
+    //pause the cupboard animation at the right moment
+    if (this.microMixer && this.open) {
+      if (this.animationCounter < (1)) {
+        this.microMixer.update(this.delta);
+        this.animationCounter += (1 * this.delta);
+      } else if (this.animationCounter > 1) {
+        //pause the animation mixer-> stop the cupboard from continuing its animation
+        this.microMixer.paused = true;
+      }
+    }
     var checkVicinity = this.checkCharacterVicinity();
     if (keyboardManager.wasPressed('E')) {
 
 
       if (checkVicinity) {
-        if (this.allowInteraction) {
+        if (this.allowInteraction && this.open == false) {
 
           //Animation goes here
+          this.microAnim.play();
           //***********
           //  this.object.rotateOnAxis(new THREE.Vector3(0,1,0), this.object.rotation.y+0.1); // This happens for now
           this.open = true;
@@ -155,7 +172,6 @@ export class Microwave extends THREE.Object3D {
           this.showOpenedSubtitles = true;
           //SHOW KEY IMAGE IN OVERLAY
           this.hudOverlayAddQueue.push("studykey");
-
           this.studydoor.setHasKey();
 
 
@@ -167,9 +183,11 @@ export class Microwave extends THREE.Object3D {
           this.allowInteraction = false;
         }
         else {
-          this.showLockedSubtitles = true;
-          this.subtitleState.t1 = false;
-          this.subtitleStarted.t1 = false;
+          if (this.open == false) {
+            this.showLockedSubtitles = true;
+            this.subtitleState.t1 = false;
+            this.subtitleStarted.t1 = false;
+          }
         }
 
       }

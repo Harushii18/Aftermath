@@ -1,7 +1,6 @@
 import * as THREE from '../../../jsm/three.module.js';
 import { GLTFLoader } from '../../../jsm/GLTFLoader.js';
 import { keyboardManager } from '../../managers/KeyboardManager.js';//checked
-//import { mainChar, cupBoardDoorR, hudOverlayAddQueue } from '../../managers/SceneManager.js';
 import { gameOverlay } from '../../Overlay/GameOverlay.js';//checked
 import { subtitleManager } from '../../managers/SubtitleManager.js';//checked
 

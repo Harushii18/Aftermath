@@ -1,5 +1,4 @@
 import * as THREE from '../../../jsm/three.module.js';
-//import { woman } from '../../managers/SceneManager.js';
 export class WomanHitBox extends THREE.Object3D {
   constructor(woman) {
     //load a model and animate it

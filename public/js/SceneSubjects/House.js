@@ -1,6 +1,5 @@
 import { GLTFLoader } from '../../jsm/GLTFLoader.js';
 import * as THREE from '../../jsm/three.module.js';
-//import {loadingManager} from '../managers/SceneManager.js';  //circular ref
 
 //variable to check if house loaded
 export var loadedHouse;
@@ -23,7 +22,7 @@ export class House extends THREE.Object3D {
     const loader = new GLTFLoader(this.loadingManager);
 
     loader.setPath('./models/');
-    const gltf = loader.load('NEWHOUSE.glb', (gltf) => {
+    const gltf = loader.load('emptyhouse.glb', (gltf) => {
       this.loadCount = 1;
       console.log("load house");
       // gltf.scene.traverse(c => {

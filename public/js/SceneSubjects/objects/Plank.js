@@ -32,9 +32,6 @@ export class Plank extends THREE.Object3D {
 
         this.open = false; //keeps track if the drawer is openend
 
-
-
-
         var gltf = loader.load('woodplank.glb', (gltf) => {
 
             var obj_gltf = new THREE.Object3D();
